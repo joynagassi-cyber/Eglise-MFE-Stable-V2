@@ -80,7 +80,7 @@ class SuperadminDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(context, BuildContext context, String title) {
+  Widget _buildHeader(BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,7 +90,7 @@ class SuperadminDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildNetworkStat(context, BuildContext context, String label, String value, IconData icon, Color color) {
+  Widget _buildNetworkStat(BuildContext context, String label, String value, IconData icon, Color color) {
     return LuminaCard(
       color: color.withOpacity(0.05),
       child: Row(
@@ -109,7 +109,7 @@ class SuperadminDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildAuditPreview(context, BuildContext context, WidgetRef ref) {
+  Widget _buildAuditPreview(BuildContext context, WidgetRef ref) {
     // Simulation du flux d'audit simplifié pour le dashboard
     return const LuminaCard(
       padding: EdgeInsets.zero,

@@ -48,7 +48,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(context, BuildContext context, var profile) {
+  Widget _buildHeader(BuildContext context, var profile) {
     return Column(
       children: [
         CircleAvatar(
@@ -63,7 +63,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(context, BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -34,7 +34,7 @@ class TutorialPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildProgress(context, BuildContext context, TutorialState state) {
+  Widget _buildProgress(BuildContext context, TutorialState state) {
     return LuminaCard(
       color: LuminaDesign.primary.withOpacity(0.05),
       child: Column(

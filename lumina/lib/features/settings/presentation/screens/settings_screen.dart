@@ -79,7 +79,7 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(context, BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

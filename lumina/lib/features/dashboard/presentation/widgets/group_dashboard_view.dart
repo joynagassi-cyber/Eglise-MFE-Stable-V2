@@ -36,7 +36,7 @@ class GroupDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(context, BuildContext context, String title) {
+  Widget _buildHeader(BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,7 +46,7 @@ class GroupDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildKPIs(context, BuildContext context, var stats) {
+  Widget _buildKPIs(BuildContext context, var stats) {
     return Row(
       children: [
         Expanded(
@@ -147,7 +147,7 @@ class GroupDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(context, BuildContext context, String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: LuminaDesign.paddingMd),
       child: Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),

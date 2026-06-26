@@ -36,7 +36,7 @@ class MemberDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildWelcome(context, BuildContext context, MemberDashboardState state) {
+  Widget _buildWelcome(BuildContext context, MemberDashboardState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,14 +82,14 @@ class MemberDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(context, BuildContext context, String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: LuminaDesign.paddingMd),
       child: Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),
     );
   }
 
-  Widget _buildGroupsList(context, BuildContext context, MemberDashboardState state) {
+  Widget _buildGroupsList(BuildContext context, MemberDashboardState state) {
     if (state.myGroups.isEmpty) {
       return Text("Vous n'avez pas encore rejoint de groupe.");
     }
