@@ -230,14 +230,19 @@ class SkeletonCard extends StatelessWidget {
   }
 }
 
-/// Bloc de shimmer réutilisable (boîte arrondie avec animation).
+/// Bloc de shimmer réutilisable (boîte arrondie avec animation intégrée).
+///
+/// Contrairement à ShimmerBox (shimmer_loading.dart) qui est un wrapper
+/// autour de ShimmerLoading, SkeletonTile gère directement l'animation,
+/// supporte BoxShape.circle et foregroundDecoration pour un rendu optimal
+/// en light ET dark mode via les tokens shimmerBase/shimmerHighlight.
 ///
 /// Usage :
 /// ```dart
-/// ShimmerBox(width: 120, height: 16) // ligne de texte
-/// ShimmerBox(width: 60, height: 60, shape: BoxShape.circle) // avatar
+/// SkeletonTile(width: 120, height: 16) // ligne de texte
+/// SkeletonTile(width: 60, height: 60, shape: BoxShape.circle) // avatar
 /// ```
-class ShimmerBox extends StatefulWidget {
+class SkeletonTile extends StatefulWidget {
   final double? width;
   final double height;
   final BorderRadius? borderRadius;
@@ -246,7 +251,7 @@ class ShimmerBox extends StatefulWidget {
   /// Durée d'un cycle de balayage. Défaut 1500ms (recommandation NN/g).
   final Duration duration;
 
-  const ShimmerBox({
+  const SkeletonTile({
     super.key,
     this.width,
     required this.height,
@@ -256,10 +261,10 @@ class ShimmerBox extends StatefulWidget {
   });
 
   @override
-  State<ShimmerBox> createState() => _ShimmerBoxState();
+  State<SkeletonTile> createState() => _SkeletonTileState();
 }
 
-class _ShimmerBoxState extends State<ShimmerBox>
+class _SkeletonTileState extends State<SkeletonTile>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;

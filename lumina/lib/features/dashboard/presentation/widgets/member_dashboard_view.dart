@@ -2,7 +2,6 @@ import "package:lumina/core/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
-import 'package:lumina/core/extensions/context_extension.dart';
 import '../providers/member_dashboard_provider.dart';
 import 'package:lumina/features/bible/reader/widgets/daily_bible_card.dart';
 import 'package:go_router/go_router.dart';
@@ -63,9 +62,9 @@ class MemberDashboardView extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // En-tête de bienvenue — 2 lignes qui miment _buildWelcome
-          ShimmerBox(width: 90, height: 14),
+          SkeletonTile(width: 90, height: 14),
           const SizedBox(height: 6),
-          ShimmerBox(width: 140, height: 24),
+          SkeletonTile(width: 140, height: 24),
           SizedBox(height: LuminaDesign.paddingLg),
           // 2 KPI cards — miment _buildKPIGrid (icône + label + valeur)
           Row(
@@ -93,13 +92,13 @@ class MemberDashboardView extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: LuminaDesign.paddingMd),
                   child: Column(
                     children: [
-                      ShimmerBox(
+                      SkeletonTile(
                         width: 60,
                         height: 60,
                         shape: BoxShape.circle,
                       ),
                       const SizedBox(height: 4),
-                      ShimmerBox(width: 48, height: 10),
+                      SkeletonTile(width: 48, height: 10),
                     ],
                   ),
                 );
@@ -119,11 +118,11 @@ class MemberDashboardView extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ShimmerBox(width: 24, height: 24, shape: BoxShape.circle),
+          SkeletonTile(width: 24, height: 24, shape: BoxShape.circle),
           const SizedBox(height: 8),
-          ShimmerBox(width: 60, height: 10),
+          SkeletonTile(width: 60, height: 10),
           const SizedBox(height: 4),
-          ShimmerBox(width: 40, height: 16),
+          SkeletonTile(width: 40, height: 16),
         ],
       ),
     );
