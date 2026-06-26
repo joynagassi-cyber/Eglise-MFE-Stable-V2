@@ -30,9 +30,9 @@ class CelebrationsTab extends ConsumerWidget {
             style:
                 AppTypography.labelLarge.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           if ((kpi['upcoming_birthdays'] as List).isEmpty)
-            const Text('Aucun anniversaire ce mois-ci')
+            Text('Aucun anniversaire ce mois-ci')
           else
             SizedBox(
               height: 120,
@@ -45,13 +45,13 @@ class CelebrationsTab extends ConsumerWidget {
                 },
               ),
             ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Text(
             'Événements à venir',
             style:
                 AppTypography.labelLarge.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           const _UpcomingEventCard(
             title: 'Fête des Mères',
             date: '25 Mai',
@@ -64,7 +64,7 @@ class CelebrationsTab extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Center(
+      loading: () => Center(
         child: LoadingDots(),
       ),
       error: (e, _) => AppErrorWidget(message: e.toString()),
@@ -86,7 +86,7 @@ class _BirthdayMemberCard extends StatelessWidget {
         children: [
           Stack(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
               ),
@@ -108,7 +108,7 @@ class _BirthdayMemberCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             member.name ?? "Membre",
             style: AppTypography.tiny.copyWith(fontWeight: FontWeight.bold),
@@ -116,13 +116,13 @@ class _BirthdayMemberCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           TextButton(
             onPressed: () async {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Voeux : Bientôt disponible')),
+                  SnackBar(content: Text('Voeux : Bientôt disponible')),
                 );
               }
             },
@@ -176,7 +176,7 @@ class _UpcomingEventCard extends StatelessWidget {
               size: 20,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

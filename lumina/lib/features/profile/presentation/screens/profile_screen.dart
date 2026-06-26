@@ -18,23 +18,23 @@ class ProfileScreen extends ConsumerWidget {
       title: "Mon Profil",
       body: profileAsync.when(
         data: (profile) => profile == null 
-          ? const Center(child: Text("Profil non trouvé"))
+          ? Center(child: Text("Profil non trouvé"))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(LuminaDesign.paddingLg),
               child: Column(
                 children: [
-                  _buildHeader(profile),
-                  const SizedBox(height: 32),
-                  _buildSection("Informations", [
+                  _buildHeader(context, profile),
+                  SizedBox(height: 32),
+                  _buildSection(context, "Informations", [
                     _InfoRow(label: "Nom", value: profile.displayName, icon: Icons.person),
                     _InfoRow(label: "Email", value: profile.email ?? "Non renseigné", icon: Icons.email),
                     _InfoRow(label: "Rôle", value: profile.roleLevel.toUpperCase(), icon: Icons.security),
                   ]),
-                  const SizedBox(height: 24),
-                  _buildSection("Sécurité", [
+                  SizedBox(height: 24),
+                  _buildSection(context, "Sécurité", [
                     _InfoRow(label: "Onboarding", value: profile.needsOnboarding ? "À faire" : "Complété", icon: Icons.check_circle, color: profile.needsOnboarding ? Colors.orange : Colors.green),
                   ]),
-                  const SizedBox(height: 48),
+                  SizedBox(height: 48),
                   LuminaButton(
                     label: "Modifier mes infos",
                     onPressed: () => context.push(AppRoutes.profileEdit),
@@ -48,7 +48,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(var profile) {
+  Widget _buildHeader(context, BuildContext context, var profile) {
     return Column(
       children: [
         CircleAvatar(
@@ -56,19 +56,19 @@ class ProfileScreen extends ConsumerWidget {
           backgroundColor: LuminaDesign.primary.withOpacity(0.1),
           child: Text(profile.initials, style: LuminaDesign.h1Of(context).copyWith(color: LuminaDesign.primary)),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Text(profile.displayName, style: LuminaDesign.h2Of(context)),
         Text(profile.email ?? "", style: LuminaDesign.labelOf(context)),
       ],
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(context, BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         LuminaCard(
           padding: EdgeInsets.zero,
           child: Column(children: children),

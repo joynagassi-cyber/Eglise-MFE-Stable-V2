@@ -80,7 +80,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Center(
             child: Container(
               width: 40,
@@ -91,7 +91,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Référence
           Padding(
@@ -115,7 +115,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
@@ -128,7 +128,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const Divider(height: 24),
+          Divider(height: 24),
 
           // Actions principales
           Wrap(
@@ -171,7 +171,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
                         ' — ${widget.verseText}',
                   ));
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Verset copié !')),
+                    SnackBar(content: Text('Verset copié !')),
                   );
                 },
               ),
@@ -195,7 +195,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
                 Text('Surligner:',
                     style: AppTypography.labelSmall
                         .copyWith(color: context.colors.textTertiary)),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 ..._kHighlightColors.map((hex) => _ColorDot(
                       hexColor: hex,
                       onTap: () async {
@@ -212,7 +212,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
 
           // Saisie de note
           if (_showNoteInput) ...[
-            const Divider(height: 1),
+            Divider(height: 1),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -229,7 +229,7 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () async {
                       if (_noteController.text.trim().isEmpty) return;
@@ -239,13 +239,13 @@ class _VerseActionSheetState extends ConsumerState<_VerseActionSheet> {
                         content: _noteController.text.trim(),
                       );
                     },
-                    child: const Text('Enregistrer la note'),
+                    child: Text('Enregistrer la note'),
                   ),
                 ],
               ),
             ),
           ],
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
       ),
     );
@@ -285,7 +285,7 @@ class _ActionChip extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: 22, color: effectiveColor),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 label,
                 style: AppTypography.labelSmall.copyWith(

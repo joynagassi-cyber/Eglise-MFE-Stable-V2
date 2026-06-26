@@ -66,7 +66,7 @@ class ActivitiesTab extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class ActivitiesTab extends StatelessWidget {
                       size: 14,
                       color: context.colors.textSecondary,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       '${act['participants']}',
                       style: AppTypography.tiny

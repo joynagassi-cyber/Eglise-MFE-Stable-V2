@@ -50,7 +50,7 @@ class EventCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +121,7 @@ class EventCard extends StatelessWidget {
                   ),
                   if (event.description != null &&
                       event.description!.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.xxs),
+                    SizedBox(height: AppSpacing.xxs),
                     Text(
                       event.description!,
                       style: AppTypography.bodySmall.copyWith(
@@ -134,7 +134,7 @@ class EventCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Row(
                     children: [
                       Icon(
@@ -142,7 +142,7 @@ class EventCard extends StatelessWidget {
                         size: AppSpacing.iconXs,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
-                      const SizedBox(width: AppSpacing.xxs),
+                      SizedBox(width: AppSpacing.xxs),
                       Text(
                         DateFormat('dd MMM yyyy').format(event.date),
                         style: AppTypography.bodySmall.copyWith(
@@ -151,13 +151,13 @@ class EventCard extends StatelessWidget {
                         ),
                       ),
                       if (event.location != null) ...[
-                        const SizedBox(width: AppSpacing.sm),
+                        SizedBox(width: AppSpacing.sm),
                         Icon(
                           Icons.location_on_outlined,
                           size: AppSpacing.iconXs,
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
-                        const SizedBox(width: AppSpacing.xxs),
+                        SizedBox(width: AppSpacing.xxs),
                         Expanded(
                           child: Text(
                             event.location!,

@@ -48,7 +48,7 @@ class OnboardingPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.xxl),
+          SizedBox(height: AppSpacing.xxl),
 
           // Title
           Text(
@@ -61,7 +61,7 @@ class OnboardingPage extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
 
           // Description
           Padding(

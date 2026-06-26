@@ -112,7 +112,7 @@ class _HorizontalWeekCalendarState extends State<HorizontalWeekCalendar> {
                       fontSize: 10,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     date.day.toString(),
                     style: AppTypography.titleLarge.copyWith(

@@ -114,7 +114,7 @@ class _RadialFireMenuState extends State<RadialFireMenu>
               child: AnimatedRotation(
                 duration: const Duration(milliseconds: 300),
                 turns: _isOpen ? 0.125 : 0, // 45 degrés
-                child: const Icon(
+                child: Icon(
                   Icons.add_rounded,
                   color: Colors.white,
                   size: 32,
@@ -199,7 +199,7 @@ class _RadialFireMenuState extends State<RadialFireMenu>
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Material(
             color: Colors.transparent,
             child: Text(

@@ -142,7 +142,7 @@ class _TransactionHistoryScreenState
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Rechercher (montant, description...)',
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: Icon(Icons.search),
                       filled: true,
                       fillColor: theme.cardColor.withValues(alpha: 0.8),
                       border: OutlineInputBorder(
@@ -185,7 +185,7 @@ class _TransactionHistoryScreenState
               // Loading indicator for next page
               if (historyState.isLoading &&
                   historyState.transactions.isNotEmpty)
-                const SliverToBoxAdapter(
+                SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.all(AppSpacing.md),
                     child: LoadingState(
@@ -196,7 +196,7 @@ class _TransactionHistoryScreenState
                 ),
 
               // Bottom padding
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: SizedBox(height: AppSpacing.xl),
               ),
             ],

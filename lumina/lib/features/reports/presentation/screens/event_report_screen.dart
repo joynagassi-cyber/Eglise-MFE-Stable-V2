@@ -43,7 +43,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 100),
               child: SectionHeader(
@@ -53,7 +53,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                 gradient: context.colors.brandGradient,
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 200),
@@ -83,7 +83,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     
                     // Date Selection Area
                     _DateSelector(
@@ -106,7 +106,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                         }
                       },
                     ),
-                    const Divider(height: 32),
+                    Divider(height: 32),
                     _DateSelector(
                       label: 'Date de fin',
                       date: _endDate,
@@ -133,7 +133,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
               ),
             ),
             
-            const SizedBox(height: AppSpacing.xxl),
+            SizedBox(height: AppSpacing.xxl),
             
             reportState.when(
               data: (file) => file != null
@@ -151,19 +151,19 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                               size: 64,
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.md),
+                          SizedBox(height: AppSpacing.md),
                           Text(
                             'Rapport généré avec succès',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.xs),
+                          SizedBox(height: AppSpacing.xs),
                           Text(
                             'Fichier: ${file.path.split('/').last}',
                             style: theme.textTheme.bodySmall,
                           ),
-                          const SizedBox(height: AppSpacing.lg),
+                          SizedBox(height: AppSpacing.lg),
                           GradientButton(
                             text: 'Générer un autre rapport',
                             onPressed: () => ref.invalidate(eventReportGeneratorProvider),
@@ -176,7 +176,7 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                       icon: Icons.auto_awesome_rounded,
                       onPressed: _generateReport,
                     ),
-              loading: () => const Center(
+              loading: () => Center(
                 child: Column(
                   children: [
                     LoadingDots(size: 40),
@@ -193,11 +193,11 @@ class _EventReportScreenState extends ConsumerState<EventReportScreen> {
                     color: context.colors.errorText, 
                     size: 64,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   Text('Erreur de génération',
                     style: TextStyle(color: context.colors.errorText, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   GradientButton(
                     text: 'RÉESSAYER',
                     onPressed: _generateReport,

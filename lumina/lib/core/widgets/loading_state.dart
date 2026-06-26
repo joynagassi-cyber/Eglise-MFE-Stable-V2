@@ -35,7 +35,7 @@ class LoadingState extends StatelessWidget {
           children: [
             const LoadingDots(size: 32),
             if (message != null) ...[
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Text(
                 message!,
                 textAlign: TextAlign.center,
@@ -93,7 +93,7 @@ class _ShimmerLoadingListState extends State<_ShimmerLoadingList>
     return ListView.separated(
       padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: 5,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.smd),
+      separatorBuilder: (_, __) => SizedBox(height: AppSpacing.smd),
       itemBuilder: (context, index) {
         return AnimatedBuilder(
           animation: _animation,

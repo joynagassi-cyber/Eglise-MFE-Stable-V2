@@ -80,11 +80,11 @@ class _GlobalAttendanceScreenState
                 ),
               );
             },
-            loading: () => const SizedBox(),
-            error: (_, __) => const SizedBox(),
+            loading: () => SizedBox(),
+            error: (_, __) => SizedBox(),
           ),
           IconButton(
-            icon: const Icon(Icons.save_rounded),
+            icon: Icon(Icons.save_rounded),
             onPressed: () => ref
                 .read(attendanceManagementControllerProvider(widget.serviceId)
                     .notifier)
@@ -138,10 +138,10 @@ class _GlobalAttendanceScreenState
         controller: _searchController,
         decoration: InputDecoration(
           hintText: 'Rechercher un membre (nom, code...)',
-          prefixIcon: const Icon(Icons.search_rounded),
+          prefixIcon: Icon(Icons.search_rounded),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear_rounded),
+                  icon: Icon(Icons.clear_rounded),
                   onPressed: () {
                     _searchController.clear();
                     setState(() => _searchQuery = '');
@@ -226,7 +226,7 @@ class _AttendanceMemberTile extends StatelessWidget {
                   color: context.colors.brandPrimaryFire, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

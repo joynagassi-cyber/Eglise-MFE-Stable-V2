@@ -22,21 +22,21 @@ class SuperadminDashboardView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader("Centre de Pilotage"),
-            const SizedBox(height: LuminaDesign.paddingLg),
+            _buildHeader(context, "Centre de Pilotage"),
+            SizedBox(height: LuminaDesign.paddingLg),
             
             // --- SECTION 1: ÉTAT GLOBAL ---
             Text("SANTÉ DU RÉSEAU", style: LuminaDesign.labelOf(context)),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildNetworkStat("Antennes", "12", Icons.hub, Colors.blue)),
-                const SizedBox(width: 12),
-                Expanded(child: _buildNetworkStat("Membres", "${stats.membersCount}", Icons.people, Colors.orange)),
+                Expanded(child: _buildNetworkStat(context, "Antennes", "12", Icons.hub, Colors.blue)),
+                SizedBox(width: 12),
+                Expanded(child: _buildNetworkStat(context, "Membres", "${stats.membersCount}", Icons.people, Colors.orange)),
               ],
             ),
             
-            const SizedBox(height: LuminaDesign.paddingLg),
+            SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 2: ALERTE DE CONFIANCE (AUDIT) ---
             Row(
@@ -45,20 +45,20 @@ class SuperadminDashboardView extends ConsumerWidget {
                 Text("FLUX DE VIGILANCE", style: LuminaDesign.labelOf(context)),
                 TextButton(
                   onPressed: () => context.push(AppRoutes.auditHistory),
-                  child: const Text("Voir tout l'audit"),
+                  child: Text("Voir tout l'audit"),
                 ),
               ],
             ),
-            _buildAuditPreview(ref),
+            _buildAuditPreview(context, ref),
 
-            const SizedBox(height: LuminaDesign.paddingLg),
+            SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 3: ACTIONS CRITIQUES ---
             Text("PILOTAGE STRATÉGIQUE", style: LuminaDesign.labelOf(context)),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             GridView.count(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
@@ -71,16 +71,16 @@ class SuperadminDashboardView extends ConsumerWidget {
               ],
             ),
             
-            const SizedBox(height: 100),
+            SizedBox(height: 100),
           ],
         ),
       ),
       loading: () => const LoadingState(),
-      error: (e, st) => const Center(child: Text("Erreur de chargement du centre de pilotage")),
+      error: (e, st) => Center(child: Text("Erreur de chargement du centre de pilotage")),
     );
   }
 
-  Widget _buildHeader(String title) {
+  Widget _buildHeader(context, BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,13 +90,13 @@ class SuperadminDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildNetworkStat(String label, String value, IconData icon, Color color) {
+  Widget _buildNetworkStat(context, BuildContext context, String label, String value, IconData icon, Color color) {
     return LuminaCard(
       color: color.withOpacity(0.05),
       child: Row(
         children: [
           Icon(icon, color: color, size: 20),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -109,7 +109,7 @@ class SuperadminDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildAuditPreview(WidgetRef ref) {
+  Widget _buildAuditPreview(context, BuildContext context, WidgetRef ref) {
     // Simulation du flux d'audit simplifié pour le dashboard
     return const LuminaCard(
       padding: EdgeInsets.zero,
@@ -139,7 +139,7 @@ class _AdminActionTile extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: context.colors.textSecondary, size: 20),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(child: Text(label, style: LuminaDesign.bodyLargeOf(context).copyWith(fontSize: 13, fontWeight: FontWeight.bold))),
         ],
       ),

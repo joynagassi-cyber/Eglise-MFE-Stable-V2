@@ -42,7 +42,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                     ),
                   ),
 
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
 
                   // Aperçu Financier
                   StaggeredListItem(
@@ -57,7 +57,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                           trailingLabel: 'Détails',
                           onTrailingTap: () => context.go(AppRoutes.ministereFinance),
                         ),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         kpiAsync.when(
                           data: (kpi) => Column(
                             children: [
@@ -75,7 +75,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                                       color: context.colors.successText,
                                     ),
                                   ),
-                                  const SizedBox(width: AppSpacing.md),
+                                  SizedBox(width: AppSpacing.md),
                                   Expanded(
                                     child: _StatCard(
                                       title: 'Membres',
@@ -87,7 +87,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: AppSpacing.md),
+                              SizedBox(height: AppSpacing.md),
                               Row(
                                 children: [
                                   Expanded(
@@ -99,7 +99,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                                       color: context.colors.warningText,
                                     ),
                                   ),
-                                  const SizedBox(width: AppSpacing.md),
+                                  SizedBox(width: AppSpacing.md),
                                   Expanded(
                                     child: _StatCard(
                                       title: 'Croissance',
@@ -125,7 +125,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                     ),
                   ),
 
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
 
                   // Églises & Structures
                   StaggeredListItem(
@@ -141,7 +141,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                           onTrailingTap: () =>
                               context.go(AppRoutes.ministereChurches),
                         ),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         churchesAsync.when(
                           data: (churchList) => churchList.isEmpty
                               ? const EmptyState(
@@ -150,7 +150,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                                   subtitle: 'Configurez vos structures')
                               : GridView.builder(
                                   shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
+                                  physics: NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
@@ -168,14 +168,14 @@ class MinistereHomeScreen extends ConsumerWidget {
                                   ),
                                 ),
                           loading: () =>
-                              const Center(child: LoadingState()),
-                          error: (err, _) => const Text('Impossible de charger les données'),
+                              Center(child: LoadingState()),
+                          error: (err, _) => Text('Impossible de charger les données'),
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
 
                   // Actions rapides
                   const StaggeredListItem(
@@ -186,12 +186,12 @@ class MinistereHomeScreen extends ConsumerWidget {
                       iconColor: Colors.amber,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   StaggeredListItem(
                     index: 4,
                     child: GridView.count(
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
                       mainAxisSpacing: AppSpacing.md,
                       crossAxisSpacing: AppSpacing.md,
@@ -217,7 +217,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                             await HapticHelper.medium();
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Rapports : Bientôt disponible')),
+                                SnackBar(content: Text('Rapports : Bientôt disponible')),
                               );
                             }
                           },
@@ -231,7 +231,7 @@ class MinistereHomeScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
                 ],
               ),
             ),
@@ -248,7 +248,7 @@ class MinistereHomeScreen extends ConsumerWidget {
       pinned: true,
       backgroundColor: context.colors.brandPrimary,
       flexibleSpace: FlexibleSpaceBar(
-        title: const Text(
+        title: Text(
           'MFE-JC',
           style: TextStyle(
             fontWeight: FontWeight.w900,
@@ -310,7 +310,7 @@ class _StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: color, size: LuminaIcon.md),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(
             value,
             style: const TextStyle(
@@ -321,7 +321,7 @@ class _StatCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Row(
             children: [
               if (isPositive != null)
@@ -332,7 +332,7 @@ class _StatCard extends StatelessWidget {
                   size: LuminaIcon.xs,
                   color: isPositive! ? context.colors.successText : context.colors.errorText,
                 ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 change,
                 style: TextStyle(
@@ -345,7 +345,7 @@ class _StatCard extends StatelessWidget {
               ),
             ],
           ),
-          const Spacer(),
+          Spacer(),
           Text(
             title.toUpperCase(),
             style: TextStyle(

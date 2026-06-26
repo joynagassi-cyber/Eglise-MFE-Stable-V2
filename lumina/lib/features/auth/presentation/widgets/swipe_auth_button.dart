@@ -109,7 +109,7 @@ class _SwipeAuthButtonState extends State<SwipeAuthButton>
 
               // Loading indicator
               if (widget.isLoading)
-                const SizedBox(
+                SizedBox(
                   height: 24,
                   width: 24,
                   child: LoadingDots(size: LuminaIcon.lg),

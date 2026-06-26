@@ -51,7 +51,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildTypeChips(context, isDark),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                 ],
               ),
             ),
@@ -79,7 +79,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
                 }, childCount: services.length),
               );
             },
-            loading: () => const SliverToBoxAdapter(
+            loading: () => SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.xxl),
                 child: LoadingState(message: 'Chargement des célébrations...'),
@@ -127,7 +127,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.add_rounded, color: context.colors.textOnBrand),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     Text(
                       'Nouveau Culte',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -173,7 +173,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
                 size: AppSpacing.iconXs,
               ),
             ),
-            const SizedBox(width: AppSpacing.sm + 2),
+            SizedBox(width: AppSpacing.sm + 2),
             Text(
               'Célébrations',
               style: theme.textTheme.headlineSmall?.copyWith(
@@ -193,7 +193,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
       child: Row(
         children: [
           _buildTypeChip(context, null, 'Tous', isDark),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           ...ServiceType.values.map(
             (type) => Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -271,7 +271,7 @@ class _CelebrationsScreenState extends ConsumerState<CelebrationsScreen> {
                 color: context.colors.brandPrimary,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text(
               'Aucun culte trouvé',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -348,7 +348,7 @@ class _ServiceCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,7 +393,7 @@ class _ServiceCard extends StatelessWidget {
                     ],
                   ),
                   if (service.theme != null) ...[
-                    const SizedBox(height: AppSpacing.xxs),
+                    SizedBox(height: AppSpacing.xxs),
                     Text(
                       'Thème: ${service.theme}',
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -403,7 +403,7 @@ class _ServiceCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Row(
                     children: [
                       Icon(
@@ -412,7 +412,7 @@ class _ServiceCard extends StatelessWidget {
                         color:
                             theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
-                      const SizedBox(width: AppSpacing.xxs),
+                      SizedBox(width: AppSpacing.xxs),
                       Text(
                         '${service.attendanceCount}',
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -421,14 +421,14 @@ class _ServiceCard extends StatelessWidget {
                         ),
                       ),
                       if (service.preacherName != null) ...[
-                        const SizedBox(width: AppSpacing.smd),
+                        SizedBox(width: AppSpacing.smd),
                         Icon(
                           Icons.mic_rounded,
                           size: AppSpacing.iconXs,
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.5),
                         ),
-                        const SizedBox(width: AppSpacing.xxs),
+                        SizedBox(width: AppSpacing.xxs),
                         Expanded(
                           child: Text(
                             service.preacherName!,
@@ -449,7 +449,7 @@ class _ServiceCard extends StatelessWidget {
               Icons.chevron_right_rounded,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
             Consumer(
               builder: (context, ref, _) {
                 final userContext =

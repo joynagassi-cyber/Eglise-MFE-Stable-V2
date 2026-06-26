@@ -33,7 +33,7 @@ class AuditFiltersBar extends ConsumerWidget {
               size: 20,
               color: isDark ? Colors.white70 : context.colors.textSecondaryLight,
             ),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
             Text(
               "Filtres",
               style: TextStyle(
@@ -42,7 +42,7 @@ class AuditFiltersBar extends ConsumerWidget {
                 color: isDark ? Colors.white70 : context.colors.textSecondaryLight,
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -54,14 +54,14 @@ class AuditFiltersBar extends ConsumerWidget {
                       isActive: startDate != null || endDate != null,
                       onTap: () => _selectDateRange(context, ref),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     _FilterChip(
                       label: actorId ?? 'Tous les utilisateurs',
                       icon: Icons.person_outline_rounded,
                       isActive: actorId != null,
                       onTap: () => _selectUser(context, ref),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     _FilterChip(
                       label: action ?? 'Toutes les actions',
                       icon: Icons.layers_outlined,
@@ -73,9 +73,9 @@ class AuditFiltersBar extends ConsumerWidget {
               ),
             ),
             if (hasFilters) ...[
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               IconButton(
-                icon: const Icon(Icons.close_rounded, size: 18),
+                icon: Icon(Icons.close_rounded, size: 18),
                 onPressed: () {
                   ref.read(auditFilterStartDateProvider.notifier).state = null;
                   ref.read(auditFilterEndDateProvider.notifier).state = null;
@@ -125,14 +125,14 @@ class AuditFiltersBar extends ConsumerWidget {
     final res = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Filtrer par utilisateur'),
+        title: Text('Filtrer par utilisateur'),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(hintText: 'ID de l\'utilisateur (ou Email)'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Tous')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text), child: const Text('Filtrer')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('Tous')),
+          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text), child: Text('Filtrer')),
         ],
       ),
     );
@@ -144,9 +144,9 @@ class AuditFiltersBar extends ConsumerWidget {
     final res = await showDialog<String>(
       context: context,
       builder: (context) => SimpleDialog(
-        title: const Text('Choisir une action'),
+        title: Text('Choisir une action'),
         children: [
-          SimpleDialogOption(onPressed: () => Navigator.pop(context, ''), child: const Text('Toutes')),
+          SimpleDialogOption(onPressed: () => Navigator.pop(context, ''), child: Text('Toutes')),
           ...actions.map((a) => SimpleDialogOption(
             onPressed: () => Navigator.pop(context, a),
             child: Text(a),
@@ -194,7 +194,7 @@ class _FilterChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 14, color: isActive ? context.colors.brandPrimary : (isDark ? Colors.white60 : Colors.black54)),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             Text(
               label,
               style: TextStyle(

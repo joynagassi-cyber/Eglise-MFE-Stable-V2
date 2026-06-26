@@ -268,7 +268,7 @@ class FireTransitionScaffold extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(title!),
                 ],
               )

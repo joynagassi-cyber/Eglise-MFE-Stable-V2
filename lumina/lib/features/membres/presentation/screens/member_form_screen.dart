@@ -50,7 +50,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
 
     return formState.when(
       loading: () =>
-          const Scaffold(body: Center(child: LoadingDots())),
+          Scaffold(body: Center(child: LoadingDots())),
       error: (e, _) => Scaffold(
         body: Center(
           child: Text(
@@ -75,7 +75,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
               label: 'Fermer',
               button: true,
               child: IconButton(
-                icon: const Icon(Icons.close_rounded, size: AppSpacing.iconMd),
+                icon: Icon(Icons.close_rounded, size: AppSpacing.iconMd),
                 onPressed: () async {
                   await HapticHelper.light();
                   if (context.mounted) {
@@ -92,7 +92,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                 child: Form(
                   key: _formKey,
                   child: PageView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     controller: _pageController,
                     children: [
                       _buildIdentityStep(context, stateData),
@@ -124,12 +124,12 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                             minimumSize: const Size(0, 56),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           ),
-                          child: const Text('Précédent'),
+                          child: Text('Précédent'),
                         ).withTouchTarget(),
                       )
                     else
-                      const Spacer(),
-                    const SizedBox(width: 16),
+                      Spacer(),
+                    SizedBox(width: 16),
                     Expanded(
                       child: GradientButton(
                         text: _currentStep == 2 ? 'Enregistrer' : 'Suivant',
@@ -183,7 +183,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           ),
           child: Center(
             child: isCompleted
-                ? const Icon(Icons.check, color: Colors.white, size: 16)
+                ? Icon(Icons.check, color: Colors.white, size: 16)
                 : Text(
                     '${index + 1}',
                     style: TextStyle(
@@ -194,7 +194,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                   ),
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           label,
           style: AppTypography.labelSmall.copyWith(
@@ -236,7 +236,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             size: 120,
           ),
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
         Row(
           children: [
             Expanded(
@@ -249,7 +249,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                 validator: (v) => v?.isEmpty == true ? 'Requis' : null,
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Expanded(
               child: _buildTextField(
                 initialValue: member.lastName,
@@ -261,7 +261,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             ),
           ],
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         _buildDropdown<Gender>(
           label: 'Genre',
           value: member.gender,
@@ -271,7 +271,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             if (v != null) controller.updateMember((m) => m.copyWith(gender: v));
           },
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         InkWell(
           onTap: () async {
             await HapticHelper.light();
@@ -296,7 +296,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             decoration: InputDecoration(
               labelText: 'Date de naissance',
               prefixIcon: Icon(Icons.cake_outlined, color: context.colors.brandPrimary),
-              suffixIcon: const Icon(Icons.calendar_today_rounded, size: 18),
+              suffixIcon: Icon(Icons.calendar_today_rounded, size: 18),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             ),
             child: Text(
@@ -327,7 +327,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           onChanged: (v) =>
               controller.updateMember((m) => m.copyWith(phone: v)),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         _buildTextField(
           initialValue: member.email,
           label: 'Email',
@@ -336,7 +336,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           onChanged: (v) =>
               controller.updateMember((m) => m.copyWith(email: v)),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         _buildTextField(
           initialValue: member.addressLine1,
           label: 'Adresse domicile',
@@ -345,7 +345,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           onChanged: (v) =>
               controller.updateMember((m) => m.copyWith(addressLine1: v)),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         _buildTextField(
           initialValue: member.city,
           label: 'Ville / Quartier',
@@ -375,7 +375,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.circle, color: Color(s.colorValue), size: 12),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Text(s.label),
                     ],
                   ),
@@ -386,7 +386,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             if (v != null) controller.updateMember((m) => m.copyWith(status: v));
           },
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         Container(
           decoration: BoxDecoration(
             color: context.colors.bgCardLight,
@@ -396,8 +396,8 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           child: Column(
             children: [
               SwitchListTile(
-                title: const Text('Est baptisé(e) ?', style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: const Text('Baptême par immersion'),
+                title: Text('Est baptisé(e) ?', style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text('Baptême par immersion'),
                 value: member.isBaptized,
                 onChanged: (v) async {
                   await HapticHelper.light();
@@ -407,7 +407,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ).withTouchTarget(),
               if (member.isBaptized) ...[
-                const Divider(height: 1),
+                Divider(height: 1),
                 InkWell(
                   onTap: () async {
                     await HapticHelper.light();
@@ -432,7 +432,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                     child: Row(
                       children: [
                         Icon(Icons.calendar_today_rounded, size: 18, color: context.colors.brandPrimary),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -445,8 +445,8 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        const Icon(Icons.edit_rounded, size: 16),
+                        Spacer(),
+                        Icon(Icons.edit_rounded, size: 16),
                       ],
                     ),
                   ),
@@ -455,7 +455,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
         Text(
           'FORMATION ET PARCOURS',
           style: AppTypography.labelSmall.copyWith(
@@ -464,7 +464,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
             color: context.colors.textSecondary,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
             color: context.colors.bgCardLight,
@@ -473,7 +473,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
           child: Column(
             children: [
               CheckboxListTile(
-                title: const Text('Classe de membre terminée'),
+                title: Text('Classe de membre terminée'),
                 value: member.hasCompletedMembershipClass,
                 onChanged: (v) async {
                   await HapticHelper.light();
@@ -484,9 +484,9 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
                 controlAffinity: ListTileControlAffinity.leading,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               ).withTouchTarget(),
-              const Divider(height: 1),
+              Divider(height: 1),
               CheckboxListTile(
-                title: const Text('Classe de maturité terminée'),
+                title: Text('Classe de maturité terminée'),
                 value: member.hasCompletedMaturityClass,
                 onChanged: (v) async {
                   await HapticHelper.light();
@@ -585,7 +585,7 @@ class _MemberFormScreenState extends ConsumerState<MemberFormScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Brebis enregistrée avec succès'),
+              content: Text('Brebis enregistrée avec succès'),
               backgroundColor: context.colors.successText,
               behavior: SnackBarBehavior.floating,
             ),

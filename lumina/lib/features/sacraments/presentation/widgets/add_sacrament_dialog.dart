@@ -70,14 +70,14 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sacrement ajouté avec succès')),
+          SnackBar(content: Text('Sacrement ajouté avec succès')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Une erreur est survenue lors de l\'ajout du sacrement')));
+        ).showSnackBar(SnackBar(content: Text('Une erreur est survenue lors de l\'ajout du sacrement')));
       }
     } finally {
       if (mounted) {
@@ -104,13 +104,13 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildTypeSelector(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildDateField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildMemberField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildDetailsField(context),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
                       _buildActions(context),
                     ],
                   ),
@@ -130,7 +130,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
       child: Row(
         children: [
           Icon(Icons.church, color: context.colors.textOnBrand, size: 28),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Text('Ajouter un Sacrement',
             style: TextStyle(
               color: context.colors.textOnBrand,
@@ -138,7 +138,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(Icons.close, color: context.colors.textOnBrand),
@@ -152,11 +152,11 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Type de sacrement',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -167,7 +167,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(type.icon),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(type.label),
                 ],
               ),
@@ -210,7 +210,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
         child: Row(
           children: [
             Icon(Icons.calendar_today, color: context.colors.brandPrimary),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Text(
               DateFormat('dd MMMM yyyy').format(_selectedDate),
               style: const TextStyle(fontSize: 16),
@@ -237,8 +237,8 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Détails', style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
+        Text('Détails', style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(height: 8),
         TextFormField(
           controller: _locationController,
           decoration: const InputDecoration(
@@ -247,7 +247,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
             border: OutlineInputBorder(),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextFormField(
           controller: _celebrantController,
           decoration: const InputDecoration(
@@ -256,7 +256,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
             border: OutlineInputBorder(),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextFormField(
           controller: _notesController,
           decoration: const InputDecoration(
@@ -276,10 +276,10 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
         Expanded(
           child: OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
             onPressed: _isLoading ? null : _submit,
@@ -289,7 +289,7 @@ class _AddSacramentDialogState extends ConsumerState<AddSacramentDialog> {
             ),
             child: _isLoading
                 ? LoadingDots(color: context.colors.textOnBrand, size: 24)
-                : const Text('Enregistrer'),
+                : Text('Enregistrer'),
           ),
         ),
       ],

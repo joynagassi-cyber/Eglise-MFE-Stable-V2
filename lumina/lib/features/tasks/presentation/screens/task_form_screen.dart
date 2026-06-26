@@ -119,13 +119,13 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Supprimer ?'),
-                    content: const Text(
+                    title: Text('Supprimer ?'),
+                    content: Text(
                         'Voulez-vous vraiment supprimer cette tâche ?'),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context, false),
-                          child: const Text('Annuler')).withTouchTarget(),
+                          child: Text('Annuler')).withTouchTarget(),
                       TextButton(
                           onPressed: () => Navigator.pop(context, true),
                           child: Text('Supprimer',
@@ -160,14 +160,14 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Champ requis' : null,
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               _buildTextField(
                 controller: _descriptionController,
                 label: 'Description',
                 icon: Icons.description_outlined,
                 maxLines: 3,
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               Text(
                 'PARAMÈTRES',
                 style: AppTypography.labelSmall.copyWith(
@@ -176,7 +176,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   color: context.colors.textSecondary,
                 ),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
               Row(
                 children: [
                   Expanded(
@@ -187,7 +187,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                       onChanged: (v) => setState(() => _type = v!),
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.md),
+                  SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: _buildDropdown<TaskPriority>(
                       label: 'Priorité',
@@ -198,20 +198,20 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               _buildDropdown<TaskStatus>(
                 label: 'Statut',
                 value: _status,
                 items: TaskStatus.values,
                 onChanged: (v) => setState(() => _status = v!),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               ListTile(
-                title: const Text('Date d\'échéance'),
+                title: Text('Date d\'échéance'),
                 subtitle: Text(_dueDate == null
                     ? 'Non définie'
                     : '${_dueDate!.day}/${_dueDate!.month}/${_dueDate!.year}'),
-                trailing: const Icon(Icons.calendar_today_rounded),
+                trailing: Icon(Icons.calendar_today_rounded),
                 onTap: () async {
                   await HapticHelper.light();
                   if (!context.mounted) return;
@@ -231,7 +231,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   }
                 },
               ).withTouchTarget(),
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -242,7 +242,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     minimumSize: const Size(double.infinity, 56),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: const Text('Enregistrer', 
+                  child: Text('Enregistrer', 
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ).withTouchTarget(),

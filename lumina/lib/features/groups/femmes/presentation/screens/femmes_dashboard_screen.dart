@@ -155,7 +155,7 @@ class _FemmesDashboardScreenState extends ConsumerState<FemmesDashboardScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     groupAsync.when(
                       data: (group) => Text(
                         group.name,
@@ -254,7 +254,7 @@ class _FemmesDashboardScreenState extends ConsumerState<FemmesDashboardScreen>
                     await HapticHelper.light();
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Fonctionnalité en cours de développement')),
+                        SnackBar(content: Text('Fonctionnalité en cours de développement')),
                       );
                     }
                   },
@@ -272,7 +272,7 @@ class _FemmesDashboardScreenState extends ConsumerState<FemmesDashboardScreen>
                         color: action['color'] as Color),
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   action['label'] as String,
                   style: TextStyle(
@@ -308,7 +308,7 @@ class _FemmesDashboardScreenState extends ConsumerState<FemmesDashboardScreen>
                 color: context.colors.femmesColor,
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Expanded(
               child: KpiCard(
                 title: 'Anniversaires',

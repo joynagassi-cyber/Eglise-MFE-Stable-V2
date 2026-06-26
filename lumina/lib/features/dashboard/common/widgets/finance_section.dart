@@ -22,7 +22,7 @@ class FinanceSection extends StatelessWidget {
           trailingLabel: 'Dépense',
           onTrailingTap: onCreateExpense,
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         if (recentTransactions.isEmpty)
           const EmptyState(
             icon: Icons.money_off,
@@ -32,9 +32,9 @@ class FinanceSection extends StatelessWidget {
         else
           ListView.separated(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             itemCount: recentTransactions.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, __) => Divider(height: 1),
             itemBuilder: (context, index) {
               final tx = recentTransactions[index];
               return ListTile(

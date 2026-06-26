@@ -27,7 +27,7 @@ class AttendanceBarChart extends StatelessWidget {
         children: [
           Text('Présence Heureuse (Derniers 4 Dimanches)',
               style: AppText.bodyMedium(context)),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Expanded(
             child: BarChart(
               BarChartData(

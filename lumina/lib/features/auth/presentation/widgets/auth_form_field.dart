@@ -85,7 +85,7 @@ class _AuthFormFieldState extends State<AuthFormField> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         AnimatedContainer(
           duration: AppSpacing.animationFast,
           curve: Curves.easeOut,

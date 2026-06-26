@@ -19,7 +19,7 @@ class RbacDashboardScreen extends ConsumerWidget {
       title: AppLocalizations.of(context)!.rbacAdmin,
       subtitle: AppLocalizations.of(context)!.rolesPermissions,
       headerAction: IconButton(
-        icon: const Icon(Icons.grid_view),
+        icon: Icon(Icons.grid_view),
         tooltip: AppLocalizations.of(context)!.permissionsMatrix,
         onPressed: () => context.push(AppRoutes.adminRolesMatrix),
       ),
@@ -27,7 +27,7 @@ class RbacDashboardScreen extends ConsumerWidget {
       body: rolesAsync.when(
         data: (roles) => ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           itemCount: roles.length,
           itemBuilder: (context, index) {
             final role = roles[index];
@@ -46,7 +46,7 @@ class RbacDashboardScreen extends ConsumerWidget {
                 ),
                 title: Text(role.label),
                 subtitle: Text(role.code),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: Icon(Icons.chevron_right),
                 onTap: () {
                   // Navigate to role details
                 },

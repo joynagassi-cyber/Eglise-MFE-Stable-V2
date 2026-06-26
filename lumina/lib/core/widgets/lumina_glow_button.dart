@@ -92,7 +92,7 @@ class _LuminaGlowButtonState extends State<LuminaGlowButton> {
                   size: 20,
                   color: color,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   widget.label,
                   style: LuminaDesign.labelOf(context).copyWith(

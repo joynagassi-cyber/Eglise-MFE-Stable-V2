@@ -13,7 +13,6 @@ import '../providers/dashboard_modules_provider.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import 'package:lumina/core/widgets/lumina_coach_mark.dart';
 import 'package:lumina/core/services/tutorial_service.dart';
-import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:lumina/core/widgets/loading_state.dart';
 import '../../../../core/extensions/context_extension.dart';
 

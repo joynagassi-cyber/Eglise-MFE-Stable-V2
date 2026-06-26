@@ -55,7 +55,7 @@ class PremiumDashboardScaffold extends ConsumerWidget {
               backgroundColor: context.colors.bgPage,
               surfaceTintColor: Colors.transparent,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               flexibleSpace: FlexibleSpaceBar(
@@ -90,7 +90,7 @@ class PremiumDashboardScaffold extends ConsumerWidget {
                 if (headerAction != null) headerAction!,
                 if (onRefresh != null && headerAction == null)
                   IconButton(
-                    icon: const Icon(Icons.refresh),
+                    icon: Icon(Icons.refresh),
                     onPressed: onRefresh,
                   ),
               ],
@@ -124,7 +124,7 @@ class PremiumDashboardScaffold extends ConsumerWidget {
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               _buildSubtitle(context),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
             ]),
           ),
         ),
@@ -167,7 +167,7 @@ class PremiumDashboardScaffold extends ConsumerWidget {
         sliver: SliverList(
           delegate: SliverChildListDelegate([
             _buildSubtitle(context),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
           ]),
         ),
       ),
@@ -177,16 +177,16 @@ class PremiumDashboardScaffold extends ConsumerWidget {
   }
 
   Widget _buildSliverBody(BuildContext context) {
-    if (body == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    if (body == null) return SliverToBoxAdapter(child: SizedBox.shrink());
 
     // If no async data is provided, just show the body
     if (asyncData == null) {
       return SliverList(
         delegate: SliverChildListDelegate([
           _buildSubtitle(context),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           body!,
-          const SizedBox(height: 80), // Bottom padding
+          SizedBox(height: 80), // Bottom padding
         ]),
       );
     }
@@ -217,9 +217,9 @@ class PremiumDashboardScaffold extends ConsumerWidget {
     return SliverList(
       delegate: SliverChildListDelegate([
         _buildSubtitle(context),
-        const SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.lg),
         AnimatedEntrance.fromBottom(child: body!),
-        const SizedBox(height: 80), // Bottom padding
+        SizedBox(height: 80), // Bottom padding
       ]),
     );
   }

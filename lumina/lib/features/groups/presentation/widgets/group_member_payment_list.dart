@@ -24,14 +24,14 @@ class GroupMemberPaymentList extends ConsumerWidget {
     return membersAsync.when(
       data: (members) {
         if (members.isEmpty) {
-          return const Center(child: Text('Aucun membre dans ce groupe.'));
+          return Center(child: Text('Aucun membre dans ce groupe.'));
         }
 
         return ListView.separated(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           itemCount: members.length,
-          separatorBuilder: (context, index) => const Divider(),
+          separatorBuilder: (context, index) => Divider(),
           itemBuilder: (context, index) {
             final membership = members[index];
             return ListTile(
@@ -56,14 +56,14 @@ class GroupMemberPaymentList extends ConsumerWidget {
                   foregroundColor: context.colors.textInverse,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                 ),
-                child: const Text('Encaisser'),
+                child: Text('Encaisser'),
               ),
             );
           },
         );
       },
-      loading: () => const Center(child: LoadingState()),
-      error: (e, st) => const Center(child: Text('Impossible de charger les paiements')),
+      loading: () => Center(child: LoadingState()),
+      error: (e, st) => Center(child: Text('Impossible de charger les paiements')),
     );
   }
 
@@ -99,7 +99,7 @@ class GroupMemberPaymentList extends ConsumerWidget {
               ),
               keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text(
               'Ce versement sera ajouté à la caisse du groupe.',
               style: TextStyle(
@@ -113,7 +113,7 @@ class GroupMemberPaymentList extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -131,7 +131,7 @@ class GroupMemberPaymentList extends ConsumerWidget {
                   Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('Aucun compte financier configuré.', style: TextStyle(fontFamily: LuminaFont.body)),
+                        content: Text('Aucun compte financier configuré.', style: TextStyle(fontFamily: LuminaFont.body)),
                         backgroundColor: context.colors.errorBg,
                       ),
                     );
@@ -166,13 +166,13 @@ class GroupMemberPaymentList extends ConsumerWidget {
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Paiement enregistré avec succès !'),
                   ),
                 );
               }
             },
-            child: const Text('Confirmer'),
+            child: Text('Confirmer'),
           ),
         ],
       ),

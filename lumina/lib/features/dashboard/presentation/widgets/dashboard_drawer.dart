@@ -43,7 +43,7 @@ class DashboardDrawer extends ConsumerWidget {
                       color: context.colors.brandPrimary,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   Text(
                     session?.name ?? 'Utilisateur',
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -51,8 +51,8 @@ class DashboardDrawer extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   userContextAsync.when(
                     data: (ctx) => Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,7 @@ class DashboardDrawer extends ConsumerWidget {
                     ...modulesAsync
                         .where((m) => m.priority == ModulePriority.critical)
                         .map((module) => _buildModuleTile(context, module)),
-                    const Divider(height: AppSpacing.lg),
+                    Divider(height: AppSpacing.lg),
                   ],
                   if (modulesAsync
                       .where((m) => m.priority == ModulePriority.frequent)
@@ -122,7 +122,7 @@ class DashboardDrawer extends ConsumerWidget {
                     ...modulesAsync
                         .where((m) => m.priority == ModulePriority.frequent)
                         .map((module) => _buildModuleTile(context, module)),
-                    const Divider(height: AppSpacing.lg),
+                    Divider(height: AppSpacing.lg),
                   ],
                   if (modulesAsync
                       .where((m) => m.priority == ModulePriority.secondary)
@@ -137,7 +137,7 @@ class DashboardDrawer extends ConsumerWidget {
             ),
 
             // Footer
-            const Divider(height: 1),
+            Divider(height: 1),
             FutureBuilder<PackageInfo>(
               future: PackageInfo.fromPlatform(),
               builder: (context, snapshot) {
@@ -151,7 +151,7 @@ class DashboardDrawer extends ConsumerWidget {
                           Icons.help_outline,
                           color: context.colors.infoText,
                         ),
-                        title: const Text('Revoir le tutoriel'),
+                        title: Text('Revoir le tutoriel'),
                         onTap: () async {
                           await HapticHelper.light();
                           // Reset tutorial et fermer drawer
@@ -165,7 +165,7 @@ class DashboardDrawer extends ConsumerWidget {
                             // Le tutoriel sera relancé au prochain build du dashboard
                             context.go(AppRoutes.dashboard);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
                                   'Naviguez vers le Dashboard pour voir le tutoriel',
                                 ),
@@ -180,7 +180,7 @@ class DashboardDrawer extends ConsumerWidget {
                           Icons.settings_outlined,
                           color: context.colors.brandPrimary,
                         ),
-                        title: const Text('Paramètres'),
+                        title: Text('Paramètres'),
                         onTap: () {
                           HapticHelper.light();
                           Navigator.pop(context);
@@ -192,14 +192,14 @@ class DashboardDrawer extends ConsumerWidget {
                           Icons.logout,
                           color: context.colors.errorText,
                         ),
-                        title: const Text('Déconnexion'),
+                        title: Text('Déconnexion'),
                         onTap: () async {
                           await HapticHelper.medium();
                           await ref.read(authProvider.notifier).logout();
                           if (context.mounted) context.go(AppRoutes.login);
                         },
                       ),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       Text(
                         'Version $version',
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -268,7 +268,7 @@ class DashboardDrawer extends ConsumerWidget {
                       ),
                 ),
               )
-            : const Icon(Icons.chevron_right),
+            : Icon(Icons.chevron_right),
         onTap: () async {
           await HapticHelper.light();
           if (context.mounted) {

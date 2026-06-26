@@ -108,8 +108,8 @@ class _ShepherdFormScreenState extends ConsumerState<ShepherdFormScreen> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle_rounded, color: Colors.white),
-                const SizedBox(width: AppSpacing.sm),
+                Icon(Icons.check_circle_rounded, color: Colors.white),
+                SizedBox(width: AppSpacing.sm),
                 Text(
                   'Berger enregistré avec succès',
                   style: Theme.of(
@@ -167,7 +167,7 @@ class _ShepherdFormScreenState extends ConsumerState<ShepherdFormScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(
+          ? Center(
               child: LoadingState(),
             )
           : SingleChildScrollView(
@@ -186,12 +186,12 @@ class _ShepherdFormScreenState extends ConsumerState<ShepherdFormScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 200),
                       child: _buildDropdown(levels, isDark, theme),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 300),
                       child: _buildTextField(
@@ -203,7 +203,7 @@ class _ShepherdFormScreenState extends ConsumerState<ShepherdFormScreen> {
                         theme: theme,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 400),
                       child: _buildTextField(
@@ -215,7 +215,7 @@ class _ShepherdFormScreenState extends ConsumerState<ShepherdFormScreen> {
                         theme: theme,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 500),
                       child: Semantics(

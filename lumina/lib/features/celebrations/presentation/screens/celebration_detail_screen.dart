@@ -89,8 +89,8 @@ class _CelebrationDetailScreenState
         SnackBar(
           content: Row(
             children: [
-              const Icon(Icons.check_circle, color: Colors.white),
-              const SizedBox(width: AppSpacing.xs),
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: AppSpacing.xs),
               Text(
                 'Modifications enregistrées',
                 style: Theme.of(
@@ -143,7 +143,7 @@ class _CelebrationDetailScreenState
                 borderRadius: AppSpacing.borderRadiusMd,
               ),
               child: IconButton(
-                icon: const Icon(Icons.save_rounded, color: Colors.white),
+                icon: Icon(Icons.save_rounded, color: Colors.white),
                 onPressed: _saveChanges,
               ),
             ),
@@ -186,7 +186,7 @@ class _CelebrationDetailScreenState
             delay: const Duration(milliseconds: 100),
             child: _buildInfoCard(isDark),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           AnimatedEntrance.fromBottom(
             delay: const Duration(milliseconds: 200),
             child: Container(
@@ -205,7 +205,7 @@ class _CelebrationDetailScreenState
                       color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xxs),
+                  SizedBox(height: AppSpacing.xxs),
                   Text(
                     '$total',
                     style: theme.textTheme.displayLarge?.copyWith(
@@ -217,7 +217,7 @@ class _CelebrationDetailScreenState
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           AnimatedEntrance.fromBottom(
             delay: const Duration(milliseconds: 300),
             child: Text(
@@ -228,12 +228,12 @@ class _CelebrationDetailScreenState
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.smd),
+          SizedBox(height: AppSpacing.smd),
           AnimatedEntrance.fromBottom(
             delay: const Duration(milliseconds: 350),
             child: _buildMemberCounters(isDark),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           AnimatedEntrance.fromBottom(
             delay: const Duration(milliseconds: 400),
             child: Text(
@@ -244,7 +244,7 @@ class _CelebrationDetailScreenState
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.smd),
+          SizedBox(height: AppSpacing.smd),
           AnimatedEntrance.fromBottom(
             delay: const Duration(milliseconds: 450),
             child: _buildVisitorCounters(isDark),
@@ -393,14 +393,14 @@ class _CelebrationDetailScreenState
         child: Row(
           children: [
             Icon(icon, color: context.colors.brandPrimary, size: AppSpacing.iconLg),
-            const SizedBox(width: AppSpacing.smd),
+            SizedBox(width: AppSpacing.smd),
             Text(
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Spacer(),
+            Spacer(),
             Semantics(
               label: 'Diminuer le nombre de $label',
               button: true,
@@ -476,7 +476,7 @@ class _CelebrationDetailScreenState
                     color: context.colors.brandPrimary,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text(
                   'Aucun membre',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -492,7 +492,7 @@ class _CelebrationDetailScreenState
         return ListView.separated(
           padding: AppSpacing.screenPadding.copyWith(bottom: AppSpacing.xxl),
           itemCount: members.length,
-          separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+          separatorBuilder: (_, __) => SizedBox(height: AppSpacing.sm),
           itemBuilder: (context, index) {
             final member = members[index];
             final attendance = ref.watch(
@@ -553,7 +553,7 @@ class _CelebrationDetailScreenState
           },
         );
       },
-      loading: () => const Center(
+      loading: () => Center(
         child: SizedBox(
           width: AppSpacing.iconLg,
           height: AppSpacing.iconLg,

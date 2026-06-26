@@ -83,13 +83,13 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Configuration sauvegardée')),
+          SnackBar(content: Text('Configuration sauvegardée')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Impossible de sauvegarder les paramètres')),
+          SnackBar(content: Text('Impossible de sauvegarder les paramètres')),
         );
       }
     } finally {
@@ -110,24 +110,24 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
 
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Paramètres Admin')),
-        body: const Center(child: LoadingState()),
+        appBar: AppBar(title: Text('Paramètres Admin')),
+        body: Center(child: LoadingState()),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paramètres Admin'),
+        title: Text('Paramètres Admin'),
         actions: [
           IconButton(
             onPressed: _isSaving ? null : _saveAll,
             icon: _isSaving
-                ? const SizedBox(
+                ? SizedBox(
                     width: 24,
                     height: 24,
                     child: LoadingDots(size: 24),
                   )
-                : const Icon(Icons.save),
+                : Icon(Icons.save),
           ),
         ],
       ),
@@ -136,7 +136,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
         children: [
           // Church Identity Section
           Text('Identité de l\'Église', style: theme.textTheme.titleMedium),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           TextField(
             controller: _nameController,
@@ -145,7 +145,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
               border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           TextField(
             controller: _logoUrlController,
@@ -155,16 +155,16 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
               hintText: 'https://...',
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Name Style Section
           Text('Style du nom (PDF)', style: theme.textTheme.titleMedium),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Font size slider
           Row(
             children: [
-              const Text('Taille:'),
+              Text('Taille:'),
               Expanded(
                 child: Slider(
                   value: _fontSize.toDouble(),
@@ -193,11 +193,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
             ],
             onChanged: (value) => setState(() => _fontWeight = value ?? 'bold'),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Color picker (simple)
           ListTile(
-            title: const Text('Couleur du nom'),
+            title: Text('Couleur du nom'),
             trailing: GestureDetector(
               onTap: _showColorPicker,
               child: Container(
@@ -211,18 +211,18 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
 
           // Financial Settings Section
           Text('Paramètres Experts (BILAN)',
               style: theme.textTheme.titleMedium),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           if (_financialSettings != null) ...[
             // Sigma threshold
             Row(
               children: [
-                const Text('Seuil anomalies (σ):'),
+                Text('Seuil anomalies (σ):'),
                 Expanded(
                   child: Slider(
                     value: _financialSettings!.anomalySigmaThreshold,
@@ -241,17 +241,17 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                     '${_financialSettings!.anomalySigmaThreshold.toStringAsFixed(1)} σ'),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               'Un multiplicateur d\'écart-type plus élevé réduit le nombre d\'alerte d\'anomalies.',
               style: theme.textTheme.bodySmall,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             SwitchListTile(
-              title: const Text('Consolidation automatique'),
-              subtitle: const Text(
+              title: Text('Consolidation automatique'),
+              subtitle: Text(
                   'Éliminer les transferts internes dans le total Église'),
               value: _financialSettings!.eliminateInternalTransfers,
               onChanged: (value) => setState(() {
@@ -260,11 +260,11 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
               }),
             ),
           ],
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
 
           // Preview Section
           Text('Aperçu', style: theme.textTheme.titleMedium),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -280,7 +280,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                       color: _nameColor,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'BILAN FINANCIER',
                     style: theme.textTheme.titleMedium,

@@ -33,19 +33,19 @@ class BilanBudgetTab extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           _buildOverallBudgetCard(context, totalBudget, totalSpent, overallPct),
-          const SizedBox(height: AppSpacing.xl),
-          const Text(
+          SizedBox(height: AppSpacing.xl),
+          Text(
             'Consommation par Rubrique',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           ListView.separated(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             itemCount: budgetCategories.length,
-            separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+            separatorBuilder: (_, __) => SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) {
               final cat = budgetCategories[index];
               final String name = cat['name'] as String;
@@ -84,7 +84,7 @@ class BilanBudgetTab extends ConsumerWidget {
             'Consommation Globale',
             style: theme.textTheme.titleMedium,
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Text(
             '${pct.toStringAsFixed(1)}%',
             style: theme.textTheme.displaySmall?.copyWith(
@@ -92,7 +92,7 @@ class BilanBudgetTab extends ConsumerWidget {
               color: pct > 100 ? context.colors.errorText : context.colors.brandPrimary,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           AppProgressBar(
             value: (pct > 100 ? 100 : pct) / 100.0,
             height: 12,
@@ -102,21 +102,21 @@ class BilanBudgetTab extends ConsumerWidget {
                 : (pct > 80 ? context.colors.warningText : context.colors.successText),
             borderRadius: 12,
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Dépensé', style: TextStyle(color: Colors.grey)),
+                  Text('Dépensé', style: TextStyle(color: Colors.grey)),
                   Text('${actual.toStringAsFixed(0)} FCFA', style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('Budget', style: TextStyle(color: Colors.grey)),
+                  Text('Budget', style: TextStyle(color: Colors.grey)),
                   Text('${target.toStringAsFixed(0)} FCFA', style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -147,7 +147,7 @@ class BilanBudgetTab extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         AppProgressBar(
           value: (pct > 100 ? 100 : pct) / 100.0,
           height: 8,
@@ -157,7 +157,7 @@ class BilanBudgetTab extends ConsumerWidget {
           borderRadius: 4,
         ),
         if (isOverage) ...[
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             'Dépassement de ${(actual - target).toStringAsFixed(0)} FCFA',
             style: TextStyle(color: context.colors.errorText, fontSize: 10, fontWeight: FontWeight.bold),

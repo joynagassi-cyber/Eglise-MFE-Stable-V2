@@ -79,12 +79,12 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
               SnackBar(
                 content: Row(
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       width: 20,
                       height: 20,
                       child: LoadingDots(size: 24),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16),
                     Text(context.l10n.bilan_export_pdf),
                   ],
                 ),
@@ -130,7 +130,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content: const Text('Impossible de télécharger le rapport PDF'),
+                    content: Text('Impossible de télécharger le rapport PDF'),
                     backgroundColor: context.colors.errorText),
               );
             }
@@ -171,7 +171,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
     final authStateVal = ref.read(authProvider).valueOrNull;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Préparation de l\'export FEC (OHADA)...')),
+      SnackBar(content: Text('Préparation de l\'export FEC (OHADA)...')),
     );
 
     try {
@@ -183,7 +183,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
       if (lines.isEmpty) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Aucune donnée à exporter pour cette période')),
+          SnackBar(content: Text('Aucune donnée à exporter pour cette période')),
         );
         return;
       }
@@ -207,7 +207,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Export FEC prêt'),
+          content: Text('Export FEC prêt'),
           backgroundColor: context.colors.successText,
         ),
       );
@@ -215,7 +215,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Erreur lors de l\'export FEC'),
+          content: Text('Erreur lors de l\'export FEC'),
           backgroundColor: context.colors.errorText,
         ),
       );
@@ -243,12 +243,12 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
           ),
           IconButton(
             tooltip: context.l10n.bilan_export_pdf,
-            icon: const Icon(Icons.picture_as_pdf),
+            icon: Icon(Icons.picture_as_pdf),
             onPressed: () => _exportBilanPdf(context, storageService),
           ),
           IconButton(
             tooltip: 'Exporter FEC (Expert)',
-            icon: const Icon(Icons.file_download_outlined),
+            icon: Icon(Icons.file_download_outlined),
             onPressed: () => _exportFec(context, storageService),
           ),
         ],

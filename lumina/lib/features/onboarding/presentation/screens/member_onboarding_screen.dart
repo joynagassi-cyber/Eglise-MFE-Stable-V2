@@ -22,17 +22,17 @@ class MemberOnboardingScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.celebration_rounded, size: 80, color: LuminaDesign.primary)
+              Icon(Icons.celebration_rounded, size: 80, color: LuminaDesign.primary)
                   .animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               Text("Bienvenue dans la Famille !", textAlign: TextAlign.center, style: LuminaDesign.h1Of(context)),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 "Votre profil est prêt. Vous allez maintenant accéder à votre espace personnalisé.",
                 textAlign: TextAlign.center,
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
               LuminaButton(
                 label: "Terminer",
                 isLoading: state.isSubmitting,

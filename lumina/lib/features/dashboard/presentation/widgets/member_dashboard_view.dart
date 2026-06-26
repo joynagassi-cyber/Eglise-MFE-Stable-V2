@@ -20,14 +20,14 @@ class MemberDashboardView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildWelcome(state),
-            const SizedBox(height: LuminaDesign.paddingLg),
+            _buildWelcome(context, state),
+            SizedBox(height: LuminaDesign.paddingLg),
             _buildKPIGrid(context, state),
-            const SizedBox(height: LuminaDesign.paddingLg),
+            SizedBox(height: LuminaDesign.paddingLg),
             const DailyBibleCard(),
-            const SizedBox(height: LuminaDesign.paddingLg),
-            _buildSectionTitle("Ma Communauté"),
-            _buildGroupsList(state),
+            SizedBox(height: LuminaDesign.paddingLg),
+            _buildSectionTitle(context, "Ma Communauté"),
+            _buildGroupsList(context, state),
           ],
         ),
       ),
@@ -36,7 +36,7 @@ class MemberDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildWelcome(MemberDashboardState state) {
+  Widget _buildWelcome(context, BuildContext context, MemberDashboardState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,23 +55,23 @@ class MemberDashboardView extends ConsumerWidget {
             onTap: () => context.push(AppRoutes.memberDonations),
             child: Column(
               children: [
-                const Icon(Icons.favorite, color: LuminaDesign.primary),
-                const SizedBox(height: 8),
+                Icon(Icons.favorite, color: LuminaDesign.primary),
+                SizedBox(height: 8),
                 Text("Mes Dons", style: LuminaDesign.labelOf(context)),
                 Text("${state.totalContributions.toInt()} F", style: LuminaDesign.h2Of(context)),
               ],
             ),
           ),
         ),
-        const SizedBox(width: LuminaDesign.paddingMd),
+        SizedBox(width: LuminaDesign.paddingMd),
         Expanded(
           child: LuminaCard(
             color: LuminaDesign.accent.withOpacity(0.05),
             onTap: () => context.push(AppRoutes.communaute),
             child: Column(
               children: [
-                const Icon(Icons.groups, color: LuminaDesign.accent),
-                const SizedBox(height: 8),
+                Icon(Icons.groups, color: LuminaDesign.accent),
+                SizedBox(height: 8),
                 Text("Mes Groupes", style: LuminaDesign.labelOf(context)),
                 Text("${state.myGroups.length}", style: LuminaDesign.h2Of(context)),
               ],
@@ -82,16 +82,16 @@ class MemberDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(context, BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: LuminaDesign.paddingMd),
       child: Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),
     );
   }
 
-  Widget _buildGroupsList(MemberDashboardState state) {
+  Widget _buildGroupsList(context, BuildContext context, MemberDashboardState state) {
     if (state.myGroups.isEmpty) {
-      return const Text("Vous n'avez pas encore rejoint de groupe.");
+      return Text("Vous n'avez pas encore rejoint de groupe.");
     }
     return SizedBox(
       height: 100,
@@ -108,7 +108,7 @@ class MemberDashboardView extends ConsumerWidget {
                 backgroundColor: LuminaDesign.primary.withOpacity(0.1),
                 child: Text(state.myGroups[i].name[0]),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(state.myGroups[i].name, overflow: TextOverflow.ellipsis, style: LuminaDesign.labelOf(context)),
             ],
           ),

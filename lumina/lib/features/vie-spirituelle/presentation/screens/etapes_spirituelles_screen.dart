@@ -24,7 +24,7 @@ class EtapesSpirituellesScreen extends ConsumerWidget {
       },
       body: jalonsAsync.when(
         data: (jalons) {
-          if (jalons.isEmpty) return const Center(child: Text("Aucun jalon défini."));
+          if (jalons.isEmpty) return Center(child: Text("Aucun jalon défini."));
 
           // Préparation des noeuds de la timeline
           final timelineNodes = jalons.map((j) {
@@ -50,13 +50,13 @@ class EtapesSpirituellesScreen extends ConsumerWidget {
                   "VOTRE HISTOIRE AVEC DIEU",
                   style: LuminaDesign.labelOf(context).copyWith(color: LuminaDesign.primary),
                 ).animate().fadeIn().slideX(begin: -0.2),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   "Chaque étape est une victoire de la foi.",
                   style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
                 ).animate().fadeIn(delay: 200.ms),
                 
-                const SizedBox(height: 48),
+                SizedBox(height: 48),
 
                 // --- TIMELINE ---
                 SpiritualTimeline(nodes: timelineNodes)
@@ -64,7 +64,7 @@ class EtapesSpirituellesScreen extends ConsumerWidget {
                   .fadeIn(delay: 400.ms)
                   .slideY(begin: 0.1),
                   
-                const SizedBox(height: 100),
+                SizedBox(height: 100),
               ],
             ),
           );

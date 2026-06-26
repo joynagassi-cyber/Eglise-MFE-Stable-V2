@@ -54,7 +54,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
                 color: context.colors.textPrimary,
               ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         TextFormField(
           controller: widget.controller,
           validator: widget.validator,

@@ -99,7 +99,7 @@ class _StatCardState extends State<StatCard> {
                 ),
                 child: Icon(widget.icon, color: Colors.white, size: 20),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Text(
                 widget.value,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -108,7 +108,7 @@ class _StatCardState extends State<StatCard> {
                       // L'utilisation de TextTheme injecte déjà Outfit pour headlineMedium
                     ),
               ),
-              const SizedBox(height: AppSpacing.xs),
+              SizedBox(height: AppSpacing.xs),
               Text(
                 widget.title,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -116,7 +116,7 @@ class _StatCardState extends State<StatCard> {
                     ),
               ),
               if (widget.subtitle != null) ...[
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 Text(
                   widget.subtitle!,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -174,14 +174,14 @@ class _StatCardState extends State<StatCard> {
               ),
           ],
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         Text(
           widget.value,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -189,7 +189,7 @@ class _StatCardState extends State<StatCard> {
               ),
         ),
         if (widget.subtitle != null) ...[
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: AppSpacing.xs),
           Text(
             widget.subtitle!,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(

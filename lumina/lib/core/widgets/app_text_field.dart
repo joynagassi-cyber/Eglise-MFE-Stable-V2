@@ -112,7 +112,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   fontWeight: FontWeight.w600,
                 ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
 
         // Text Field avec animation de focus
@@ -258,7 +258,7 @@ class AppSearchField extends StatelessWidget {
       prefixIcon: Icons.search_rounded,
       suffix: controller?.text.isNotEmpty == true
           ? IconButton(
-              icon: const Icon(Icons.clear_rounded),
+              icon: Icon(Icons.clear_rounded),
               onPressed: () {
                 controller?.clear();
                 onClear?.call();

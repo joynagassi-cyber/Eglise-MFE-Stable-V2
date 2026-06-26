@@ -23,10 +23,10 @@ class DonorDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détail Donateur'),
+        title: Text('Détail Donateur'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: Icon(Icons.edit),
             onPressed: () => context.push(AppRoutes.donorEditWithId(donorId)),
           ),
         ],
@@ -34,12 +34,12 @@ class DonorDetailScreen extends ConsumerWidget {
       body: donorAsync.when(
         data: (donor) {
           if (donor == null) {
-            return const Center(child: Text('Donateur non trouvé'));
+            return Center(child: Text('Donateur non trouvé'));
           }
           return Column(
             children: [
               _buildHeader(context, donor),
-              const Divider(),
+              Divider(),
               Expanded(
                 child: donationsAsync.when(
                   data: (donations) =>
@@ -69,8 +69,8 @@ class DonorDetailScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () =>
             context.push(AppRoutes.donorRecordDonationWithDonorId(donorId)),
-        icon: const Icon(Icons.add),
-        label: const Text('Enregistrer un Don'),
+        icon: Icon(Icons.add),
+        label: Text('Enregistrer un Don'),
       ),
     );
   }
@@ -86,7 +86,7 @@ class DonorDetailScreen extends ConsumerWidget {
                 ? donor.displayName.characters.first.toUpperCase()
                 : '?'),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class DonorDetailScreen extends ConsumerWidget {
     List<Donation> donations,
   ) {
     if (donations.isEmpty) {
-      return const Center(child: Text('Aucun don enregistré pour le moment.'));
+      return Center(child: Text('Aucun don enregistré pour le moment.'));
     }
 
     final campaignsAsync = ref.watch(donationCampaignsProvider);

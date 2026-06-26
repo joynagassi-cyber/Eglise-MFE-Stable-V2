@@ -25,27 +25,27 @@ class SettingsScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(LuminaDesign.paddingLg),
           children: [
             _buildSyncStatus(context, syncStatus),
-            const SizedBox(height: 24),
-            _buildSection("Affichage", [
+            SizedBox(height: 24),
+            _buildSection(context, "Affichage", [
               ListTile(
-                title: const Text("Thème"),
+                title: Text("Thème"),
                 subtitle: Text(settings.themeMode.toUpperCase()),
-                trailing: const Icon(Icons.brightness_medium),
+                trailing: Icon(Icons.brightness_medium),
                 onTap: () {}, // Handled in V2
               ),
             ]),
-            const SizedBox(height: 16),
-            _buildSection("Compte & Sécurité", [
+            SizedBox(height: 16),
+            _buildSection(context, "Compte & Sécurité", [
               ListTile(
-                title: const Text("Changement de mot de passe"),
+                title: Text("Changement de mot de passe"),
                 onTap: () {},
               ),
               ListTile(
-                title: const Text("Sauvegardes manuelles"),
+                title: Text("Sauvegardes manuelles"),
                 onTap: () => context.push(AppRoutes.backupSettings),
               ),
             ]),
-            const SizedBox(height: 48),
+            SizedBox(height: 48),
             LuminaButton(
               label: "Déconnexion",
               onPressed: () {}, // logic handled by AuthProvider
@@ -64,7 +64,7 @@ class SettingsScreen extends ConsumerWidget {
       child: Row(
         children: [
           Icon(Icons.sync, color: status.isHealthy ? Colors.green : LuminaDesign.primary),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,12 +79,12 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(context, BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         LuminaCard(
           padding: EdgeInsets.zero,
           child: Column(children: children),

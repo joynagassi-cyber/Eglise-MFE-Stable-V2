@@ -113,7 +113,7 @@ class GradientButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: textColor, size: 20),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
@@ -186,7 +186,7 @@ class GradientFAB extends StatelessWidget {
                       Icon(icon,
                           color: context.colors.textOnBrand,
                           size: 24),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         label!,
                         style: TextStyle(

@@ -113,15 +113,15 @@ class _SignInPageState extends ConsumerState<SignInPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Tab Toggle
                       _buildTabToggle(context, isLoginActive: true),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28),
 
                       // Email
                       _buildLabel('Email'),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       _buildTextField(
                         controller: _emailController,
                         hint: 'Entrez votre email',
@@ -129,11 +129,11 @@ class _SignInPageState extends ConsumerState<SignInPage>
                         keyboardType: TextInputType.emailAddress,
                         validator: AppValidators.validateEmail,
                       ),
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: AppSpacing.lg),
 
                       // Mot de passe
                       _buildLabel('Mot de passe'),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       _buildTextField(
                         controller: _passwordController,
                         hint: 'Entrez votre mot de passe',
@@ -152,7 +152,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                               () => _obscurePassword = !_obscurePassword),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
 
                       // Remember me + Forgot password
                       Row(
@@ -178,7 +178,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8),
                               Text(
                                 'Se souvenir de moi',
                                 style: TextStyle(
@@ -191,7 +191,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                           GestureDetector(
                             onTap: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
                                       'Fonctionnalité disponible prochainement'),
                                   backgroundColor: AppColors.brandOrange,
@@ -199,7 +199,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                                 ),
                               );
                             },
-                            child: const Text(
+                            child: Text(
                               'Mot de passe oublié ?',
                               style: TextStyle(
                                 fontSize: 13,
@@ -210,7 +210,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                           ),
                         ],
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28),
 
                       // Swipe to Login
                       SwipeAuthButton(
@@ -219,11 +219,11 @@ class _SignInPageState extends ConsumerState<SignInPage>
                             state.valueOrNull is! app_auth.AuthAuthenticated,
                         onCompleted: _handleSignIn,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Séparateur
                       _buildDivider('Ou continuer avec'),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // Boutons sociaux
                       _buildSocialButton(
@@ -232,7 +232,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                         isLoading: state is AsyncLoading,
                         onTap: _handleGoogleSignIn,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Lien inscription
                       Center(
@@ -269,7 +269,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
             Positioned.fill(
               child: Container(
                 color: context.colors.bgPage.withOpacity(0.7),
-                child: const Center(
+                child: Center(
                   child: ThreeDCrossVisual(),
                 ),
               ),
@@ -334,13 +334,13 @@ class _SignInPageState extends ConsumerState<SignInPage>
                       color: Colors.white.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.local_fire_department_rounded,
                       size: 36,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Lumina MFE-JC',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -349,7 +349,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                           fontWeight: FontWeight.w600,
                         ),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     'Bon Retour !',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -357,7 +357,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Text(
                     'Connectez-vous pour continuer\nvotre mission.',
                     textAlign: TextAlign.center,
@@ -571,7 +571,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
           ),
         ),
         child: isLoading
-            ? const Center(
+            ? Center(
                 child: SizedBox(
                   height: 24,
                   width: 24,
@@ -582,7 +582,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   icon,
-                  const SizedBox(width: AppSpacing.md),
+                  SizedBox(width: AppSpacing.md),
                   Text(
                     label,
                     style: TextStyle(

@@ -38,7 +38,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.xl),
+                SizedBox(height: AppSpacing.xl),
 
                 // 404
                 Text(
@@ -51,7 +51,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Title
                 Text(
@@ -63,7 +63,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
 
                 // URI
                 Text(
@@ -76,7 +76,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
 
                 Text(
                   'Cette page n\'existe pas ou a été déplacée.',
@@ -87,7 +87,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.xxl),
+                SizedBox(height: AppSpacing.xxl),
 
                 // Back to Dashboard
                 SizedBox(
@@ -95,8 +95,8 @@ class NotFoundScreen extends StatelessWidget {
                   height: 48,
                   child: ElevatedButton.icon(
                     onPressed: () => context.go(AppRoutes.dashboard),
-                    icon: const Icon(Icons.home_rounded, size: 20),
-                    label: const Text(
+                    icon: Icon(Icons.home_rounded, size: 20),
+                    label: Text(
                       'Retour au Dashboard',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
@@ -111,7 +111,7 @@ class NotFoundScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Go back
                 TextButton(

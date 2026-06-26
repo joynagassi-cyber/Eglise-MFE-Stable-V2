@@ -32,14 +32,14 @@ class DonorDashboardScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildStatsGrid(context, stats),
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
                     SectionHeader(
                       title: context.l10n.donors_evolution,
                       subtitle: context.l10n.donors_last_6_months,
                       icon: Icons.analytics_outlined,
                       iconColor: context.colors.brandPrimary,
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     const GlassCard(
                       padding: EdgeInsets.all(AppSpacing.md),
                       child: SizedBox(
@@ -47,7 +47,7 @@ class DonorDashboardScreen extends ConsumerWidget {
                         child: MonthlyDonationsChart(),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
                     SectionHeader(
                       title: context.l10n.donors_active_campaigns,
                       icon: Icons.campaign_outlined,
@@ -55,12 +55,12 @@ class DonorDashboardScreen extends ConsumerWidget {
                       trailingLabel: context.l10n.donors_all_campaigns,
                       onTrailingTap: () => context.push(AppRoutes.donorsList),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     SizedBox(
                       height: 140,
                       child: ref.watch(donationCampaignsProvider).when(
                             data: (campaigns) => campaigns.isEmpty
-                                ? const Center(
+                                ? Center(
                                     child: EmptyState(
                                       icon: Icons.campaign_outlined,
                                       title: 'Aucune campagne active',
@@ -80,16 +80,16 @@ class DonorDashboardScreen extends ConsumerWidget {
                               itemHeight: 140,
                               spacing: AppSpacing.md,
                             ),
-                            error: (e, _) => const Center(child: Text('Impossible de charger les statistiques')),
+                            error: (e, _) => Center(child: Text('Impossible de charger les statistiques')),
                           ),
                     ),
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
                     SectionHeader(
                       title: context.l10n.donors_quick_actions,
                       icon: Icons.bolt_rounded,
                       iconColor: context.colors.warningText,
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     Row(
                       children: [
                         Expanded(
@@ -99,7 +99,7 @@ class DonorDashboardScreen extends ConsumerWidget {
                             onPressed: () => context.push(AppRoutes.donorsList),
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.md),
+                        SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: GradientButton(
                             text: context.l10n.donors_action_record,
@@ -129,7 +129,7 @@ class DonorDashboardScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(AppRoutes.donorsNew),
-        icon: const Icon(Icons.person_add_rounded),
+        icon: Icon(Icons.person_add_rounded),
         label: Text(context.l10n.donors_new_donor),
         backgroundColor: context.colors.brandPrimary,
         foregroundColor: context.colors.textOnBrand,
@@ -177,12 +177,12 @@ class DonorDashboardScreen extends ConsumerWidget {
         ),
       ),
       leading: IconButton(
-        icon: const Icon(Icons.menu),
+        icon: Icon(Icons.menu),
         onPressed: () => Scaffold.of(context).openDrawer(),
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.search_rounded),
+          icon: Icon(Icons.search_rounded),
           onPressed: () => context.push(AppRoutes.donorsList),
         ),
       ],
@@ -196,7 +196,7 @@ class DonorDashboardScreen extends ConsumerWidget {
       crossAxisSpacing: AppSpacing.md,
       mainAxisSpacing: AppSpacing.md,
       childAspectRatio: 1.4,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       children: [
         _StatCard(
           label: context.l10n.donors_action_list.toUpperCase(),
@@ -249,7 +249,7 @@ class DonorDashboardScreen extends ConsumerWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const Spacer(),
+            Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -267,7 +267,7 @@ class DonorDashboardScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Semantics(
               label:
                   '${context.l10n.donors_active_campaigns}: ${campaign.title}, ${(progress * 100).toInt()}%',
@@ -313,7 +313,7 @@ class _StatCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: color, size: 22),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -325,7 +325,7 @@ class _StatCard extends StatelessWidget {
                   ),
                 ),
                 if (suffix != null) ...[
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2),
                     child: Text(
@@ -342,7 +342,7 @@ class _StatCard extends StatelessWidget {
                 ],
               ],
             ),
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(

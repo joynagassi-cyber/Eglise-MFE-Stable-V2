@@ -97,7 +97,7 @@ class SectionShortcutCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             // Titre
             Text(
               shortcut.title,
@@ -108,7 +108,7 @@ class SectionShortcutCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: AppSpacing.xxs),
+            SizedBox(height: AppSpacing.xxs),
             // Description
             Text(
               shortcut.description,
@@ -155,7 +155,7 @@ class SectionShortcutsGrid extends StatelessWidget {
           ),
         GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: AppSpacing.md,

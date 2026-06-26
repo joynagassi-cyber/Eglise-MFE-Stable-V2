@@ -23,16 +23,16 @@ class BilanOverviewTab extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error_outline, size: 48, color: context.colors.errorText),
-            const SizedBox(height: 16),
-            const Text('Impossible de charger la vue d\'ensemble'),
+            SizedBox(height: 16),
+            Text('Impossible de charger la vue d\'ensemble'),
             ElevatedButton(
               onPressed: () => ref.invalidate(consolidatedBilanProvider),
-              child: const Text('Réessayer'),
+              child: Text('Réessayer'),
             ),
           ],
         ),
       ),
-      data: (summary) => const SingleChildScrollView(
+      data: (summary) => SingleChildScrollView(
         padding: EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

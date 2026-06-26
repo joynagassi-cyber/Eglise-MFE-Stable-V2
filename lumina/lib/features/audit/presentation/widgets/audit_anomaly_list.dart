@@ -22,7 +22,7 @@ class AuditAnomalyList extends ConsumerWidget {
           icon: Icons.warning_amber_rounded,
           iconColor: context.colors.errorText,
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         ...anomalies.asMap().entries.map(
           (entry) {
             final index = entry.key;
@@ -55,7 +55,7 @@ class AuditAnomalyList extends ConsumerWidget {
                           size: 20,
                         ),
                       ),
-                      const SizedBox(width: AppSpacing.md),
+                      SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +67,7 @@ class AuditAnomalyList extends ConsumerWidget {
                                 fontSize: 14,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2),
                             Text(
                               'Détecté à ${_formatTime(anomaly.detectedAt)}',
                               style: TextStyle(
@@ -81,7 +81,7 @@ class AuditAnomalyList extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
+                      Icon(Icons.chevron_right_rounded,
                           size: 20, color: Colors.grey),
                     ],
                   ),

@@ -22,8 +22,8 @@ class TutorialPage extends ConsumerWidget {
           padding: const EdgeInsets.all(LuminaDesign.paddingLg),
           child: Column(
             children: [
-              _buildProgress(state),
-              const SizedBox(height: 32),
+              _buildProgress(context, state),
+              SizedBox(height: 32),
               ...state.config.steps.map((s) => _StepCard(step: s, isDone: state.isStepCompleted(s.id))),
             ],
           ),
@@ -34,19 +34,19 @@ class TutorialPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildProgress(TutorialState state) {
+  Widget _buildProgress(context, BuildContext context, TutorialState state) {
     return LuminaCard(
       color: LuminaDesign.primary.withOpacity(0.05),
       child: Column(
         children: [
           Text("VOTRE DÉCOUVERTE", style: LuminaDesign.labelOf(context)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           LinearProgressIndicator(
             value: state.progressPercentage,
             backgroundColor: context.colors.textTertiary.withOpacity(0.1),
             color: LuminaDesign.primary,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text("${(state.progressPercentage * 100).toInt()}% complété", style: LuminaDesign.labelOf(context)),
         ],
       ),
@@ -66,7 +66,7 @@ class _StepCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(step.icon, color: isDone ? Colors.green : LuminaDesign.primary),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,8 +76,8 @@ class _StepCard extends StatelessWidget {
               ],
             ),
           ),
-          if (isDone) const Icon(Icons.check_circle, color: Colors.green)
-          else const Icon(Icons.play_circle_outline, color: LuminaDesign.primary),
+          if (isDone) Icon(Icons.check_circle, color: Colors.green)
+          else Icon(Icons.play_circle_outline, color: LuminaDesign.primary),
         ],
       ),
     );

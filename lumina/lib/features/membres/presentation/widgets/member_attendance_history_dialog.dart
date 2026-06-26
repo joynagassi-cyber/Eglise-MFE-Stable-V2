@@ -32,27 +32,27 @@ class MemberAttendanceHistoryDialog extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, isDark),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             statsAsync.when(
               data: (stats) => Flexible(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildOverview(context, stats),
-                    const SizedBox(height: AppSpacing.lg),
-                    const Text(
+                    SizedBox(height: AppSpacing.lg),
+                    Text(
                       'Historique Récent',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                    const SizedBox(height: AppSpacing.sm),
+                    SizedBox(height: AppSpacing.sm),
                     Flexible(
                       child: _buildHistoryList(context, stats.history),
                     ),
                   ],
                 ),
               ),
-              loading: () => const Center(
+              loading: () => Center(
                 child: Padding(
                   padding: EdgeInsets.all(AppSpacing.xxl),
                   child: LoadingState(message: 'Calcul de l\'assiduité...'),
@@ -60,7 +60,7 @@ class MemberAttendanceHistoryDialog extends ConsumerWidget {
               ),
               error: (e, _) => AppErrorWidget(message: e.toString()),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             Center(
               child: AppButton.text(
                 label: 'Fermer',
@@ -81,7 +81,7 @@ class MemberAttendanceHistoryDialog extends ConsumerWidget {
           fallbackName: member.fullName,
           size: 48,
         ),
-        const SizedBox(width: AppSpacing.md),
+        SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +153,7 @@ class MemberAttendanceHistoryDialog extends ConsumerWidget {
   Widget _buildHistoryList(
       BuildContext context, List<UnifiedAttendanceRecord> history) {
     if (history.isEmpty) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.all(AppSpacing.xl),
         child: Center(child: Text('Aucun historique disponible')),
       );

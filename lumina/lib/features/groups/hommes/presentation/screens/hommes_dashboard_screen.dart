@@ -150,7 +150,7 @@ class _HommesDashboardScreenState extends ConsumerState<HommesDashboardScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     groupAsync.when(
                       data: (group) => Text(
                         group.name,
@@ -214,7 +214,7 @@ class _HommesDashboardScreenState extends ConsumerState<HommesDashboardScreen>
                     color: context.colors.hommesColor,
                   ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: _KpiCard(
                     title: 'Mentorats',
@@ -229,7 +229,7 @@ class _HommesDashboardScreenState extends ConsumerState<HommesDashboardScreen>
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             _BudgetOverviewCard(
               target: kpi['total_budget_target'],
               spent: kpi['total_spent'],
@@ -284,7 +284,7 @@ class _KpiCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: color, size: LuminaIcon.sm),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             value,
             style: TextStyle(
@@ -303,7 +303,7 @@ class _KpiCard extends StatelessWidget {
               color: context.colors.textPrimary,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             subtitle,
             style: TextStyle(
@@ -388,7 +388,7 @@ class _BudgetOverviewCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: AppProgressBar(
@@ -430,7 +430,7 @@ class _ProjectsTab extends ConsumerWidget {
                     .slideY(begin: 0.1);
               },
             ),
-      loading: () => const Center(child: LoadingState()),
+      loading: () => Center(child: LoadingState()),
       error: (e, _) => AppErrorWidget(message: e.toString()),
     );
   }
@@ -466,7 +466,7 @@ class _ProjectCard extends StatelessWidget {
                 child:
                     Icon(Icons.rocket_launch_rounded, color: color, size: LuminaIcon.sm),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -497,7 +497,7 @@ class _ProjectCard extends StatelessWidget {
                     color: context.colors.successText, size: LuminaIcon.sm),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -506,7 +506,7 @@ class _ProjectCard extends StatelessWidget {
                   style: TextStyle(fontFamily: LuminaFont.body, fontSize: 10, fontWeight: FontWeight.bold, color: context.colors.textPrimary)),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: AppProgressBar(
@@ -548,7 +548,7 @@ class _MentorshipTab extends ConsumerWidget {
                     .slideY(begin: 0.1);
               },
             ),
-      loading: () => const Center(child: LoadingState()),
+      loading: () => Center(child: LoadingState()),
       error: (e, _) => AppErrorWidget(message: e.toString()),
     );
   }
@@ -579,7 +579,7 @@ class _MentorshipCard extends StatelessWidget {
                 color: context.colors.textSecondary, size: LuminaIcon.xs),
           ),
           _UserAvatar(userId: pair.menteeId, label: 'Mentoré'),
-          const Spacer(),
+          Spacer(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -604,7 +604,7 @@ class _MentorshipCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 'Focus: Général',
                 style: TextStyle(
@@ -636,7 +636,7 @@ class _UserAvatar extends StatelessWidget {
           backgroundColor: context.colors.brandPrimary.withValues(alpha: 0.1),
           child: Icon(Icons.person_rounded, color: context.colors.brandPrimary),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(label,
             style: TextStyle(fontFamily: LuminaFont.body, fontSize: 10, fontWeight: FontWeight.bold, color: context.colors.textSecondary)),
       ],
@@ -658,7 +658,7 @@ class _EmptyState extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: LuminaIcon.xl, color: color.withValues(alpha: 0.2)),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(message,
               style: TextStyle(fontFamily: LuminaFont.body, fontSize: 14, color: context.colors.textSecondary)),
         ],

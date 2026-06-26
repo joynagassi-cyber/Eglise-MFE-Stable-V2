@@ -49,10 +49,10 @@ class BilanSealTab extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           periodsAsync.when(
-            loading: () => const Center(child: LoadingState()),
-            error: (e, _) => const Center(child: Text('Impossible de charger le statut de clôture')),
+            loading: () => Center(child: LoadingState()),
+            error: (e, _) => Center(child: Text('Impossible de charger le statut de clôture')),
             data: (periodsList) {
               // Ensure we have a list of BilanPeriod objects, even if Provider returns dynamic
               final List<BilanPeriod> periods = List<BilanPeriod>.from(periodsList);
@@ -63,7 +63,7 @@ class BilanSealTab extends ConsumerWidget {
 
               return GridView.builder(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1.5,
@@ -86,16 +86,16 @@ class BilanSealTab extends ConsumerWidget {
             },
           ),
           
-          const SizedBox(height: AppSpacing.xl),
-          const Divider(),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.xl),
+          Divider(),
+          SizedBox(height: AppSpacing.md),
           Text(
             'Journal d\'Audit',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           const AuditTrailList(),
         ],
       ),
@@ -106,15 +106,15 @@ class BilanSealTab extends ConsumerWidget {
     return Center(
       child: Column(
         children: [
-          const Icon(Icons.calendar_today, size: 48, color: Colors.grey),
-          const SizedBox(height: AppSpacing.sm),
+          Icon(Icons.calendar_today, size: 48, color: Colors.grey),
+          SizedBox(height: AppSpacing.sm),
           Text('Aucune période initialisée pour l\'année $year.'),
           TextButton(
             onPressed: () {
               // Note: Usually we would have a 'init year' RPC or we just initialize 
               // periods automatically upon transaction creation.
             },
-            child: const Text('Générer les mois manquants'),
+            child: Text('Générer les mois manquants'),
           )
         ],
       ),
@@ -144,8 +144,8 @@ class BilanSealTab extends ConsumerWidget {
               monthNames[month - 1],
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            const Chip(
+            SizedBox(height: 8),
+            Chip(
               label: Text('Non initialisé', style: TextStyle(fontSize: 10)),
               padding: EdgeInsets.zero,
             ),
@@ -252,7 +252,7 @@ class BilanSealTab extends ConsumerWidget {
                   Icon(statusIcon, color: statusColor, size: 16),
                 ],
               ),
-              const Spacer(),
+              Spacer(),
               if (period.isSealed) ...[
                 Text(
                   currencyFormatter.format(period.netBalance),
@@ -261,7 +261,7 @@ class BilanSealTab extends ConsumerWidget {
                     color: period.netBalance >= 0 ? context.colors.successText : context.colors.errorText,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'Hash: ${period.sealHash?.substring(0, 8) ?? '...'}',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(

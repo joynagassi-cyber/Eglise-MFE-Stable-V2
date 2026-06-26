@@ -22,21 +22,21 @@ class BilanDimensionsTab extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           _buildFilterChips(context, ref),
-          const SizedBox(height: AppSpacing.lg),
-          const Text(
+          SizedBox(height: AppSpacing.lg),
+          Text(
             'Répartition par Groupes',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           const GroupBreakdownTable(),
-          const SizedBox(height: AppSpacing.xl),
-          const Text(
+          SizedBox(height: AppSpacing.xl),
+          Text(
             'Données Consolidées',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           const ConsolidationTable(),
         ],
       ),
@@ -54,13 +54,13 @@ class BilanDimensionsTab extends ConsumerWidget {
         Text('Filtrer par groupe:',
           style: TextStyle(fontSize: 14, color: context.colors.textSecondaryLight),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
             FilterChip(
-              label: const Text('Tous les groupes'),
+              label: Text('Tous les groupes'),
               selected: selectedGroups.isEmpty,
               onSelected: (val) {
                 if (val) {

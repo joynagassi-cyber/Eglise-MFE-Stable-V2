@@ -44,7 +44,7 @@ class VerseActionBar extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildColorPicker(context, ref),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               _buildMainToolbar(context, ref),
             ],
           ),
@@ -111,9 +111,9 @@ class VerseActionBar extends ConsumerWidget {
                       ),
                     ),
                   )),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Container(width: 1, height: 24, color: context.colors.borderSubtle),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: Icon(Icons.format_color_reset, color: context.colors.textPrimary, size: 20),
@@ -188,7 +188,7 @@ class VerseActionBar extends ConsumerWidget {
                   _handleBookmark(ref, context);
                 },
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               GestureDetector(
                 onTap: onClear,
                 child: Container(
@@ -242,7 +242,7 @@ class VerseActionBar extends ConsumerWidget {
     
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Favoris mis à jour'),
         behavior: SnackBarBehavior.floating,
       ),
@@ -288,7 +288,7 @@ class _ToolbarAction extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, color: context.colors.iconPrimary, size: 22),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(

@@ -55,22 +55,22 @@ class _AddEventDialogState extends State<AddEventDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTypeSelector(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildDateField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTextField(
                         controller: _titleController,
                         label: 'Titre *',
                         icon: Icons.title,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTextField(
                         controller: _descriptionController,
                         label: 'Description',
                         maxLines: 3,
                         icon: Icons.description,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
@@ -80,7 +80,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                               icon: Icons.people,
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          SizedBox(width: 16),
                           Expanded(
                             child: _buildNumberField(
                               controller: _estimatedBudgetController,
@@ -90,20 +90,20 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTextField(
                         controller: _locationController,
                         label: 'Lieu',
                         icon: Icons.location_on,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTextField(
                         controller: _notesController,
                         label: 'Notes',
                         maxLines: 3,
                         icon: Icons.notes,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
                       _buildActions(context),
                     ],
                   ),
@@ -123,7 +123,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
       child: Row(
         children: [
           Icon(Icons.event, color: context.colors.textOnBrand, size: 28),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Text(
             'Ajouter un événement',
             style: TextStyle(
@@ -132,7 +132,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(Icons.close, color: context.colors.textOnBrand),
@@ -150,7 +150,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
           'Type d\'événement *',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: context.colors.textPrimary),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -160,7 +160,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(type.icon, style: const TextStyle(fontSize: 18)),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(type.label),
                 ],
               ),
@@ -212,7 +212,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
           decoration: InputDecoration(
             labelText: 'Date *',
             hintText: 'JJ/MM/YYYY',
-            prefixIcon: const Icon(Icons.calendar_today),
+            prefixIcon: Icon(Icons.calendar_today),
             filled: true,
             fillColor: Theme.of(context).cardTheme.color,
             border: OutlineInputBorder(
@@ -277,10 +277,10 @@ class _AddEventDialogState extends State<AddEventDialog> {
         Expanded(
           child: OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
             onPressed: _submitForm,
@@ -288,7 +288,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
               backgroundColor: context.colors.brandPrimary,
               foregroundColor: context.colors.textOnBrand,
             ),
-            child: const Text('Créer'),
+            child: Text('Créer'),
           ),
         ),
       ],

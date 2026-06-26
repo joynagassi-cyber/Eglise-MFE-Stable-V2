@@ -34,9 +34,9 @@ class BiblePlansScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   _buildSectionTitle(context, 'MES PLANS EN COURS'),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   activePlansAsync.when(
                     data: (active) => active.isEmpty
                         ? _buildEmptyActivePlans(context)
@@ -62,15 +62,15 @@ class BiblePlansScreen extends ConsumerWidget {
                               );
                             }).toList(),
                           ),
-                    loading: () => const Padding(
+                    loading: () => Padding(
                       padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
                       child: FireSkeletonHeroCard(),
                     ),
                     error: (e, _) => Text('Erreur: $e'),
                   ),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   _buildSectionTitle(context, 'DÉCOUVRIR LES PLANS'),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   ...availablePlans.map((plan) {
                     // Skip if already active
                     final isActive = activePlansAsync.valueOrNull?.any((p) => p.planId == plan.planId) ?? false;
@@ -86,11 +86,11 @@ class BiblePlansScreen extends ConsumerWidget {
                       ),
                     );
                   }),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   _buildSectionTitle(context, 'MES RÉCOMPENSES'),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildRewardsSection(context, rewardsAsync),
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
                 ],
               ),
             ),
@@ -162,7 +162,7 @@ class BiblePlansScreen extends ConsumerWidget {
         child: Column(
           children: [
             Icon(Icons.menu_book, size: 40, color: context.colors.textTertiary),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text(
               'Aucun plan actif',
               style: AppTypography.bodySmallStyle.copyWith(color: context.colors.textSecondary),
@@ -214,14 +214,14 @@ class BiblePlansScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(title, style: AppTypography.h3.copyWith(color: context.colors.textPrimary)),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: AppSpacing.xs),
           Text(
             description,
             style: AppTypography.bodySmallStyle.copyWith(color: context.colors.textSecondary, fontSize: 13),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           AppProgressBar(
             value: progress,
             backgroundColor: context.colors.borderSubtle,

@@ -19,7 +19,7 @@ class MedicalAlertsWidget extends ConsumerWidget {
           'Vigilance Sécurité & Médicale',
           style: AppText.h3(context),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         cardsAsync.when(
           data: (cards) {
             final alertCards = cards
@@ -36,7 +36,7 @@ class MedicalAlertsWidget extends ConsumerWidget {
                   border: Border.all(
                       color: const Color(0xFF10B981).withValues(alpha: 0.3)),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Icon(Icons.check_circle_outline, color: Color(0xFF10B981)),
                     SizedBox(width: 12),
@@ -48,7 +48,7 @@ class MedicalAlertsWidget extends ConsumerWidget {
 
             return ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               itemCount: alertCards.length,
               itemBuilder: (ctx, index) {
                 final card = alertCards[index];
@@ -56,7 +56,7 @@ class MedicalAlertsWidget extends ConsumerWidget {
               },
             );
           },
-          loading: () => const Center(child: LoadingState()),
+          loading: () => Center(child: LoadingState()),
           error: (e, _) => Text('Error: $e'),
         ),
       ],
@@ -79,7 +79,7 @@ class MedicalAlertsWidget extends ConsumerWidget {
             backgroundColor: errorColor.withValues(alpha: 0.2),
             child: Icon(Icons.warning, color: errorColor, size: 20),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

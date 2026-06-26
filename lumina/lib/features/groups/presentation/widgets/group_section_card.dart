@@ -90,19 +90,19 @@ class GroupSectionCard extends StatelessWidget {
 
                   // Budget si disponible
                   if (budgetAllocated != null) ...[
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     _buildBudgetProgress(context, color),
                   ],
 
                   // Actions
                   if (onViewBudget != null) ...[
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton.icon(
                           onPressed: onViewBudget,
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.account_balance_wallet,
                             size: LuminaIcon.sm,
                           ),
@@ -131,7 +131,7 @@ class GroupSectionCard extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: LuminaIcon.sm, color: context.colors.textTertiary),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           text,
           style: AppTypography.bodySmall.copyWith(
@@ -169,12 +169,12 @@ class GroupSectionCard extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         AppProgressBar(
           value: progress,
           color: progress > 0.9 ? context.colors.errorText : color,
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           remaining >= 0
               ? 'Reste: ${_formatAmount(remaining)} FCFA'

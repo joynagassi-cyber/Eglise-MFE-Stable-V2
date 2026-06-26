@@ -47,7 +47,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               delay: const Duration(milliseconds: 100),
               child: _buildIllustration(isDark),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 200),
               child: Text(
@@ -59,7 +59,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 300),
               child: Text(
@@ -70,16 +70,16 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 400),
               child: _buildMonthSelector(isDark, theme),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 500),
               child: state.isGenerating
-                  ? const Center(
+                  ? Center(
                       child: LoadingState(
                         message: 'Génération du rapport...',
                       ),
@@ -99,7 +99,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                                 ));
                           },
                         ),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         GradientButton(
                           text: 'GÉNÉRER RAPPORT EXCEL',
                           icon: Icons.table_chart_rounded,
@@ -117,14 +117,14 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                     ),
             ),
             if (state.reportPath != null && !state.isGenerating) ...[
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 100),
                 child: _buildSuccessActions(context, state.reportPath!, theme),
               ),
             ],
             if (state.hasError) ...[
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 600),
                 child: Container(
@@ -139,7 +139,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.error_outline, color: context.colors.errorText),
-                      const SizedBox(width: AppSpacing.md),
+                      SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Text(
                           state.error ?? 'Une erreur est survenue',
@@ -229,7 +229,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xxs),
+                  SizedBox(height: AppSpacing.xxs),
                   Text(
                     DateFormat(
                       'MMMM yyyy',
@@ -282,7 +282,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                 color: context.colors.successText,
                 size: 28,
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +305,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -316,15 +316,15 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                         .read(reportActionsProvider.notifier)
                         .openLastReport());
                   },
-                  icon: const Icon(Icons.open_in_new_rounded),
-                  label: const Text('OUVRIR'),
+                  icon: Icon(Icons.open_in_new_rounded),
+                  label: Text('OUVRIR'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: context.colors.brandPrimary,
                     side: BorderSide(color: context.colors.brandPrimary),
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () async {
@@ -334,8 +334,8 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                         .read(reportActionsProvider.notifier)
                         .shareLastReport(context, fileName));
                   },
-                  icon: const Icon(Icons.share_rounded),
-                  label: const Text('PARTAGER'),
+                  icon: Icon(Icons.share_rounded),
+                  label: Text('PARTAGER'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: context.colors.brandPrimary,
                     foregroundColor: context.colors.textOnBrand,

@@ -113,7 +113,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Une erreur est survenue lors de l\'enregistrement'),
+            content: Text('Une erreur est survenue lors de l\'enregistrement'),
             backgroundColor: context.colors.errorText,
             behavior: SnackBarBehavior.floating,
           ),
@@ -136,7 +136,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
+            icon: Icon(Icons.arrow_back_rounded),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
@@ -151,7 +151,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: LoadingDots())
+          ? Center(child: LoadingDots())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: AnimatedEntrance.fromBottom(
@@ -168,15 +168,15 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                         validator: (value) =>
                             value?.isEmpty ?? true ? 'Champ requis' : null,
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       _buildTextField(
                         controller: _iconController,
                         label: 'Nom de l\'icône (ex: payments)',
                         icon: Icons.category_rounded,
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       _buildParentSelector(),
-                      const SizedBox(height: AppSpacing.xl),
+                      SizedBox(height: AppSpacing.xl),
                       Semantics(
                         label: widget.category == null
                             ? 'Créer la catégorie'
@@ -274,7 +274,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
           },
         );
       },
-      loading: () => const Center(child: LoadingDots()),
+      loading: () => Center(child: LoadingDots()),
       error: (e, _) => Text('Erreur chargement parents: $e', 
           style: TextStyle(color: context.colors.errorText)),
     );

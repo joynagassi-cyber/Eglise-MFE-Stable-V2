@@ -54,11 +54,11 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildKpiHeader(kpisAsync),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   const AttendanceBarChart(),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   const MedicalAlertsWidget(),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   Text(
                     'Programmes par Âge',
                     style: TextStyle(
@@ -68,9 +68,9 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
                       color: context.colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   const ProgramsGrid(),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   Text(
                     'Coffre à Ressources',
                     style: TextStyle(
@@ -80,9 +80,9 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
                       color: context.colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   const ResourceVault(),
-                  const SizedBox(height: 100), // Space for bottom
+                  SizedBox(height: 100), // Space for bottom
                 ],
               ),
             ),
@@ -138,7 +138,7 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
             final groupId = _resolveEnfantsGroupId(ref);
             if (groupId == null) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Groupe enfants introuvable')),
+                SnackBar(content: Text('Groupe enfants introuvable')),
               );
               return;
             }
@@ -146,12 +146,12 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
           },
         ),
         IconButton(
-          icon: const Icon(Icons.notifications_active_outlined),
+          icon: Icon(Icons.notifications_active_outlined),
           onPressed: () async {
             final messenger = ScaffoldMessenger.of(context);
             await HapticHelper.medium();
             messenger.showSnackBar(
-              const SnackBar(content: Text('Notifications : Bientôt disponible')),
+              SnackBar(content: Text('Notifications : Bientôt disponible')),
             );
           },
         ),
@@ -171,7 +171,7 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
               color: context.colors.brandPrimary,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: _KpiCard(
               title: 'Présence',
@@ -180,7 +180,7 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
               color: context.colors.successText,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: _KpiCard(
               title: 'Alertes',
@@ -242,7 +242,7 @@ class _KpiCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(icon, color: color, size: LuminaIcon.md),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 value,
                 style: TextStyle(

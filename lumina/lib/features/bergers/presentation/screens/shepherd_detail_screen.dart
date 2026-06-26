@@ -19,12 +19,12 @@ class ShepherdDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détails du Berger'),
+        title: Text('Détails du Berger'),
         actions: [
           shepherdAsync.when(
             data: (shepherd) => shepherd != null
                 ? IconButton(
-                    icon: const Icon(Icons.edit_rounded),
+                    icon: Icon(Icons.edit_rounded),
                     onPressed: () => context.push('/bergers/$shepherdId/modifier', extra: shepherd),
                   )
                 : const SizedBox.shrink(),
@@ -36,7 +36,7 @@ class ShepherdDetailScreen extends ConsumerWidget {
       body: shepherdAsync.when(
         data: (shepherd) {
           if (shepherd == null) {
-            return const Center(child: Text('Berger non trouvé'));
+            return Center(child: Text('Berger non trouvé'));
           }
           return SingleChildScrollView(
             padding: AppSpacing.screenPadding,
@@ -50,11 +50,11 @@ class ShepherdDetailScreen extends ConsumerWidget {
                         ? NetworkImage(shepherd.photoUrl!)
                         : null,
                     child: shepherd.photoUrl == null
-                        ? const Icon(Icons.person, size: 50)
+                        ? Icon(Icons.person, size: 50)
                         : null,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
                 Center(
                   child: Text(
                     '${shepherd.firstName} ${shepherd.lastName}',
@@ -63,7 +63,7 @@ class ShepherdDetailScreen extends ConsumerWidget {
                         ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -80,15 +80,15 @@ class ShepherdDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                SizedBox(height: AppSpacing.xl),
                 _buildSection(context, 'Biographie', shepherd.bio ?? 'Aucune biographie disponible'),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
                 _buildSection(context, 'Spécialités', shepherd.specialties.join(', ')),
               ],
             ),
           );
         },
-        loading: () => const Center(child: LoadingState()),
+        loading: () => Center(child: LoadingState()),
         error: (e, st) => Center(child: Text('Erreur: $e')),
       ),
     );
@@ -104,7 +104,7 @@ class ShepherdDetailScreen extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Text(
           content.isEmpty ? 'Non renseigné' : content,
           style: Theme.of(context).textTheme.bodyLarge,

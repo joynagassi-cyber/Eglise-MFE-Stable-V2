@@ -32,7 +32,7 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
             child: Tooltip(
               message: 'Actualiser',
               child: IconButton(
-                icon: const Icon(Icons.refresh, size: AppSpacing.iconMd),
+                icon: Icon(Icons.refresh, size: AppSpacing.iconMd),
                 onPressed: () async {
                   await HapticHelper.light();
                   ref.invalidate(dashboardAnalyticsProvider);
@@ -163,10 +163,10 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               iconColor: context.colors.brandPrimary,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: AppSpacing.md,
@@ -179,7 +179,7 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               child: memberCards[index],
             ),
           ),
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
           StaggeredListItem(
             index: 5,
             child: SectionHeader(
@@ -188,10 +188,10 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               iconColor: context.colors.successText,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: AppSpacing.md,
@@ -204,7 +204,7 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               child: financeCards[index],
             ),
           ),
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
           StaggeredListItem(
             index: 10,
             child: SectionHeader(
@@ -213,10 +213,10 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               iconColor: context.colors.brandSecondary,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: AppSpacing.md,
@@ -229,7 +229,7 @@ class AnalyticsDashboardScreen extends ConsumerWidget {
               child: eventCards[index],
             ),
           ),
-          const SizedBox(height: AppSpacing.xxl),
+          SizedBox(height: AppSpacing.xxl),
         ],
       ),
     );

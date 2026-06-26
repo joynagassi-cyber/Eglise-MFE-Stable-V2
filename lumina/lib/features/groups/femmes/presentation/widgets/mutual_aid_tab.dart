@@ -43,7 +43,7 @@ class MutualAidTab extends ConsumerWidget {
                 child: MutualAidChart(requests: requests),
               ),
             ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
@@ -61,12 +61,12 @@ class MutualAidTab extends ConsumerWidget {
                 await HapticHelper.medium();
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Soumettre demande : Bientôt disponible')),
+                    SnackBar(content: Text('Soumettre demande : Bientôt disponible')),
                   );
                 }
               },
               icon: Icon(Icons.add_rounded, color: context.colors.textInverse),
-              label: const Text('Soumettre demande'),
+              label: Text('Soumettre demande'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: accentColor,
                 foregroundColor: context.colors.textInverse,
@@ -79,7 +79,7 @@ class MutualAidTab extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Center(
+      loading: () => Center(
         child: LoadingDots(),
       ),
       error: (e, _) => AppErrorWidget(message: e.toString()),
@@ -112,7 +112,7 @@ class MutualAidTab extends ConsumerWidget {
         ),
       ),
       loading: () => const ShimmerBox(height: 50),
-      error: (_, __) => const SizedBox(),
+      error: (_, __) => SizedBox(),
     );
   }
 }

@@ -205,7 +205,7 @@ class _AdminCodeVerificationScreenState
                                           );
                                         },
                                       ),
-                                      const SizedBox(height: AppSpacing.xl),
+                                      SizedBox(height: AppSpacing.xl),
 
                                       // Titre en Lora (Spirituel/Éditorial)
                                       Text(
@@ -218,7 +218,7 @@ class _AdminCodeVerificationScreenState
                                           letterSpacing: -0.5,
                                         ),
                                       ),
-                                      const SizedBox(height: AppSpacing.sm),
+                                      SizedBox(height: AppSpacing.sm),
                                       
                                       Text(
                                         'ADMINISTRATION LUMINA',
@@ -228,7 +228,7 @@ class _AdminCodeVerificationScreenState
                                           letterSpacing: 2,
                                         ),
                                       ),
-                                      const SizedBox(height: AppSpacing.xl),
+                                      SizedBox(height: AppSpacing.xl),
 
                                       // Champ de Saisie Stylisé
                                       TextFormField(
@@ -261,7 +261,7 @@ class _AdminCodeVerificationScreenState
                                         ),
                                         validator: (v) => v?.isEmpty ?? true ? 'Code requis' : null,
                                       ),
-                                      const SizedBox(height: AppSpacing.xl),
+                                      SizedBox(height: AppSpacing.xl),
 
                                       // Bouton avec Gradient (AuthPrimaryButton mis à jour)
                                       AuthPrimaryButton(
@@ -271,7 +271,7 @@ class _AdminCodeVerificationScreenState
                                       ),
 
                                       if (_errorMessage != null) ...[
-                                        const SizedBox(height: AppSpacing.md),
+                                        SizedBox(height: AppSpacing.md),
                                         Text(
                                           _errorMessage!,
                                           style: TextStyle(
@@ -283,7 +283,7 @@ class _AdminCodeVerificationScreenState
                                         ),
                                       ],
 
-                                      const SizedBox(height: AppSpacing.xl),
+                                      SizedBox(height: AppSpacing.xl),
 
                                       // Note info Glass
                                       Container(
@@ -298,7 +298,7 @@ class _AdminCodeVerificationScreenState
                                         child: Row(
                                           children: [
                                             Icon(Icons.info_outline_rounded, size: 18, color: context.colors.infoText),
-                                            const SizedBox(width: 12),
+                                            SizedBox(width: 12),
                                             Expanded(
                                               child: Text(
                                                 'Ce code sécurise l\'accès aux outils de pilotage de votre église.',

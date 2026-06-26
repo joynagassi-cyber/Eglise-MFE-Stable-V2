@@ -34,7 +34,7 @@ class AuditTimeline extends ConsumerWidget {
                     size: 48,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     'Aucune activité enregistrée',
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -49,7 +49,7 @@ class AuditTimeline extends ConsumerWidget {
 
         return ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           itemCount: logs.length,
           itemBuilder: (context, index) {
             final log = logs[index];
@@ -117,7 +117,7 @@ class AuditTimeline extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     // Contenu principal
                     Expanded(
                       child: Padding(
@@ -156,7 +156,7 @@ class AuditTimeline extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-                                  const Spacer(),
+                                  Spacer(),
                                   Text(
                                     _formatTimestamp(log.occurredAt),
                                     style: theme.textTheme.labelSmall?.copyWith(
@@ -166,7 +166,7 @@ class AuditTimeline extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: AppSpacing.sm),
+                              SizedBox(height: AppSpacing.sm),
                               Text(
                                 '${log.action.label} : ${log.entityType}',
                                 style: theme.textTheme.titleSmall?.copyWith(
@@ -174,7 +174,7 @@ class AuditTimeline extends ConsumerWidget {
                                   fontFamily: 'Outfit',
                                 ),
                               ),
-                              const SizedBox(height: AppSpacing.xxs),
+                              SizedBox(height: AppSpacing.xxs),
                               Row(
                                 children: [
                                   Icon(
@@ -183,7 +183,7 @@ class AuditTimeline extends ConsumerWidget {
                                     color: theme.colorScheme.onSurface
                                         .withOpacity(0.5),
                                   ),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: 4),
                                   Text(
                                     'Par ${TraceabilityFormatter.formatActor(name: log.actorName, role: log.roleUsed)}',
                                     style: theme.textTheme.bodySmall?.copyWith(
@@ -218,7 +218,7 @@ class AuditTimeline extends ConsumerWidget {
         borderColor: context.colors.errorText.withOpacity(0.3),
         child: Row(children: [
             Icon(Icons.error_outline_rounded, color: context.colors.errorText),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
                 'Impossible de charger l\'historique',

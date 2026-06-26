@@ -17,7 +17,7 @@ class MemberQrScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Ma Carte Membre'),
+        title: Text('Ma Carte Membre'),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -73,7 +73,7 @@ class MemberQrScreen extends ConsumerWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
+                                      Text(
                                         'LUMINA • MEMBRE',
                                         style: TextStyle(
                                           color: Colors.white70,
@@ -82,7 +82,7 @@ class MemberQrScreen extends ConsumerWidget {
                                           letterSpacing: 2,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      SizedBox(height: 4),
                                       Text(
                                         'FEU D\'ÉVANGILE',
                                         style: theme.textTheme.titleSmall
@@ -93,11 +93,11 @@ class MemberQrScreen extends ConsumerWidget {
                                       ),
                                     ],
                                   ),
-                                  const Icon(Icons.star_rounded,
+                                  Icon(Icons.star_rounded,
                                       color: Colors.white, size: 28),
                                 ],
                               ),
-                              const SizedBox(height: AppSpacing.xl),
+                              SizedBox(height: AppSpacing.xl),
 
                               // QR Code Section
                               Container(
@@ -120,7 +120,7 @@ class MemberQrScreen extends ConsumerWidget {
                                 ),
                               ),
 
-                              const SizedBox(height: AppSpacing.xl),
+                              SizedBox(height: AppSpacing.xl),
 
                               Row(
                                 children: [
@@ -131,7 +131,7 @@ class MemberQrScreen extends ConsumerWidget {
                                     borderColor: Colors.white,
                                     borderWidth: 2,
                                   ),
-                                  const SizedBox(width: 16),
+                                  SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -165,7 +165,7 @@ class MemberQrScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
                   Text(
                     'PRÉSENTEZ CE CODE À L\'ENTRÉE',
                     style: theme.textTheme.labelLarge?.copyWith(
@@ -174,7 +174,7 @@ class MemberQrScreen extends ConsumerWidget {
                       letterSpacing: 2,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Accès rapide et enregistrement automatique',
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -186,10 +186,10 @@ class MemberQrScreen extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: LoadingState(message: 'Génération de la carte...'),
         ),
-        error: (err, _) => const Center(child: Text('Impossible de générer le QR code')),
+        error: (err, _) => Center(child: Text('Impossible de générer le QR code')),
       ),
     );
   }

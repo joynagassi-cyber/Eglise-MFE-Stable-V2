@@ -102,7 +102,7 @@ class MemberCard extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
 
             // Infos principales
             Expanded(
@@ -119,7 +119,7 @@ class MemberCard extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
 
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
 
                   // Rôle / Profession via le nouveau composant universel
                   RoleBadge(
@@ -129,7 +129,7 @@ class MemberCard extends ConsumerWidget {
                         member.primaryRole.label,
                   ),
 
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
 
                   // Badges
                   _buildPillBadges(context, member),
@@ -307,7 +307,7 @@ class MemberCardCompact extends StatelessWidget {
         ),
       ),
       trailing: member.isBaptized
-          ? const Text('✝️', style: TextStyle(fontSize: 16))
+          ? Text('✝️', style: TextStyle(fontSize: 16))
           : null,
     );
   }

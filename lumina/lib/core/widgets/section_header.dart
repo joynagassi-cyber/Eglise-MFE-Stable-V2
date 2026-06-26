@@ -44,7 +44,7 @@ class SectionHeader extends StatelessWidget {
                 color: iconColor ?? context.colors.brandPrimary,
                 size: 24,
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
             ],
             Expanded(
               child: Column(
@@ -58,7 +58,7 @@ class SectionHeader extends StatelessWidget {
                         ),
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: AppSpacing.xs),
+                    SizedBox(height: AppSpacing.xs),
                     Text(
                       subtitle!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -79,7 +79,7 @@ class SectionHeader extends StatelessWidget {
           ],
         ),
         if (showDivider) ...[
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Divider(
             color: context.colors.borderSubtle,
           ),
@@ -110,7 +110,7 @@ class SectionHeader extends StatelessWidget {
                   size: 28,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
             ],
             Text(
               title,
@@ -120,7 +120,7 @@ class SectionHeader extends StatelessWidget {
                   ),
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: AppSpacing.xs),
+              SizedBox(height: AppSpacing.xs),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(

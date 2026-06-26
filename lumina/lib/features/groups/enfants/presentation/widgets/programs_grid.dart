@@ -36,7 +36,7 @@ class ProgramsGrid extends ConsumerWidget {
 
           return GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
@@ -54,7 +54,7 @@ class ProgramsGrid extends ConsumerWidget {
 
         return GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
@@ -69,7 +69,7 @@ class ProgramsGrid extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: LoadingState()),
+      loading: () => Center(child: LoadingState()),
       error: (e, _) => Text('Error: $e'),
     );
   }
@@ -86,13 +86,13 @@ class ProgramsGrid extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, color: color, size: 40),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             title,
             textAlign: TextAlign.center,
             style: AppText.bodyBold(context).copyWith(color: color),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text('12 inscrits pool', style: AppText.caption(context)),
         ],
       ),

@@ -35,7 +35,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestion des Codes'),
+        title: Text('Gestion des Codes'),
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: context.colors.brandGradient),
@@ -46,7 +46,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
           _buildSearchHeader(),
           Expanded(
             child: codesAsync.when(
-              loading: () => const Center(child: LoadingState()),
+              loading: () => Center(child: LoadingState()),
               error: (e, _) => Center(
                 child: Padding(
                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -55,18 +55,18 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
                     children: [
                       Icon(Icons.error_outline,
                           color: context.colors.errorText, size: LuminaIcon.xxl),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       Text(
                         'Impossible de charger les codes',
                         style: AppTypography.titleSmall
                             .copyWith(color: context.colors.errorText),
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       ElevatedButton.icon(
                         onPressed: () => ref
                             .invalidate(roleCodesAdminNotifierProvider),
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('Réessayer'),
+                        icon: Icon(Icons.refresh),
+                        label: Text('Réessayer'),
                       ),
                     ],
                   ),
@@ -90,7 +90,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
         onChanged: (v) => setState(() => _searchQuery = v),
         decoration: InputDecoration(
           hintText: 'Rechercher un rôle...',
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: Icon(Icons.search),
           filled: true,
           fillColor: context.colors.bgSecondary,
           border: OutlineInputBorder(
@@ -104,7 +104,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
 
   Widget _buildCodesList(List<RoleCodeEntry> codes) {
     if (codes.isEmpty) {
-      return const Center(child: Text('Aucun code trouvé'));
+      return Center(child: Text('Aucun code trouvé'));
     }
 
     return ListView.builder(
@@ -133,7 +133,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Row(
                 children: [
                   Text(
@@ -147,10 +147,10 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
                           data.isUsed ? TextDecoration.lineThrough : null,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   if (!data.isUsed)
                     IconButton(
-                      icon: const Icon(Icons.copy, size: 18),
+                      icon: Icon(Icons.copy, size: 18),
                       onPressed: () => _copyToClipboard(data.rawCode),
                     ),
                 ],
@@ -179,7 +179,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
     await HapticHelper.success();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Code copié !'),
           behavior: SnackBarBehavior.floating,
           duration: Duration(seconds: 1),

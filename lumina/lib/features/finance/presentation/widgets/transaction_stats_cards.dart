@@ -25,7 +25,7 @@ class TransactionStatsCards extends StatelessWidget {
             index: 0,
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _EnhancedStatCard(
             title: 'Dépenses',
@@ -35,7 +35,7 @@ class TransactionStatsCards extends StatelessWidget {
             index: 1,
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
         Expanded(
           child: _EnhancedStatCard(
             title: 'Solde',
@@ -190,7 +190,7 @@ class _EnhancedStatCardState extends State<_EnhancedStatCard>
                               size: AppSpacing.iconMd,
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.sm),
+                          SizedBox(height: AppSpacing.sm),
                           // Title
                           Text(
                             widget.title,
@@ -198,7 +198,7 @@ class _EnhancedStatCardState extends State<_EnhancedStatCard>
                               color: context.colors.textSecondary,
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.xs),
+                          SizedBox(height: AppSpacing.xs),
                           // Animated value
                           AnimatedCurrencyCounter(
                             value: widget.value,

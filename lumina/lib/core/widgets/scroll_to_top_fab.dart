@@ -84,7 +84,7 @@ class _ScrollToTopFABState extends State<ScrollToTopFAB>
         backgroundColor: context.colors.brandPrimary,
         foregroundColor: context.colors.textOnBrand,
         elevation: 4,
-        child: const Icon(Icons.keyboard_arrow_up_rounded),
+        child: Icon(Icons.keyboard_arrow_up_rounded),
       ),
     );
   }

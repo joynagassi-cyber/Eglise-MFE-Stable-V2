@@ -67,20 +67,20 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 200),
                       child: overBudgetsAsync.when(
                         data: (overBudgets) =>
                             _buildAlertsSection(overBudgets, theme),
-                        loading: () => const Padding(
+                        loading: () => Padding(
                           padding: EdgeInsets.only(bottom: AppSpacing.md),
                           child: ShimmerBox(height: 60, borderRadius: 16),
                         ),
                         error: (_, __) => const SizedBox.shrink(),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     budgetsAsync.when(
                       data: (budgets) {
                         if (budgets.isEmpty) {
@@ -98,7 +98,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                                 theme,
                               ),
                             ),
-                            const SizedBox(height: AppSpacing.xl),
+                            SizedBox(height: AppSpacing.xl),
                             AnimatedEntrance.fromBottom(
                               delay: const Duration(milliseconds: 400),
                               child: _buildBudgetList(
@@ -149,7 +149,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                   color: context.colors.textOnBrand,
                 ),
               ),
-              icon: const Icon(Icons.add_rounded),
+              icon: Icon(Icons.add_rounded),
               backgroundColor: Colors.transparent,
               elevation: 0,
               foregroundColor: context.colors.textOnBrand,
@@ -226,7 +226,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
             _updateActuals,
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
       ],
     );
   }
@@ -283,7 +283,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                   color: context.colors.errorText,
                   size: AppSpacing.iconLg,
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Text(
                   '${overBudgets.length} Dépassements',
                   style: AppTypography.bodyLarge.copyWith(
@@ -293,7 +293,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             ...overBudgets.take(3).map(
                   (b) => Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.xs),
@@ -303,7 +303,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                           size: AppSpacing.iconSm,
                           color: context.colors.errorText,
                         ),
-                        const SizedBox(width: AppSpacing.xxs),
+                        SizedBox(width: AppSpacing.xxs),
                         Expanded(
                           child: Text(
                             'Catégorie ${b.categoryId}',
@@ -351,17 +351,17 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Row(
             children: [
               _buildLegend('Prévu', context.colors.infoText, theme),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               _buildLegend('Réalisé', context.colors.successText, theme),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               _buildLegend('Dépas.', context.colors.errorText, theme),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Expanded(
             child: BarChart(
               BarChartData(
@@ -451,7 +451,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
             borderRadius: AppSpacing.borderRadiusSm,
           ),
         ),
-        const SizedBox(width: AppSpacing.xxs),
+        SizedBox(width: AppSpacing.xxs),
         Text(
           label,
           style: AppTypography.labelSmall.copyWith(
@@ -477,7 +477,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
             color: textColor,
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         ...budgets.asMap().entries.map(
               (entry) => AnimatedEntrance.fromLeft(
                 delay: Duration(milliseconds: 50 * entry.key),
@@ -508,14 +508,14 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
                 color: context.colors.brandPrimary,
               ),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             Text(
               'Aucun budget défini',
               style: AppTypography.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             Text(
               'Préparez vos prévisions pour cette période.',
               textAlign: TextAlign.center,
@@ -618,7 +618,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
     if (!mounted) return;
     messenger.showSnackBar(
       SnackBar(
-        content: const Text('Montants mis à jour'),
+        content: Text('Montants mis à jour'),
         backgroundColor: context.colors.successText,
       ),
     );

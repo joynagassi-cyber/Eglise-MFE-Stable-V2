@@ -67,7 +67,7 @@ class _PremiumSplashScreenState extends ConsumerState<PremiumSplashScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Semantics(
                   header: true,
                   label: 'Lumina Application',
@@ -80,7 +80,7 @@ class _PremiumSplashScreenState extends ConsumerState<PremiumSplashScreen> {
                     ),
                   ),
                 ).animate().fadeIn(duration: 800.ms),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 const ShimmerBox(
                   width: 40,
                   height: 4,

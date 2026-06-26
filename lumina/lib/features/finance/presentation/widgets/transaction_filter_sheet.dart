@@ -79,15 +79,15 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
                     _endDate = null;
                   });
                 },
-                child: const Text('Réinitialiser'),
+                child: Text('Réinitialiser'),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
 
           // Type section
           Text('Type de transaction', style: theme.textTheme.titleSmall),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: AppSpacing.sm,
             children: [
@@ -114,15 +114,15 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
             ],
           ),
 
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
 
           Text('Période', style: theme.textTheme.titleSmall),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  icon: const Icon(Icons.calendar_today, size: 18),
+                  icon: Icon(Icons.calendar_today, size: 18),
                   label: Text(
                     _startDate != null
                         ? DateFormat('dd/MM/yy').format(_startDate!)
@@ -143,10 +143,10 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
                   },
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: OutlinedButton.icon(
-                  icon: const Icon(Icons.calendar_today, size: 18),
+                  icon: Icon(Icons.calendar_today, size: 18),
                   label: Text(
                     _endDate != null
                         ? DateFormat('dd/MM/yy').format(_endDate!)
@@ -170,7 +170,7 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
             ],
           ),
 
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
 
           Row(
             children: [
@@ -183,10 +183,10 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
                       _endDate = null;
                     });
                   },
-                  child: const Text('Réinitialiser'),
+                  child: Text('Réinitialiser'),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -204,7 +204,7 @@ class _TransactionFilterSheetState extends State<TransactionFilterSheet> {
                     );
                     if (context.mounted) Navigator.pop(context);
                   },
-                  child: const Text('Appliquer'),
+                  child: Text('Appliquer'),
                 ),
               ),
             ],

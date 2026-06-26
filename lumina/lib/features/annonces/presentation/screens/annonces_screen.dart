@@ -58,9 +58,9 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSearchField(context, isDark),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildTypeChips(context, isDark),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                 ],
               ),
             ),
@@ -88,7 +88,7 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                 }, childCount: annonces.length),
               );
             },
-            loading: () => const SliverToBoxAdapter(
+            loading: () => SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.xxl),
                 child: LoadingState(),
@@ -136,7 +136,7 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                       color: context.colors.textOnBrand,
                       size: AppSpacing.iconMd,
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     Text(
                       'Annonce',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -182,7 +182,7 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                 size: AppSpacing.iconXs,
               ),
             ),
-            const SizedBox(width: AppSpacing.sm + 2),
+            SizedBox(width: AppSpacing.sm + 2),
             Text(
               'Annonces',
               style: theme.textTheme.headlineSmall?.copyWith(
@@ -246,7 +246,7 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
       child: Row(
         children: [
           _buildTypeChip(context, null, 'Toutes', isDark),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           ...AnnonceType.allTypes.map(
             (type) => Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -333,14 +333,14 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                   color: context.colors.brandPrimary,
                 ),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               Text(
                 isSearching ? 'Aucun résultat trouvé' : 'Aucune annonce',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
                 child: Text(
@@ -354,7 +354,7 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                 ),
               ),
               if (isSearching) ...[
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
                 TextButton.icon(
                   onPressed: () {
                     HapticHelper.light();
@@ -364,8 +364,8 @@ class _AnnoncesScreenState extends ConsumerState<AnnoncesScreen> {
                       _selectedType = null;
                     });
                   },
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: const Text('RÉINITIALISER LES FILTRES'),
+                  icon: Icon(Icons.refresh_rounded),
+                  label: Text('RÉINITIALISER LES FILTRES'),
                 ),
               ],
             ],
@@ -449,7 +449,7 @@ class _AnnonceCard extends ConsumerWidget {
                               decoration: BoxDecoration(color: context.colors.warningText,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.sync,
                                 size: 10,
                                 color: Colors.white,
@@ -458,7 +458,7 @@ class _AnnonceCard extends ConsumerWidget {
                           ),
                       ],
                     ),
-                    const SizedBox(width: AppSpacing.md),
+                    SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,7 +511,7 @@ class _AnnonceCard extends ConsumerWidget {
                                 ),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.xs),
+                          SizedBox(height: AppSpacing.xs),
                           Text(
                             type.label,
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -524,7 +524,7 @@ class _AnnonceCard extends ConsumerWidget {
                   ],
                 ),
                 if (annonce.summary != null && annonce.summary!.isNotEmpty) ...[
-                  const SizedBox(height: AppSpacing.smd),
+                  SizedBox(height: AppSpacing.smd),
                   Text(
                     annonce.summary!,
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -534,7 +534,7 @@ class _AnnonceCard extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.smd),
+                SizedBox(height: AppSpacing.smd),
                 Row(
                   children: [
                     Icon(
@@ -542,27 +542,27 @@ class _AnnonceCard extends ConsumerWidget {
                       size: AppSpacing.iconXs,
                       color: context.colors.textTertiary,
                     ),
-                    const SizedBox(width: AppSpacing.xs),
+                    SizedBox(width: AppSpacing.xs),
                     Text(
                       '${annonce.date.day}/${annonce.date.month}/${annonce.date.year}',
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: context.colors.textTertiary,
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.md),
+                    SizedBox(width: AppSpacing.md),
                     Icon(
                       Icons.visibility_outlined,
                       size: AppSpacing.iconXs,
                       color: context.colors.textTertiary,
                     ),
-                    const SizedBox(width: AppSpacing.xs),
+                    SizedBox(width: AppSpacing.xs),
                     Text(
                       '${annonce.viewsCount}',
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: context.colors.textTertiary,
                       ),
                     ),
-                    const Spacer(),
+                    Spacer(),
                     Icon(
                       Icons.chevron_right_rounded,
                       size: AppSpacing.iconMd,

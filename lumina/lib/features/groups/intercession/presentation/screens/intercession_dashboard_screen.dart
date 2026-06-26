@@ -54,7 +54,7 @@ class _IntercessionDashboardScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildKpiHeader(kpisAsync),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   TabBar(
                     controller: _tabController,
                     labelColor: context.colors.intercessionColor,
@@ -67,7 +67,7 @@ class _IntercessionDashboardScreenState
                       Tab(text: 'Stats', icon: Icon(Icons.analytics_rounded)),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   SizedBox(
                     height: 600,
                     child: TabBarView(
@@ -79,7 +79,7 @@ class _IntercessionDashboardScreenState
                       ],
                     ),
                   ),
-                  const SizedBox(height: 100),
+                  SizedBox(height: 100),
                 ],
               ),
             ),
@@ -154,7 +154,7 @@ class _IntercessionDashboardScreenState
               color: context.colors.intercessionColor,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: _KpiCard(
               title: 'Sujets Actifs',
@@ -163,7 +163,7 @@ class _IntercessionDashboardScreenState
               color: context.colors.brandPrimary,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: _KpiCard(
               title: 'Participants',
@@ -213,7 +213,7 @@ class _KpiCard extends StatelessWidget {
           child: Column(
             children: [
               Icon(icon, color: color, size: LuminaIcon.md),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(value, style: TextStyle(fontFamily: LuminaFont.display, fontSize: 18, color: color, fontWeight: FontWeight.bold)),
               Text(
                 title,

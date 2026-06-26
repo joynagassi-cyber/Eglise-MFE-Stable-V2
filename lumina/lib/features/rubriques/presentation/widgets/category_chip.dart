@@ -32,7 +32,7 @@ class CategoryChip extends StatelessWidget {
             size: 16,
             color: isSelected ? Colors.white : color,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(category.name),
         ],
       ),
@@ -103,7 +103,7 @@ class CategorySelector extends StatelessWidget {
       value: selectedCategory?.id,
       decoration: InputDecoration(
         labelText: labelText ?? 'Catégorie',
-        prefixIcon: const Icon(Icons.category),
+        prefixIcon: Icon(Icons.category),
         border: const OutlineInputBorder(),
       ),
       items: categories.map((category) {
@@ -116,7 +116,7 @@ class CategorySelector extends StatelessWidget {
                 size: 20,
                 color: _hexToColor(context, category.color),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Text(category.name, overflow: TextOverflow.ellipsis),
               ),

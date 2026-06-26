@@ -99,7 +99,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
+            icon: Icon(Icons.arrow_back_rounded),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) context.pop();
@@ -123,12 +123,12 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                 validator: (v) => v?.isEmpty == true ? 'Requis' : null,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 200),
               child: _buildTypeSelector(context, isDark, theme),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 300),
               child: Row(
@@ -137,7 +137,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                     flex: 2,
                     child: _buildDatePicker(context, isDark, theme),
                   ),
-                  const SizedBox(width: AppSpacing.sm),
+                  SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: _buildTimePicker(
                       context,
@@ -148,7 +148,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                       theme,
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.sm),
+                  SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: _buildTimePicker(
                       context,
@@ -162,7 +162,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 400),
               child: _buildTextField(
@@ -173,7 +173,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                 theme: theme,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 500),
               child: _buildTextField(
@@ -185,7 +185,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                 theme: theme,
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 600),
               child: Semantics(
@@ -283,7 +283,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
             color: context.colors.textTertiary,
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -393,7 +393,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
                   color: context.colors.brandPrimaryFire,
                   size: AppSpacing.iconMd,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -549,7 +549,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
             content: Row(
               children: [
                 Icon(Icons.check_circle, color: context.colors.textOnBrand),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   widget.eventId == null
                       ? 'Événement créé'
@@ -571,7 +571,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'enregistrer l\'événement'),
+            content: Text('Impossible d\'enregistrer l\'événement'),
             backgroundColor: context.colors.errorText,
           ),
         );

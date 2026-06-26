@@ -124,11 +124,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Tab Toggle
                       _buildTabToggle(context, isSignUpActive: true),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Prénom + Nom
                       Row(
@@ -138,7 +138,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildLabel('Prénom'),
-                              const SizedBox(height: AppSpacing.sm),
+                              SizedBox(height: AppSpacing.sm),
                               _buildTextField(
                                 controller: _firstNameController,
                                 hint: 'Jean',
@@ -148,13 +148,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                             ],
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.md),
+                        SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildLabel('Nom'),
-                              const SizedBox(height: AppSpacing.sm),
+                              SizedBox(height: AppSpacing.sm),
                               _buildTextField(
                                 controller: _lastNameController,
                                 hint: 'Dupont',
@@ -166,11 +166,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
 
                       // Email
                       _buildLabel('Email'),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       _buildTextField(
                         controller: _emailController,
                         hint: 'Entrez votre email',
@@ -184,11 +184,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           });
                         },
                       ),
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: AppSpacing.lg),
 
                       // Mot de passe
                       _buildLabel('Mot de passe'),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       Focus(
                         onFocusChange: (focused) =>
                             setState(() => _isPasswordFocused = focused),
@@ -226,11 +226,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Confirmer mot de passe
                       _buildLabel('Confirmer'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       _buildTextField(
                         controller: _confirmPasswordController,
                         hint: 'Confirmez votre mot de passe',
@@ -254,7 +254,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                               () => _obscureConfirm = !_obscureConfirm),
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28),
 
                       // Swipe to Sign Up
                       SwipeAuthButton(
@@ -265,11 +265,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                         isDisabled: !_isEmailValid,
                         onCompleted: _handleSignUp,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Séparateur
                       _buildDivider('Ou continuer avec'),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // Boutons sociaux
                       _buildSocialButton(
@@ -278,7 +278,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                         isLoading: state is AsyncLoading,
                         onTap: _handleGoogleSignUp,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Lien connexion
                       Center(
@@ -305,7 +305,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      SizedBox(height: 32),
                     ],
                   ),
                 ),
@@ -377,7 +377,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                       color: context.colors.textOnBrand,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     'Lumina MFE-JC',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -386,7 +386,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           fontWeight: FontWeight.w600,
                         ),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     'Créer un Compte',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -394,7 +394,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Text(
                     'Rejoignez la mission aujourd\'hui.',
                     textAlign: TextAlign.center,
@@ -605,7 +605,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
           ),
         ),
         child: isLoading
-            ? const Center(
+            ? Center(
                 child: SizedBox(
                   height: 24,
                   width: 24,
@@ -616,7 +616,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   icon,
-                  const SizedBox(width: AppSpacing.md),
+                  SizedBox(width: AppSpacing.md),
                   Text(
                     label,
                     style: TextStyle(

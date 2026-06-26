@@ -22,9 +22,9 @@ class RoleSwitcher extends ConsumerWidget {
             // S'il n'y a qu'un rôle, pas besoin de switcher (sauf si superadmin)
             if (roles.length <= 1 && !userContext.role.isSuper) {
               return ListTile(
-                leading: const Icon(Icons.person_outline),
+                leading: Icon(Icons.person_outline),
                 title: Text(userContext.role.label),
-                subtitle: const Text('Rôle unique'),
+                subtitle: Text('Rôle unique'),
               );
             }
 
@@ -43,7 +43,7 @@ class RoleSwitcher extends ConsumerWidget {
                         size: LuminaIcon.md,
                         color: context.colors.iconSecondary,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         'CHANGER DE RÔLE',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -83,18 +83,18 @@ class RoleSwitcher extends ConsumerWidget {
               ],
             );
           },
-          loading: () => const Center(child: LoadingState()),
+          loading: () => Center(child: LoadingState()),
           error: (e, _) =>
-              const ListTile(title: Text('Erreur de chargement des rôles')),
+              ListTile(title: Text('Erreur de chargement des rôles')),
         );
       },
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.all(16),
         child: Center(child: LoadingDots()),
       ),
       error: (e, _) => ListTile(
         leading: Icon(Icons.warning_amber_rounded, color: context.colors.warningIcon),
-        title: const Text('Impossible de charger le contexte'),
+        title: Text('Impossible de charger le contexte'),
       ),
     );
   }
@@ -104,7 +104,7 @@ class RoleSwitcher extends ConsumerWidget {
 void showRoleSwitcher(BuildContext context) {
   showModalBottomSheet(
     context: context,
-    builder: (context) => const SafeArea(
+    builder: (context) => SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: RoleSwitcher(),

@@ -35,7 +35,7 @@ class HomeSwitcher extends ConsumerWidget {
     return profileAsync.when(
       data: (profile) {
         if (profile == null) {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
                 child: Text('Profil non chargé. Veuillez vous reconnecter.')),
           );
@@ -88,7 +88,7 @@ class HomeSwitcher extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Scaffold(body: LoadingState()),
+      loading: () => Scaffold(body: LoadingState()),
       error: (e, st) => Scaffold(
         body: Center(
           child: Padding(
@@ -96,16 +96,16 @@ class HomeSwitcher extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline, size: 48),
-                const SizedBox(height: 16),
+                Icon(Icons.error_outline, size: 48),
+                SizedBox(height: 16),
                 Text(
                   'Erreur d\'aiguillage : $e',
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => ref.invalidate(profileStateProvider),
-                  child: const Text('Réessayer'),
+                  child: Text('Réessayer'),
                 ),
               ],
             ),

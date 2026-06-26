@@ -20,23 +20,23 @@ class GroupDashboardView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader("Gestion du Groupe"),
-            const SizedBox(height: LuminaDesign.paddingLg),
-            _buildKPIs(stats),
-            const SizedBox(height: LuminaDesign.paddingLg),
+            _buildHeader(context, "Gestion du Groupe"),
+            SizedBox(height: LuminaDesign.paddingLg),
+            _buildKPIs(context, stats),
+            SizedBox(height: LuminaDesign.paddingLg),
             _buildActions(context),
-            const SizedBox(height: LuminaDesign.paddingLg),
-            _buildSectionTitle("Alertes de Vigilance"),
+            SizedBox(height: LuminaDesign.paddingLg),
+            _buildSectionTitle(context, "Alertes de Vigilance"),
             _buildAlerts(stats, context),
           ],
         ),
       ),
       loading: () => const LoadingState(),
-      error: (e, st) => const Center(child: Text("Erreur de chargement")),
+      error: (e, st) => Center(child: Text("Erreur de chargement")),
     );
   }
 
-  Widget _buildHeader(String title) {
+  Widget _buildHeader(context, BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,7 +46,7 @@ class GroupDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildKPIs(var stats) {
+  Widget _buildKPIs(context, BuildContext context, var stats) {
     return Row(
       children: [
         Expanded(
@@ -60,7 +60,7 @@ class GroupDashboardView extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(width: LuminaDesign.paddingMd),
+        SizedBox(width: LuminaDesign.paddingMd),
         Expanded(
           child: LuminaCard(
             color: Colors.green.withOpacity(0.05),
@@ -84,13 +84,13 @@ class GroupDashboardView extends ConsumerWidget {
           icon: Icons.checklist_rtl_rounded,
           onPressed: () => context.push(AppRoutes.equipe),
         ),
-        const SizedBox(height: LuminaDesign.paddingMd),
+        SizedBox(height: LuminaDesign.paddingMd),
         Row(
           children: [
             Expanded(
               child: LuminaCard(
                 onTap: () => context.push(AppRoutes.brebis),
-                child: const Column(
+                child: Column(
                   children: [
                     Icon(Icons.person_add_alt_1, color: LuminaDesign.primary),
                     Text("Nouveau"),
@@ -98,11 +98,11 @@ class GroupDashboardView extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(width: LuminaDesign.paddingMd),
+            SizedBox(width: LuminaDesign.paddingMd),
             Expanded(
               child: LuminaCard(
                 onTap: () => context.push(AppRoutes.financeHistory),
-                child: const Column(
+                child: Column(
                   children: [
                     Icon(Icons.history, color: context.colors.textTertiary),
                     Text("Historique"),
@@ -125,8 +125,8 @@ class GroupDashboardView extends ConsumerWidget {
             onTap: () => context.push(AppRoutes.brebis),
             child: Row(
               children: [
-                const Icon(Icons.cake_rounded, color: Colors.pink),
-                const SizedBox(width: 16),
+                Icon(Icons.cake_rounded, color: Colors.pink),
+                SizedBox(width: 16),
                 Text("${stats.birthdaysCount} Anniversaires cette semaine"),
               ],
             ),
@@ -137,8 +137,8 @@ class GroupDashboardView extends ConsumerWidget {
             onTap: () => context.push(AppRoutes.equipe),
             child: Row(
               children: [
-                const Icon(Icons.warning_amber_rounded, color: Colors.orange),
-                const SizedBox(width: 16),
+                Icon(Icons.warning_amber_rounded, color: Colors.orange),
+                SizedBox(width: 16),
                 Text("${stats.absenceAlertsCount} Absences prolongées"),
               ],
             ),
@@ -147,7 +147,7 @@ class GroupDashboardView extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(context, BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: LuminaDesign.paddingMd),
       child: Text(title.toUpperCase(), style: LuminaDesign.labelOf(context)),

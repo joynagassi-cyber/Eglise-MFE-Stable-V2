@@ -46,8 +46,8 @@ class TeamListScreen extends ConsumerWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
-                    const Text(
+                    SizedBox(width: AppSpacing.sm),
+                    Text(
                       '',
                       style: TextStyle(fontSize: AppSpacing.iconLg),
                     ),
@@ -74,7 +74,7 @@ class TeamListScreen extends ConsumerWidget {
                 label: 'Rechercher',
                 button: true,
                 child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.search,
                     color: Colors.white,
                     size: AppSpacing.iconMd,
@@ -92,7 +92,7 @@ class TeamListScreen extends ConsumerWidget {
             sliver: teamAsync.when(
               data: (leaders) {
                 if (leaders.isEmpty) {
-                  return const SliverToBoxAdapter(
+                  return SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(top: AppSpacing.xxl),
                       child: AnimatedEntrance.fromBottom(
@@ -120,7 +120,7 @@ class TeamListScreen extends ConsumerWidget {
                   }, childCount: leaders.length),
                 );
               },
-              loading: () => const SliverToBoxAdapter(
+              loading: () => SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.only(top: AppSpacing.xxl),
                   child: LoadingState(),
@@ -155,8 +155,8 @@ class TeamListScreen extends ConsumerWidget {
                 unawaited(context.push(AppRoutes.brebisNouveau));
               }
             },
-            icon: const Icon(Icons.person_add, size: AppSpacing.iconMd),
-            label: const Text('Nouveau'),
+            icon: Icon(Icons.person_add, size: AppSpacing.iconMd),
+            label: Text('Nouveau'),
             backgroundColor: context.colors.brandSecondary,
             foregroundColor: Colors.white,
           ),

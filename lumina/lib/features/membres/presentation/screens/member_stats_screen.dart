@@ -34,7 +34,7 @@ class MemberStatsScreen extends ConsumerWidget {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
@@ -52,22 +52,22 @@ class MemberStatsScreen extends ConsumerWidget {
               delay: const Duration(milliseconds: 100),
               child: _buildKpiSection(context, stats),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 200),
               child: _buildGenderChart(context, stats),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 300),
               child: _buildStatusChart(context, stats),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 400),
               child: _buildAgeChart(context, stats),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             AnimatedEntrance.fromBottom(
               delay: const Duration(milliseconds: 500),
               child: _buildGrowthChart(context, stats),
@@ -94,12 +94,12 @@ class MemberStatsScreen extends ConsumerWidget {
                   size: AppSpacing.iconHero,
                   color: context.colors.errorText,
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text(
                   'Erreur lors du chargement',
                   style: theme.textTheme.titleMedium,
                 ),
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
                 Text(
                   '$err',
                   textAlign: TextAlign.center,
@@ -124,7 +124,7 @@ class MemberStatsScreen extends ConsumerWidget {
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Row(
           children: [
             Expanded(
@@ -135,7 +135,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 color: context.colors.brandPrimary,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: _KpiCard(
                 title: 'Actifs',
@@ -146,7 +146,7 @@ class MemberStatsScreen extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Row(
           children: [
             Expanded(
@@ -157,7 +157,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 color: context.colors.infoText,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: _KpiCard(
                 title: 'Leaders',
@@ -168,7 +168,7 @@ class MemberStatsScreen extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         _KpiCard(
           title: 'Âge Moyen',
           value: '${stats.averageAge.toStringAsFixed(1)} ans',
@@ -215,7 +215,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: Row(
@@ -249,7 +249,7 @@ class MemberStatsScreen extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     '${e.key.label}: ${e.value}',
@@ -311,7 +311,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: BarChart(
@@ -401,7 +401,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: BarChart(
@@ -475,7 +475,7 @@ class MemberStatsScreen extends ConsumerWidget {
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: LineChart(
@@ -607,7 +607,7 @@ class _KpiCard extends StatelessWidget {
               ),
               child: Icon(icon, color: color, size: AppSpacing.iconMd),
             ),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

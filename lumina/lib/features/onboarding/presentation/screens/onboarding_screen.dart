@@ -24,19 +24,19 @@ class OnboardingScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
               // --- HEADER ---
               Text(
                 "Bienvenue sur Lumina",
                 style: LuminaDesign.h1Of(context),
               ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 "Pour commencer, quel est votre rôle ?",
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
               
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
 
               // --- ROLE SELECTION ---
               Expanded(
@@ -160,13 +160,13 @@ class _RoleCard extends StatelessWidget {
             ),
             child: Icon(icon, color: LuminaDesign.primary, size: 28),
           ),
-          const SizedBox(width: 20),
+          SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: LuminaDesign.h2Of(context).copyWith(fontSize: 18)),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   description, 
                   style: LuminaDesign.bodyLargeOf(context).copyWith(

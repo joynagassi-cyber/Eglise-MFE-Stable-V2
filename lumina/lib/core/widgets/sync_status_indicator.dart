@@ -49,7 +49,7 @@ class SyncStatusIndicator extends StatelessWidget {
             size: 14,
             color: isSynced ? context.colors.successText : context.colors.errorText,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             isSynced ? 'Synchronisé' : 'Hors ligne',
             style: Theme.of(context).textTheme.labelSmall?.copyWith(

@@ -52,7 +52,7 @@ class _IntegrityCertificateScreenState extends ConsumerState<IntegrityCertificat
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erreur lors du partage du certificat')),
+          SnackBar(content: Text('Erreur lors du partage du certificat')),
         );
       }
     } finally {
@@ -109,16 +109,16 @@ class _IntegrityCertificateScreenState extends ConsumerState<IntegrityCertificat
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Divider(color: Colors.brown, thickness: 0.5),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 8),
+                    Divider(color: Colors.brown, thickness: 0.5),
+                    SizedBox(height: 24),
                     
-                    _buildField("Document", widget.transactionData['description'] ?? 'Transaction'),
-                    _buildField("Montant", "${widget.transactionData['amount'] ?? 0} FCFA"),
-                    _buildField("Date", _formatDate(widget.transactionData['date'])),
-                    _buildField("Catégorie", widget.transactionData['category'] ?? 'Général'),
+                    _buildField(context, "Document", widget.transactionData['description'] ?? 'Transaction'),
+                    _buildField(context, "Montant", "${widget.transactionData['amount'] ?? 0} FCFA"),
+                    _buildField(context, "Date", _formatDate(widget.transactionData['date'])),
+                    _buildField(context, "Catégorie", widget.transactionData['category'] ?? 'Général'),
                     
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
                     Text(
                       _isVerified == false 
                         ? "ATTENTION : L'intégrité de ce document est compromise !"
@@ -131,7 +131,7 @@ class _IntegrityCertificateScreenState extends ConsumerState<IntegrityCertificat
                       ),
                     ),
                     
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     Text(
                       "Empreinte numérique :",
                       style: LuminaDesign.labelOf(context).copyWith(fontSize: 10),
@@ -151,7 +151,7 @@ class _IntegrityCertificateScreenState extends ConsumerState<IntegrityCertificat
               ),
             ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.1),
             
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             
             LuminaButton(
               label: _isCapturing ? "Génération..." : "Partager la preuve",
@@ -165,7 +165,7 @@ class _IntegrityCertificateScreenState extends ConsumerState<IntegrityCertificat
     );
   }
 
-  Widget _buildField(String label, String value) {
+  Widget _buildField(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(

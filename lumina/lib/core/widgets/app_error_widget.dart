@@ -109,7 +109,7 @@ class AppErrorWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
 
             // Titre
             if (title != null) ...[
@@ -121,7 +121,7 @@ class AppErrorWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
             ],
 
             // Message principal
@@ -135,16 +135,16 @@ class AppErrorWidget extends StatelessWidget {
 
             // Détails techniques (collapsible)
             if (showTechnicalDetails && technicalDetails != null) ...[
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               _TechnicalDetailsExpansion(details: technicalDetails!),
             ],
 
             // Bouton Retry
             if (onRetry != null) ...[
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh_rounded),
+                icon: Icon(Icons.refresh_rounded),
                 label: Text(retryLabel),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
@@ -198,7 +198,7 @@ class _TechnicalDetailsExpansionState
           ),
         ),
         if (_isExpanded) ...[
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Container(
             padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(

@@ -40,7 +40,7 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
     final donorsAsync = ref.watch(donorsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Enregistrer un Don')),
+      appBar: AppBar(title: Text('Enregistrer un Don')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -62,9 +62,9 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
                 validator: (val) => val == null ? 'Champ requis' : null,
               ),
               loading: () => const AppProgressBar(),
-              error: (_, __) => const Text('Erreur chargement donateurs'),
+              error: (_, __) => Text('Erreur chargement donateurs'),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: _donationType,
               decoration: const InputDecoration(labelText: 'Type de Don'),
@@ -87,7 +87,7 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
               ],
               onChanged: (val) => setState(() => _donationType = val!),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ref.watch(donationCampaignsProvider).when(
                   data: (campaigns) => campaigns.isEmpty
                       ? const SizedBox.shrink()
@@ -115,7 +115,7 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
                   loading: () => const AppProgressBar(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextFormField(
               controller: _amountController,
               decoration: const InputDecoration(
@@ -129,16 +129,16 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ListTile(
-              title: const Text('Date du Don'),
+              title: Text('Date du Don'),
               subtitle: Text(
                 '${_donationDate.day}/${_donationDate.month}/${_donationDate.year}',
               ),
-              trailing: const Icon(Icons.calendar_today),
+              trailing: Icon(Icons.calendar_today),
               onTap: _selectDate,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextFormField(
               controller: _notesController,
               decoration: const InputDecoration(
@@ -146,14 +146,14 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
               ),
               maxLines: 2,
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.colors.brandPrimary,
                 foregroundColor: context.colors.textOnBrand,
               ),
               onPressed: _save,
-              child: const Text('Confirmer le Don'),
+              child: Text('Confirmer le Don'),
             ),
           ],
         ),
@@ -196,7 +196,7 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
         ref.invalidate(donorDonationsProvider(_selectedDonorId!));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Don enregistré avec succès'),
+            content: Text('Don enregistré avec succès'),
             backgroundColor: context.colors.successText,
           ),
         );
@@ -207,7 +207,7 @@ class _DonationFormScreenState extends ConsumerState<DonationFormScreen> {
           context,
         ).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'enregistrer le don'),
+            content: Text('Impossible d\'enregistrer le don'),
             backgroundColor: context.colors.errorText,
           ),
         );

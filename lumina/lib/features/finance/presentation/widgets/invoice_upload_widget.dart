@@ -64,7 +64,7 @@ class _InvoiceUploadWidgetState extends ConsumerState<InvoiceUploadWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Facture uploadée'),
+            content: Text('Facture uploadée'),
             backgroundColor: context.colors.successText,
           ),
         );
@@ -74,7 +74,7 @@ class _InvoiceUploadWidgetState extends ConsumerState<InvoiceUploadWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible de télécharger la facture'),
+            content: Text('Impossible de télécharger la facture'),
             backgroundColor: context.colors.errorText,
           ),
         );
@@ -102,7 +102,7 @@ class _InvoiceUploadWidgetState extends ConsumerState<InvoiceUploadWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Facture scellée'),
+            content: Text('Facture scellée'),
             backgroundColor: context.colors.successText,
           ),
         );
@@ -129,25 +129,25 @@ class _InvoiceUploadWidgetState extends ConsumerState<InvoiceUploadWidget> {
         ElevatedButton.icon(
           onPressed: _uploading ? null : _pickAndUpload,
           icon: _uploading
-              ? const SizedBox(
+              ? SizedBox(
                   width: 20,
                   height: 20,
                   child: LoadingDots(),
                 )
-              : const Icon(Icons.upload_file),
+              : Icon(Icons.upload_file),
           label: Text(_uploading ? 'Upload...' : 'Joindre facture'),
         ),
         if (_uploadedFileId != null) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text('Facture uploadée',
             style: TextStyle(color: context.colors.successText),
           ),
           if (_canSeal) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             ElevatedButton.icon(
               onPressed: _uploading ? null : _sealInvoice,
-              icon: const Icon(Icons.lock),
-              label: const Text('Sceller facture'),
+              icon: Icon(Icons.lock),
+              label: Text('Sceller facture'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.colors.warningText,
               ),

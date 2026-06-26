@@ -118,7 +118,7 @@ class StatusBadge extends StatelessWidget {
           children: [
             if (icon != null) ...[
               Text(icon!, style: TextStyle(fontSize: fontSize ?? 10)),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
             ],
             Text(
               label,
@@ -145,7 +145,7 @@ class StatusBadge extends StatelessWidget {
         children: [
           if (icon != null) ...[
             Text(icon!, style: TextStyle(fontSize: fontSize ?? 10)),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
           ],
           Text(
             label,

@@ -52,7 +52,7 @@ class ChapterNavBar extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (isLoading)
-                    const SizedBox(
+                    SizedBox(
                       height: 16,
                       width: 16,
                       child: LoadingDots(size: 24),
@@ -66,7 +66,7 @@ class ChapterNavBar extends ConsumerWidget {
                       textAlign: TextAlign.center,
                     ),
                   // Barre de progression
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: AppProgressBar(

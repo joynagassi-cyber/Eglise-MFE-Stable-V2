@@ -11,7 +11,7 @@ class ChurchListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestion des Églises'),
+        title: Text('Gestion des Églises'),
       ),
       body: const EmptyState(
         icon: Icons.church_outlined,
@@ -23,7 +23,7 @@ class ChurchListScreen extends StatelessWidget {
           // TODO: Implémenter l'ajout d'église
         },
         backgroundColor: context.colors.brandPrimary,
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }

@@ -47,7 +47,7 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
@@ -73,7 +73,7 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
 
               // Carte Tendance (Glass Secondary)
               Expanded(
@@ -91,7 +91,7 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       SizedBox(
                         height: 60,
                         child: ref.watch(financeTrendProvider).when(
@@ -99,15 +99,15 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
                                 data: (trend['data'] as List<double>),
                                 isPositive: (trend['growth'] as double) >= 0,
                               ),
-                              loading: () => const Center(
+                              loading: () => Center(
                                   child: LoadingDots(
                                 size: 24,
                                 color: Colors.white,
                               )),
-                              error: (_, __) => const Icon(Icons.error_outline),
+                              error: (_, __) => Icon(Icons.error_outline),
                             ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       ref.watch(financeTrendProvider).when(
                             data: (trend) {
                               final growth = trend['growth'] as double;
@@ -139,7 +139,7 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
                               );
                             },
                             loading: () => const LoadingState(),
-                            error: (_, __) => const SizedBox(),
+                            error: (_, __) => SizedBox(),
                           ),
                     ],
                   ),
@@ -170,7 +170,7 @@ class FinanceGlassHeroHeader extends ConsumerWidget {
           ),
           child: Icon(icon, color: color, size: 12),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

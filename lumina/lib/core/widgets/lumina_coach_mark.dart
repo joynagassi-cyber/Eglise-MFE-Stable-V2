@@ -4,10 +4,11 @@ import 'package:lumina/core/theme/lumina_design_system.dart';
 import '../extensions/context_extension.dart';
 
 /// Utilitaire pour créer des "Coach Marks" (bulles d'aide contextuelles)
-/// conformes au Design System Lumina 2.0.
+/// conformes au Design System Lumina 2.2 (mode-aware).
 class LuminaCoachMark {
   /// Crée un style de bulle standard pour Lumina
   static Widget buildContent({
+    required BuildContext context,
     required String title,
     required String description,
     required int step,
@@ -16,7 +17,7 @@ class LuminaCoachMark {
     return Container(
       padding: const EdgeInsets.all(LuminaDesign.paddingLg),
       decoration: BoxDecoration(
-        color: context.colors.bgPage,
+        color: context.colors.bgCard,
         borderRadius: BorderRadius.circular(LuminaDesign.radiusMd),
         boxShadow: LuminaDesign.shadowLg,
       ),
@@ -44,12 +45,12 @@ class LuminaCoachMark {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             description,
             style: LuminaDesign.bodyLargeOf(context).copyWith(fontSize: 15, height: 1.4),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -57,7 +58,7 @@ class LuminaCoachMark {
                 "Appuyez pour continuer",
                 style: LuminaDesign.labelOf(context).copyWith(color: context.colors.textTertiary, fontSize: 10),
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Icon(Icons.touch_app, size: 14, color: context.colors.textTertiary),
             ],
           ),
@@ -87,6 +88,7 @@ class LuminaCoachMark {
         TargetContent(
           align: align,
           builder: (context, controller) => buildContent(
+            context: context,
             title: title,
             description: description,
             step: step,

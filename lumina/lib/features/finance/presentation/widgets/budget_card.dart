@@ -78,7 +78,7 @@ class BudgetCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ClipRRect(
               borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
               child: AppProgressBar(
@@ -88,7 +88,7 @@ class BudgetCard extends ConsumerWidget {
                     : context.colors.brandPrimary,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -125,7 +125,7 @@ class BudgetCard extends ConsumerWidget {
             color: context.colors.textTertiary,
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           '$prefix${amount.toStringAsFixed(0)} FCFA',
           style: AppTypography.labelLarge.copyWith(

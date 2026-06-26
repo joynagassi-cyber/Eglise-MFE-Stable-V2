@@ -95,7 +95,7 @@ class _DonorFormScreenState extends ConsumerState<DonorFormScreen> {
               onChanged: (val) => setState(() => _type = val!),
             ),
             if (_type == 'organization') ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _orgNameController,
                 decoration: const InputDecoration(
@@ -107,7 +107,7 @@ class _DonorFormScreenState extends ConsumerState<DonorFormScreen> {
               ),
             ],
             if (_type == 'individual') ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -116,7 +116,7 @@ class _DonorFormScreenState extends ConsumerState<DonorFormScreen> {
                       decoration: const InputDecoration(labelText: 'Prénom'),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: TextFormField(
                       controller: _lastNameController,
@@ -128,38 +128,38 @@ class _DonorFormScreenState extends ConsumerState<DonorFormScreen> {
                 ],
               ),
             ],
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextFormField(
               controller: _phoneController,
               decoration: const InputDecoration(labelText: 'Téléphone'),
               keyboardType: TextInputType.phone,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextFormField(
               controller: _addressController,
               decoration: const InputDecoration(labelText: 'Adresse'),
               maxLines: 2,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             SwitchListTile(
-              title: const Text('Désire un reçu fiscal'),
+              title: Text('Désire un reçu fiscal'),
               value: _wantsReceipt,
               onChanged: (val) => setState(() => _wantsReceipt = val),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.colors.brandPrimary,
                 foregroundColor: context.colors.textOnBrand,
               ),
               onPressed: _save,
-              child: const Text('Enregistrer'),
+              child: Text('Enregistrer'),
             ),
           ],
         ),
@@ -199,7 +199,7 @@ class _DonorFormScreenState extends ConsumerState<DonorFormScreen> {
           context,
         ).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'enregistrer le donateur'),
+            content: Text('Impossible d\'enregistrer le donateur'),
             backgroundColor: context.colors.errorText,
           ),
         );

@@ -43,7 +43,7 @@ class MonthlyDonationsChart extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Expanded(
             child: BarChart(
               BarChartData(

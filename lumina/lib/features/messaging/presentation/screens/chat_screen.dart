@@ -98,9 +98,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           IconButton(
-            icon: const Icon(Icons.send, color: LuminaDesign.primary),
+            icon: Icon(Icons.send, color: LuminaDesign.primary),
             onPressed: _sendMessage,
           ),
         ],

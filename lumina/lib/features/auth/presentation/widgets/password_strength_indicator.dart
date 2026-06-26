@@ -23,7 +23,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Row(
             children: List.generate(4, (index) {
               final bool isActive = _getStrengthIndex(strength) >= index;
@@ -44,7 +44,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: AppSpacing.xs),
           Text(
             strength.label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(

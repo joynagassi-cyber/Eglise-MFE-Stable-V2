@@ -256,7 +256,7 @@ class _NavTabItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildPill(context),
-                  const SizedBox(height: 6), // Espace
+                  SizedBox(height: 6), // Espace
                   _buildIcon(context),
                 ],
               ),
@@ -296,7 +296,7 @@ class _NavTabItem extends StatelessWidget {
   }
 
   Widget _buildPill(BuildContext context) {
-    if (!isActive || pillAnim == null) return const SizedBox(height: 4);
+    if (!isActive || pillAnim == null) return SizedBox(height: 4);
 
     return Opacity(
       opacity: pillAnim!.value,

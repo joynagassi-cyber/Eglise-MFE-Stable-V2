@@ -59,7 +59,7 @@ class CalendarScreen extends ConsumerWidget {
             },
           ),
 
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
 
           Expanded(
             child: eventsAsync.when(
@@ -138,7 +138,7 @@ class CalendarScreen extends ConsumerWidget {
                   size: 64,
                   color: context.colors.textPrimary.withValues(alpha: 0.05),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
                   'Journée libre',
                   style: AppTypography.titleMedium.copyWith(
@@ -159,14 +159,14 @@ class CalendarScreen extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.all(AppSpacing.md),
         child: ShimmerCardList(
           itemCount: 4,
           itemHeight: 100,
         ),
       ),
-      error: (e, _) => const Center(child: Text('Impossible de charger le calendrier')),
+      error: (e, _) => Center(child: Text('Impossible de charger le calendrier')),
     );
   }
 
@@ -235,7 +235,7 @@ class CalendarScreen extends ConsumerWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           event.title,
@@ -248,7 +248,7 @@ class CalendarScreen extends ConsumerWidget {
                     ],
                   ),
                   if (event.location != null) ...[
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Row(
                       children: [
                         Icon(
@@ -256,7 +256,7 @@ class CalendarScreen extends ConsumerWidget {
                           size: 14,
                           color: context.colors.textTertiary,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             event.location!,

@@ -37,16 +37,16 @@ class ChartContainer extends StatelessWidget {
                   ),
                   if (onRefresh != null)
                     IconButton(
-                      icon: const Icon(Icons.refresh, size: AppSpacing.iconMd),
+                      icon: Icon(Icons.refresh, size: AppSpacing.iconMd),
                       onPressed: onRefresh,
                       color: context.colors.textSecondary,
                     ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               chart,
               if (legend != null) ...[
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 legend!,
               ],
             ],

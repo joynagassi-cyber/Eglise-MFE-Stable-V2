@@ -101,7 +101,7 @@ class _TtsBar extends StatelessWidget {
         children: [
           // Icône micro
           Icon(Icons.mic, color: context.colors.accent, size: 20),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           // Info verset
           Expanded(
             child: Text(
@@ -141,14 +141,14 @@ class _TtsBar extends StatelessWidget {
           ),
           // Stop
           IconButton(
-            icon: const Icon(Icons.stop_circle_outlined, size: 24),
+            icon: Icon(Icons.stop_circle_outlined, size: 24),
             onPressed: onStop,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
           ),
           // Settings
           IconButton(
-            icon: const Icon(Icons.tune, size: 20),
+            icon: Icon(Icons.tune, size: 20),
             onPressed: onOpenSettings,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
@@ -193,19 +193,19 @@ class _TtsSettingsSheet extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text('Paramètres de lecture audio',
               style: AppTypography.titleMedium.copyWith(
                 fontWeight: FontWeight.w700,
               )),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // Langue
           _SettingRow(
             label: 'Langue',
             child: DropdownButton<String>(
               value: settings.languageCode,
-              underline: const SizedBox(),
+              underline: SizedBox(),
               items: const [
                 DropdownMenuItem(value: 'fr-FR', child: Text('Français (FR)')),
                 DropdownMenuItem(value: 'fr-BE', child: Text('Français (BE)')),
@@ -266,7 +266,7 @@ class _TtsSettingsSheet extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
       ),
     );

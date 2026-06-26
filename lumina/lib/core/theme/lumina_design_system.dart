@@ -238,7 +238,7 @@ class LuminaButton extends StatelessWidget {
               children: [
                 if (icon != null) ...[
                   Icon(icon, size: 18),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                 ],
                 Text(
                   label.toUpperCase(),

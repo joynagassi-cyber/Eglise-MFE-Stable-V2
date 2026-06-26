@@ -81,7 +81,7 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
             ),
 
           // ── TTS Control bar (flottante bas) ─────────
-          const Positioned(
+          Positioned(
             left: 0,
             right: 0,
             bottom: 68, // au-dessus de la ChapterNavBar
@@ -105,7 +105,7 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
 
   Widget _buildContent(BibleState state, BibleNotifier notifier) {
     if (state.isLoadingChapter) {
-      return const Center(child: LoadingState());
+      return Center(child: LoadingState());
     }
 
     if (state.errorMessage != null) {
@@ -114,15 +114,15 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.wifi_off, size: 56, color: context.colors.textTertiary),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(state.errorMessage!,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: context.colors.textTertiary)),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: notifier.loadChapter,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Réessayer'),
+              icon: Icon(Icons.refresh),
+              label: Text('Réessayer'),
             ),
           ],
         ),

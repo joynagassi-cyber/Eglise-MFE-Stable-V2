@@ -59,42 +59,42 @@ class _BibleViewState extends ConsumerState<BibleView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // 1. CINEMATIC HEADER
             _buildCinematicHeader(context),
 
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
 
             // 1.5 QUICK ACTIONS (Search + Bookmarks)
             _buildQuickActions(context),
 
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
 
             // 1.6 READING STREAK
             const ReadingStreakBadge(),
 
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // 2. VERSET DU JOUR (GLOWING)
             _buildGlowingVerseCard(context),
 
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // 3. EXPLORER LA PAROLE
             _buildExploreSection(context, ref),
 
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // 4. PLANS DE LECTURE
             _buildPlansSection(context),
 
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // 5. LECTURE RÉCENTE
             _buildRecentReading(context),
 
-            const SizedBox(height: AppSpacing.xl * 3),
+            SizedBox(height: AppSpacing.xl * 3),
           ],
         ),
       ),
@@ -112,7 +112,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
             letterSpacing: 2.0,
           ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Text(
           'Sainte Bible',
           style: AppTypography.h1.copyWith(
@@ -140,7 +140,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
                 children: [
                   Icon(Icons.search_rounded,
                       color: context.colors.accent.withOpacity(0.7), size: 20),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     'Rechercher',
                     style: AppTypography.editorialSection.copyWith(
@@ -153,7 +153,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
             ),
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
+        SizedBox(width: AppSpacing.md),
         Expanded(
           child: ScaleButtonWrapper(
             child: GlassCard(
@@ -166,7 +166,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
                 children: [
                   Icon(Icons.bookmark_rounded,
                       color: context.colors.accent.withOpacity(0.7), size: 20),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     'Mes Favoris',
                     style: AppTypography.editorialSection.copyWith(
@@ -215,7 +215,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Text(
             '"${_verseOfTheDay['text']}"',
             textAlign: TextAlign.center,
@@ -226,7 +226,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
               fontStyle: FontStyle.italic,
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Text(
             _verseOfTheDay['ref']!,
             style: AppTypography.editorialSection.copyWith(
@@ -235,7 +235,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
               letterSpacing: 2,
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           GradientButton(
             text: 'LIRE MAINTENANT',
             onPressed: () => context.push(AppRoutes.bibleReader
@@ -262,13 +262,13 @@ class _BibleViewState extends ConsumerState<BibleView> {
             color: context.colors.accent.withOpacity(0.6),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         ListView.separated(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           itemCount: books.length,
           separatorBuilder: (context, _) =>
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
           itemBuilder: (context, index) {
             final book = books[index];
             return _buildBookExpansionTile(context, book['name']!, book['id']!);
@@ -358,7 +358,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
             color: context.colors.accent.withOpacity(0.6),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         ScaleButtonWrapper(
           child: GlassCard(
             onTap: () => context.push(AppRoutes.biblePlans),
@@ -378,7 +378,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
                   child: Icon(Icons.calendar_month_rounded,
                       color: context.colors.textOnBrand, size: 24),
                 ),
-                const SizedBox(width: AppSpacing.lg),
+                SizedBox(width: AppSpacing.lg),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,7 +388,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
                         style: AppTypography.h3
                             .copyWith(color: context.colors.textPrimary, fontSize: 16),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         'Bible en 1 an, Proverbes, Psaumes...',
                         style: AppTypography.editorialDisplay.copyWith(
@@ -419,12 +419,12 @@ class _BibleViewState extends ConsumerState<BibleView> {
             color: context.colors.accent.withOpacity(0.6),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         FutureBuilder<List<BibleChapterModel>>(
           future: _recentReadingsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: LoadingState());
+              return Center(child: LoadingState());
             }
             if (snapshot.hasError) {
               return Text('Impossible de charger le texte biblique',
@@ -463,7 +463,7 @@ class _BibleViewState extends ConsumerState<BibleView> {
                                 child: Icon(Icons.history_rounded,
                                     color: context.colors.textOnBrand, size: 24),
                               ),
-                              const SizedBox(width: AppSpacing.md),
+                              SizedBox(width: AppSpacing.md),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

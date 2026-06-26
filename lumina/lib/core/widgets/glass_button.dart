@@ -64,7 +64,7 @@ class _GlassButtonIconContent extends StatelessWidget {
           size: 20,
           color: context.colors.iconPrimary,
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           label,
           style: AppTypography.labelMedium.copyWith(

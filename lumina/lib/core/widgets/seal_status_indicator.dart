@@ -72,7 +72,7 @@ class SealStatusIndicator extends StatelessWidget {
               size: 16,
               color: _getIconColor(context, status),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               _getLabel(status),
               style: TextStyle(
@@ -82,7 +82,7 @@ class SealStatusIndicator extends StatelessWidget {
               ),
             ),
             if (isSealed) ...[
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Icon(Icons.lock,
                 size: 12,
                 color: context.colors.successText,

@@ -32,7 +32,7 @@ class SpiritualTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       itemCount: nodes.length,
       itemBuilder: (context, index) {
         final node = nodes[index];
@@ -94,7 +94,7 @@ class SpiritualTimeline extends StatelessWidget {
                           color: node.isAchieved ? context.colors.textPrimary : context.colors.textTertiary,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         node.description,
                         style: LuminaDesign.bodyLargeOf(context).copyWith(

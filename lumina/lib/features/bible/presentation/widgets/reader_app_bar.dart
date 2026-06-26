@@ -51,8 +51,8 @@ class ReaderAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.arrow_drop_down, size: 20),
+              SizedBox(width: 4),
+              Icon(Icons.arrow_drop_down, size: 20),
             ],
           ),
         ),
@@ -83,7 +83,7 @@ class _OverflowMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert),
+      icon: Icon(Icons.more_vert),
       onSelected: (value) async {
         final notifier = ref.read(bibleNotifierProvider.notifier);
         switch (value) {
@@ -132,7 +132,7 @@ class _OverflowMenu extends ConsumerWidget {
             child: Text('Version de la Bible',
                 style: Theme.of(context).textTheme.titleMedium),
           ),
-          const Divider(height: 1),
+          Divider(height: 1),
           ...translations.map((t) => ListTile(
                 title: Text(t.name),
                 subtitle: Text(t.shortName),
@@ -144,7 +144,7 @@ class _OverflowMenu extends ConsumerWidget {
                   notifier.changeTranslation(t.id);
                 },
               )),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       ),
     );

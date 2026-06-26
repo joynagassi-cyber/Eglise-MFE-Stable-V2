@@ -35,7 +35,7 @@ class StatDetailScreen extends StatelessWidget {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
@@ -87,7 +87,7 @@ class StatDetailScreen extends StatelessWidget {
                             color: context.colors.textInverse,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         Hero(
                           tag: 'stat-value-$title',
                           child: Material(
@@ -102,7 +102,7 @@ class StatDetailScreen extends StatelessWidget {
                           ),
                         ),
                         if (subtitle != null) ...[
-                          const SizedBox(height: AppSpacing.sm),
+                          SizedBox(height: AppSpacing.sm),
                           Text(
                             subtitle!,
                             style: AppText.bodyMedium(context).copyWith(
@@ -116,7 +116,7 @@ class StatDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
 
             // Details Section
             if (details.isNotEmpty) ...[
@@ -124,7 +124,7 @@ class StatDetailScreen extends StatelessWidget {
                 delay: const Duration(milliseconds: 200),
                 child: Text('Détails', style: AppText.headlineSmall(context)),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               ...details.asMap().entries.map((entry) {
                 final index = entry.key;
                 final detail = entry.value;
@@ -151,7 +151,7 @@ class StatDetailScreen extends StatelessWidget {
                               color: color,
                               size: AppSpacing.iconMd,
                             ),
-                            const SizedBox(width: AppSpacing.md),
+                            SizedBox(width: AppSpacing.md),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

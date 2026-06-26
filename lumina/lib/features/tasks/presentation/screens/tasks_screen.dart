@@ -24,7 +24,7 @@ class TasksScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.communicationTasksNew),
         backgroundColor: LuminaDesign.primary,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
       ),
       body: tasksAsync.when(
         data: (tasks) {
@@ -48,9 +48,9 @@ class TasksScreen extends ConsumerWidget {
                   ),
                 ).animate().fadeIn().slideY(begin: -0.1),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 Text("DÉFIS DU JOUR", style: LuminaDesign.labelOf(context)),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // --- TASKS LIST ---
                 ...tasks.map((task) => _TaskItem(task: task).animate(delay: 50.ms).fadeIn().slideX(begin: 0.1)),
@@ -70,10 +70,10 @@ class TasksScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.auto_stories_outlined, size: 64, color: context.colors.textTertiary),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text("Votre carnet est vide", style: LuminaDesign.h2Of(context)),
-          const Text("Commencez par planifier un temps de prière."),
-          const SizedBox(height: 24),
+          Text("Commencez par planifier un temps de prière."),
+          SizedBox(height: 24),
           LuminaButton(
             label: "Ajouter une tâche", 
             onPressed: () => context.push(AppRoutes.communicationTasksNew)
@@ -115,7 +115,7 @@ class _TaskItem extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

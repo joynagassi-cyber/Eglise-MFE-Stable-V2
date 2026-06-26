@@ -37,7 +37,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
           label: 'Retour au tableau de bord',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) context.go(AppRoutes.dashboard);
@@ -56,7 +56,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
           ref.invalidate(circleControllerProvider(churchId: churchId));
         },
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           padding: AppSpacing.screenPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,13 +82,13 @@ class CommunauteHomeScreen extends ConsumerWidget {
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: AppSpacing.borderRadiusSm,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.people,
                           color: Colors.white,
                           size: AppSpacing.iconXl,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       Text(
                         'Communauté',
                         style: theme.textTheme.headlineMedium?.copyWith(
@@ -96,7 +96,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.xs),
+                      SizedBox(height: AppSpacing.xs),
                       Text(
                         'Gérez votre troupeau et suivez les personnes',
                         style: theme.textTheme.bodyLarge?.copyWith(
@@ -108,7 +108,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
 
               // Menu de navigation rapide
               const AnimatedEntrance.fromBottom(
@@ -119,7 +119,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
 
               // Statistiques rapides
               AnimatedEntrance.fromBottom(
@@ -132,11 +132,11 @@ class CommunauteHomeScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
 
               // — Live stats from CircleController —
               circlesAsync.when(
-                loading: () => const Padding(
+                loading: () => Padding(
                   padding: EdgeInsets.all(AppSpacing.lg),
                   child: LoadingState(skeleton: FireSkeletonCommSummary()),
                 ),
@@ -146,19 +146,19 @@ class CommunauteHomeScreen extends ConsumerWidget {
                     child: Column(
                       children: [
                         Icon(Icons.error_outline, color: context.colors.errorText),
-                        const SizedBox(height: AppSpacing.sm),
+                        SizedBox(height: AppSpacing.sm),
                         Text(
                           'Erreur de chargement',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: context.colors.errorText,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.sm),
+                        SizedBox(height: AppSpacing.sm),
                         TextButton(
                           onPressed: () => ref.invalidate(
                             circleControllerProvider(churchId: churchId),
                           ),
-                          child: const Text('Réessayer'),
+                          child: Text('Réessayer'),
                         ),
                       ],
                     ),
@@ -182,7 +182,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                               onTap: () => context.go(AppRoutes.communaute),
                             ),
                           ),
-                          const SizedBox(width: AppSpacing.md),
+                          SizedBox(width: AppSpacing.md),
                           Expanded(
                             child: _StatCard(
                               title: 'Cercles',
@@ -194,7 +194,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                                 await HapticHelper.medium();
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Cercles : Bientôt disponible')),
+                                    SnackBar(content: Text('Cercles : Bientôt disponible')),
                                   );
                                 }
                               },
@@ -207,7 +207,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                 },
               ),
 
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
 
               // Actions rapides
               AnimatedEntrance.fromBottom(
@@ -220,13 +220,13 @@ class CommunauteHomeScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
 
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 450),
                 child: GridView.count(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   mainAxisSpacing: AppSpacing.md,
                   crossAxisSpacing: AppSpacing.md,
@@ -274,7 +274,7 @@ class CommunauteHomeScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
             ],
           ),
         ),
@@ -357,7 +357,7 @@ class _StatCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.smd),
+                SizedBox(height: AppSpacing.smd),
                 Text(
                   value,
                   style: theme.textTheme.headlineSmall?.copyWith(
@@ -365,7 +365,7 @@ class _StatCard extends StatelessWidget {
                     color: context.colors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xxs),
+                SizedBox(height: AppSpacing.xxs),
                 Text(
                   title,
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -430,7 +430,7 @@ class _QuickActionCard extends StatelessWidget {
                     ),
                     child: Icon(icon, size: AppSpacing.iconLg, color: color),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     title,
                     style: theme.textTheme.bodyMedium?.copyWith(

@@ -81,7 +81,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                     color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios_rounded,
                     color: Colors.white,
                     size: AppSpacing.iconSm,
@@ -106,9 +106,9 @@ class AnnonceDetailScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.push_pin_rounded,
+                      Icon(Icons.push_pin_rounded,
                           color: Colors.white, size: 14),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         'Épinglée',
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -172,7 +172,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                                   type.icon,
                                   style: const TextStyle(fontSize: 14),
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6),
                                 Text(
                                   type.label,
                                   style: theme.textTheme.labelSmall?.copyWith(
@@ -183,7 +183,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
                           // Title
                           Text(
                             annonce.title,
@@ -217,7 +217,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                     child: _buildMetaRow(context, annonce, theme, isDark),
                   ),
 
-                  const SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.lg),
 
                   // SUMMARY (if present)
                   if (annonce.summary != null &&
@@ -242,7 +242,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                               color: context.colors.brandPrimary.withValues(alpha: 0.5),
                               size: 24,
                             ),
-                            const SizedBox(width: AppSpacing.sm),
+                            SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
                                 annonce.summary!,
@@ -257,7 +257,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                   ],
 
                   // CONTENT
@@ -273,7 +273,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.smd),
+                    SizedBox(height: AppSpacing.smd),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 400),
                       child: Container(
@@ -299,7 +299,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
 
                   // IMAGE
                   if (annonce.hasImage) ...[
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 500),
                       child: ClipRRect(
@@ -329,7 +329,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
 
                   // TAGS
                   if (annonce.tagsList.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     AnimatedEntrance.fromBottom(
                       delay: const Duration(milliseconds: 600),
                       child: Wrap(
@@ -362,13 +362,13 @@ class AnnonceDetailScreen extends ConsumerWidget {
                   ],
 
                   // STATS ROW
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   AnimatedEntrance.fromBottom(
                     delay: const Duration(milliseconds: 700),
                     child: _buildStatsRow(context, annonce, theme, isDark),
                   ),
 
-                  const SizedBox(height: AppSpacing.xxl * 2),
+                  SizedBox(height: AppSpacing.xxl * 2),
                 ],
               ),
             ),
@@ -403,7 +403,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
             Icons.calendar_today_rounded,
             formattedDate,
           ),
-          const SizedBox(width: AppSpacing.lg),
+          SizedBox(width: AppSpacing.lg),
           // Author
           if (annonce.authorName != null && annonce.authorName!.isNotEmpty)
             _buildMetaItem(
@@ -434,7 +434,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
           ),
           child: Icon(icon, color: context.colors.brandPrimary, size: 16),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Flexible(
           child: Text(
             text,
@@ -465,7 +465,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
           '${annonce.viewsCount ?? 0}',
           'vues',
         ),
-        const SizedBox(width: AppSpacing.md),
+        SizedBox(width: AppSpacing.md),
         // Likes
         _buildStatChip(
           context,
@@ -496,7 +496,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: context.colors.textSecondary, size: 16),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             '$count $label',
             style: theme.textTheme.labelSmall?.copyWith(

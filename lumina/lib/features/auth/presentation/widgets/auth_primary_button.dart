@@ -97,7 +97,7 @@ class _AuthPrimaryButtonState extends State<AuthPrimaryButton>
           ),
           alignment: Alignment.center,
           child: widget.isLoading
-              ? const SizedBox(
+              ? SizedBox(
                   height: 24,
                   width: 24,
                   child: LoadingDots(size: LuminaIcon.lg),

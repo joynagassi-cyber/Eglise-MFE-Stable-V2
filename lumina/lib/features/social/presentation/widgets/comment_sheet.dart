@@ -54,7 +54,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Impossible d\'envoyer le commentaire')));
+        ).showSnackBar(SnackBar(content: Text('Impossible d\'envoyer le commentaire')));
       }
     } finally {
       if (mounted) {
@@ -90,21 +90,21 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                   'Commentaires',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: context.colors.textPrimary),
                 ),
-                const Spacer(),
+                Spacer(),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded),
+                  icon: Icon(Icons.close_rounded),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1),
           // List
           Expanded(
             child: commentsAsync.when(
               data: (comments) {
                 if (comments.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text('Soyez le premier à commenter !'),
                   );
                 }
@@ -123,7 +123,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                             fallbackName: comment.authorName,
                             size: 32,
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +137,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                         color: context.colors.textPrimary,
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    SizedBox(width: 8),
                                     Text(
                                       DateFormat(
                                         'dd MMM HH:mm',
@@ -148,7 +148,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4),
                                 Text(comment.content),
                               ],
                             ),
@@ -162,7 +162,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
               loading: () => ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: 3,
-                itemBuilder: (_, __) => const Padding(
+                itemBuilder: (_, __) => Padding(
                   padding: EdgeInsets.only(bottom: 16),
                   child: Row(
                     children: [
@@ -173,7 +173,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                   ),
                 ),
               ),
-              error: (err, stack) => const Center(child: Text('Impossible de charger les commentaires')),
+              error: (err, stack) => Center(child: Text('Impossible de charger les commentaires')),
             ),
           ),
           // Input
@@ -200,7 +200,7 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                     maxLines: null,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 IconButton(
                   onPressed: _isSending ? null : _sendComment,
                   icon: _isSending

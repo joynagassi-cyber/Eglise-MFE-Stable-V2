@@ -38,7 +38,7 @@ class SocialPostCard extends StatelessWidget {
                 backgroundImage: post.authorAvatarUrl != null ? NetworkImage(post.authorAvatarUrl!) : null,
                 child: post.authorAvatarUrl == null ? Text(post.authorName[0]) : null,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,17 +49,17 @@ class SocialPostCard extends StatelessWidget {
                 ),
               ),
               if (isPrayerRequest)
-                const Icon(Icons.auto_awesome, color: LuminaDesign.secondary, size: 16),
+                Icon(Icons.auto_awesome, color: LuminaDesign.secondary, size: 16),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // Content
           Text(
             post.content,
             style: LuminaDesign.bodyLargeOf(context),
           ),
           if (post.imageUrls.isNotEmpty) ...[
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ClipRRect(
               borderRadius: BorderRadius.circular(LuminaDesign.radiusSm),
               child: Image.network(
@@ -67,11 +67,11 @@ class SocialPostCard extends StatelessWidget {
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                errorBuilder: (_, __, ___) => Icon(Icons.broken_image),
               ),
             ),
           ],
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           // Actions Premium
           Row(
             children: [
@@ -81,7 +81,7 @@ class SocialPostCard extends StatelessWidget {
                 isActive: post.likesCount > 0,
                 onTap: onLike ?? () {},
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               LuminaGlowButton(
                 label: post.commentsCount == 0 ? "AMEN" : "${post.commentsCount} AMEN",
                 icon: Icons.chat_bubble_outline_rounded,
@@ -89,7 +89,7 @@ class SocialPostCard extends StatelessWidget {
                 activeColor: LuminaDesign.accent,
                 onTap: onComment ?? () {},
               ),
-              const Spacer(),
+              Spacer(),
               Icon(Icons.share_outlined, color: context.colors.textTertiary, size: 20),
             ],
           ),

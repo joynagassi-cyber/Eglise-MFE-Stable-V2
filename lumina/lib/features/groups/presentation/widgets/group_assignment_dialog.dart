@@ -94,10 +94,10 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
                   ),
                   loading: () => const AppProgressBar(),
                   error: (_, __) =>
-                      const Text('Erreur de chargement des groupes'),
+                      Text('Erreur de chargement des groupes'),
                 ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // 2. Sélection du Membre
               if (widget.initialMember != null)
@@ -118,7 +118,7 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
                     decoration: InputDecoration(
                       labelText: 'Membre à affecter',
                       labelStyle: TextStyle(fontFamily: LuminaFont.body, fontSize: 13, color: context.colors.textSecondary),
-                      prefixIcon: const Icon(Icons.person_outline, size: LuminaIcon.sm),
+                      prefixIcon: Icon(Icons.person_outline, size: LuminaIcon.sm),
                     ),
                     items: members.map((m) {
                       return DropdownMenuItem(
@@ -134,10 +134,10 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
                   ),
                   loading: () => const AppProgressBar(),
                   error: (_, __) =>
-                      const Text('Erreur de chargement des membres'),
+                      Text('Erreur de chargement des membres'),
                 ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // 3. Sélection du Rôle
               DropdownButtonFormField<GroupRole>(
@@ -145,7 +145,7 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
                 decoration: InputDecoration(
                   labelText: 'Rôle dans le groupe',
                   labelStyle: TextStyle(fontFamily: LuminaFont.body, fontSize: 13, color: context.colors.textSecondary),
-                  prefixIcon: const Icon(Icons.badge_outlined, size: LuminaIcon.sm),
+                  prefixIcon: Icon(Icons.badge_outlined, size: LuminaIcon.sm),
                 ),
                 items: GroupRole.values.map((role) {
                   return DropdownMenuItem(
@@ -164,7 +164,7 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Annuler'),
+          child: Text('Annuler'),
         ),
         FilledButton(
           onPressed: _isLoading ? null : _submit,
@@ -173,12 +173,12 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
             foregroundColor: context.colors.textInverse,
           ),
           child: _isLoading
-              ? const SizedBox(
+              ? SizedBox(
                   width: LuminaIcon.sm,
                   height: LuminaIcon.sm,
                   child: LoadingDots(size: LuminaIcon.sm),
                 )
-              : const Text('Affecter'),
+              : Text('Affecter'),
         ),
       ],
     );
@@ -222,7 +222,7 @@ class _GroupAssignmentDialogState extends ConsumerState<GroupAssignmentDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'affecter le membre'),
+            content: Text('Impossible d\'affecter le membre'),
             backgroundColor: context.colors.errorBg,
           ),
         );

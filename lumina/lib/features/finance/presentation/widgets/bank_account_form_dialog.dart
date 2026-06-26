@@ -92,14 +92,14 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       _isEditing ? 'Modifier le compte' : 'Nouveau compte',
                       style: AppTypography.h4.copyWith(fontFamily: 'Outfit'),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
 
                 // Nom
                 _buildTextField(
@@ -109,7 +109,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                   validator: (v) =>
                       v == null || v.isEmpty ? 'Champ requis' : null,
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Type Selection
                 Text(
@@ -120,7 +120,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     color: context.colors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
                 DropdownButtonFormField<FinancialAccountType>(
                   value: _type,
                   style: AppTypography.bodyMedium.copyWith(color: context.colors.textPrimary),
@@ -144,7 +144,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     setState(() => _type = v!);
                   },
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
 
                 // Mode Manuel/Auto
                 Container(
@@ -177,7 +177,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ).withTouchTarget(),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Verrouillage
                 Container(
@@ -210,7 +210,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ).withTouchTarget(),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
 
                 // Devise
                 DropdownButtonFormField<String>(
@@ -229,7 +229,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     setState(() => _currency = v!);
                   },
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Solde (Initial ou Actuel)
                 _buildTextField(
@@ -242,7 +242,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                       ? 'Édition directe autorisée'
                       : 'Mise à jour automatique',
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Bank-specific fields
                 if (_type == FinancialAccountType.bank) ...[
@@ -251,13 +251,13 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                     label: 'Nom de la banque',
                     icon: Icons.account_balance_rounded,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildTextField(
                     controller: _accountNumberCtrl,
                     label: 'N° de compte',
                     icon: Icons.numbers_rounded,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                 ],
 
                 // Description
@@ -267,7 +267,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                   icon: Icons.notes_rounded,
                   maxLines: 2,
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                SizedBox(height: AppSpacing.xl),
 
                 // Actions
                 Row(
@@ -279,14 +279,14 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                           minimumSize: const Size(0, 56),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                        child: const Text('Annuler'),
+                        child: Text('Annuler'),
                       ).withTouchTarget(),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       flex: 2,
                       child: _isSaving
-                          ? const Center(child: LoadingDots())
+                          ? Center(child: LoadingDots())
                           : FilledButton.icon(
                               onPressed: _submit,
                               style: FilledButton.styleFrom(
@@ -294,7 +294,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                 backgroundColor: context.colors.brandPrimary,
                               ),
-                              icon: const Icon(Icons.save_rounded),
+                              icon: Icon(Icons.save_rounded),
                               label: Text(_isEditing ? 'Enregistrer' : 'Créer'),
                             ).withTouchTarget(),
                     ),
@@ -376,7 +376,7 @@ class _BankAccountFormDialogState extends ConsumerState<BankAccountFormDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'enregistrer le compte bancaire'),
+            content: Text('Impossible d\'enregistrer le compte bancaire'),
             backgroundColor: context.colors.errorText,
           ),
         );

@@ -232,7 +232,7 @@ class NavigationHierarchy {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(currentSection.icon, size: 16, color: accentColor),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Text(
               currentSection.title,
               style: GoogleFonts.openSans(
@@ -276,7 +276,7 @@ class SectionQuickMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final section = NavigationHierarchy.getSectionInfo(currentRoute);
     if (section == null || section.subSections.isEmpty) {
-      return const SizedBox();
+      return SizedBox();
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -352,7 +352,7 @@ class SectionQuickMenu extends StatelessWidget {
                                 : context.colors.textSecondary,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
                           child: Text(
                             subSection.title,

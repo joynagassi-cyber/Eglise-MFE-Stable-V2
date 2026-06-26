@@ -116,7 +116,7 @@ class _ShimmerButtonState extends State<ShimmerButton>
                         ),
                       ),
                       if (widget.icon != null) ...[
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Icon(
                           widget.icon,
                           color: context.colors.textInverse,

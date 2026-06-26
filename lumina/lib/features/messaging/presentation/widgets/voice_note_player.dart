@@ -126,7 +126,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
             ),
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
         // Waveform
         Expanded(
           child: Column(
@@ -145,7 +145,7 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                   ),
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 _isPlaying || _position > Duration.zero
                     ? _formatDuration(_position)

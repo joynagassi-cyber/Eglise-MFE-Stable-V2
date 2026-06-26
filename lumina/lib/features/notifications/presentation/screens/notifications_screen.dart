@@ -26,7 +26,7 @@ class NotificationsScreen extends ConsumerWidget {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
@@ -35,7 +35,7 @@ class NotificationsScreen extends ConsumerWidget {
             },
           ),
         ),
-        title: const Text('Notifications'),
+        title: Text('Notifications'),
         actions: [
           if (notifications.isNotEmpty)
             Semantics(
@@ -47,7 +47,7 @@ class NotificationsScreen extends ConsumerWidget {
                   service.markAllAsRead();
                   await HapticHelper.success();
                 },
-                child: const Text('Tout marquer lu'),
+                child: Text('Tout marquer lu'),
               ),
             ),
           if (notifications.isNotEmpty)
@@ -57,7 +57,7 @@ class NotificationsScreen extends ConsumerWidget {
               child: Tooltip(
                 message: 'Tout supprimer',
                 child: IconButton(
-                  icon: const Icon(Icons.delete_sweep),
+                  icon: Icon(Icons.delete_sweep),
                   onPressed: () async {
                     await HapticHelper.warning();
                     service.clearAll();
@@ -79,7 +79,7 @@ class NotificationsScreen extends ConsumerWidget {
           : ListView.separated(
               padding: AppSpacing.screenPadding,
               itemCount: notifications.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, __) => Divider(height: 1),
               itemBuilder: (context, index) {
                 final notification = notifications[index];
                 return AnimatedEntrance.fromLeft(
@@ -116,7 +116,7 @@ class _NotificationTile extends ConsumerWidget {
           color: Colors.red,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: AppSpacing.lg),
-          child: const Icon(
+          child: Icon(
             Icons.delete,
             color: Colors.white,
             size: AppSpacing.iconLg,
@@ -158,9 +158,9 @@ class _NotificationTile extends ConsumerWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Text(notification.body),
-                  const SizedBox(height: AppSpacing.xs),
+                  SizedBox(height: AppSpacing.xs),
                   Text(
                     _formatDate(notification.createdAt),
                     style: theme.textTheme.labelSmall?.copyWith(

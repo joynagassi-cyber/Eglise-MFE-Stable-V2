@@ -72,7 +72,7 @@ class PasswordStrengthBar extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
               Row(
                 children: [
                   Expanded(
@@ -106,7 +106,7 @@ class PasswordStrengthBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.sm),
+                  SizedBox(width: AppSpacing.sm),
                   Text(
                     _getLabel(strength),
                     style: theme.textTheme.labelSmall?.copyWith(

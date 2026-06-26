@@ -30,7 +30,7 @@ class AuthErrorBanner extends StatelessWidget {
       child: Row(
         children: [
           Icon(Icons.error_outline, color: context.colors.errorText, size: LuminaIcon.md),
-          const SizedBox(width: AppSpacing.sm),
+          SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
               message,

@@ -12,7 +12,7 @@ class MembersSection extends StatelessWidget {
     return Column(
       children: [
         const SectionHeader(title: 'Membres du Groupe', icon: Icons.people),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         if (groupMembers.isEmpty)
           const EmptyState(
             icon: Icons.person_off,
@@ -38,7 +38,7 @@ class MembersSection extends StatelessWidget {
                         ),
                         child: Text(member.initials),
                       ),
-                      const SizedBox(height: AppSpacing.xs),
+                      SizedBox(height: AppSpacing.xs),
                       Text(
                         member.firstName,
                         style: Theme.of(context).textTheme.labelSmall,

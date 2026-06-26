@@ -88,7 +88,7 @@ class ReconciliationScreen extends ConsumerWidget {
                     padding: AppSpacing.screenPadding,
                     itemCount: state.imported.length,
                     separatorBuilder: (_, __) =>
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                     itemBuilder: (context, index) => AnimatedEntrance.fromLeft(
                       delay: Duration(milliseconds: 100 + (index * 50)),
                       child: _ReconciliationItemCard(
@@ -139,7 +139,7 @@ class ReconciliationScreen extends ConsumerWidget {
                       color: context.colors.textOnBrand,
                       size: AppSpacing.iconXl,
                     ),
-                    const SizedBox(width: AppSpacing.md),
+                    SizedBox(width: AppSpacing.md),
                     Text(
                       'Importer un relevé CSV',
                       style: theme.textTheme.bodyLarge?.copyWith(
@@ -187,7 +187,7 @@ class ReconciliationScreen extends ConsumerWidget {
             size: 80,
             color: context.colors.brandPrimary.withValues(alpha: 0.1),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Text(
             'Aucune transaction à rapprocher',
             style: theme.textTheme.bodyLarge?.copyWith(
@@ -222,7 +222,7 @@ class ReconciliationScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Impossible de réconcilier')));
+        ).showSnackBar(SnackBar(content: Text('Impossible de réconcilier')));
       }
     }
   }
@@ -271,7 +271,7 @@ class _ReconciliationItemCard extends StatelessWidget {
                 size: AppSpacing.iconMd,
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +303,7 @@ class _ReconciliationItemCard extends StatelessWidget {
                     color: _textColor(context),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xxs),
+                SizedBox(height: AppSpacing.xxs),
                 _buildBadge(context, isMatched, theme),
               ],
             ),

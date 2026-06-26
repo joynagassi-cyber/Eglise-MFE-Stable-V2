@@ -29,7 +29,7 @@ class AccessDeniedScreen extends StatelessWidget {
                   color: context.colors.errorText,
                 ),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               Text(
                 'Accès Refusé',
                 style: AppTypography.headlineMedium.copyWith(
@@ -37,7 +37,7 @@ class AccessDeniedScreen extends StatelessWidget {
                   color: context.colors.errorText,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Text(
                 "Vous n'avez pas les permissions nécessaires pour accéder à cette section. Si vous pensez qu'il s'agit d'une erreur, contactez votre administrateur.",
                 textAlign: TextAlign.center,
@@ -47,11 +47,11 @@ class AccessDeniedScreen extends StatelessWidget {
                       : context.colors.textSecondary,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
               ElevatedButton.icon(
                 onPressed: () => context.go(AppRoutes.splash),
-                icon: const Icon(Icons.home_outlined),
-                label: const Text('Retour à l\'accueil'),
+                icon: Icon(Icons.home_outlined),
+                label: Text('Retour à l\'accueil'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.colors.brandPrimary,
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,

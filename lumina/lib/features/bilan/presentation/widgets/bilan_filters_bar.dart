@@ -28,7 +28,7 @@ class BilanFiltersBar extends ConsumerWidget {
           children: [
             Icon(Icons.date_range_rounded,
                 size: 18, color: context.colors.brandPrimary),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             TextButton(
               onPressed: () async {
                 final picked = await showDateRangePicker(
@@ -60,7 +60,7 @@ class BilanFiltersBar extends ConsumerWidget {
                 ),
               ),
             ),
-            const VerticalDivider(width: 24, indent: 8, endIndent: 8),
+            VerticalDivider(width: 24, indent: 8, endIndent: 8),
             // Group Filter
             Expanded(
               child: groupsAsync.when(
@@ -68,8 +68,8 @@ class BilanFiltersBar extends ConsumerWidget {
                   child: DropdownButton<String?>(
                     value: selectedGroupId,
                     isExpanded: true,
-                    hint: const Text('Tous les groupes', style: TextStyle(fontSize: 12)),
-                    icon: const Icon(Icons.arrow_drop_down, size: 20),
+                    hint: Text('Tous les groupes', style: TextStyle(fontSize: 12)),
+                    icon: Icon(Icons.arrow_drop_down, size: 20),
                     items: [
                       const DropdownMenuItem(
                         value: null,
@@ -88,12 +88,12 @@ class BilanFiltersBar extends ConsumerWidget {
                     },
                   ),
                 ),
-                loading: () => const SizedBox(width: 20, height: 20, child: LoadingDots(size: 16)),
-                error: (_, __) => const Icon(Icons.error_outline, size: 16),
+                loading: () => SizedBox(width: 20, height: 20, child: LoadingDots(size: 16)),
+                error: (_, __) => Icon(Icons.error_outline, size: 16),
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.refresh_rounded, size: 20),
+              icon: Icon(Icons.refresh_rounded, size: 20),
               onPressed: () {
                 ref.invalidate(bilanSummaryProvider);
                 ref.invalidate(bilanBreakdownProvider);

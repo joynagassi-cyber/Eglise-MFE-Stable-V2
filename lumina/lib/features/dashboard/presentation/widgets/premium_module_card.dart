@@ -152,7 +152,7 @@ class _PremiumModuleCardState extends State<PremiumModuleCard>
                               ),
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.md),
+                          SizedBox(height: AppSpacing.md),
                           // Title and subtitle
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,7 @@ class _PremiumModuleCardState extends State<PremiumModuleCard>
                                       letterSpacing: 1.4,
                                     ),
                               ),
-                              const SizedBox(height: AppSpacing.xs),
+                              SizedBox(height: AppSpacing.xs),
                               Text(
                                 widget.subtitle,
                                 style: Theme.of(context)

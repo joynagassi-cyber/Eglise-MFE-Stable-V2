@@ -38,7 +38,7 @@ class TransactionStatusBadge extends StatelessWidget {
         children: [
           Icon(status.icon, size: iconSize ?? 16, color: status.getColor(context)),
           if (showLabel) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               status.label.toUpperCase(),
               style: TextStyle(
@@ -99,7 +99,7 @@ class StatusSelector extends StatelessWidget {
                   color:
                       isSelected ? status.getColor(context) : context.colors.textTertiary,
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Text(
                   status.label,
                   style: TextStyle(

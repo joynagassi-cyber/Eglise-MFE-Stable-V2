@@ -24,17 +24,17 @@ class AppErrorWidget extends StatelessWidget {
               color: context.colors.brandPrimary,
               size: 48,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: onRetry,
-                child: const Text('Réessayer'),
+                child: Text('Réessayer'),
               ),
             ],
           ],

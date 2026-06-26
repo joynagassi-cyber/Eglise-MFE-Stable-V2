@@ -27,7 +27,7 @@ List<RouteBase> authRoutes(AuthRoutesRef ref) {
   return [
     GoRoute(
       path: '/login-callback',
-      builder: (context, state) => const Scaffold(body: _AuthSkeleton()),
+      builder: (context, state) => Scaffold(body: _AuthSkeleton()),
     ),
     GoRoute(
       path: AppRoutes.authHome,
@@ -87,12 +87,12 @@ class _AuthSkeleton extends StatelessWidget {
                 width: 100, height: 100,
                 decoration: BoxDecoration(color: baseColor, shape: BoxShape.circle),
               ),
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
               Container(
                 width: double.infinity, height: 56,
                 decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(12)),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               Container(
                 width: double.infinity, height: 56,
                 decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(12)),

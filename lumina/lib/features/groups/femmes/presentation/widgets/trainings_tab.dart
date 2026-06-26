@@ -27,7 +27,7 @@ class TrainingsTab extends ConsumerWidget {
       data: (trainings) => Column(
         children: [
           if (trainings.isEmpty)
-            const Expanded(
+            Expanded(
               child: Center(
                 child: Text('Aucune formation disponible'),
               ),
@@ -51,7 +51,7 @@ class TrainingsTab extends ConsumerWidget {
           ),
         ],
       ),
-      loading: () => const Center(
+      loading: () => Center(
         child: LoadingDots(),
       ),
       error: (e, _) => AppErrorWidget(message: e.toString()),
@@ -73,7 +73,7 @@ class TrainingsTab extends ConsumerWidget {
             await HapticHelper.medium();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Création de formation : Bientôt disponible')),
+                SnackBar(content: Text('Création de formation : Bientôt disponible')),
               );
             }
           },

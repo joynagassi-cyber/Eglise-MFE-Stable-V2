@@ -242,11 +242,11 @@ class _AnimatedButtonState extends State<AnimatedButton>
         children: [
           if (widget.icon != null) ...[
             widget.icon!,
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
           ],
           Flexible(child: child),
           if (widget.trailing != null) ...[
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: AppSpacing.sm),
             widget.trailing!,
           ],
         ],

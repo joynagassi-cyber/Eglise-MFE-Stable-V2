@@ -13,7 +13,7 @@ class WorkInProgressScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
       ),
@@ -23,13 +23,13 @@ class WorkInProgressScreen extends StatelessWidget {
           children: [
             Icon(Icons.construction,
                 size: 80, color: context.colors.brandPrimary.withValues(alpha: 0.5)),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Text(
               'Fonctionnalité en cours de développement',
               style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Text(
               'Cette section sera bientôt disponible.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -38,10 +38,10 @@ class WorkInProgressScreen extends StatelessWidget {
                         : context.colors.textSecondaryLight,
                   ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () => context.pop(),
-              child: const Text('Retour'),
+              child: Text('Retour'),
             ),
           ],
         ),

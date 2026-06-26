@@ -48,7 +48,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
           ref.invalidate(discipleshipProgramsProvider(widget.groupId));
         },
         child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           slivers: [
             _buildAppBar(context, groupAsync),
             SliverToBoxAdapter(
@@ -60,7 +60,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
             SliverToBoxAdapter(
               child: _buildQuickActionsSection(context),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
       ),
@@ -132,7 +132,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                         children: [
                           Icon(Icons.flash_on_rounded,
                               color: context.colors.brandSecondary, size: 14),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Text(
                             'DASHBOARD JEUNESSE',
                             style: TextStyle(
@@ -146,7 +146,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     groupAsync.when(
                       data: (group) => Text(
                         group.name,
@@ -161,7 +161,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                       error: (_, __) => Text('Vague de Jeunesse',
                           style: TextStyle(color: context.colors.textOnBrand)),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       'Prêt à impacter cette génération ?',
                       style: TextStyle(
@@ -212,12 +212,12 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
             await HapticHelper.medium();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Notifications : Bientôt disponible')),
+                SnackBar(content: Text('Notifications : Bientôt disponible')),
               );
             }
           },
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
       ],
     );
   }
@@ -239,7 +239,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                     color: _primaryColor,
                   ).animate().fadeIn(duration: 400.ms).scale(),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: _KpiCard(
                     title: 'Camps Prévus',
@@ -251,7 +251,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Row(
               children: [
                 Expanded(
@@ -264,7 +264,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                     color: context.colors.brandPrimary,
                   ).animate().fadeIn(duration: 400.ms, delay: 200.ms).scale(),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: _KpiCard(
                     title: 'Budget Camp',
@@ -302,7 +302,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           dashboardKpi.when(
             data: (kpi) => Row(
               children: [
@@ -313,7 +313,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                       children: [
                         Text('Engagement Mensuel',
                             style: TextStyle(fontFamily: LuminaFont.body, fontSize: 10, color: context.colors.textSecondary)),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         SizedBox(
                           height: 120,
                           child: LineChart(
@@ -349,7 +349,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: GlassCard(
                     padding: const EdgeInsets.all(AppSpacing.md),
@@ -357,7 +357,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
                       children: [
                         Text('Croissance Spirituelle',
                             style: TextStyle(fontFamily: LuminaFont.body, fontSize: 10, color: context.colors.textSecondary)),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         SizedBox(
                           height: 120,
                           child: BarChart(
@@ -420,7 +420,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           _QuickActionItem(
             title: 'Camps & Événements',
             subtitle: 'Gérer les retraites et sorties',
@@ -430,7 +430,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Camps & Événements : Bientôt disponible')),
+                  SnackBar(content: Text('Camps & Événements : Bientôt disponible')),
                 );
               }
             },
@@ -444,7 +444,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Mentorat & Discipulat : Bientôt disponible')),
+                  SnackBar(content: Text('Mentorat & Discipulat : Bientôt disponible')),
                 );
               }
             },
@@ -458,7 +458,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Ressources Jeunesse : Bientôt disponible')),
+                  SnackBar(content: Text('Ressources Jeunesse : Bientôt disponible')),
                 );
               }
             },
@@ -472,7 +472,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Messagerie : Bientôt disponible')),
+                  SnackBar(content: Text('Messagerie : Bientôt disponible')),
                 );
               }
             },
@@ -526,7 +526,7 @@ class _KpiCard extends StatelessWidget {
             ),
             child: Icon(icon, color: color, size: 22),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             value,
             style: TextStyle(
@@ -545,7 +545,7 @@ class _KpiCard extends StatelessWidget {
               color: context.colors.textPrimary,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             subtitle,
             style: TextStyle(
@@ -599,7 +599,7 @@ class _QuickActionItem extends StatelessWidget {
                   ),
                   child: Icon(icon, color: color),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

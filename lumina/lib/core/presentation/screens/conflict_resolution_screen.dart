@@ -21,7 +21,7 @@ class ConflictResolutionScreen extends ConsumerWidget {
     if (!isarService.isReady) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Conflits de Synchronisation'),
+          title: Text('Conflits de Synchronisation'),
           centerTitle: true,
         ),
         body: const EmptyState(
@@ -35,7 +35,7 @@ class ConflictResolutionScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Conflits de Synchronisation'),
+        title: Text('Conflits de Synchronisation'),
         centerTitle: true,
       ),
       body: StreamBuilder<List<SyncItemModel>>(
@@ -59,7 +59,7 @@ class ConflictResolutionScreen extends ConsumerWidget {
           return ListView.separated(
             padding: const EdgeInsets.all(AppSpacing.md),
             itemCount: conflicts.length,
-            separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+            separatorBuilder: (_, __) => SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) {
               final item = conflicts[index];
               return _ConflictCard(item: item);
@@ -96,12 +96,12 @@ class _ConflictCard extends ConsumerWidget {
           Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: context.colors.warningText),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Text(
                 'Table: ${item.tableName}',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              const Spacer(),
+              Spacer(),
               Text(
                 item.action,
                 style: TextStyle(
@@ -113,12 +113,12 @@ class _ConflictCard extends ConsumerWidget {
               ),
             ],
           ),
-          const Divider(),
-          const Text(
+          Divider(),
+          Text(
             'Un conflit est survenu car les données sur le serveur ont changé depuis votre dernière modification hors ligne.',
             style: TextStyle(fontSize: 12),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Row(
             children: [
               Expanded(
@@ -128,7 +128,7 @@ class _ConflictCard extends ConsumerWidget {
                   onPressed: () => _resolve(ref, keepLocal: true),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: _ResolutionButton(
                   label: 'Garder le serveur',
@@ -139,11 +139,11 @@ class _ConflictCard extends ConsumerWidget {
             ],
           ),
           if (remoteData != null) ...[
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             TextButton.icon(
               onPressed: () => _showDiff(context, localData, remoteData!),
-              icon: const Icon(Icons.compare_arrows_rounded),
-              label: const Text('Comparer les différences'),
+              icon: Icon(Icons.compare_arrows_rounded),
+              label: Text('Comparer les différences'),
             ),
           ],
         ],
@@ -190,9 +190,9 @@ class _ConflictCard extends ConsumerWidget {
           ),
           child: Column(
             children: [
-              const Text('Comparaison Local vs Serveur',
+              Text('Comparaison Local vs Serveur',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Expanded(
                 child: ListView(
                   controller: controller,
@@ -214,7 +214,7 @@ class _ConflictCard extends ConsumerWidget {
       border:
           TableBorder.all(color: context.colors.borderSubtle.withOpacity(0.5)),
       children: [
-        const TableRow(
+        TableRow(
           children: [
             Padding(
                 padding: EdgeInsets.all(8),

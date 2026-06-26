@@ -54,7 +54,7 @@ class GenericGroupDashboardScreen extends ConsumerWidget {
       dashboardType: dashboardType,
     );
     if (userContext == null || groupId == null) {
-      return const Scaffold(body: LoadingState());
+      return Scaffold(body: LoadingState());
     }
 
     final dashboardData = ref.watch(groupDashboardControllerProvider(groupId));
@@ -79,14 +79,14 @@ class GenericGroupDashboardScreen extends ConsumerWidget {
                 onCreateExpense: () =>
                     context.push(AppRoutes.groupDashboardFinanceWithType(dashboardType)),
               ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             if (data['events'] != null)
               EventsSection(
                 upcomingEvents: data['events'],
                 onAddEvent: () =>
                     context.push(AppRoutes.groupDashboardNewEventWithType(dashboardType)),
               ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             if (data['members'] != null)
               MembersSection(groupMembers: data['members'] ?? []),
           ],

@@ -335,13 +335,13 @@ class FireSkeletonDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           const FireSkeletonHeroCard(),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: FireSkeletonAtom.textLine(
@@ -356,13 +356,13 @@ class FireSkeletonDashboard extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: 3,
-              itemBuilder: (_, __) => const Padding(
+              itemBuilder: (_, __) => Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: FireSkeletonStatCard(),
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: FireSkeletonAtom.textLine(
@@ -375,7 +375,7 @@ class FireSkeletonDashboard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: GridView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
@@ -401,10 +401,10 @@ class FireSkeletonMemberList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
       itemCount: 6,
-      itemBuilder: (_, __) => const Padding(
+      itemBuilder: (_, __) => Padding(
         padding: EdgeInsets.only(bottom: 16),
         child: FireSkeletonTransactionItem(),
       ),
@@ -420,10 +420,10 @@ class FireSkeletonInbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
       itemCount: 8,
-      itemBuilder: (_, __) => const Padding(
+      itemBuilder: (_, __) => Padding(
         padding: EdgeInsets.only(bottom: 16),
         child: FireSkeletonTransactionItem(), // Row style fits well
       ),
@@ -455,7 +455,7 @@ class FireSkeletonSocialFeed extends StatelessWidget {
               Row(
                 children: [
                   FireSkeletonAtom.circle(context: context, diameter: 40),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -465,11 +465,11 @@ class FireSkeletonSocialFeed extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               FireSkeletonAtom.textLine(context: context, widthFactor: 0.9, height: 14),
               FireSkeletonAtom.textLine(context: context, widthFactor: 0.8, height: 14),
               FireSkeletonAtom.textLine(context: context, widthFactor: 0.5, height: 14),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               FireSkeletonAtom.rect(context: context, height: 200, radius: 16),
             ],
           ),
@@ -539,9 +539,9 @@ class FireSkeletonCommSummary extends StatelessWidget {
             ),
           )),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         FireSkeletonAtom.rect(context: context, height: 200, radius: 24),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         FireSkeletonAtom.rect(context: context, height: 150, radius: 24),
       ],
     );
@@ -555,14 +555,14 @@ class FireSkeletonBudgetDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           FireSkeletonAtom.rect(
               context: context, height: 250, radius: 20), // Chart mimic
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           FireSkeletonAtom.textLine(
               context: context,
               widthFactor: 0.4,
@@ -590,16 +590,16 @@ class FireSkeletonDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
         FireSkeletonAtom.rect(
             context: context,
             width: 200,
             height: 40,
             radius: 8), // Amount mimic
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         FireSkeletonAtom.chip(
             context: context, width: 100, height: 24), // Status mimic
-        const SizedBox(height: 48),
+        SizedBox(height: 48),
         ...List.generate(
             4,
             (i) => Padding(
@@ -614,15 +614,15 @@ class FireSkeletonDetails extends StatelessWidget {
                     ],
                   ),
                 )),
-        const SizedBox(height: 24),
-        const Divider(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
+        Divider(),
+        SizedBox(height: 24),
         Align(
           alignment: Alignment.centerLeft,
           child:
               FireSkeletonAtom.rect(context: context, width: 150, height: 24),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Row(
           children: List.generate(
               3,

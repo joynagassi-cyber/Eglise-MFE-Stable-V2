@@ -57,13 +57,13 @@ class LuminaPage extends ConsumerWidget {
               ...?actions,
               if (showHomeButton)
                 IconButton(
-                  icon: const Icon(Icons.home_rounded, color: LuminaDesign.primary),
+                  icon: Icon(Icons.home_rounded, color: LuminaDesign.primary),
                   onPressed: () {
                     HapticHelper.light();
                     context.go(AppRoutes.dashboard);
                   },
                 ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
             ],
           )
         : null,

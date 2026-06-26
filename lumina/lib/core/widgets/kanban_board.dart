@@ -43,7 +43,7 @@ class KanbanColumn extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                if (accentColor != null) const SizedBox(width: 8),
+                if (accentColor != null) SizedBox(width: 8),
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -51,7 +51,7 @@ class KanbanColumn extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -129,7 +129,7 @@ class KanbanCard extends StatelessWidget {
               ],
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -140,7 +140,7 @@ class KanbanCard extends StatelessWidget {
               ),
             ],
             if (description != null && description!.isNotEmpty) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 description!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -151,7 +151,7 @@ class KanbanCard extends StatelessWidget {
               ),
             ],
             if (priority != null || dueDate != null) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   if (priority != null)
@@ -171,13 +171,13 @@ class KanbanCard extends StatelessWidget {
                       ),
                     ),
                   if (priority != null && dueDate != null)
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   if (dueDate != null)
                     Row(
                       children: [
                         Icon(Icons.calendar_today,
                             size: 12, color: context.colors.textTertiary),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           dueDate!,
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(

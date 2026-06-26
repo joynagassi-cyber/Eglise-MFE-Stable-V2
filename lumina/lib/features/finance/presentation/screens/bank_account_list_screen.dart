@@ -32,13 +32,13 @@ class BankAccountListScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.swap_horiz),
+            icon: Icon(Icons.swap_horiz),
             tooltip: 'Transférer des fonds',
             onPressed: () {
               final accounts = accountsAsync.value ?? [];
               if (accounts.length < 2) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                       content:
                           Text('Il faut au moins 2 comptes pour un transfert')),
                 );
@@ -48,7 +48,7 @@ class BankAccountListScreen extends ConsumerWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.add_circle_outline),
+            icon: Icon(Icons.add_circle_outline),
             tooltip: 'Nouveau compte',
             onPressed: () => _showForm(context, ref),
           ),
@@ -100,7 +100,7 @@ class BankAccountListScreen extends ConsumerWidget {
                           color: context.colors.textOnBrand.withValues(alpha: 0.8),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Text(
                         CurrencyService.format(totalBalance, 'XAF'),
                         style: AppTypography.headingLarge.copyWith(
@@ -108,9 +108,9 @@ class BankAccountListScreen extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Divider(color: context.colors.textOnBrand.withOpacity(0.2)),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -160,7 +160,7 @@ class BankAccountListScreen extends ConsumerWidget {
             ],
           );
         },
-        loading: () => const SliverToBoxAdapter(
+        loading: () => SliverToBoxAdapter(
           child: ShimmerCardList(
             itemCount: 4,
             itemHeight: 180,
@@ -208,12 +208,12 @@ class BankAccountListScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Supprimer ce compte ?'),
+        title: Text('Supprimer ce compte ?'),
         content: Text('Le compte "${account.name}" sera désactivé.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: context.colors.errorText),
@@ -249,14 +249,14 @@ class _TotalMiniCard extends StatelessWidget {
     return Column(
       children: [
         Icon(icon, color: context.colors.iconOnBrand.withOpacity(0.9), size: 18),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           label,
           style: AppTypography.labelSmall.copyWith(
             color: context.colors.textOnBrand.withValues(alpha: 0.7),
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           CurrencyService.format(amount, 'XAF').replaceAll(' FCFA', ''),
           style: AppTypography.labelMedium.copyWith(
@@ -355,7 +355,7 @@ class _AccountCard extends StatelessWidget {
                                   size: 20,
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               getColumn(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -378,7 +378,7 @@ class _AccountCard extends StatelessWidget {
                             ],
                           ),
                           if (account.isManual) ...[
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -399,7 +399,7 @@ class _AccountCard extends StatelessWidget {
                             ),
                           ],
                           if (account.isLocked) ...[
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(color: context.colors.errorText,

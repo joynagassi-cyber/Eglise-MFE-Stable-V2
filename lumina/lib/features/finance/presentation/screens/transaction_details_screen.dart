@@ -56,7 +56,7 @@ class _TransactionDetailsScreenState
     final approvalsAsync = ref.watch(transactionApprovalsProvider(t.id));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Détails Transaction')),
+      appBar: AppBar(title: Text('Détails Transaction')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -70,7 +70,7 @@ class _TransactionDetailsScreenState
                     '${isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'fr_FR', symbol: '').format(t.amount)} FCFA',
                     style: AppTypography.h1.copyWith(color: color),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -92,7 +92,7 @@ class _TransactionDetailsScreenState
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // Details Review
             _buildDetailRow('Description', t.description),
@@ -104,11 +104,11 @@ class _TransactionDetailsScreenState
             _buildDetailRow('Date', DateFormat('dd/MM/yyyy').format(t.date)),
 
             if (t.relatedMemberId != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text('Membre Lié',
                   style: TextStyle(
                       color: context.colors.textTertiary, fontSize: 12)),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Consumer(
                 builder: (context, ref, _) {
                   final memberAsync =
@@ -122,16 +122,16 @@ class _TransactionDetailsScreenState
                                   ? NetworkImage(member.photoUrl!)
                                   : null,
                               child: member.photoUrl == null
-                                  ? const Icon(Icons.person)
+                                  ? Icon(Icons.person)
                                   : null,
                             ),
                             title:
                                 Text('${member.firstName} ${member.lastName}'),
-                            subtitle: const Text('Voir le profil'),
-                            trailing: const Icon(Icons.chevron_right),
+                            subtitle: Text('Voir le profil'),
+                            trailing: Icon(Icons.chevron_right),
                             onTap: () => context.push(AppRoutes.brebisDetailsWithId(member.id)),
                           )
-                        : const Text('Membre introuvable'),
+                        : Text('Membre introuvable'),
                     loading: () => const AppProgressBar(),
                     error: (e, _) => Text('Erreur chargement membre: $e'),
                   );
@@ -139,14 +139,14 @@ class _TransactionDetailsScreenState
               ),
             ],
 
-            const SizedBox(height: 24),
-            const Divider(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
+            Divider(),
+            SizedBox(height: 24),
 
             // Proof Image
             if (t.proofImages.isNotEmpty) ...[
               Text('Preuve / Reçu', style: AppTypography.h3),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -162,12 +162,12 @@ class _TransactionDetailsScreenState
                         ))
                     .toList(),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
             ],
 
             // Workflow / Approvals
             Text('Flux d\'approbation', style: AppTypography.h3),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             approvalsAsync.when(
               data: (approvals) => Column(
                 children: approvals
@@ -187,10 +187,10 @@ class _TransactionDetailsScreenState
                               context: context, height: 50, radius: 8),
                         )),
               ),
-              error: (e, _) => const Text('Impossible de charger les détails'),
+              error: (e, _) => Text('Impossible de charger les détails'),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             if (!t.canBeModified) ...[
               Container(
@@ -205,7 +205,7 @@ class _TransactionDetailsScreenState
                   children: [
                     Icon(Icons.lock_clock_rounded,
                         color: context.colors.errorText, size: 20),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
                         'Cette transaction date de plus de 30 jours et ne peut plus être modifiée ou validée.',
@@ -219,7 +219,7 @@ class _TransactionDetailsScreenState
                   ],
                 ),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
             ],
 
             if (canValidate && t.canBeModified) ...[
@@ -233,7 +233,7 @@ class _TransactionDetailsScreenState
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: _isProcessing
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 20,
                               width: 20,
                               child: LoadingDots(size: 24),
@@ -243,7 +243,7 @@ class _TransactionDetailsScreenState
                                   color: context.colors.textOnBrand)),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: _isProcessing ? null : _reject,
@@ -252,7 +252,7 @@ class _TransactionDetailsScreenState
                         side: BorderSide(color: context.colors.errorText),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text('Rejeter'),
+                      child: Text('Rejeter'),
                     ),
                   ),
                 ],
@@ -285,13 +285,13 @@ class _TransactionDetailsScreenState
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmer la validation'),
-        content: const Text(
+        title: Text('Confirmer la validation'),
+        content: Text(
             'Voulez-vous vraiment valider et sceller cette transaction ? Cette action est irréversible.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -346,7 +346,7 @@ class _TransactionDetailsScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Transaction validée et scellée avec succès'),
+          content: Text('Transaction validée et scellée avec succès'),
           backgroundColor: context.colors.successText,
         ),
       );
@@ -359,7 +359,7 @@ class _TransactionDetailsScreenState
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('Impossible de mettre à jour la transaction'), backgroundColor: context.colors.errorText),
+        SnackBar(content: Text('Impossible de mettre à jour la transaction'), backgroundColor: context.colors.errorText),
       );
     } finally {
       if (mounted) setState(() => _isProcessing = false);
@@ -371,12 +371,12 @@ class _TransactionDetailsScreenState
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Rejeter la transaction'),
+        title: Text('Rejeter la transaction'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Veuillez indiquer le motif du rejet :'),
-            const SizedBox(height: 10),
+            Text('Veuillez indiquer le motif du rejet :'),
+            SizedBox(height: 10),
             TextField(
               controller: reasonController,
               decoration: const InputDecoration(
@@ -390,12 +390,12 @@ class _TransactionDetailsScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           OutlinedButton(
             onPressed: () => Navigator.pop(context, true),
             style: OutlinedButton.styleFrom(foregroundColor: context.colors.errorText),
-            child: const Text('Rejeter'),
+            child: Text('Rejeter'),
           ),
         ],
       ),
@@ -423,7 +423,7 @@ class _TransactionDetailsScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Transaction rejetée'),
+          content: Text('Transaction rejetée'),
           backgroundColor: context.colors.errorText,
         ),
       );
@@ -431,7 +431,7 @@ class _TransactionDetailsScreenState
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('Impossible de supprimer la transaction'), backgroundColor: context.colors.errorText),
+        SnackBar(content: Text('Impossible de supprimer la transaction'), backgroundColor: context.colors.errorText),
       );
     } finally {
       if (mounted) setState(() => _isProcessing = false);

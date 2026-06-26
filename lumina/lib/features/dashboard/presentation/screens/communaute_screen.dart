@@ -39,17 +39,17 @@ class CommunauteScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildMyGroupSection(context),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   _buildSectionHeader(
                       context, 'Découvrir', Icons.explore_rounded),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildGroupsGrid(context),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                   _buildSectionHeader(context, 'Événements Proches',
                       Icons.event_available_rounded),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildEventCard(context),
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
                 ],
               ),
             ),
@@ -116,11 +116,11 @@ class CommunauteScreen extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.notifications_none_rounded,
+          icon: Icon(Icons.notifications_none_rounded,
               color: Colors.white70),
           onPressed: () => _showComingSoon(context),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
       ],
     );
   }
@@ -130,7 +130,7 @@ class CommunauteScreen extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: context.colors.brandPrimary, size: 20),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
         Text(
           title.toUpperCase(),
           style: AppTypography.h4.copyWith(
@@ -148,7 +148,7 @@ class CommunauteScreen extends StatelessWidget {
       children: [
         _buildSectionHeader(
             context, 'Mon Équipe de Vie', Icons.favorite_border_rounded),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         GlassCard(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
@@ -169,10 +169,10 @@ class CommunauteScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.local_fire_department_rounded,
+                    child: Icon(Icons.local_fire_department_rounded,
                         color: Colors.white),
                   ),
-                  const SizedBox(width: AppSpacing.md),
+                  SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +197,7 @@ class CommunauteScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(height: 32, color: Colors.white10),
+              Divider(height: 32, color: Colors.white10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -227,7 +227,7 @@ class CommunauteScreen extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimary, size: 20),
           ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Text(
           label,
           style: AppTypography.bodySmall
@@ -255,7 +255,7 @@ class CommunauteScreen extends StatelessWidget {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: AppSpacing.md,
@@ -287,7 +287,7 @@ class CommunauteScreen extends StatelessWidget {
                   children: [
                     Icon(cat['icon'] as IconData,
                         color: cat['color'] as Color, size: 24),
-                    const SizedBox(height: AppSpacing.xs),
+                    SizedBox(height: AppSpacing.xs),
                     Text(
                       cat['name'] as String,
                       style: AppTypography.h4.copyWith(color: Colors.white),
@@ -326,7 +326,7 @@ class CommunauteScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,7 +343,7 @@ class CommunauteScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.arrow_forward_ios_rounded,
+          Icon(Icons.arrow_forward_ios_rounded,
               color: Colors.white24, size: 14),
         ],
       ),

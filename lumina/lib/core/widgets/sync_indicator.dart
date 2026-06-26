@@ -58,7 +58,7 @@ class SyncIndicator extends ConsumerWidget {
             LoadingDots(size: 14, color: color)
           else
             Icon(icon, size: 14, color: color),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             !isOnline
                 ? 'Hors ligne'

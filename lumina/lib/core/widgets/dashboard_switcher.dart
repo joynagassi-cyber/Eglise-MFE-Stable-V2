@@ -126,7 +126,7 @@ class DashboardSwitcher extends ConsumerWidget {
               size: 18,
               color: isSelected ? Colors.white : context.colors.textSecondaryLight,
             ),
-            const SizedBox(width: AppSpacing.xs),
+            SizedBox(width: AppSpacing.xs),
             Flexible(
               child: Text(
                 config.label,

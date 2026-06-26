@@ -56,7 +56,7 @@ class _PhotoUploadWidgetState extends ConsumerState<PhotoUploadWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Photo uploadée avec succès'),
+            content: Text('Photo uploadée avec succès'),
             backgroundColor: context.colors.successText,
           ),
         );
@@ -66,7 +66,7 @@ class _PhotoUploadWidgetState extends ConsumerState<PhotoUploadWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible de télécharger la photo'),
+            content: Text('Impossible de télécharger la photo'),
             backgroundColor: context.colors.errorText,
           ),
         );
@@ -84,7 +84,7 @@ class _PhotoUploadWidgetState extends ConsumerState<PhotoUploadWidget> {
           onPressed: _uploading ? null : _pickAndUpload,
           icon: _uploading
               ? const LoadingDots(size: 24)
-              : const Icon(Icons.upload_file),
+              : Icon(Icons.upload_file),
           label: Text(_uploading ? 'Upload en cours...' : 'Choisir photo'),
         ),
         if (_uploadedFileId != null)

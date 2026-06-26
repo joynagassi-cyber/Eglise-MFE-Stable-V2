@@ -52,7 +52,7 @@ class GroupDashboardScaffold extends ConsumerWidget {
           // KPIs Grid
           _buildKPIsSliver(context, data),
 
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
+          SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
 
           // Quick Actions Header
           SliverToBoxAdapter(
@@ -62,12 +62,12 @@ class GroupDashboardScaffold extends ConsumerWidget {
               iconColor: context.colors.warningText,
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
+          SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
 
           // Quick Actions Grid
           _buildQuickActionsSliver(context),
 
-          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
+          SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
 
           // Extra Content
           if (extraContent != null) SliverToBoxAdapter(child: extraContent!),

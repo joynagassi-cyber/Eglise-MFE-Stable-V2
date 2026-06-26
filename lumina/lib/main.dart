@@ -132,8 +132,8 @@ class _BootstrapErrorApp extends StatelessWidget {
               children: [
                 Icon(Icons.bolt_rounded,
                     size: 80, color: context.colors.brandPrimary),
-                const SizedBox(height: AppSpacing.lg),
-                const Text(
+                SizedBox(height: AppSpacing.lg),
+                Text(
                   'Échec de l\'initialisation',
                   style: TextStyle(
                     fontSize: 24,
@@ -142,13 +142,13 @@ class _BootstrapErrorApp extends StatelessWidget {
                         .white, // Gardé blanc pour contraste sur fond sombre Bootstrap
                   ),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text(
                   error,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white.withOpacity(0.7)),
                 ),
-                const SizedBox(height: AppSpacing.xxl),
+                SizedBox(height: AppSpacing.xxl),
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
@@ -157,7 +157,7 @@ class _BootstrapErrorApp extends StatelessWidget {
                       backgroundColor: context.colors.brandPrimary,
                       foregroundColor: context.colors.textOnBrand,
                     ),
-                    child: const Text('RÉESSAYER'),
+                    child: Text('RÉESSAYER'),
                   ),
                 ),
               ],

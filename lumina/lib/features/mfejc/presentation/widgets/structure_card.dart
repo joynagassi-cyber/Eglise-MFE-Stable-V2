@@ -46,7 +46,7 @@ class StructureCard extends StatelessWidget {
                   color: context.colors.brandPrimary,
                 ),
               ),
-              const SizedBox(width: AppSpacing.xs),
+              SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: Text(
                   title,
@@ -58,7 +58,7 @@ class StructureCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: AppSpacing.xs),
           Row(
             children: [
               Icon(
@@ -66,14 +66,14 @@ class StructureCard extends StatelessWidget {
                 size: AppSpacing.iconXs,
                 color: context.colors.textTertiary,
               ),
-              const SizedBox(width: AppSpacing.xxs),
+              SizedBox(width: AppSpacing.xxs),
               Text(
                 '$members membres',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: context.colors.textTertiary,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.xs,

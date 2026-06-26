@@ -18,10 +18,10 @@ class ActionHistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historique des Actions'),
+        title: Text('Historique des Actions'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: Icon(Icons.filter_list),
             onPressed: () => _showFilterSheet(context, ref),
           ),
         ],
@@ -43,14 +43,14 @@ class ActionHistoryScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(AppSpacing.md),
                   itemCount: logs.length,
                   separatorBuilder: (context, index) =>
-                      const Divider(height: 1),
+                      Divider(height: 1),
                   itemBuilder: (context, index) {
                     final log = logs[index];
                     return _ActionLogTile(log: log);
                   },
                 );
               },
-              loading: () => const Center(child: LoadingState()),
+              loading: () => Center(child: LoadingState()),
               error: (err, st) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -59,12 +59,12 @@ class ActionHistoryScreen extends ConsumerWidget {
                       size: 48,
                       color: context.colors.errorText,
                     ),
-                    const SizedBox(height: 16),
-                    const Text('Impossible de charger l\'historique'),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
+                    Text('Impossible de charger l\'historique'),
+                    SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => ref.refresh(auditLogsProvider),
-                      child: const Text('Réessayer'),
+                      child: Text('Réessayer'),
                     ),
                   ],
                 ),
@@ -144,7 +144,7 @@ class ActionHistoryScreen extends ConsumerWidget {
       padding: const EdgeInsets.only(right: 8),
       child: Chip(
         label: Text(label, style: const TextStyle(fontSize: 12)),
-        deleteIcon: const Icon(Icons.close, size: 14),
+        deleteIcon: Icon(Icons.close, size: 14),
         onDeleted: onDeleted,
         backgroundColor: context.colors.brandPrimaryContainer.withValues(alpha: 0.3),
         side: BorderSide.none,
@@ -181,19 +181,19 @@ class ActionHistoryScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 'Filtrage Avancé',
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24),
+              Text(
                 'Type de donnée',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 children: ['finance_transaction', 'member', 'group', 'donor']
@@ -209,12 +209,12 @@ class ActionHistoryScreen extends ConsumerWidget {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24),
+              Text(
                 'Action',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 children: [
@@ -236,17 +236,17 @@ class ActionHistoryScreen extends ConsumerWidget {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24),
+              Text(
                 'Période',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.calendar_today, size: 16),
+                      icon: Icon(Icons.calendar_today, size: 16),
                       label: Text(
                         ref.watch(auditFilterStartDateProvider) != null
                             ? DateFormat(
@@ -273,10 +273,10 @@ class ActionHistoryScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.calendar_today, size: 16),
+                      icon: Icon(Icons.calendar_today, size: 16),
                       label: Text(
                         ref.watch(auditFilterEndDateProvider) != null
                             ? DateFormat(
@@ -304,7 +304,7 @@ class ActionHistoryScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               Row(
                 children: [
                   Expanded(
@@ -322,19 +322,19 @@ class ActionHistoryScreen extends ConsumerWidget {
                             null;
                         Navigator.pop(context);
                       },
-                      child: const Text('Réinitialiser'),
+                      child: Text('Réinitialiser'),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Appliquer'),
+                      child: Text('Appliquer'),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
             ],
           ),
         ),
@@ -359,7 +359,7 @@ class _ActionLogTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildActionIcon(context, log.action.name),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,7 +382,7 @@ class _ActionLogTile extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   '${log.summary} (${log.roleUsed})',
                   style: const TextStyle(fontSize: 14),

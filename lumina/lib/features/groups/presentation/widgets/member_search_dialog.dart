@@ -49,7 +49,7 @@ class _MemberSearchDialogState extends ConsumerState<MemberSearchDialog> {
               ),
               onChanged: (val) => setState(() => _searchQuery = val),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Flexible(
               child: membersAsync.when(
                 data: (members) {
@@ -64,7 +64,7 @@ class _MemberSearchDialogState extends ConsumerState<MemberSearchDialog> {
                       .toList();
 
                   if (filtered.isEmpty) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(AppSpacing.md),
                       child: Text('Aucun résultat.'),
                     );
@@ -92,8 +92,8 @@ class _MemberSearchDialogState extends ConsumerState<MemberSearchDialog> {
                     },
                   );
                 },
-                loading: () => const Center(child: LoadingState()),
-                error: (e, st) => const Text('Impossible de charger les membres'),
+                loading: () => Center(child: LoadingState()),
+                error: (e, st) => Text('Impossible de charger les membres'),
               ),
             ),
           ],
@@ -102,7 +102,7 @@ class _MemberSearchDialogState extends ConsumerState<MemberSearchDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Fermer'),
+          child: Text('Fermer'),
         ),
       ],
     );
@@ -116,14 +116,14 @@ class _MemberSearchDialogState extends ConsumerState<MemberSearchDialog> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Membre ajouté au groupe !')),
+          SnackBar(content: Text('Membre ajouté au groupe !')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Impossible d\'ajouter le membre')));
+        ).showSnackBar(SnackBar(content: Text('Impossible d\'ajouter le membre')));
       }
     }
   }

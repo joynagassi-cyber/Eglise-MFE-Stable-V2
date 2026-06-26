@@ -70,7 +70,7 @@ class MemberGroupsWidget extends ConsumerWidget {
                 final groupMap = {for (final g in groups) g.id: g};
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: memberships.length,
                   itemBuilder: (context, index) {
                     final m = memberships[index];
@@ -94,7 +94,7 @@ class MemberGroupsWidget extends ConsumerWidget {
           loading: () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.mlg, vertical: AppSpacing.xs),
                 child: Text('En attente de validation',
@@ -102,7 +102,7 @@ class MemberGroupsWidget extends ConsumerWidget {
                         color: context.colors.textSecondary,
                         fontWeight: FontWeight.bold)),
               ),
-              const SizedBox(height: AppSpacing.xs),
+              SizedBox(height: AppSpacing.xs),
               const _ShimmerList(),
             ],
           ),
@@ -112,12 +112,12 @@ class MemberGroupsWidget extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text('En attente de validation',
                     style: AppTypography.labelLarge.copyWith(
                         color: context.colors.textSecondary,
                         fontWeight: FontWeight.bold)),
-                const SizedBox(height: AppSpacing.sm),
+                SizedBox(height: AppSpacing.sm),
                 Container(
                   padding: const EdgeInsets.all(AppSpacing.smd),
                   decoration: BoxDecoration(
@@ -130,11 +130,11 @@ class MemberGroupsWidget extends ConsumerWidget {
                     children: [
                       Text('Erreur lors du chargement des demandes.',
                           style: AppTypography.bodyMedium.copyWith(color: context.colors.errorText)),
-                      const SizedBox(height: AppSpacing.sm),
+                      SizedBox(height: AppSpacing.sm),
                       ElevatedButton.icon(
                         onPressed: () => ref.refresh(myPendingGroupRequestsProvider),
-                        icon: const Icon(Icons.refresh, size: LuminaIcon.sm),
-                        label: const Text('Réessayer'),
+                        icon: Icon(Icons.refresh, size: LuminaIcon.sm),
+                        label: Text('Réessayer'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.colors.errorBg,
                           foregroundColor: context.colors.errorText,
@@ -151,16 +151,16 @@ class MemberGroupsWidget extends ConsumerWidget {
           ),
 
           data: (requests) {
-            if (requests.isEmpty) return const SizedBox();
+            if (requests.isEmpty) return SizedBox();
             return allGroupsAsync.when(
-              loading: () => const SizedBox(),
-              error: (_, __) => const SizedBox(),
+              loading: () => SizedBox(),
+              error: (_, __) => SizedBox(),
               data: (groups) {
                 final groupMap = {for (final g in groups) g.id: g};
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.mlg, vertical: AppSpacing.xs),
@@ -254,7 +254,7 @@ class _ShimmerList extends StatelessWidget {
       child: Column(
         children: List.generate(
             2,
-            (i) => const Padding(
+            (i) => Padding(
                   padding: EdgeInsets.only(bottom: AppSpacing.smd),
                   child: FireSkeletonTransactionItem(),
                 )),

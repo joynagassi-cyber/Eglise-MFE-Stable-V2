@@ -65,7 +65,7 @@ class _VisitesPastoralesScreenState
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back, size: AppSpacing.iconLg),
+            icon: Icon(Icons.arrow_back, size: AppSpacing.iconLg),
             onPressed: () {
               HapticHelper.light();
               context.go(AppRoutes.equipe);
@@ -77,7 +77,7 @@ class _VisitesPastoralesScreenState
             label: 'Rafraîchir',
             button: true,
             child: IconButton(
-              icon: const Icon(Icons.refresh, size: AppSpacing.iconLg),
+              icon: Icon(Icons.refresh, size: AppSpacing.iconLg),
               onPressed: () {
                 HapticHelper.medium();
                 ref.invalidate(visitesProvider);
@@ -175,8 +175,8 @@ class _VisitesPastoralesScreenState
             HapticHelper.light();
             _showPlanifierDialog(context, ref);
           },
-          icon: const Icon(Icons.add_location_rounded, size: AppSpacing.iconLg),
-          label: const Text('Planifier'),
+          icon: Icon(Icons.add_location_rounded, size: AppSpacing.iconLg),
+          label: Text('Planifier'),
           backgroundColor: context.colors.brandPrimary,
           foregroundColor: context.colors.textOnBrand,
         ),
@@ -191,8 +191,8 @@ class _VisitesPastoralesScreenState
         shape: RoundedRectangleBorder(
           borderRadius: AppSpacing.borderRadiusCard,
         ),
-        title: const Text('Planifier une Visite'),
-        content: const Text(
+        title: Text('Planifier une Visite'),
+        content: Text(
           'Fonctionnalité à implémenter. Utilisez Supabase Dashboard pour créer des visites.',
         ),
         actions: [
@@ -201,7 +201,7 @@ class _VisitesPastoralesScreenState
               HapticHelper.light();
               Navigator.pop(context);
             },
-            child: const Text('Fermer'),
+            child: Text('Fermer'),
           ),
         ],
       ),
@@ -270,7 +270,7 @@ class _SkeletonCard extends StatelessWidget {
                   borderRadius: AppSpacing.borderRadiusSm,
                 ),
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +283,7 @@ class _SkeletonCard extends StatelessWidget {
                         borderRadius: AppSpacing.borderRadiusSm,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.sm),
+                    SizedBox(height: AppSpacing.sm),
                     Container(
                       width: 120,
                       height: 12,
@@ -363,7 +363,7 @@ class _StatsHeader extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Row(
               children: [
                 _StatItem(
@@ -371,7 +371,7 @@ class _StatsHeader extends StatelessWidget {
                   value: stats.effectuees.toString(),
                   label: 'Effectuées',
                 ),
-                const SizedBox(width: AppSpacing.lg),
+                SizedBox(width: AppSpacing.lg),
                 _StatItem(
                   icon: Icons.schedule_rounded,
                   value: stats.planifiees.toString(),
@@ -412,7 +412,7 @@ class _StatItem extends StatelessWidget {
             ),
             child: Icon(icon, color: Colors.white, size: AppSpacing.iconMd),
           ),
-          const SizedBox(width: AppSpacing.smd),
+          SizedBox(width: AppSpacing.smd),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -520,7 +520,7 @@ class _VisiteCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     visite.displayDate,
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -529,7 +529,7 @@ class _VisiteCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.smd),
+              SizedBox(height: AppSpacing.smd),
               Text(
                 visite.displayMembreNom,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -538,7 +538,7 @@ class _VisiteCard extends StatelessWidget {
                 ),
               ),
               if (visite.adresse.isNotEmpty) ...[
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 Row(
                   children: [
                     Icon(
@@ -546,7 +546,7 @@ class _VisiteCard extends StatelessWidget {
                       size: AppSpacing.iconSm,
                       color: context.colors.textTertiary,
                     ),
-                    const SizedBox(width: AppSpacing.xs),
+                    SizedBox(width: AppSpacing.xs),
                     Expanded(
                       child: Text(
                         visite.displayAdresse,
@@ -560,14 +560,14 @@ class _VisiteCard extends StatelessWidget {
                   ],
                 ),
               ],
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
               Row(
                 children: [
                   Icon(Icons.person_outline_rounded,
                     size: AppSpacing.iconSm,
                     color: context.colors.brandPrimary,
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  SizedBox(width: AppSpacing.xs),
                   Text(
                     'Berger: ${visite.displayBergerNom}',
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -656,7 +656,7 @@ class _MembreCard extends StatelessWidget {
                   borderRadius: AppSpacing.borderRadiusSm,
                 ),
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -692,14 +692,14 @@ class _MembreCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.xs),
+                    SizedBox(height: AppSpacing.xs),
                     Text(
                       membre.raison,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: context.colors.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.sm),
+                    SizedBox(height: AppSpacing.sm),
                     Row(
                       children: [
                         Icon(
@@ -707,7 +707,7 @@ class _MembreCard extends StatelessWidget {
                           size: AppSpacing.iconSm,
                           color: context.colors.textTertiary,
                         ),
-                        const SizedBox(width: AppSpacing.xs),
+                        SizedBox(width: AppSpacing.xs),
                         Text(
                           membre.displayDerniereVisite,
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -771,7 +771,7 @@ class _EmptyState extends StatelessWidget {
               size: AppSpacing.iconFeature + 20,
               color: context.colors.textTertiary,
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             Text(
               title,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -779,7 +779,7 @@ class _EmptyState extends StatelessWidget {
                 color: context.colors.textPrimary,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             Text(
               subtitle,
               textAlign: TextAlign.center,

@@ -196,7 +196,7 @@ class _FirePullToRefreshState extends State<FirePullToRefresh>
                 },
               ),
 
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
 
               // Texte
               AnimatedOpacity(
@@ -214,7 +214,7 @@ class _FirePullToRefreshState extends State<FirePullToRefresh>
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
 
               // Barre de progression
               if (_isRefreshing)
@@ -296,7 +296,7 @@ class FireRefreshScrollView extends StatelessWidget {
       onRefresh: onRefresh,
       child: SingleChildScrollView(
         controller: controller,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           children: children,
         ),

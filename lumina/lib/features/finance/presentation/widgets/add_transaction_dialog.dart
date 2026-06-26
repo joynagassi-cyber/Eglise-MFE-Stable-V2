@@ -86,7 +86,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                     style: AppTypography.h3.copyWith(fontFamily: 'Outfit'),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // --- Type Toggle ---
                   SegmentedButton<TransactionType>(
@@ -116,7 +116,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // --- Amount ---
                   TextFormField(
@@ -144,9 +144,9 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                     },
                     onTap: () => HapticHelper.light(),
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 12),
+                  Divider(),
+                  SizedBox(height: 20),
 
                   // --- Description ---
                   _buildTextField(
@@ -155,7 +155,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                     icon: Icons.description_outlined,
                     validator: (value) => value == null || value.isEmpty ? 'Requis' : null,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // --- Date Picker ---
                   ListTile(
@@ -164,7 +164,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                       'Date: ${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
                       style: AppTypography.bodyMedium,
                     ),
-                    trailing: const Icon(Icons.edit_rounded, size: 18),
+                    trailing: Icon(Icons.edit_rounded, size: 18),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     onTap: () async {
                       await HapticHelper.light();
@@ -185,7 +185,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                       }
                     },
                   ).withTouchTarget(),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // --- Category Dropdown ---
                   DropdownButtonFormField<String>(
@@ -206,7 +206,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                     validator: (value) =>
                         value == null ? 'Sélectionnez une catégorie' : null,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // --- Account Dropdown ---
                   accountsAsync.when(
@@ -243,10 +243,10 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                         validator: (value) => value == null ? 'Sélectionnez un compte' : null,
                       );
                     },
-                    loading: () => const Center(child: LoadingDots()),
+                    loading: () => Center(child: LoadingDots()),
                     error: (_, __) => Text('Erreur comptes', style: TextStyle(color: context.colors.errorText)),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // --- Proof Button ---
                   if (_proofImage != null)
@@ -271,7 +271,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                             backgroundColor: context.colors.errorText,
                             radius: 18,
                             child: IconButton(
-                              icon: const Icon(Icons.close_rounded, size: 16, color: Colors.white),
+                              icon: Icon(Icons.close_rounded, size: 16, color: Colors.white),
                               onPressed: () async {
                                 await HapticHelper.light();
                                 setState(() => _proofImage = null);
@@ -291,13 +291,13 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                         minimumSize: const Size(double.infinity, 56),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      icon: const Icon(Icons.camera_alt_outlined),
-                      label: const Text('Ajouter une preuve / reçu'),
+                      icon: Icon(Icons.camera_alt_outlined),
+                      label: Text('Ajouter une preuve / reçu'),
                     ).withTouchTarget(),
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32),
 
                   if (_isUploading)
-                    const Center(child: LoadingDots())
+                    Center(child: LoadingDots())
                   else
                     Row(
                       children: [
@@ -305,10 +305,10 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                           child: TextButton(
                             onPressed: () => Navigator.pop(context),
                             style: TextButton.styleFrom(minimumSize: const Size(0, 56)),
-                            child: const Text('Annuler'),
+                            child: Text('Annuler'),
                           ).withTouchTarget(),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           flex: 2,
                           child: GradientButton(
@@ -422,7 +422,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible de créer la transaction'),
+            content: Text('Impossible de créer la transaction'),
             backgroundColor: context.colors.errorText,
             behavior: SnackBarBehavior.floating,
           ),

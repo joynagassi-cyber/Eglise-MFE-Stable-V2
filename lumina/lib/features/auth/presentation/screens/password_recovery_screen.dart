@@ -68,13 +68,13 @@ class _PasswordRecoveryScreenState
                       onPressed: () => context.pop(),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
                   Icon(
                     Icons.lock_reset_rounded,
                     size: LuminaIcon.giga,
                     color: context.colors.brandPrimary,
                   ),
-                  const SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.lg),
                   Text(
                     'Récupération',
                     style: theme.textTheme.headlineMedium?.copyWith(
@@ -83,7 +83,7 @@ class _PasswordRecoveryScreenState
                       letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     'Entrez votre email pour réinitialiser votre mot de passe',
                     textAlign: TextAlign.center,
@@ -93,14 +93,14 @@ class _PasswordRecoveryScreenState
                             .onPrimary
                             .withValues(alpha: 0.7)),
                   ),
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
                   GlassCard(
                     child: _isSent
                         ? Column(
                             children: [
                               Icon(Icons.check_circle_outline_rounded,
                                   color: context.colors.successText, size: LuminaIcon.xxl),
-                              const SizedBox(height: AppSpacing.md),
+                              SizedBox(height: AppSpacing.md),
                               Text(
                                 'Email envoyé !',
                                 style: theme.textTheme.titleLarge?.copyWith(
@@ -108,7 +108,7 @@ class _PasswordRecoveryScreenState
                                         .colorScheme
                                         .onSurface),
                               ),
-                              const SizedBox(height: AppSpacing.sm),
+                              SizedBox(height: AppSpacing.sm),
                               Text(
                                 'Consultez votre boîte de réception pour les instructions.',
                                 textAlign: TextAlign.center,
@@ -118,7 +118,7 @@ class _PasswordRecoveryScreenState
                                         .onSurface
                                         .withValues(alpha: 0.7)),
                               ),
-                              const SizedBox(height: AppSpacing.xl),
+                              SizedBox(height: AppSpacing.xl),
                               AuthPrimaryButton(
                                 label: 'RETOUR',
                                 onPressed: () => context.pop(),
@@ -136,7 +136,7 @@ class _PasswordRecoveryScreenState
                                     style: theme.textTheme.labelMedium
                                         ?.copyWith(color: context.colors.errorText),
                                   ),
-                                  const SizedBox(height: AppSpacing.lg),
+                                  SizedBox(height: AppSpacing.lg),
                                 ],
                                 AuthFormField(
                                   label: 'Email',
@@ -151,7 +151,7 @@ class _PasswordRecoveryScreenState
                                           ? 'Email invalide'
                                           : null,
                                 ),
-                                const SizedBox(height: AppSpacing.xl),
+                                SizedBox(height: AppSpacing.xl),
                                 AuthPrimaryButton(
                                   label: 'ENVOYER LES INSTRUCTIONS',
                                   onPressed: _handleRecover,

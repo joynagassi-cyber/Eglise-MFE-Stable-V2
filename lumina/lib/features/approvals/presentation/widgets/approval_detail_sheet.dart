@@ -45,7 +45,7 @@ class ApprovalDetailSheet extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             
             // Type Badge
             Container(
@@ -66,7 +66,7 @@ class ApprovalDetailSheet extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             
             // Title
             Text(
@@ -75,7 +75,7 @@ class ApprovalDetailSheet extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppSpacing.xs),
+            SizedBox(height: AppSpacing.xs),
             
             // Amount
             if (request.entityAmount != null && request.entityAmount! > 0)
@@ -86,7 +86,7 @@ class ApprovalDetailSheet extends StatelessWidget {
                   color: context.colors.brandPrimary,
                 ),
               ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             
             // Info Row
             _buildInfoRow(
@@ -95,28 +95,28 @@ class ApprovalDetailSheet extends StatelessWidget {
               'Date de demande', 
               DateFormat('dd MMMM yyyy, HH:mm', 'fr_FR').format(request.requestedAt)
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             _buildInfoRow(
               theme, 
               Icons.tag_rounded, 
               'ID Référence', 
               request.entityId
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             _buildInfoRow(
               theme, 
               Icons.check_circle_outline_rounded, 
               'Progression', 
               'Étape ${request.currentStepOrder} sur ${request.totalSteps}'
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             
             // Action Button
             SizedBox(
               width: double.infinity,
               child: FilledButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Fermer les détails'),
+                child: Text('Fermer les détails'),
               ),
             ),
           ],
@@ -130,7 +130,7 @@ class ApprovalDetailSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
-        const SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +141,7 @@ class ApprovalDetailSheet extends StatelessWidget {
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 value,
                 style: theme.textTheme.bodyLarge?.copyWith(

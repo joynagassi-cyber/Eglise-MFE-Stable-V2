@@ -51,7 +51,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
@@ -60,14 +60,14 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
             },
           ),
         ),
-        title: const Text('Catégories de Transactions'),
+        title: Text('Catégories de Transactions'),
         actions: [
           // Bouton synchronisation
           Semantics(
             label: 'Synchroniser les catégories',
             button: true,
             child: IconButton(
-              icon: const Icon(Icons.sync, size: AppSpacing.iconMd),
+              icon: Icon(Icons.sync, size: AppSpacing.iconMd),
               onPressed: () async {
                 await HapticHelper.medium();
                 final actions = ref.read(categoryActionsProvider);
@@ -77,7 +77,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('Synchronisation réussie'),
+                        content: Text('Synchronisation réussie'),
                         backgroundColor: context.colors.successText,
                       ),
                     );
@@ -147,8 +147,8 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
               ));
             }
           },
-          icon: const Icon(Icons.add, size: AppSpacing.iconMd),
-          label: const Text('Nouvelle catégorie'),
+          icon: Icon(Icons.add, size: AppSpacing.iconMd),
+          label: Text('Nouvelle catégorie'),
         ),
       ),
     );
@@ -173,12 +173,12 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
                     size: AppSpacing.iconHero,
                     color: context.colors.textTertiary,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   Text(
                     'Aucune catégorie',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text('Ajoutez votre première catégorie ou\ninitialisez les catégories par défaut',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: context.colors.textTertiary),
@@ -205,7 +205,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
           },
         );
       },
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.all(AppSpacing.md),
         child: ShimmerCardList(
           itemCount: 10,
@@ -216,8 +216,8 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error_outline, size: 64, color: context.colors.errorText),
-            const SizedBox(height: 16),
-            const Text('Impossible de charger les catégories'),
+            SizedBox(height: 16),
+            Text('Impossible de charger les catégories'),
           ],
         ),
       ),
@@ -235,7 +235,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmer la suppression'),
+        title: Text('Confirmer la suppression'),
         content: Text(
           'Êtes-vous sûr de vouloir supprimer "${category.name}" ?\n\n'
           'Les sous-catégories seront également affectées.',
@@ -243,12 +243,12 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: context.colors.errorText),
-            child: const Text('Supprimer'),
+            child: Text('Supprimer'),
           ),
         ],
       ),
@@ -262,7 +262,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Catégorie supprimée'),
+              content: Text('Catégorie supprimée'),
               backgroundColor: context.colors.successText,
             ),
           );
@@ -284,8 +284,8 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Initialiser les catégories'),
-        content: const Text(
+        title: Text('Initialiser les catégories'),
+        content: Text(
           'Cela va créer 60+ catégories prédéfinies \n'
           '(Dîmes, Offrandes, Salaires, etc.).\n\n'
           'Cette action ne supprime pas les catégories existantes.',
@@ -293,11 +293,11 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Initialiser'),
+            child: Text('Initialiser'),
           ),
         ],
       ),
@@ -312,7 +312,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Catégories initialisées avec succès'),
+              content: Text('Catégories initialisées avec succès'),
               backgroundColor: context.colors.successText,
             ),
           );
@@ -321,7 +321,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Une erreur est survenue'),
+              content: Text('Une erreur est survenue'),
               backgroundColor: context.colors.errorText,
             ),
           );

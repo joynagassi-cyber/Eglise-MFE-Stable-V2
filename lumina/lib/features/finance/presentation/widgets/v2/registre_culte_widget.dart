@@ -23,7 +23,7 @@ class RegistreCulteWidget extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Registre des Collectes',
                 style: TextStyle(
                   fontSize: 18,
@@ -37,11 +37,11 @@ class RegistreCulteWidget extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         registreAsync.when(
           data: (data) => _buildTable(context, data),
           loading: () => const FireSkeletonBudgetDashboard(),
-          error: (err, _) => const Center(child: Text('Impossible de charger le registre')),
+          error: (err, _) => Center(child: Text('Impossible de charger le registre')),
         ),
       ],
     );

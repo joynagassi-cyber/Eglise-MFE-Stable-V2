@@ -38,7 +38,7 @@ class KpiCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: color, size: 24),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             value,
             style: AppTypography.h3.copyWith(

@@ -46,7 +46,7 @@ class EventsScreen extends ConsumerWidget {
                   size: AppSpacing.iconSm,
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm + 2),
+              SizedBox(width: AppSpacing.sm + 2),
               Text(
                 'Événements',
                 style: AppTypography.h3.copyWith(fontFamily: 'Outfit'),
@@ -207,7 +207,7 @@ class EventsScreen extends ConsumerWidget {
                 'Filtrer par date',
                 style: AppTypography.h3.copyWith(fontFamily: 'Outfit'),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               _FilterOption(
                 label: 'Tous les événements',
                 value: EventFilter.all,
@@ -238,7 +238,7 @@ class EventsScreen extends ConsumerWidget {
                   Navigator.pop(context);
                 },
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
             ],
           ),
         );

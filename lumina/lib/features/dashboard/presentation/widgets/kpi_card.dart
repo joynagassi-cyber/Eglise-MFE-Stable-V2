@@ -132,7 +132,7 @@ class _KPICardState extends State<KPICard> with SingleTickerProviderStateMixin {
                                 _buildChangeBadge(context),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.lg),
+                          SizedBox(height: AppSpacing.lg),
                           Text(
                             widget.label,
                             style: AppTypography.labelMedium.copyWith(
@@ -140,7 +140,7 @@ class _KPICardState extends State<KPICard> with SingleTickerProviderStateMixin {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           // Animated value counter
                           widget.numericValue != null
                               ? AnimatedCounter(
@@ -188,7 +188,7 @@ class _KPICardState extends State<KPICard> with SingleTickerProviderStateMixin {
             color: color,
             size: 14,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             widget.change!,
             style: AppTypography.labelSmall.copyWith(
@@ -266,7 +266,7 @@ class _KPICardState extends State<KPICard> with SingleTickerProviderStateMixin {
             ),
           ],
         ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         Container(
           width: 80,
           height: 16,
@@ -275,7 +275,7 @@ class _KPICardState extends State<KPICard> with SingleTickerProviderStateMixin {
             borderRadius: AppSpacing.borderRadiusSm,
           ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         Container(
           width: 120,
           height: 24,

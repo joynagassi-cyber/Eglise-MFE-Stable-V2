@@ -55,7 +55,7 @@ class FilterChipButton extends StatelessWidget {
                       : null,
                 ),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
             ],
             Text(
               label,
@@ -68,7 +68,7 @@ class FilterChipButton extends StatelessWidget {
               ),
             ),
             if (count != null) ...[
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(

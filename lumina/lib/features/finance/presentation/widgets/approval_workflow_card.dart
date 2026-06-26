@@ -53,7 +53,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
                   size: AppSpacing.iconSm,
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Text(
                 'Workflow d\'approbation',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -62,7 +62,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
 
           // Timeline des approbations
           if (approvals.isEmpty)
@@ -72,7 +72,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
 
           // Actions disponibles
           if (_canPerformAction) ...[
-            const Divider(height: AppSpacing.lg),
+            Divider(height: AppSpacing.lg),
             _buildActionButtons(context, theme),
           ],
         ],
@@ -93,7 +93,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
             Icons.hourglass_empty_rounded,
             color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
           ),
-          const SizedBox(width: AppSpacing.smd),
+          SizedBox(width: AppSpacing.smd),
           Expanded(
             child: Text(
               'Aucune approbation pour le moment',
@@ -163,7 +163,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               // Détails
               Expanded(
                 child: Padding(
@@ -225,7 +225,7 @@ class ApprovalWorkflowCard extends StatelessWidget {
                 ),
               ),
             ),
-          const SizedBox(width: AppSpacing.smd),
+          SizedBox(width: AppSpacing.smd),
           if (onApprove != null)
             FireShimmer(
               child: Container(
@@ -250,21 +250,21 @@ class ApprovalWorkflowCard extends StatelessWidget {
               await HapticFeedback.mediumImpact();
               onReject?.call();
             },
-            icon: const Icon(Icons.close_rounded, size: 18),
-            label: const Text('Rejeter'),
+            icon: Icon(Icons.close_rounded, size: 18),
+            label: Text('Rejeter'),
             style: OutlinedButton.styleFrom(
               foregroundColor: context.colors.errorText,
               side: BorderSide(color: context.colors.errorText),
             ),
           ),
-        const SizedBox(width: AppSpacing.smd),
+        SizedBox(width: AppSpacing.smd),
         if (onApprove != null)
           FilledButton.icon(
             onPressed: () async {
               await HapticFeedback.heavyImpact();
               onApprove?.call();
             },
-            icon: const Icon(Icons.check_rounded, size: 18),
+            icon: Icon(Icons.check_rounded, size: 18),
             label: Text('Approuver',
                 style: TextStyle(color: context.colors.textOnBrand)),
             style:

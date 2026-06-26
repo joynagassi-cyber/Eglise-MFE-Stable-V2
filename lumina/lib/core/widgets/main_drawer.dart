@@ -35,7 +35,7 @@ class MainDrawer extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildHeader(context, user?.name ?? 'Utilisateur', role),
-              const Divider(color: Colors.white10),
+              Divider(color: Colors.white10),
               Expanded(
                 child: ListView(
                   padding:
@@ -64,7 +64,7 @@ class MainDrawer extends ConsumerWidget {
                     if (role == 'SUPERADMIN' ||
                         role == 'ADMIN' ||
                         role == 'BERGER') ...[
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: AppSpacing.lg),
                       _buildSection('GESTION'),
                       _buildMenuItem(
                         context,
@@ -80,7 +80,7 @@ class MainDrawer extends ConsumerWidget {
                       ),
                     ],
                     if (role == 'SUPERADMIN') ...[
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: AppSpacing.lg),
                       _buildSection('ADMINISTRATION'),
                       _buildMenuItem(
                         context,
@@ -95,7 +95,7 @@ class MainDrawer extends ConsumerWidget {
                         onTap: () => context.push(AppRoutes.audit),
                       ),
                     ],
-                    const SizedBox(height: AppSpacing.lg),
+                    SizedBox(height: AppSpacing.lg),
                     _buildSection('COMPTE'),
                     _buildMenuItem(
                       context,
@@ -140,9 +140,9 @@ class MainDrawer extends ConsumerWidget {
               ],
             ),
             child:
-                const Icon(Icons.person_rounded, color: Colors.white, size: 30),
+                Icon(Icons.person_rounded, color: Colors.white, size: 30),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Text(name, style: AppTypography.h2.copyWith(color: Colors.white)),
           Text(
             role,
@@ -188,7 +188,7 @@ class MainDrawer extends ConsumerWidget {
         child: Row(
           children: [
             Icon(icon, color: context.colors.brandPrimary.withOpacity(0.7), size: 22),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Text(
               title,
               style: AppTypography.bodySmallStyle.copyWith(
@@ -213,8 +213,8 @@ class MainDrawer extends ConsumerWidget {
             context.go(AppRoutes.login);
           }
         },
-        icon: const Icon(Icons.logout_rounded, size: 18),
-        label: const Text('DÉCONNEXION'),
+        icon: Icon(Icons.logout_rounded, size: 18),
+        label: Text('DÉCONNEXION'),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.redAccent,
           side: const BorderSide(color: Colors.redAccent, width: 0.5),

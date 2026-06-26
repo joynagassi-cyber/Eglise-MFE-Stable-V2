@@ -137,7 +137,7 @@ class _RoleCodeVerificationScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               // --- ICON ---
               Container(
                 padding: const EdgeInsets.all(24),
@@ -145,21 +145,21 @@ class _RoleCodeVerificationScreenState
                   color: LuminaDesign.primary.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.vpn_key_outlined, color: LuminaDesign.primary, size: 48),
+                child: Icon(Icons.vpn_key_outlined, color: LuminaDesign.primary, size: 48),
               ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
               
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // --- TITLES ---
               Text("Vérification d'accès", style: LuminaDesign.h2Of(context)).animate().fadeIn(delay: 200.ms),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 "Saisissez le code secret fourni par votre église pour activer vos privilèges.",
                 textAlign: TextAlign.center,
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ).animate().fadeIn(delay: 400.ms),
 
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
 
               // --- INPUT ---
               LuminaCard(
@@ -182,7 +182,7 @@ class _RoleCodeVerificationScreenState
                 ),
               ).animate().slideY(begin: 0.2, duration: 400.ms),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // --- BUTTON ---
               LuminaButton(
@@ -191,7 +191,7 @@ class _RoleCodeVerificationScreenState
                 onPressed: _verifyCode,
               ).animate().fadeIn(delay: 600.ms),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
               
               Text(
                 "Vous n'avez pas de code ?",
@@ -199,7 +199,7 @@ class _RoleCodeVerificationScreenState
               ),
               TextButton(
                 onPressed: () => context.pop(),
-                child: const Text("Retourner au mode membre"),
+                child: Text("Retourner au mode membre"),
               ),
             ],
           ),

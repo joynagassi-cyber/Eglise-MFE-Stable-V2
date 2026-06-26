@@ -124,7 +124,7 @@ class EventDetailScreen extends ConsumerWidget {
                             color: context.colors.brandPrimary,
                             size: AppSpacing.iconMd,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text('Modifier', style: AppTypography.bodyMedium.copyWith(color: context.colors.textOnBrand)),
                         ],
                       ),
@@ -137,7 +137,7 @@ class EventDetailScreen extends ConsumerWidget {
                             color: context.colors.errorText,
                             size: AppSpacing.iconMd,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             'Supprimer',
                             style: AppTypography.bodyMedium.copyWith(
@@ -161,7 +161,7 @@ class EventDetailScreen extends ConsumerWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -206,7 +206,7 @@ class EventDetailScreen extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8),
                               if (isPast)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -245,7 +245,7 @@ class EventDetailScreen extends ConsumerWidget {
                                 ),
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8),
                           Text(
                             event.title,
                             style: AppTypography.h2.copyWith(
@@ -292,9 +292,9 @@ class EventDetailScreen extends ConsumerWidget {
                         theme,
                       ),
                     ),
-                  const SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.lg),
                   _buildRegistrationSection(context, ref, event, theme),
-                  const SizedBox(height: AppSpacing.lg),
+                  SizedBox(height: AppSpacing.lg),
                   AnimatedEntrance.fromBottom(
                     delay: const Duration(milliseconds: 300),
                     child: Text(
@@ -305,7 +305,7 @@ class EventDetailScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.smd),
+                  SizedBox(height: AppSpacing.smd),
                   AnimatedEntrance.fromBottom(
                     delay: const Duration(milliseconds: 400),
                     child: SizedBox(
@@ -326,7 +326,7 @@ class EventDetailScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
                 ],
               ),
             ),
@@ -363,7 +363,7 @@ class EventDetailScreen extends ConsumerWidget {
                   color: context.colors.brandPrimaryFire,
                   size: AppSpacing.iconMd,
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,15 +394,15 @@ class EventDetailScreen extends ConsumerWidget {
                   ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             if (user != null)
               SizedBox(
                 width: double.infinity,
                 child: isRegistered
                     ? OutlinedButton.icon(
                         onPressed: () => _handleUnregister(ref, event.id, user.id!),
-                        icon: const Icon(Icons.person_remove_rounded, size: 20),
-                        label: const Text('Se désinscrire'),
+                        icon: Icon(Icons.person_remove_rounded, size: 20),
+                        label: Text('Se désinscrire'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: context.colors.errorText,
                           side: BorderSide(color: context.colors.errorText),
@@ -412,8 +412,8 @@ class EventDetailScreen extends ConsumerWidget {
                         onPressed: isFull
                             ? null
                             : () => _handleRegister(ref, event.id, user.id!),
-                        icon: const Icon(Icons.person_add_rounded, size: 20),
-                        label: const Text('S\'inscrire à l\'événement'),
+                        icon: Icon(Icons.person_add_rounded, size: 20),
+                        label: Text('S\'inscrire à l\'événement'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.colors.brandPrimaryFire,
                           foregroundColor: context.colors.textOnBrand,
@@ -421,7 +421,7 @@ class EventDetailScreen extends ConsumerWidget {
                       ),
               )
             else
-              const Text(
+              Text(
                 'Connectez-vous pour vous inscrire',
                 style: TextStyle(fontStyle: FontStyle.italic, fontSize: 13),
               ),
@@ -465,7 +465,7 @@ class EventDetailScreen extends ConsumerWidget {
               size: AppSpacing.iconMd,
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

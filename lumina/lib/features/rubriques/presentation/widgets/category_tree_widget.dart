@@ -69,11 +69,11 @@ class _CategoryTreeWidgetState extends ConsumerState<CategoryTreeWidget> {
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                             )
-                          : const SizedBox(width: 20),
-                      loading: () => const SizedBox(width: 20),
-                      error: (_, __) => const SizedBox(width: 20),
+                          : SizedBox(width: 20),
+                      loading: () => SizedBox(width: 20),
+                      error: (_, __) => SizedBox(width: 20),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
 
                     // Icône catégorie
                     Container(
@@ -91,7 +91,7 @@ class _CategoryTreeWidgetState extends ConsumerState<CategoryTreeWidget> {
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
 
                     // Nom et détails
                     Expanded(
@@ -143,8 +143,8 @@ class _CategoryTreeWidgetState extends ConsumerState<CategoryTreeWidget> {
                             child: Row(
                               children: [
                                 Icon(Icons.delete, color: context.colors.errorText),
-                                const SizedBox(width: 8),
-                                const Text('Supprimer'),
+                                SizedBox(width: 8),
+                                Text('Supprimer'),
                               ],
                             ),
                           ),

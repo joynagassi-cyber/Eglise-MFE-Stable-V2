@@ -65,7 +65,7 @@ class _AddGroupMemberDialogState extends ConsumerState<AddGroupMemberDialog> {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
 
             // Search Bar
             TextField(
@@ -86,13 +86,13 @@ class _AddGroupMemberDialogState extends ConsumerState<AddGroupMemberDialog> {
               },
             ),
 
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
 
             // Results List
             ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 300),
               child: membersAsync.isLoading && membersAsync.members.isEmpty
-                  ? const Center(child: LoadingState())
+                  ? Center(child: LoadingState())
                   : membersAsync.members.isEmpty
                       ? Center(
                           child: Padding(
@@ -111,7 +111,7 @@ class _AddGroupMemberDialogState extends ConsumerState<AddGroupMemberDialog> {
                       : ListView.separated(
                           shrinkWrap: true,
                           itemCount: membersAsync.members.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          separatorBuilder: (_, __) => Divider(height: 1),
                           itemBuilder: (context, index) {
                             final member = membersAsync.members[index];
                             return ListTile(

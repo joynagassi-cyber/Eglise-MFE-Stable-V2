@@ -136,7 +136,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             // Controls
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,7 +147,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                   button: true,
                   child: IconButton(
                     onPressed: _cancel,
-                    icon: const Icon(Icons.close_rounded),
+                    icon: Icon(Icons.close_rounded),
                     color: context.colors.errorText,
                     iconSize: AppSpacing.iconLg,
                   ),
@@ -171,7 +171,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                         );
                       },
                     ),
-                    const SizedBox(width: AppSpacing.sm),
+                    SizedBox(width: AppSpacing.sm),
                     Text(
                       _formatDuration(_currentDuration),
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -194,7 +194,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                     ),
                     child: IconButton(
                       onPressed: _stopAndSend,
-                      icon: const Icon(Icons.send_rounded),
+                      icon: Icon(Icons.send_rounded),
                       color: context.colors.textInverse,
                       iconSize: AppSpacing.iconMd,
                     ),

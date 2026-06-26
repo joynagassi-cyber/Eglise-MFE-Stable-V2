@@ -80,7 +80,7 @@ class TeamCard extends StatelessWidget {
                   borderWidth: 2,
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // Nom
                 Text(
@@ -93,7 +93,7 @@ class TeamCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
 
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
 
                 // Rôle (Badge)
                 StatusBadge.custom(
@@ -102,7 +102,7 @@ class TeamCard extends StatelessWidget {
                   icon: member.primaryRole.icon,
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // Département / Ministère (simulé si pas dispo)
                 if (member.ministries.isNotEmpty)
@@ -123,7 +123,7 @@ class TeamCard extends StatelessWidget {
                     ),
                   ),
 
-                const Spacer(),
+                Spacer(),
 
                 // Actions (Appel / Message)
                 Row(
@@ -134,7 +134,7 @@ class TeamCard extends StatelessWidget {
                       color: context.colors.successText,
                       onTap: () => _showComingSoon(context),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     _SmallActionButton(
                       icon: Icons.message,
                       color: context.colors.brandPrimary,

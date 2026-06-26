@@ -98,7 +98,7 @@ class _GoogleAuthButtonState extends State<GoogleAuthButton>
                 : null,
           ),
           child: widget.isLoading
-              ? const Center(
+              ? Center(
                   child: SizedBox(
                     height: 24,
                     width: 24,
@@ -117,7 +117,7 @@ class _GoogleAuthButtonState extends State<GoogleAuthButton>
                             'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png',
                         placeholder: (context, url) =>
                             const LoadingDots(size: LuminaIcon.lg),
-                        errorWidget: (context, url, error) => const Text(
+                        errorWidget: (context, url, error) => Text(
                           'G',
                           style: TextStyle(
                             fontSize: 18,
@@ -126,7 +126,7 @@ class _GoogleAuthButtonState extends State<GoogleAuthButton>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       widget.label,
                       style: TextStyle(

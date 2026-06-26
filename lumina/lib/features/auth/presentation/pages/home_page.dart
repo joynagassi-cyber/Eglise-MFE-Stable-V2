@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage>
                 Expanded(
                   child: Center(
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: isSmallScreen ? 10.0 : 20.0),
@@ -301,7 +301,7 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(icon, color: context.colors.brandPrimary, size: 28),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     title,
                     textAlign: TextAlign.center,
@@ -368,7 +368,7 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           // Bouton Secondaire (Discret)
           TextButton(
             onPressed: () =>
@@ -376,7 +376,7 @@ class _HomePageState extends State<HomePage>
             style: TextButton.styleFrom(
               foregroundColor: context.colors.brandPrimary,
             ),
-            child: const Text(
+            child: Text(
               'SE CONNECTER',
               style: TextStyle(
                 fontSize: 14,

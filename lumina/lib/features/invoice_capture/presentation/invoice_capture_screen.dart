@@ -50,7 +50,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
       if (data != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Données extraites avec succès'),
+            content: Text('Données extraites avec succès'),
             backgroundColor: context.colors.successText,
             behavior: SnackBarBehavior.floating,
           ),
@@ -58,7 +58,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Extraction échouée, saisie manuelle requise'),
+            content: Text('Extraction échouée, saisie manuelle requise'),
             backgroundColor: context.colors.warningText,
             behavior: SnackBarBehavior.floating,
           ),
@@ -69,7 +69,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
         setState(() => _isExtracting = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible de traiter la facture'),
+            content: Text('Impossible de traiter la facture'),
             backgroundColor: context.colors.errorText,
             behavior: SnackBarBehavior.floating,
           ),
@@ -105,7 +105,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
           if (_isExtracting)
             Container(
               color: Colors.black.withValues(alpha: 0.7),
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -130,7 +130,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
             icon: Icons.document_scanner_rounded,
             iconColor: context.colors.brandPrimary,
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
@@ -151,7 +151,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -161,7 +161,7 @@ class _InvoiceCaptureScreenState extends State<InvoiceCaptureScreen> {
                   onPressed: () => _pickImage(ImageSource.camera),
                 ),
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: GradientButton(
                   text: 'Galerie',

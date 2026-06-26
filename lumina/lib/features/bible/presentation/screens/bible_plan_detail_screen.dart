@@ -21,7 +21,7 @@ class BiblePlanDetailScreen extends ConsumerWidget {
     final availablePlans = ref.watch(biblePlanServiceProvider);
     
     if (availablePlans.isEmpty) {
-      return const Scaffold(body: Center(child: FireSkeletonHeroCard()));
+      return Scaffold(body: Center(child: FireSkeletonHeroCard()));
     }
 
     final plan = availablePlans.firstWhere(
@@ -32,7 +32,7 @@ class BiblePlanDetailScreen extends ConsumerWidget {
     final activePlansAsync = ref.watch(activeBiblePlansProvider);
     
     return activePlansAsync.when(
-      loading: () => const Scaffold(body: Center(child: FireSkeletonHeroCard())),
+      loading: () => Scaffold(body: Center(child: FireSkeletonHeroCard())),
       error: (err, _) => Scaffold(body: Center(child: Text('Erreur: $err'))),
       data: (activePlans) {
         final progress = activePlans.firstWhere(
@@ -168,7 +168,7 @@ class BiblePlanDetailScreen extends ConsumerWidget {
             ),
             child: Center(
               child: isCompleted
-                  ? const Icon(Icons.check, color: Colors.white, size: 20)
+                  ? Icon(Icons.check, color: Colors.white, size: 20)
                   : Text('${day.dayNumber}',
                       style: AppTypography.bodySmallStyle.copyWith(
                         color: isToday ? context.colors.accent : context.colors.textTertiary,

@@ -60,7 +60,7 @@ class DailyBibleCard extends ConsumerWidget {
                       children: [
                         Icon(Icons.menu_book_rounded,
                             color: context.colors.accent, size: 20),
-                        const SizedBox(width: AppSpacing.sm),
+                        SizedBox(width: AppSpacing.sm),
                         Text(
                           'PLAN DE LECTURE',
                           style: AppTypography.editorialSection.copyWith(
@@ -85,26 +85,26 @@ class DailyBibleCard extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text(
                   planDetails.title,
                   style: AppTypography.h3
                       .copyWith(color: context.colors.textOnBrand, fontSize: 18),
                 ),
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 Text(
                   'Jour $effectiveDayNumber : ${todayPlan.references?.join(", ") ?? "Aucune référence"}',
                   style: AppTypography.bodySmallStyle
                       .copyWith(color: context.colors.textOnBrand.withOpacity(0.7)),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 AppProgressBar(
                   value: activePlan.completedDays.length /
                       planDetails.durationInDays,
                   backgroundColor: context.colors.textOnBrand.withOpacity(0.1),
                   color: context.colors.accent,
                 ),
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 Text(
                   '${activePlan.completedDays.length} / ${planDetails.durationInDays} jours complétés',
                   style: AppTypography.labelSmall
@@ -142,7 +142,7 @@ class DailyBibleCard extends ConsumerWidget {
                 children: [
                   Icon(Icons.auto_stories_rounded,
                       color: context.colors.accent, size: 20),
-                  const SizedBox(width: AppSpacing.sm),
+                  SizedBox(width: AppSpacing.sm),
                   Text(
                     'VERSET DU JOUR',
                     style: AppTypography.editorialSection
@@ -167,7 +167,7 @@ class DailyBibleCard extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(
             "${verseOfTheDay['text']}",
             style: AppTypography.h3.copyWith(
@@ -177,7 +177,7 @@ class DailyBibleCard extends ConsumerWidget {
               fontStyle: FontStyle.italic,
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

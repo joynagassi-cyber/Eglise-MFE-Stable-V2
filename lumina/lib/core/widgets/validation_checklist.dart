@@ -75,7 +75,7 @@ class _ValidationChecklistItemState extends State<ValidationChecklistItem> {
                 gradient: _isChecked ? context.colors.fireFusionGradient : null,
               ),
               child: _isChecked
-                  ? const Center(
+                  ? Center(
                       child: Icon(
                         Icons.check,
                         size: 14,
@@ -84,7 +84,7 @@ class _ValidationChecklistItemState extends State<ValidationChecklistItem> {
                     )
                   : null,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Text(
                 widget.label,

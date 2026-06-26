@@ -21,21 +21,21 @@ class RoleSelectionScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                icon: Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: () => context.pop(),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
               
               Text("Votre Rôle", style: LuminaDesign.h1Of(context)),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 "Choisissez comment vous allez utiliser Lumina.",
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ),
 
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
 
               _RoleTile(
                 title: "Membre de l'Église",
@@ -50,7 +50,7 @@ class RoleSelectionScreen extends ConsumerWidget {
                 },
               ),
               
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               _RoleTile(
                 title: "Staff & Administration",
@@ -62,13 +62,13 @@ class RoleSelectionScreen extends ConsumerWidget {
                 },
               ),
 
-              const SizedBox(height: 64),
+              SizedBox(height: 64),
               
               Center(
                 child: TextButton.icon(
                   onPressed: () => ref.read(authProvider.notifier).logout(),
-                  icon: const Icon(Icons.logout_rounded, size: 18),
-                  label: const Text("DÉCONNEXION"),
+                  icon: Icon(Icons.logout_rounded, size: 18),
+                  label: Text("DÉCONNEXION"),
                   style: TextButton.styleFrom(foregroundColor: LuminaDesign.primary),
                 ),
               ),
@@ -102,13 +102,13 @@ class _RoleTile extends StatelessWidget {
             ),
             child: Icon(icon, color: LuminaDesign.primary, size: 24),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: LuminaDesign.h2Of(context).copyWith(fontSize: 16)),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(description, style: LuminaDesign.labelOf(context)),
               ],
             ),

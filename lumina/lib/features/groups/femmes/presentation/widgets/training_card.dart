@@ -61,7 +61,7 @@ class TrainingCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: AppProgressBar(
@@ -69,7 +69,7 @@ class TrainingCard extends StatelessWidget {
               color: progress >= 1.0 ? context.colors.successText : context.colors.brandPrimary,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -86,7 +86,7 @@ class TrainingCard extends StatelessWidget {
                   await HapticHelper.medium();
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Inscription : Bientôt disponible')),
+                      SnackBar(content: Text('Inscription : Bientôt disponible')),
                     );
                   }
                 },

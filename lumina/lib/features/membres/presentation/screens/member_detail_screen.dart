@@ -101,7 +101,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                       }
                     },
                   ).withTouchTarget(),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   IconButton(
                     icon: CircleAvatar(
                       backgroundColor: context.colors.bgCard.withValues(alpha: 0.8),
@@ -118,7 +118,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                       }
                     },
                   ).withTouchTarget(),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
                   stretchModes: const [
@@ -185,7 +185,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20),
                             Hero(
                               tag: 'avatar_${member.id}',
                               child: Container(
@@ -204,7 +204,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Text(
                               member.fullName,
                               style: AppTypography.headlineMedium.copyWith(
@@ -224,7 +224,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20),
                             // Quick Status Pills
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +234,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                                   color: context.colors.brandSecondary,
                                 ),
                                 if (member.isLeader) ...[
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8),
                                   _StatusPill(
                                     label: 'LEADER',
                                     color: context.colors.brandSecondary,
@@ -295,12 +295,12 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.error_outline, size: 60, color: context.colors.errorText),
-          const SizedBox(height: 16),
-          const Text('Membre introuvable'),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
+          Text('Membre introuvable'),
+          SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.pop(),
-            child: const Text('Retour'),
+            child: Text('Retour'),
           ),
         ],
       ),
@@ -423,7 +423,7 @@ class _GeneralTab extends StatelessWidget {
             userRole: member.lastModifiedByRole,
             modifiedAt: member.lastModifiedAt,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
         _InfoCard(
           title: 'Contact',
@@ -433,12 +433,12 @@ class _GeneralTab extends StatelessWidget {
             _InfoRow(label: 'Email', value: member.email ?? ''),
             _InfoRow(label: 'Adresse', value: member.address),
             if (member.userId != null) ...[
-              const Divider(height: 24),
+              Divider(height: 24),
               _MessageAction(member: member),
             ],
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _InfoCard(
           title: 'Personnel',
           icon: Icons.person,
@@ -487,7 +487,7 @@ class _SpiritualTab extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         sacramentsAsync.when(
           data: (sacraments) {
             if (sacraments.isEmpty) {
@@ -504,16 +504,16 @@ class _SpiritualTab extends ConsumerWidget {
                   .toList(),
             );
           },
-          loading: () => const Padding(
+          loading: () => Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             child: ShimmerBox(height: 60, borderRadius: 12),
           ),
           error: (err, _) => const SizedBox.shrink(),
         ),
 
-        const SizedBox(height: 24),
-        const Divider(),
-        const SizedBox(height: 12),
+        SizedBox(height: 24),
+        Divider(),
+        SizedBox(height: 12),
 
         Text(
           'Jalons Spirituels',
@@ -521,11 +521,11 @@ class _SpiritualTab extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         jalonsAsync.when(
           data: (jalons) {
             if (jalons.isEmpty) {
-              return const Text('Aucun jalon défini');
+              return Text('Aucun jalon défini');
             }
             return Column(
               children: jalons.map((jalon) {
@@ -548,7 +548,7 @@ class _SpiritualTab extends ConsumerWidget {
               }).toList(),
             );
           },
-          loading: () => const Padding(
+          loading: () => Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             child: ShimmerBox(height: 60, borderRadius: 12),
           ),
@@ -615,7 +615,7 @@ class _SpiritualJalonCard extends StatelessWidget {
             ),
             child: Icon(jalon.iconData, color: jalon.color, size: 24),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -656,7 +656,7 @@ class _SpiritualJalonCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Valider'),
+              child: Text('Valider'),
             ).withTouchTarget(),
         ],
       ),
@@ -692,11 +692,11 @@ class _ValidateJalonDialogState extends State<_ValidateJalonDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text('Pour : ${widget.member.fullName}'),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ListTile(
-            title: const Text('Date de réalisation'),
+            title: Text('Date de réalisation'),
             subtitle: Text(DateFormat('dd/MM/yyyy').format(_selectedDate)),
-            leading: const Icon(Icons.calendar_today),
+            leading: Icon(Icons.calendar_today),
             onTap: () async {
               final picked = await showDatePicker(
                 context: context,
@@ -726,7 +726,7 @@ class _ValidateJalonDialogState extends State<_ValidateJalonDialog> {
       actions: [
         TextButton(
           onPressed: _isLoading ? null : () => Navigator.pop(context),
-          child: const Text('Annuler'),
+          child: Text('Annuler'),
         ),
         Consumer(
           builder: (context, ref, child) {
@@ -748,7 +748,7 @@ class _ValidateJalonDialogState extends State<_ValidateJalonDialog> {
                       } catch (e) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Une erreur est survenue lors de la validation')),
+                            SnackBar(content: Text('Une erreur est survenue lors de la validation')),
                           );
                         }
                       } finally {
@@ -756,12 +756,12 @@ class _ValidateJalonDialogState extends State<_ValidateJalonDialog> {
                       }
                     },
               child: _isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 20,
                       height: 20,
                       child: LoadingDots(),
                     )
-                  : const Text('Confirmer'),
+                  : Text('Confirmer'),
             );
           },
         ),
@@ -816,7 +816,7 @@ class _InfoCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, color: context.colors.brandPrimary, size: 20),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 title.toUpperCase(),
                 style: theme.textTheme.labelLarge?.copyWith(
@@ -827,7 +827,7 @@ class _InfoCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ...children,
         ],
       ),
@@ -878,7 +878,7 @@ class _MessageAction extends StatelessWidget {
         child: Row(
           children: [
             Icon(Icons.message_rounded, color: context.colors.brandPrimary, size: 20),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Text(
               'Envoyer un message',
               style: TextStyle(
@@ -917,7 +917,7 @@ class _SacramentListTile extends StatelessWidget {
         'Le ${DateFormat('dd/MM/yyyy').format(sacrament.date)}',
         style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
       ),
-      trailing: const Icon(Icons.chevron_right, size: 16),
+      trailing: Icon(Icons.chevron_right, size: 16),
       onTap: () async {
         await HapticHelper.light();
       },
@@ -929,6 +929,6 @@ class ShimmerDetail extends StatelessWidget {
   const ShimmerDetail({super.key});
   @override
   Widget build(BuildContext context) {
-    return const Center(child: LoadingDots());
+    return Center(child: LoadingDots());
   }
 }

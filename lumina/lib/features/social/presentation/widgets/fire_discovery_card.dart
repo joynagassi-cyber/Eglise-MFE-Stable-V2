@@ -149,7 +149,7 @@ class FireDiscoveryCard extends StatelessWidget {
                 fallbackName: post.authorName,
                 size: 40,
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +173,7 @@ class FireDiscoveryCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(
             post.content,
             maxLines: 4,
@@ -184,7 +184,7 @@ class FireDiscoveryCard extends StatelessWidget {
               fontFamily: 'Inter',
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -231,7 +231,7 @@ class FireDiscoveryCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           FaIcon(icon, color: color, size: 22),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             count != null && count > 0 ? '$count $label' : label,
             style: TextStyle(
@@ -259,7 +259,7 @@ class FireDiscoveryCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           FaIcon(FontAwesomeIcons.cross, size: 10, color: context.colors.brandPrimary),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             'FOI',
             style: TextStyle(

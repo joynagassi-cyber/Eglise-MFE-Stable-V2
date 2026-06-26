@@ -64,7 +64,7 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
             Row(
               children: [
                 Icon(Icons.tune_rounded, color: context.colors.brandPrimary),
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: AppSpacing.sm),
                 Text(
                   'Personnaliser le Rapport',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -73,7 +73,7 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(
@@ -82,16 +82,16 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
-            const Text('Couleur de l\'en-tête',
+            SizedBox(height: AppSpacing.md),
+            Text('Couleur de l\'en-tête',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             SizedBox(
               height: 40,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: _colorOptions.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                separatorBuilder: (context, index) => SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final option = _colorOptions[index];
                   final hex = option['color'] as String?;
@@ -113,9 +113,9 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
                             : null,
                       ),
                       child: hex == null
-                          ? const Icon(Icons.palette_outlined, size: 20)
+                          ? Icon(Icons.palette_outlined, size: 20)
                           : isSelected
-                              ? const Icon(Icons.check,
+                              ? Icon(Icons.check,
                                   color: Colors.white, size: 20)
                               : null,
                     ),
@@ -123,44 +123,44 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
                 },
               ),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             SwitchListTile.adaptive(
-              title: const Text('Afficher les KPIs'),
+              title: Text('Afficher les KPIs'),
               subtitle:
-                  const Text('Résumé financier (Revenus, Dépenses, Solde)'),
+                  Text('Résumé financier (Revenus, Dépenses, Solde)'),
               value: _showKpis,
               onChanged: (v) => setState(() => _showKpis = v),
               contentPadding: EdgeInsets.zero,
             ),
             SwitchListTile.adaptive(
-              title: const Text('Afficher la répartition'),
-              subtitle: const Text('Tableau détaillé par catégories'),
+              title: Text('Afficher la répartition'),
+              subtitle: Text('Tableau détaillé par catégories'),
               value: _showBreakdown,
               onChanged: (v) => setState(() => _showBreakdown = v),
               contentPadding: EdgeInsets.zero,
             ),
             SwitchListTile.adaptive(
-              title: const Text('Afficher le logo'),
+              title: Text('Afficher le logo'),
               value: _showLogo,
               onChanged: (v) => setState(() => _showLogo = v),
               contentPadding: EdgeInsets.zero,
             ),
             SwitchListTile.adaptive(
-              title: const Text('Afficher le pied de page'),
+              title: Text('Afficher le pied de page'),
               value: _showFooter,
               onChanged: (v) => setState(() => _showFooter = v),
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.xl),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: widget.onCancel,
-                    child: const Text('Annuler'),
+                    child: Text('Annuler'),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {
@@ -174,8 +174,8 @@ class _BilanPdfCustomizerState extends State<BilanPdfCustomizer> {
                       );
                       widget.onConfirm(options);
                     },
-                    icon: const Icon(Icons.picture_as_pdf_rounded),
-                    label: const Text('Exporter'),
+                    icon: Icon(Icons.picture_as_pdf_rounded),
+                    label: Text('Exporter'),
                   ),
                 ),
               ],

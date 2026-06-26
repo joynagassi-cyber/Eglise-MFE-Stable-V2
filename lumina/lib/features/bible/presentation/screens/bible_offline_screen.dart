@@ -61,7 +61,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
     return Scaffold(
       backgroundColor: context.colors.bgPrimary,
       appBar: GlassAppBar(
-        title: const Text('MODE HORS-LIGNE'),
+        title: Text('MODE HORS-LIGNE'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
               color: context.colors.iconPrimary, size: 20),
@@ -74,14 +74,14 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildHeader(),
-            const SizedBox(height: AppSpacing.xxl),
+            SizedBox(height: AppSpacing.xxl),
             if (importState.isImporting) ...[
               _buildProgressSection(importState),
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
             ],
             _buildStatusCard(
                 isFullyDownloaded, percentage, totalDownloaded, totalExpected),
-            const SizedBox(height: AppSpacing.xxl),
+            SizedBox(height: AppSpacing.xxl),
             _buildActionButtons(
                 importState, isFullyDownloaded, totalDownloaded),
           ],
@@ -95,13 +95,13 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
       children: [
         Icon(Icons.auto_awesome_rounded,
             size: 64, color: context.colors.accent.withOpacity(0.8)),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         Text(
           'Bible Locale',
           style: AppTypography.h3.copyWith(color: context.colors.textPrimary),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text(
           'Rendez la Bible entièrement disponible hors-ligne en quelques secondes.',
           style: AppTypography.editorialDisplay
@@ -137,7 +137,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -150,7 +150,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
                     style: AppTypography.editorialDisplay
                         .copyWith(color: context.colors.textSecondary, fontSize: 12),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   RichText(
                     text: TextSpan(
                       children: [
@@ -193,14 +193,14 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
           style: AppTypography.editorialSection
               .copyWith(color: context.colors.textPrimary, fontSize: 14),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: AppSpacing.xs),
         if (state.currentItem != null)
           Text(
             state.currentItem!,
             style: AppTypography.editorialDisplay
                 .copyWith(color: context.colors.accent, fontSize: 16),
           ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         AppProgressBar(
           value: state.progress > 0 ? state.progress : null,
           backgroundColor: context.colors.borderSubtle,
@@ -208,7 +208,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
           height: 8,
           borderRadius: 4,
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Text(
           '${(state.progress * 100).toStringAsFixed(1)}%',
           style: AppTypography.editorialSection
@@ -231,12 +231,12 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
+            SizedBox(
               width: 16,
               height: 16,
               child: LoadingDots(size: 24),
             ),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: AppSpacing.md),
             Text('Importation optimisée...',
                 style: TextStyle(color: context.colors.textSecondary)),
           ],
@@ -257,7 +257,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
             },
             gradient: context.colors.brandGradient,
           ),
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         if (totalDownloaded > 0)
           TextButton.icon(
             onPressed: () => _showClearCacheConfirm(context),
@@ -305,7 +305,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
               if (context.mounted) {
                 scaffoldMessenger.showSnackBar(
                   SnackBar(
-                      content: const Text('Mode hors-ligne désactivé'),
+                      content: Text('Mode hors-ligne désactivé'),
                       backgroundColor: context.colors.successBg),
                 );
               }

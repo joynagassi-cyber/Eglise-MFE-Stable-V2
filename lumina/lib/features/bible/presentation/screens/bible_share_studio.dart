@@ -55,7 +55,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
     return Scaffold(
       backgroundColor: context.colors.bgPrimary,
       appBar: GlassAppBar(
-        title: const Text('STUDIO CREATIF'),
+        title: Text('STUDIO CREATIF'),
         actions: [
           IconButton(
             icon: Icon(Icons.check_circle_rounded,
@@ -128,7 +128,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
                     if (_isGoldTheme)
                       Icon(Icons.auto_awesome,
                           color: context.colors.accent, size: 24),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     Text(
                       widget.content,
                       textAlign: _textAlign,
@@ -143,7 +143,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     Text(
                       '${widget.book} ${widget.verses.join(', ')}',
                       style: AppTypography.editorialSection.copyWith(
@@ -154,7 +154,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
                         letterSpacing: 2,
                       ),
                     ),
-                    const Spacer(),
+                    Spacer(),
                     Text(
                       ' MFE-JC',
                       style: AppTypography.editorialSection.copyWith(
@@ -212,7 +212,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
               }),
             ],
           ),
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
           GradientButton(
             text: 'PARTAGER LA PAROLE',
             onPressed: _shareImage,
@@ -240,7 +240,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
               ),
               child: Icon(icon, color: context.colors.textPrimary, size: 20),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(label,
                 style: AppTypography.labelSmall.copyWith(
                   color: context.colors.textSecondary,

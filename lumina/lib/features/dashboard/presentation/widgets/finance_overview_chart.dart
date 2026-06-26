@@ -51,11 +51,11 @@ class FinanceOverviewChart extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           financeChartAsync.when(
             data: (chartData) {
               if (chartData.isEmpty || chartData.every((e) => e == 0)) {
-                return const SizedBox(
+                return SizedBox(
                   height: 120,
                   child: Center(
                     child: Text('Aucune donnée financière'),
@@ -84,7 +84,7 @@ class FinanceOverviewChart extends ConsumerWidget {
                                         .onSurfaceVariant,
                                   ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Text(
                           formatter.format(currentMonthTotal),
                           style:
@@ -113,7 +113,7 @@ class FinanceOverviewChart extends ConsumerWidget {
                 ],
               );
             },
-            loading: () => const SizedBox(
+            loading: () => SizedBox(
               height: 120,
               child: Center(child: ShimmerBox(height: 80, borderRadius: 16)),
             ),

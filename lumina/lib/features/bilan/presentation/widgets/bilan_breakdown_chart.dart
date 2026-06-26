@@ -19,7 +19,7 @@ class BilanBreakdownChart extends ConsumerWidget {
     return breakdownAsync.when(
       data: (items) {
         if (items.isEmpty) {
-          return const Center(child: Text("Aucune donnée"));
+          return Center(child: Text("Aucune donnée"));
         }
 
         // Simple Pie Chart for Category/Group
@@ -127,8 +127,8 @@ class BilanBreakdownChart extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(child: LoadingState()),
-      error: (err, _) => const Center(child: Text('Impossible de charger le graphique')),
+      loading: () => Center(child: LoadingState()),
+      error: (err, _) => Center(child: Text('Impossible de charger le graphique')),
     );
   }
 }

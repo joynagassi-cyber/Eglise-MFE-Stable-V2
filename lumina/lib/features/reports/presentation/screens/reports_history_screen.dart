@@ -32,7 +32,7 @@ class ReportsHistoryScreen extends ConsumerWidget {
         currentLocation: '/ministere/reports/history',
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, size: AppSpacing.iconMd),
+            icon: Icon(Icons.refresh_rounded, size: AppSpacing.iconMd),
             onPressed: () async {
               await HapticHelper.light();
               ref.invalidate(reportsHistoryProvider(churchId));
@@ -55,7 +55,7 @@ class ReportsHistoryScreen extends ConsumerWidget {
                   vertical: AppSpacing.md,
                 ),
                 itemCount: data.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+                separatorBuilder: (_, __) => SizedBox(height: AppSpacing.md),
                 itemBuilder: (context, index) {
                   return AnimatedEntrance.fromBottom(
                     delay: Duration(milliseconds: 100 + (index * 50)),
@@ -72,12 +72,12 @@ class ReportsHistoryScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.error_outline_rounded, size: 48, color: context.colors.errorText),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Text(
                 'Une erreur est survenue lors du chargement',
                 style: theme.textTheme.bodyMedium?.copyWith(color: context.colors.errorText),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               GradientButton(
                 text: 'RÉESSAYER',
                 onPressed: () => ref.invalidate(reportsHistoryProvider(churchId)),
@@ -135,7 +135,7 @@ class _ReportCard extends ConsumerWidget {
                   ),
                   child: Icon(_getTypeIcon(type), color: _getTypeColor(context, type), size: 24),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +146,7 @@ class _ReportCard extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         DateFormat('dd/MM/yyyy • HH:mm', 'fr_FR').format(createdAt),
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -164,12 +164,12 @@ class _ReportCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.delete_outline_rounded, size: 20),
+                      icon: Icon(Icons.delete_outline_rounded, size: 20),
                       color: context.colors.errorText,
                       onPressed: () async {
                         await HapticHelper.medium();
@@ -226,7 +226,7 @@ class _ReportCard extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Impossible de télécharger le rapport')));
+        ).showSnackBar(SnackBar(content: Text('Impossible de télécharger le rapport')));
       }
     }
   }
@@ -235,13 +235,13 @@ class _ReportCard extends ConsumerWidget {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Supprimer le rapport'),
-        content: const Text('Cette action est irréversible.'),
+        title: Text('Supprimer le rapport'),
+        content: Text('Cette action est irréversible.'),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
@@ -261,13 +261,13 @@ class _ReportCard extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Rapport supprimé')));
+          ).showSnackBar(SnackBar(content: Text('Rapport supprimé')));
         }
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Erreur lors de la suppression')));
+          ).showSnackBar(SnackBar(content: Text('Erreur lors de la suppression')));
         }
       }
     }

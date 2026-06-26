@@ -40,7 +40,7 @@ class MemberViewSwitchButton extends ConsumerWidget {
                   size: 16,
                   color: isMemberViewMode ? context.colors.brandPrimary : null,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   isMemberViewMode ? 'Vue Membre' : 'Vue Pro',
                   style: TextStyle(

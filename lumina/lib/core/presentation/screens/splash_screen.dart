@@ -146,7 +146,7 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(flex: 3),
+              Spacer(flex: 3),
 
               // Logo avec animation
               AnimatedBuilder(
@@ -184,7 +184,7 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
 
               // App Name
               FadeTransition(
@@ -200,7 +200,7 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.sm),
+              SizedBox(height: AppSpacing.sm),
 
               // Subtitle
               FadeTransition(
@@ -216,12 +216,12 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                 ),
               ),
 
-              const Spacer(flex: 2),
+              Spacer(flex: 2),
 
               // Loading indicator
               FadeTransition(
                 opacity: _fadeIn,
-                child: const SizedBox(
+                child: SizedBox(
                   height: 60,
                   width: double.infinity,
                   child: LoadingState(
@@ -230,7 +230,7 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
 
               // Church name
               FadeTransition(
@@ -246,7 +246,7 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                 ),
               ),
 
-              const Spacer(flex: 1),
+              Spacer(flex: 1),
             ],
           ),
         ),

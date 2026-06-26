@@ -81,10 +81,10 @@ class AppButton extends StatelessWidget {
                 ? context.colors.textOnBrand
                 : (color ?? context.colors.brandPrimary),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
         ] else if (icon != null) ...[
           Icon(icon, size: 18, color: _getTextColor(context, isDark)),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
         ],
         Text(
           label,

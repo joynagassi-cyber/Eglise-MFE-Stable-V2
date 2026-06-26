@@ -51,14 +51,14 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
               Row(
                 children: [
                   Icon(Icons.swap_horiz, color: context.colors.brandPrimary),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     'Transfert de fonds',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               accountsAsync.when(
                 data: (accounts) {
                   final autoAccounts = accounts
@@ -82,10 +82,10 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
                         onChanged: (v) => setState(() => _fromAccount = v),
                         validator: (v) => v == null ? 'Champ requis' : null,
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       Icon(Icons.arrow_downward,
                           color: context.colors.textTertiary),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       DropdownButtonFormField<FinancialAccount>(
                         value: _toAccount,
                         decoration: const InputDecoration(
@@ -111,10 +111,10 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
                     ],
                   );
                 },
-                loading: () => const Center(child: LoadingState()),
-                error: (e, s) => const Text('Impossible de charger les comptes'),
+                loading: () => Center(child: LoadingState()),
+                error: (e, s) => Text('Impossible de charger les comptes'),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               TextFormField(
                 controller: _amountCtrl,
                 decoration: const InputDecoration(
@@ -132,7 +132,7 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
                   return null;
                 },
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               TextFormField(
                 controller: _descCtrl,
                 decoration: const InputDecoration(
@@ -141,25 +141,25 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
                 ),
                 maxLines: 2,
               ),
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: _isSaving ? null : () => Navigator.pop(context),
-                    child: const Text('Annuler'),
+                    child: Text('Annuler'),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   FilledButton.icon(
                     onPressed: _isSaving ? null : _submit,
                     icon: _isSaving
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 16,
                             height: 16,
                             child: LoadingDots(size: 24),
                           )
-                        : const Icon(Icons.send),
-                    label: const Text('Effectuer'),
+                        : Icon(Icons.send),
+                    label: Text('Effectuer'),
                   ),
                 ],
               ),
@@ -202,7 +202,7 @@ class _TransferFundsDialogState extends ConsumerState<TransferFundsDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'effectuer le virement'),
+            content: Text('Impossible d\'effectuer le virement'),
             backgroundColor: context.colors.errorText,
           ),
         );

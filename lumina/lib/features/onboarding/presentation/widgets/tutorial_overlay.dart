@@ -158,7 +158,7 @@ class TutorialOverlay {
                   ),
                   child: Icon(icon, color: context.colors.textInverse, size: LuminaIcon.lg),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     title,
@@ -171,7 +171,7 @@ class TutorialOverlay {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               description,
               style: TextStyle(
@@ -180,7 +180,7 @@ class TutorialOverlay {
                 color: context.colors.textSecondary,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
               child: ShimmerButton(

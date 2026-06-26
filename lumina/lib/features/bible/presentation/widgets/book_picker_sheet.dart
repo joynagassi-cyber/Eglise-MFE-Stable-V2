@@ -58,15 +58,15 @@ class _BookPickerSheetState extends ConsumerState<BookPickerSheet> {
                 ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Divider(color: context.colors.borderSubtle),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           SizedBox(
             height: 400,
             child:
                 _showingChapters ? _buildChapterGrid() : _buildBookList(books),
           ),
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
         ],
       ),
     );
@@ -135,7 +135,7 @@ class _BookPickerSheetState extends ConsumerState<BookPickerSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(width: AppSpacing.sm),
+          SizedBox(width: AppSpacing.sm),
           Text(
             title.toUpperCase(),
             style: AppTypography.editorialSection.copyWith(

@@ -55,7 +55,7 @@ class PostDetailScreen extends StatelessWidget {
                         fallbackName: post.authorName,
                         size: 48,
                       ),
-                      const SizedBox(width: AppSpacing.md),
+                      SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +78,7 @@ class PostDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xl),
 
                   // Texte de la publication (Focus Lecture)
                   Text(
@@ -91,14 +91,14 @@ class PostDetailScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: AppSpacing.xxl),
-                  const Divider(),
-                  const SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: AppSpacing.xxl),
+                  Divider(),
+                  SizedBox(height: AppSpacing.xl),
 
                   // Actions Sacrées
                   _buildActionsRow(theme),
 
-                  const SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: AppSpacing.xxl),
 
                   // Espace pour les commentaires (Placeholder)
                   Text(
@@ -109,7 +109,7 @@ class PostDetailScreen extends StatelessWidget {
                       color: context.colors.brandPrimary,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   _buildCommentsPlaceholder(context, isDark),
                 ],
               ),

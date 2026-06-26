@@ -37,7 +37,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
       await HapticHelper.error();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir tous les champs.')),
+        SnackBar(content: Text('Veuillez remplir tous les champs.')),
       );
       return;
     }
@@ -52,7 +52,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
       await HapticHelper.success();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
               content: Text('Demande de transfert envoyée avec succès.')),
         );
         Navigator.pop(context);
@@ -61,7 +61,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
       await HapticHelper.error();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Impossible d\'effectuer le transfert')),
+          SnackBar(content: Text('Impossible d\'effectuer le transfert')),
         );
       }
     } finally {
@@ -73,7 +73,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transfert de Membre'),
+        title: Text('Transfert de Membre'),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: context.colors.brandPrimaryGradient,
@@ -98,7 +98,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
 
               // Sélection du membre
               AnimatedEntrance.fromLeft(
@@ -110,7 +110,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                       Row(
                         children: [
                           Icon(Icons.person_outline, color: context.colors.brandPrimary, size: LuminaIcon.sm),
-                          const SizedBox(width: AppSpacing.sm),
+                          SizedBox(width: AppSpacing.sm),
                           Text(
                             'Membre à transférer',
                             style: TextStyle(
@@ -122,7 +122,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       // Dropdown simulé pour le moment
                       Semantics(
                         label: 'Sélectionner le membre à transférer',
@@ -151,7 +151,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
 
               // Destination
               AnimatedEntrance.fromRight(
@@ -165,7 +165,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                           Icon(Icons.groups_outlined,
                               color: context.colors.brandSecondary,
                               size: LuminaIcon.sm),
-                          const SizedBox(width: AppSpacing.sm),
+                          SizedBox(width: AppSpacing.sm),
                           Text(
                             'Groupe de destination',
                             style: TextStyle(
@@ -177,7 +177,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       Semantics(
                         label: 'Sélectionner le groupe de destination',
                         child: DropdownButtonFormField<String>(
@@ -205,7 +205,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
 
               // Motif
               AnimatedEntrance.fromBottom(
@@ -218,7 +218,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                         children: [
                           Icon(Icons.description_outlined,
                               color: context.colors.textSecondary),
-                          const SizedBox(width: AppSpacing.sm),
+                          SizedBox(width: AppSpacing.sm),
                           Text(
                             'Motif du transfert',
                             style: TextStyle(
@@ -230,7 +230,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       TextFormField(
                         controller: _reasonController,
                         maxLines: 3,
@@ -251,7 +251,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xl * 2),
+              SizedBox(height: AppSpacing.xl * 2),
 
               // Bouton Submit
               Semantics(
@@ -271,7 +271,7 @@ class _MemberTransferScreenState extends ConsumerState<MemberTransferScreen> {
                     ),
                     child: _isSubmitting
                         ? LoadingDots(color: context.colors.textInverse, size: 24)
-                        : const Text(
+                        : Text(
                             'Soumettre la demande',
                             style: TextStyle(
                                 fontFamily: LuminaFont.display,

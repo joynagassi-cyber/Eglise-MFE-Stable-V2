@@ -11,7 +11,7 @@ class MutualAidChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (requests.isEmpty) return const SizedBox();
+    if (requests.isEmpty) return SizedBox();
 
     final data = _getChartData();
 
@@ -41,7 +41,7 @@ class MutualAidChart extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +59,7 @@ class MutualAidChart extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         type,
                         style: AppTypography.tiny

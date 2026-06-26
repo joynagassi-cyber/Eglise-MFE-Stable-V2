@@ -47,7 +47,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     return Scaffold(
       backgroundColor: Colors.black, // Dark background for camera
       appBar: AppBar(
-        title: const Text('Scanner QR'),
+        title: Text('Scanner QR'),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -58,13 +58,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               builder: (context, state, child) {
                 switch (state.torchState) {
                   case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.grey);
+                    return Icon(Icons.flash_off, color: Colors.grey);
                   case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
+                    return Icon(Icons.flash_on, color: Colors.yellow);
                   case TorchState.unavailable:
-                    return const Icon(Icons.flash_off, color: Colors.red);
+                    return Icon(Icons.flash_off, color: Colors.red);
                   case TorchState.auto:
-                    return const Icon(Icons.flash_auto, color: Colors.blue);
+                    return Icon(Icons.flash_auto, color: Colors.blue);
                 }
               },
             ),
@@ -76,9 +76,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               builder: (context, state, child) {
                 switch (state.cameraDirection) {
                   case CameraFacing.front:
-                    return const Icon(Icons.camera_front);
+                    return Icon(Icons.camera_front);
                   case CameraFacing.back:
-                    return const Icon(Icons.camera_rear);
+                    return Icon(Icons.camera_rear);
                 }
               },
             ),
@@ -109,7 +109,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             right: 0,
             child: Container(
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 'Centrez le QR Code dans le cadre',
                 style: TextStyle(
                   color: Colors.white,

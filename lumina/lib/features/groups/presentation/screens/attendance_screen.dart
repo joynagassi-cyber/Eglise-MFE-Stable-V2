@@ -54,7 +54,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
 
     return Scaffold(
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         slivers: [
           // Premium Header with Circular Progress
           SliverAppBar(
@@ -94,7 +94,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                                       letterSpacing: 2,
                                     ),
                                   ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4),
                                   Text(
                                     'Réunion du jour',
                                     style: AppTypography.h3.copyWith(
@@ -175,7 +175,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                   children: [
                     IconButton(
                       onPressed: () => _changeDate(-1),
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                      icon: Icon(Icons.arrow_back_ios_new_rounded,
                           size: 16),
                       padding: EdgeInsets.zero,
                     ),
@@ -199,7 +199,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                     IconButton(
                       onPressed: () => _changeDate(1),
                       icon:
-                          const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                          Icon(Icons.arrow_forward_ios_rounded, size: 16),
                       padding: EdgeInsets.zero,
                     ),
                   ],
@@ -256,7 +256,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
             error: (err, _) => SliverFillRemaining(
                 child: AppErrorWidget(message: err.toString())),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 120)),
+          SliverToBoxAdapter(child: SizedBox(height: 120)),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -291,7 +291,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                           .notifier)
                       .save());
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Pointage enregistré avec succès')));
                     context.pop();
                   }
@@ -397,9 +397,9 @@ class _AttendanceMemberRow extends ConsumerWidget {
               fallbackName: member?.fullName ?? '?',
               size: 44,
             ),
-            orElse: () => const SizedBox(width: 44, height: 44),
+            orElse: () => SizedBox(width: 44, height: 44),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -415,7 +415,7 @@ class _AttendanceMemberRow extends ConsumerWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  orElse: () => const Text('Chargement...'),
+                  orElse: () => Text('Chargement...'),
                 ),
                 Text(
                   membership.role.name.toUpperCase(),

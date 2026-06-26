@@ -44,7 +44,7 @@ class BilanKpiCard extends StatelessWidget {
                     size: 14,
                     color: color.withOpacity(0.8),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     title.toUpperCase(),
                     style: TextStyle(
@@ -58,7 +58,7 @@ class BilanKpiCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 displayValue,
                 style: TextStyle(

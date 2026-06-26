@@ -113,17 +113,17 @@ class _ProductionInitErrorScreen extends StatelessWidget {
                 size: 64,
                 color: context.colors.errorText,
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16),
+              Text(
                 'Erreur de démarrage critique',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               SelectableText(error, textAlign: TextAlign.center),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => SystemNavigator.pop(),
-                child: const Text('Quitter'),
+                child: Text('Quitter'),
               ),
             ],
           ),

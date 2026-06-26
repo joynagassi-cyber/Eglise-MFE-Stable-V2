@@ -93,7 +93,7 @@ class _QuickActionButtonState extends State<QuickActionButton>
                           ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
                 Text(
                   widget.label,
                   textAlign: TextAlign.center,

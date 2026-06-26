@@ -24,14 +24,14 @@ class _PermissionMatrixScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Matrice des Permissions'),
+        title: Text('Matrice des Permissions'),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                const Text('Filtrer par module : '),
+                Text('Filtrer par module : '),
                 DropdownButton<String>(
                   value: _selectedModule,
                   items: const [
@@ -59,10 +59,10 @@ class _PermissionMatrixScreenState
       body: permissionsAsync.when(
         data: (perms) => rolesAsync.when(
           data: (roles) => _buildMatrix(perms, roles),
-          loading: () => const Center(child: LoadingState()),
+          loading: () => Center(child: LoadingState()),
           error: (e, _) => Center(child: Text('Erreur rôles: $e')),
         ),
-        loading: () => const Center(child: LoadingState()),
+        loading: () => Center(child: LoadingState()),
         error: (e, _) => Center(child: Text('Erreur permissions: $e')),
       ),
     );
@@ -156,7 +156,7 @@ class _PermissionToggle extends ConsumerWidget {
           onPressed: () => _toggle(ref, has),
         );
       },
-      loading: () => const SizedBox(
+      loading: () => SizedBox(
         width: 20,
         height: 20,
         child: LoadingDots(),

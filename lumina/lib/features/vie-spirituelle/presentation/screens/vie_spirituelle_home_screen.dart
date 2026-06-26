@@ -22,9 +22,9 @@ class VieSpirituelleHomeScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildQuickActions(context),
-            const SizedBox(height: LuminaDesign.paddingLg),
+            SizedBox(height: LuminaDesign.paddingLg),
             Text("AGENDA PASTORAL", style: LuminaDesign.labelOf(context)),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildUpcomingEvents(ref, context),
           ],
         ),
@@ -35,7 +35,7 @@ class VieSpirituelleHomeScreen extends ConsumerWidget {
   Widget _buildQuickActions(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
@@ -53,14 +53,14 @@ class VieSpirituelleHomeScreen extends ConsumerWidget {
     final eventsAsync = ref.watch(upcomingEventsProvider);
     return eventsAsync.when(
       data: (events) {
-        if (events.isEmpty) return const Text("Aucun événement prévu.");
+        if (events.isEmpty) return Text("Aucun événement prévu.");
         return Column(
           children: events.take(3).map((e) => LuminaCard(
             onTap: () => context.push("${AppRoutes.vieSpirituelleEvents}/${e.id}"),
             child: Row(
               children: [
-                const Icon(Icons.event, color: LuminaDesign.primary),
-                const SizedBox(width: 16),
+                Icon(Icons.event, color: LuminaDesign.primary),
+                SizedBox(width: 16),
                 Expanded(child: Text(e.title, style: LuminaDesign.bodyLargeOf(context))),
                 Text(DateFormat('dd/MM').format(e.date), style: LuminaDesign.labelOf(context)),
               ],
@@ -89,7 +89,7 @@ class _QuickAction extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, color: LuminaDesign.primary),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(title, style: LuminaDesign.labelOf(context)),
         ],
       ),

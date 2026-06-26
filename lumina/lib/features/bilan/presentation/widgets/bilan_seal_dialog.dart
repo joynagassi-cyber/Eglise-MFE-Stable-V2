@@ -43,7 +43,7 @@ class BilanSealDialog extends StatelessWidget {
       title: Row(
         children: [
           Icon(Icons.lock, color: context.colors.errorText),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: Text(
               'Sceller $monthName $year',
@@ -73,13 +73,13 @@ class BilanSealDialog extends StatelessWidget {
                     amount: currencyFormatter.format(totalIncome),
                     color: context.colors.successText,
                   ),
-                  const Divider(),
+                  Divider(),
                   _TotauxRow(
                     label: 'Sorties',
                     amount: currencyFormatter.format(totalExpense),
                     color: context.colors.errorText,
                   ),
-                  const Divider(thickness: 2),
+                  Divider(thickness: 2),
                   _TotauxRow(
                     label: 'Solde Net',
                     amount: currencyFormatter.format(netBalance),
@@ -89,15 +89,15 @@ class BilanSealDialog extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text('Attention : Cette action est irréversible et verrouillera toutes les transactions de ce mois. Le hash calculé garantira l\'intégrité des données.',
               style: TextStyle(
                 color: context.colors.errorText,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            const Text(
+            SizedBox(height: AppSpacing.sm),
+            Text(
               'Veuillez vous assurer que toutes les transactions sont correctes.',
             ),
           ],
@@ -110,8 +110,8 @@ class BilanSealDialog extends StatelessWidget {
         ),
         FilledButton.icon(
           onPressed: handleConfirm,
-          icon: const Icon(Icons.lock),
-          label: const Text('Confirmer & Sceller'),
+          icon: Icon(Icons.lock),
+          label: Text('Confirmer & Sceller'),
           style: FilledButton.styleFrom(
             backgroundColor: context.colors.errorText,
             foregroundColor: Colors.white,

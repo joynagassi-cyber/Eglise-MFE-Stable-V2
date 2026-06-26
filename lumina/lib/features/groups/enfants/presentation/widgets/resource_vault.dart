@@ -46,7 +46,7 @@ class ResourceVault extends ConsumerWidget {
               Tab(text: 'Médias'),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             height: 300,
             child: resourcesAsync.when(
@@ -57,7 +57,7 @@ class ResourceVault extends ConsumerWidget {
                   _buildResourceList(context, resources, 'media'),
                 ],
               ),
-              loading: () => const Center(child: LoadingState()),
+              loading: () => Center(child: LoadingState()),
               error: (e, _) => Text('Error: $e'),
             ),
           ),
@@ -102,7 +102,7 @@ class ResourceVault extends ConsumerWidget {
         leading: Icon(icon, color: context.colors.brandPrimary),
         title: Text(title, style: AppText.bodyMedium(context)),
         subtitle: Text(subtitle, style: AppText.caption(context)),
-        trailing: const Icon(Icons.download_rounded, size: 20),
+        trailing: Icon(Icons.download_rounded, size: 20),
         onTap: () => _showComingSoon(context),
       ),
     );

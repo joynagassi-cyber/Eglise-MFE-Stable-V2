@@ -21,10 +21,10 @@ class PrayerVigilsList extends ConsumerWidget {
     return vigilsAsync.when(
       data: (vigils) {
         if (vigils.isEmpty) {
-          return const Center(child: Text('Aucune veillée prévue.'));
+          return Center(child: Text('Aucune veillée prévue.'));
         }
         return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: vigils.length,
           itemBuilder: (context, index) {
@@ -58,16 +58,16 @@ class PrayerVigilsList extends ConsumerWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '${DateFormat('dd MMM, HH:mm').format(vigil.startTime)} - ${DateFormat('HH:mm').format(vigil.endTime)}',
                       style: AppText.caption(context),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.people_outline, size: 14),
-                        const SizedBox(width: 4),
+                        Icon(Icons.people_outline, size: 14),
+                        SizedBox(width: 4),
                         Text('${vigil.participantsCount} participants',
                             style: AppText.caption(context)),
                       ],
@@ -96,8 +96,8 @@ class PrayerVigilsList extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: LoadingState()),
-      error: (e, _) => const Center(child: Text('Impossible de charger les veillées')),
+      loading: () => Center(child: LoadingState()),
+      error: (e, _) => Center(child: Text('Impossible de charger les veillées')),
     );
   }
 

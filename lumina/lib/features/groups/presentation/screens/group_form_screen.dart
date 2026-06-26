@@ -104,7 +104,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
             content: Row(
               children: [
                 Icon(Icons.check_circle, color: context.colors.bgCard),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   widget.groupId != null ? 'Groupe mis à jour' : 'Groupe créé',
                 ),
@@ -123,7 +123,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'enregistrer le groupe'),
+            content: Text('Impossible d\'enregistrer le groupe'),
             backgroundColor: context.colors.errorText,
             behavior: SnackBarBehavior.floating,
           ),
@@ -149,7 +149,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
           label: 'Retour',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
+            icon: Icon(Icons.arrow_back_rounded),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) context.pop();
@@ -175,12 +175,12 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   validator: (v) => v?.isEmpty == true ? 'Requis' : null,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 200),
                 child: _buildTypeSelector(context, isDark, theme),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 300),
                 child: _buildTextField(
@@ -192,7 +192,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   theme: theme,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 400),
                 child: _buildTextField(
@@ -203,7 +203,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   theme: theme,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 500),
                 child: _buildTextField(
@@ -214,7 +214,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   theme: theme,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 600),
                 child: Semantics(
@@ -299,7 +299,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
             color: context.colors.textSecondary,
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        SizedBox(height: AppSpacing.sm),
         Wrap(
           spacing: AppSpacing.sm,
           runSpacing: AppSpacing.sm,
@@ -343,7 +343,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                               ? context.colors.textOnBrand
                               : context.colors.textSecondary,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           _getLabelForType(type),
                           style: AppTypography.bodySmall.copyWith(

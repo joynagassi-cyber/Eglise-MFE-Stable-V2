@@ -36,7 +36,7 @@ class EquipeHomeScreen extends ConsumerWidget {
           label: 'Retour au tableau de bord',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) context.go(AppRoutes.dashboard);
@@ -49,7 +49,7 @@ class EquipeHomeScreen extends ConsumerWidget {
           ref.invalidate(equipeControllerProvider(churchId: churchId));
         },
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           padding: AppSpacing.screenPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                           size: AppSpacing.iconXl,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.md),
                       Text(
                         'Équipe Pastorale',
                         style: theme.textTheme.headlineMedium?.copyWith(
@@ -87,7 +87,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.xs),
+                      SizedBox(height: AppSpacing.xs),
                       Text(
                         'Coordonnez et équipez vos leaders',
                         style: theme.textTheme.bodyLarge?.copyWith(
@@ -98,7 +98,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
               const AnimatedEntrance.fromBottom(
                 delay: Duration(milliseconds: 200),
                 child: SectionQuickMenu(
@@ -106,7 +106,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                   showHeader: true,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xl),
+              SizedBox(height: AppSpacing.xl),
               AnimatedEntrance.fromBottom(
                 delay: const Duration(milliseconds: 300),
                 child: Text(
@@ -116,11 +116,11 @@ class EquipeHomeScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
 
               // — Live data from EquipeController —
               equipeAsync.when(
-                loading: () => const Center(
+                loading: () => Center(
                   child: Padding(
                     padding: EdgeInsets.all(AppSpacing.lg),
                     child: LoadingDots(),
@@ -143,7 +143,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                             onTap: () => context.go(AppRoutes.equipe),
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.md),
+                        SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: _StatCard(
                             title: 'Visites planifiées',
@@ -156,7 +156,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     Row(
                       children: [
                         Expanded(
@@ -169,7 +169,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                             onTap: () => context.go(AppRoutes.equipeVisites),
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.md),
+                        SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: _StatCard(
                             title: 'Complétées',
@@ -183,7 +183,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                       ],
                     ),
 
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
 
                     // Bergers actifs récents
                     Container(
@@ -219,7 +219,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.md),
+                          SizedBox(height: AppSpacing.md),
                           if (equipeState.shepherds.isEmpty)
                             Center(
                               child: Padding(
@@ -253,7 +253,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    const SizedBox(height: AppSpacing.xl),
+                    SizedBox(height: AppSpacing.xl),
 
                     // Visites à planifier
                     Container(
@@ -297,7 +297,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppSpacing.md),
+                          SizedBox(height: AppSpacing.md),
                           if (equipeState.plannedVisits.isEmpty)
                             Center(
                               child: Padding(
@@ -333,7 +333,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: AppSpacing.xxl),
             ],
           ),
         ),
@@ -348,20 +348,20 @@ class EquipeHomeScreen extends ConsumerWidget {
         child: Column(
           children: [
             Icon(Icons.error_outline, color: context.colors.errorText, size: 48),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             Text(
               'Erreur de chargement',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: context.colors.errorText,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             TextButton.icon(
               onPressed: () => ref.invalidate(
                 equipeControllerProvider(churchId: churchId),
               ),
-              icon: const Icon(Icons.refresh),
-              label: const Text('Réessayer'),
+              icon: Icon(Icons.refresh),
+              label: Text('Réessayer'),
             ),
           ],
         ),
@@ -404,7 +404,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.smd),
+              SizedBox(width: AppSpacing.smd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -415,14 +415,14 @@ class EquipeHomeScreen extends ConsumerWidget {
                             fontWeight: FontWeight.w600,
                           ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       team,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: context.colors.textSecondary,
                           ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       activity,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -489,7 +489,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                   color: context.colors.brandSecondary,
                 ),
               ),
-              const SizedBox(width: AppSpacing.smd),
+              SizedBox(width: AppSpacing.smd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,7 +500,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                             fontWeight: FontWeight.w600,
                           ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Row(
                       children: [
                         Icon(
@@ -508,7 +508,7 @@ class EquipeHomeScreen extends ConsumerWidget {
                           size: AppSpacing.iconXs - 4,
                           color: context.colors.textTertiary,
                         ),
-                        const SizedBox(width: AppSpacing.xs),
+                        SizedBox(width: AppSpacing.xs),
                         Text(
                           time,
                           style:
@@ -611,14 +611,14 @@ class _StatCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.smd),
+              SizedBox(height: AppSpacing.smd),
               Text(
                 value,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 title,
                 style: theme.textTheme.bodyMedium?.copyWith(

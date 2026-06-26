@@ -52,7 +52,7 @@ class ImagePreviewCard extends StatelessWidget {
                         ),
                       ),
                       padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: const Text(
+                      child: Text(
                         'Aperçu de la capture',
                         style: TextStyle(
                           color: Colors.white,
@@ -66,7 +66,7 @@ class ImagePreviewCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           if (extractedData != null)
             AnimatedEntrance(
               child: GlassCard(
@@ -79,7 +79,7 @@ class ImagePreviewCard extends StatelessWidget {
                       children: [
                         Icon(Icons.auto_awesome_rounded,
                             color: context.colors.successText, size: 20),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           'DONNÉES EXTRAITES PAR AI',
                           style: TextStyle(
@@ -93,7 +93,7 @@ class ImagePreviewCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: AppSpacing.md),
                     _buildDataRow(context, Icons.business_rounded, 'Fournisseur',
                         extractedData!.vendor),
                     _buildDataRow(context, Icons.calendar_today_rounded, 'Date',
@@ -109,7 +109,7 @@ class ImagePreviewCard extends StatelessWidget {
                 ),
               ),
             ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -119,7 +119,7 @@ class ImagePreviewCard extends StatelessWidget {
                   onPressed: onRetake,
                 ),
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: GradientButton(
                   text: extractedData != null ? 'Utiliser' : 'Confirmer',
@@ -141,7 +141,7 @@ class ImagePreviewCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: 14, color: context.colors.brandPrimary.withValues(alpha: 0.7)),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             '$label : ',
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),

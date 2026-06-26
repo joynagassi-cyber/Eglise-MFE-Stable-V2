@@ -73,7 +73,7 @@ class _PhotoPickerState extends State<PhotoPicker> {
                 shape: BoxShape.circle,
                 color: Colors.black.withValues(alpha: 0.5),
               ),
-              child: const Center(
+              child: Center(
                 child: LoadingDots(color: Colors.white, size: 28),
               ),
             ),
@@ -100,7 +100,7 @@ class _PhotoPickerState extends State<PhotoPicker> {
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.camera_alt,
                   color: Colors.white,
                   size: 20,
@@ -155,20 +155,20 @@ class _PhotoPickerState extends State<PhotoPicker> {
     final source = await showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Choisir une photo'),
+        title: Text('Choisir une photo'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: Icon(Icons.camera_alt, color: context.colors.brandPrimary),
-              title: const Text('Appareil photo'),
+              title: Text('Appareil photo'),
               onTap: () => Navigator.pop(context, ImageSource.camera),
             ),
             ListTile(
               leading: Icon(Icons.photo_library,
                 color: context.colors.brandPrimary,
               ),
-              title: const Text('Galerie'),
+              title: Text('Galerie'),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
           ],
@@ -176,7 +176,7 @@ class _PhotoPickerState extends State<PhotoPicker> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
         ],
       ),

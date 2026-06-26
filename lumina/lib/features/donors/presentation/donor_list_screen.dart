@@ -22,10 +22,10 @@ class DonorListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Donateurs'),
+        title: Text('Donateurs'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search_rounded),
+            icon: Icon(Icons.search_rounded),
             onPressed: () {
               showSearch(
                 context: context,
@@ -74,7 +74,7 @@ class DonorListScreen extends ConsumerWidget {
         onPressed: () => context.push(AppRoutes.donorsNew),
         backgroundColor: context.colors.brandPrimary,
         foregroundColor: context.colors.textOnBrand,
-        child: const Icon(Icons.person_add_rounded),
+        child: Icon(Icons.person_add_rounded),
       ),
     );
   }
@@ -98,7 +98,7 @@ class _DonorCard extends StatelessWidget {
       child: Row(
         children: [
           _buildAvatar(color),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +112,7 @@ class _DonorCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   donor.email ?? donor.phone ?? 'Aucun contact',
                   style: TextStyle(
@@ -120,12 +120,12 @@ class _DonorCard extends StatelessWidget {
                     color: context.colors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 _buildSegmentBadge(context, donor),
               ],
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -220,14 +220,14 @@ class _DonorSearchDelegate extends SearchDelegate<String> {
   List<Widget>? buildActions(BuildContext context) => [
         if (query.isNotEmpty)
           IconButton(
-            icon: const Icon(Icons.clear_rounded),
+            icon: Icon(Icons.clear_rounded),
             onPressed: () => query = '',
           ),
       ];
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(Icons.arrow_back_rounded),
+        icon: Icon(Icons.arrow_back_rounded),
         onPressed: () => close(context, ''),
       );
 
@@ -259,7 +259,7 @@ class _DonorSearchDelegate extends SearchDelegate<String> {
                   size: 48,
                   color: context.colors.borderSubtle,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
                   query.isEmpty
                       ? 'Tapez pour rechercher...'
@@ -311,7 +311,7 @@ class _DonorSearchDelegate extends SearchDelegate<String> {
         );
       },
       loading: () => const FireSkeletonMemberList(),
-      error: (e, _) => const Center(child: Text('Impossible de charger les donateurs')),
+      error: (e, _) => Center(child: Text('Impossible de charger les donateurs')),
     );
   }
 }

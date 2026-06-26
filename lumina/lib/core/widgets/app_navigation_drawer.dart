@@ -18,7 +18,7 @@ class AppNavigationDrawer extends ConsumerWidget {
       child: userContextAsync.when(
         data: (userContext) {
           if (userContext == null) {
-            return const Center(child: Text('Non connecté'));
+            return Center(child: Text('Non connecté'));
           }
 
           final items = _buildFilteredItems(userContext);
@@ -37,7 +37,7 @@ class AppNavigationDrawer extends ConsumerWidget {
           );
         },
         loading: () => const _DrawerSkeleton(),
-        error: (e, _) => const Center(child: Text('Impossible de charger le menu')),
+        error: (e, _) => Center(child: Text('Impossible de charger le menu')),
       ),
     );
   }
@@ -58,7 +58,7 @@ class AppNavigationDrawer extends ConsumerWidget {
             backgroundColor: Colors.white,
             child: Icon(Icons.person, size: 32, color: context.colors.brandPrimary),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Text(
             email,
             style: const TextStyle(
@@ -261,7 +261,7 @@ class _DrawerSkeleton extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: AppSpacing.sm),
                 Container(
                   width: 120,
                   height: 16,

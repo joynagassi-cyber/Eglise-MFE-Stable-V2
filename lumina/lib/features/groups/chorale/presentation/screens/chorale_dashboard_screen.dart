@@ -178,7 +178,7 @@ class _ChoraleDashboardScreenState extends ConsumerState<ChoraleDashboardScreen>
               error: (_, __) => const _KpiErrorCard(),
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: sheetsKpi.when(
               data: (kpi) => _KpiCard(
@@ -229,7 +229,7 @@ class _KpiCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: color, size: LuminaIcon.md),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(value,
               style: AppTypography.h4.copyWith(
                 fontWeight: FontWeight.w900,
@@ -297,7 +297,7 @@ class _SheetMusicTab extends ConsumerWidget {
     final sheetsAsync = ref.watch(sheetMusicProvider(groupId));
     return sheetsAsync.when(
       data: (sheets) => sheets.isEmpty
-          ? const Center(child: Text('Aucune partition trouvée'))
+          ? Center(child: Text('Aucune partition trouvée'))
           : ListView.builder(
               padding: const EdgeInsets.all(AppSpacing.md),
               itemCount: sheets.length,
@@ -337,7 +337,7 @@ class _SheetMusicTab extends ConsumerWidget {
               },
             ),
       loading: () => const FireSkeletonMemberList(),
-      error: (e, _) => const Center(child: Text('Impossible de charger les données')),
+      error: (e, _) => Center(child: Text('Impossible de charger les données')),
     );
   }
 }
@@ -351,7 +351,7 @@ class _RehearsalsTab extends ConsumerWidget {
     final rehearsalsAsync = ref.watch(rehearsalsProvider(groupId));
     return rehearsalsAsync.when(
       data: (rehearsals) => rehearsals.isEmpty
-          ? const Center(child: Text('Aucune répétition enregistrée'))
+          ? Center(child: Text('Aucune répétition enregistrée'))
           : ListView.builder(
               padding: const EdgeInsets.all(AppSpacing.md),
               itemCount: rehearsals.length,
@@ -401,7 +401,7 @@ class _RehearsalsTab extends ConsumerWidget {
               },
             ),
       loading: () => const FireSkeletonMemberList(),
-      error: (e, _) => const Center(child: Text('Impossible de charger les données')),
+      error: (e, _) => Center(child: Text('Impossible de charger les données')),
     );
   }
 }

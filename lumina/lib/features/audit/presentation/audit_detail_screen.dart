@@ -22,10 +22,10 @@ class AuditDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détail de l\'action'),
+        title: Text('Détail de l\'action'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share_outlined),
+            icon: Icon(Icons.share_outlined),
             onPressed: () {
               // Optionnel: Copier le log complet au presse-papier
             },
@@ -34,10 +34,10 @@ class AuditDetailScreen extends ConsumerWidget {
       ),
       body: logAsync.when(
         data: (log) => log == null
-            ? const Center(child: Text('Log introuvable'))
+            ? Center(child: Text('Log introuvable'))
             : _buildContent(context, log, isDark),
-        loading: () => const Center(child: LoadingState()),
-        error: (e, _) => const Center(child: Text('Impossible de charger les détails')),
+        loading: () => Center(child: LoadingState()),
+        error: (e, _) => Center(child: Text('Impossible de charger les détails')),
       ),
     );
   }
@@ -49,23 +49,23 @@ class AuditDetailScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSummaryHeader(context, log, isDark),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           _buildSectionTitle(context, 'Informations de l\'Action'),
           _buildActionDetails(context, log, isDark),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
           _buildSectionTitle(context, 'Acteur & Contexte'),
           _buildActorDetails(context, log, isDark),
           if (log.oldData != null || log.newData != null) ...[
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             _buildSectionTitle(context, 'Modifications de données'),
             _buildDataDiff(context, log, isDark),
           ],
           if (log.metadata != null && log.metadata!.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: AppSpacing.lg),
             _buildSectionTitle(context, 'Métadonnées Supplémentaires'),
             _buildJsonBlock(log.metadata!, isDark),
           ],
-          const SizedBox(height: AppSpacing.xl),
+          SizedBox(height: AppSpacing.xl),
         ],
       ),
     );
@@ -84,7 +84,7 @@ class AuditDetailScreen extends ConsumerWidget {
             ),
             child: Icon(Icons.history, color: context.colors.brandPrimary, size: 30),
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,9 +137,9 @@ class AuditDetailScreen extends ConsumerWidget {
       child: Column(
         children: [
           _buildInfoRow('Entité ID', log.entityId, Icons.fingerprint),
-          const Divider(height: 1),
+          Divider(height: 1),
           _buildInfoRow('Type d\'entité', log.entityType, Icons.category_outlined),
-          const Divider(height: 1),
+          Divider(height: 1),
           _buildInfoRow('Action', log.action.label, Icons.bolt),
         ],
       ),
@@ -151,16 +151,16 @@ class AuditDetailScreen extends ConsumerWidget {
       child: Column(
         children: [
           _buildInfoRow('Acteur', log.actorName, Icons.person_outline),
-          const Divider(height: 1),
+          Divider(height: 1),
           _buildInfoRow('Rôle utilisé', log.roleUsed, Icons.admin_panel_settings_outlined),
-          const Divider(height: 1),
+          Divider(height: 1),
           _buildInfoRow('Source Dashboard', log.dashboardSource, Icons.dashboard_outlined),
           if (log.ipAddress != null) ...[
-            const Divider(height: 1),
+            Divider(height: 1),
             _buildInfoRow('Adresse IP', log.ipAddress!, Icons.network_check_outlined),
           ],
           if (log.userAgent != null) ...[
-            const Divider(height: 1),
+            Divider(height: 1),
             _buildInfoRow('Terminal', _shortenUserAgent(log.userAgent!), Icons.devices_outlined),
           ],
         ],
@@ -172,14 +172,14 @@ class AuditDetailScreen extends ConsumerWidget {
     return Column(
       children: [
         if (log.oldData != null) ...[
-          const Text('ANCIENNE VALEUR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.red)),
-          const SizedBox(height: 4),
+          Text('ANCIENNE VALEUR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.red)),
+          SizedBox(height: 4),
           _buildJsonBlock(log.oldData!, isDark, borderColor: Colors.red.withOpacity(0.2)),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
         ],
         if (log.newData != null) ...[
-          const Text('NOUVELLE VALEUR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green)),
-          const SizedBox(height: 4),
+          Text('NOUVELLE VALEUR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green)),
+          SizedBox(height: 4),
           _buildJsonBlock(log.newData!, isDark, borderColor: Colors.green.withOpacity(0.2)),
         ],
       ],
@@ -214,9 +214,9 @@ class AuditDetailScreen extends ConsumerWidget {
       child: Row(
         children: [
           Icon(icon, size: 18, color: Colors.grey),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
           Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-          const Spacer(),
+          Spacer(),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),

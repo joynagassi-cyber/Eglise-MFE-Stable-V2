@@ -76,7 +76,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
         if (mounted) {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Annonce ajoutée avec succès')),
+            SnackBar(content: Text('Annonce ajoutée avec succès')),
           );
         }
       }
@@ -85,7 +85,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Impossible d\'enregistrer l\'annonce')));
+        ).showSnackBar(SnackBar(content: Text('Impossible d\'enregistrer l\'annonce')));
       }
     } finally {
       if (mounted) {
@@ -112,19 +112,19 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildTypeSelector(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTitleField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildSummaryField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildContentField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildDateField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTagsField(context),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildPinnedSwitch(context),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
                       _buildActions(context),
                     ],
                   ),
@@ -143,9 +143,9 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
       decoration: BoxDecoration(gradient: context.colors.fireFusionGradient),
       child: Row(
         children: [
-          const Icon(Icons.campaign, color: Colors.white, size: 28),
-          const SizedBox(width: 16),
-          const Text(
+          Icon(Icons.campaign, color: Colors.white, size: 28),
+          SizedBox(width: 16),
+          Text(
             'Nouvelle Annonce',
             style: TextStyle(
               color: Colors.white,
@@ -153,7 +153,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Semantics(
             label: 'Fermer',
             button: true,
@@ -164,7 +164,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                   Navigator.of(context).pop();
                 }
               },
-              icon: const Icon(Icons.close, color: Colors.white),
+              icon: Icon(Icons.close, color: Colors.white),
             ),
           ),
         ],
@@ -176,11 +176,11 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Type d\'annonce',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -191,7 +191,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(type.icon),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(type.label),
                 ],
               ),
@@ -279,8 +279,8 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
           ),
           child: Row(
             children: [
-              const Icon(Icons.calendar_today, size: AppSpacing.iconMd),
-              const SizedBox(width: AppSpacing.smd),
+              Icon(Icons.calendar_today, size: AppSpacing.iconMd),
+              SizedBox(width: AppSpacing.smd),
               Text(
                 DateFormat('dd MMMM yyyy').format(_selectedDate),
                 style: const TextStyle(fontSize: 16),
@@ -309,10 +309,10 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
       toggled: _isPinned,
       child: Row(
         children: [
-          const Icon(Icons.push_pin, size: AppSpacing.iconMd),
-          const SizedBox(width: AppSpacing.smd),
-          const Text('Épingler cette annonce'),
-          const Spacer(),
+          Icon(Icons.push_pin, size: AppSpacing.iconMd),
+          SizedBox(width: AppSpacing.smd),
+          Text('Épingler cette annonce'),
+          Spacer(),
           Switch(
             value: _isPinned,
             onChanged: (value) async {
@@ -339,11 +339,11 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('Annuler'),
+              child: Text('Annuler'),
             ),
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
+        SizedBox(width: AppSpacing.md),
         Expanded(
           child: Semantics(
             label: 'Enregistrer l\'annonce',
@@ -365,7 +365,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                       backgroundColor: context.colors.brandPrimary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Enregistrer'),
+                    child: Text('Enregistrer'),
                   ),
           ),
         ),

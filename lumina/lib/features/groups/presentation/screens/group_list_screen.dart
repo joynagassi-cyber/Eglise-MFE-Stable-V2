@@ -35,17 +35,17 @@ class GroupListScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search_rounded),
+            icon: Icon(Icons.search_rounded),
             onPressed: () async {
               await HapticHelper.medium();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Recherche : Bientôt disponible')),
+                  SnackBar(content: Text('Recherche : Bientôt disponible')),
                 );
               }
             },
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
         ],
       ),
       body: groupsAsync.when(
@@ -60,7 +60,7 @@ class GroupListScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg, vertical: AppSpacing.md),
             itemCount: groups.length,
-            separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+            separatorBuilder: (_, __) => SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) {
               final group = groups[index];
               return AnimatedEntrance.fromBottom(
@@ -100,7 +100,7 @@ class GroupListScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.add_rounded, color: context.colors.textInverse, size: LuminaIcon.md),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       'CRÉER UN GROUPE',
                       style: AppTypography.labelLarge.copyWith(
@@ -160,7 +160,7 @@ class _GroupCard extends StatelessWidget {
               size: LuminaIcon.md,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +172,7 @@ class _GroupCard extends StatelessWidget {
                     color: context.colors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   _getLabelForType(group.type).toUpperCase(),
                   style: AppTypography.labelSmall.copyWith(

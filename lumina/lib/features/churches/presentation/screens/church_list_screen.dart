@@ -18,10 +18,10 @@ class ChurchListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes Églises'),
+        title: Text('Mes Églises'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add),
             onPressed: () {
               // Navigation pour ajouter/rejoindre une église
             },
@@ -31,7 +31,7 @@ class ChurchListScreen extends ConsumerWidget {
       body: churchesAsync.when(
         data: (churches) {
           if (churches.isEmpty) {
-            return const Center(child: Text('Aucune église trouvée'));
+            return Center(child: Text('Aucune église trouvée'));
           }
 
           return ListView.builder(
@@ -47,7 +47,7 @@ class ChurchListScreen extends ConsumerWidget {
           itemCount: 3,
           itemHeight: 80,
         ),
-        error: (err, _) => const Center(child: Text('Impossible de charger les églises')),
+        error: (err, _) => Center(child: Text('Impossible de charger les églises')),
       ),
     );
   }
@@ -90,7 +90,7 @@ class _ChurchCard extends ConsumerWidget {
                     color: isActive ? context.colors.brandPrimary : Colors.grey,
                   ),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,7 @@ class _ChurchCard extends ConsumerWidget {
                                           : FontWeight.normal,
                                     ),
                           ),
-                          const SizedBox(width: AppSpacing.xs),
+                          SizedBox(width: AppSpacing.xs),
                           Icon(
                             church.isSynced ? Icons.cloud_done_rounded : Icons.cloud_off_rounded,
                             size: 14,

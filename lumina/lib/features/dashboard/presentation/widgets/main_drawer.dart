@@ -150,7 +150,7 @@ class MainDrawer extends ConsumerWidget {
                     context.pop();
                   },
                 ),
-                const Divider(height: AppSpacing.xl),
+                Divider(height: AppSpacing.xl),
                 _buildSectionTitle('AUTRES MODULES'),
                 _buildMenuItem(
                   context,
@@ -178,7 +178,7 @@ class MainDrawer extends ConsumerWidget {
                   icon: Icons.event_rounded,
                   onTap: () => context.push(AppRoutes.vieSpirituelleEvents),
                 ),
-                const Divider(height: AppSpacing.xl),
+                Divider(height: AppSpacing.xl),
                 _buildMenuItem(
                   context,
                   label: 'Paramètres',
@@ -230,7 +230,7 @@ class MainDrawer extends ConsumerWidget {
             child: Icon(Icons.person_rounded,
                 color: Theme.of(context).colorScheme.onPrimary, size: 30),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(
             profile?.name ?? 'Utilisateur',
             style: TextStyle(

@@ -26,7 +26,7 @@ class LuminaErrorWidget extends StatelessWidget {
               size: 64,
               color: context.colors.errorText.withOpacity(0.5),
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text(
               message,
               style: AppTypography.bodyMedium.copyWith(
@@ -35,11 +35,11 @@ class LuminaErrorWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: AppSpacing.lg),
               ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh),
-                label: const Text('Réessayer'),
+                icon: Icon(Icons.refresh),
+                label: Text('Réessayer'),
               ),
             ],
           ],

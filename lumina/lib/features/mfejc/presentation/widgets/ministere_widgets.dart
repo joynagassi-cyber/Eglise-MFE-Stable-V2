@@ -38,7 +38,7 @@ class CategoryChip extends StatelessWidget {
               color: color,
             ),
           ),
-          const SizedBox(width: AppSpacing.xxs),
+          SizedBox(width: AppSpacing.xxs),
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.xs,
@@ -112,7 +112,7 @@ class QuickActionCard extends StatelessWidget {
                     ),
                     child: Icon(icon, size: AppSpacing.iconLg, color: color),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     title,
                     style: theme.textTheme.bodyMedium?.copyWith(

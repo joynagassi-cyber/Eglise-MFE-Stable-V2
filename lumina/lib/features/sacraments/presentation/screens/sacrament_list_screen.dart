@@ -73,7 +73,7 @@ class _SacramentListScreenState extends ConsumerState<SacramentListScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Rechercher (nom, type, célébrant...)',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: Icon(Icons.search),
                 filled: true,
                 fillColor: theme.cardColor.withValues(alpha: 0.8),
                 border: OutlineInputBorder(
@@ -105,21 +105,21 @@ class _SacramentListScreenState extends ConsumerState<SacramentListScreen> {
                   ),
                   itemCount: sacraments.length,
                   separatorBuilder: (_, __) =>
-                      const SizedBox(height: AppSpacing.smd),
+                      SizedBox(height: AppSpacing.smd),
                   itemBuilder: (context, index) => AnimatedEntrance.fromBottom(
                     delay: Duration(milliseconds: 100 + (index * 50)),
                     child: _SacramentListTile(sacrament: sacraments[index]),
                   ),
                 );
               },
-              loading: () => const Padding(
+              loading: () => Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: ShimmerCardList(
                   itemCount: 8,
                   itemHeight: 70,
                 ),
               ),
-              error: (err, stack) => const Center(child: Text('Impossible de charger les sacrements')),
+              error: (err, stack) => Center(child: Text('Impossible de charger les sacrements')),
             ),
           ),
         ],
@@ -147,7 +147,7 @@ class _SacramentListScreenState extends ConsumerState<SacramentListScreen> {
                 color: Colors.white,
               ),
             ),
-            icon: const Icon(Icons.add_rounded),
+            icon: Icon(Icons.add_rounded),
             backgroundColor: Colors.transparent,
             elevation: 0,
             foregroundColor: Colors.white,
@@ -167,7 +167,7 @@ class _SacramentListScreenState extends ConsumerState<SacramentListScreen> {
             size: 64,
             color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             _searchQuery.isEmpty
                 ? 'Aucun sacrement enregistré'

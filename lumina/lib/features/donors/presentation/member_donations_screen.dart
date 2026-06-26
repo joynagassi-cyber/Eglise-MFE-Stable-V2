@@ -42,7 +42,7 @@ class MemberDonationsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes Finances & Dons'),
+        title: Text('Mes Finances & Dons'),
       ),
       body: donorAsync.when(
         data: (donor) {
@@ -51,14 +51,14 @@ class MemberDonationsScreen extends ConsumerWidget {
           }
           return _buildDonorView(context, ref, donor);
         },
-        loading: () => const Center(child: LoadingState()),
-        error: (e, st) => const Center(child: Text('Impossible de charger le donateur')),
+        loading: () => Center(child: LoadingState()),
+        error: (e, st) => Center(child: Text('Impossible de charger le donateur')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () =>
             _handleNewDonation(context, ref, donorAsync.valueOrNull),
-        icon: const Icon(Icons.favorite),
-        label: const Text('Faire un Don'),
+        icon: Icon(Icons.favorite),
+        label: Text('Faire un Don'),
         backgroundColor: context.colors.brandPrimary,
         foregroundColor: context.colors.textOnBrand,
       ),
@@ -74,12 +74,12 @@ class MemberDonationsScreen extends ConsumerWidget {
           children: [
             Icon(Icons.monetization_on_outlined,
                 size: 80, color: context.colors.textTertiary),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Text(
               'Aucun historique de dons',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             Text('Vous n\'avez pas encore enregistré de dîme ou d\'offrande à votre nom. Cliquez sur le bouton ci-dessous pour faire votre premier don.',
               textAlign: TextAlign.center,
               style: TextStyle(color: context.colors.textSecondary),
@@ -113,7 +113,7 @@ class MemberDonationsScreen extends ConsumerWidget {
                         color: context.colors.textOnBrand.withValues(alpha: 0.7),
                         fontSize: 16),
                   ),
-                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     '${donor.totalDonated?.toStringAsFixed(0) ?? 0} XAF',
                     style: AppTypography.h3.copyWith(
@@ -121,14 +121,14 @@ class MemberDonationsScreen extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.history,
                           color: context.colors.textOnBrand.withValues(alpha: 0.7),
                           size: 16),
-                      const SizedBox(width: AppSpacing.xs),
+                      SizedBox(width: AppSpacing.xs),
                       Text(
                         '${donor.donationCount ?? 0} dons effectués',
                         style: TextStyle(
@@ -140,14 +140,14 @@ class MemberDonationsScreen extends ConsumerWidget {
           ),
         ),
 
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
 
         // Liste des dons
         Expanded(
           child: donationsAsync.when(
             data: (donations) {
               if (donations.isEmpty) {
-                return const Center(
+                return Center(
                     child: Text('Aucun don dans l\'historique.'));
               }
               return ListView.builder(
@@ -192,8 +192,8 @@ class MemberDonationsScreen extends ConsumerWidget {
                 },
               );
             },
-            loading: () => const Center(child: LoadingState()),
-            error: (e, _) => const Center(child: Text('Impossible de charger les dons')),
+            loading: () => Center(child: LoadingState()),
+            error: (e, _) => Center(child: Text('Impossible de charger les dons')),
           ),
         ),
       ],

@@ -17,7 +17,7 @@ class BilanOilModeBanner extends ConsumerWidget {
       width: double.infinity,
       color: context.colors.warningText.withOpacity(0.9),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: AppSpacing.md),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.visibility_off, color: Colors.white, size: 20),

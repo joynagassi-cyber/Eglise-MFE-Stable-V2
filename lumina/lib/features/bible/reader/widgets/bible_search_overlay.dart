@@ -54,7 +54,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back),
+                    icon: Icon(Icons.arrow_back),
                     onPressed: () {
                       notifier.clearSearch();
                       widget.onClose();
@@ -73,10 +73,10 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                         filled: true,
                         fillColor:
                             context.colors.bgSecondary,
-                        prefixIcon: const Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search),
                         suffixIcon: state.searchQuery.isNotEmpty
                             ? IconButton(
-                                icon: const Icon(Icons.clear),
+                                icon: Icon(Icons.clear),
                                 onPressed: () {
                                   _controller.clear();
                                   notifier.clearSearch();
@@ -93,7 +93,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                 ],
               ),
             ),
-            const Divider(height: 1),
+            Divider(height: 1),
 
             // ── Résultats ───────────────────────────────
             Expanded(
@@ -107,7 +107,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
 
   Widget _buildBody(BibleState state, BibleNotifier notifier) {
     if (state.isSearchingVerses) {
-      return const Center(child: LoadingState());
+      return Center(child: LoadingState());
     }
 
     if (state.searchQuery.length < 3) {
@@ -130,7 +130,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
           children: [
             Icon(Icons.search_off,
                 size: 56, color: context.colors.iconDisabled),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               'Aucun résultat pour\n"${state.searchQuery}"',
               style: AppTypography.bodyMedium.copyWith(
@@ -160,7 +160,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
           child: ListView.separated(
             itemCount: state.searchResults.length,
             separatorBuilder: (_, __) =>
-                const Divider(height: 1, indent: 16),
+                Divider(height: 1, indent: 16),
             itemBuilder: (_, i) {
               final verse = state.searchResults[i];
               return _SearchResultTile(
@@ -204,7 +204,7 @@ class _SearchHint extends StatelessWidget {
         children: [
           if (recentReadings.isNotEmpty) ...[
             Text('Récemment lu', style: AppTypography.labelMedium),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             ...recentReadings.map((r) => ListTile(
                   leading: Icon(Icons.history,
                       color: context.colors.accent, size: 20),
@@ -217,15 +217,15 @@ class _SearchHint extends StatelessWidget {
                   onTap: () => onTapReading(r),
                   dense: true,
                 )),
-            const Divider(),
+            Divider(),
           ],
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Center(
             child: Column(
               children: [
                 Icon(Icons.search,
                     size: 48, color: context.colors.iconDisabled),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   'Tapez au moins 3 caractères\npour lancer la recherche',
                   style: AppTypography.bodySmall

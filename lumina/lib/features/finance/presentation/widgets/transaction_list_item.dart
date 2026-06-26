@@ -111,7 +111,7 @@ class TransactionListItem extends ConsumerWidget {
                     ),
                 ],
               ),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +125,7 @@ class TransactionListItem extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Row(
                       children: [
                         Container(
@@ -144,7 +144,7 @@ class TransactionListItem extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           DateFormat('dd MMM', 'fr_FR')
                               .format(transaction.date),
@@ -168,7 +168,7 @@ class TransactionListItem extends ConsumerWidget {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   _buildMiniStatus(context, transaction.status),
                 ],
               ),

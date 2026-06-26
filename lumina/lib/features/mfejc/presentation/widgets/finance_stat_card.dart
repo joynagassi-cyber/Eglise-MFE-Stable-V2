@@ -67,7 +67,7 @@ class FinanceStatCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Text(
             value,
             style: theme.textTheme.titleLarge?.copyWith(
@@ -75,7 +75,7 @@ class FinanceStatCard extends StatelessWidget {
               color: context.colors.textPrimary,
             ),
           ),
-          const SizedBox(height: AppSpacing.xxs),
+          SizedBox(height: AppSpacing.xxs),
           Text(
             title,
             style: theme.textTheme.bodySmall?.copyWith(

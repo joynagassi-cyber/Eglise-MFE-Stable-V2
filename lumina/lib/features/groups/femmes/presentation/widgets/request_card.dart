@@ -42,21 +42,21 @@ class RequestCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               Text(
                 request.status,
                 style: AppTypography.tiny.copyWith(color: statusColor),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             request.description ?? "Pas de description",
             style: AppTypography.labelMedium,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             children: [
               Icon(
@@ -64,7 +64,7 @@ class RequestCard extends StatelessWidget {
                 size: 14,
                 color: context.colors.textSecondary,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 '${request.responsesCount} réponses',
                 style: AppTypography.tiny,

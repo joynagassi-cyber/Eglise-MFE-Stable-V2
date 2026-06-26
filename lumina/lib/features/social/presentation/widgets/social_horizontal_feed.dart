@@ -84,9 +84,9 @@ class _SocialHorizontalFeedState extends State<SocialHorizontalFeed> {
         ),
 
         // Indicateur discret (Simplicité Pro)
-        const SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.md),
         _buildPageIndicator(),
-        const SizedBox(
+        SizedBox(
             height: AppSpacing.xxl + 20), // Espace pour la barre de navigation
       ],
     );

@@ -49,19 +49,19 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
     return showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmer l\'approbation'),
-        content: const Text(
+        title: Text('Confirmer l\'approbation'),
+        content: Text(
           'Êtes-vous sûr de vouloir approuver cette demande ? Cette action est irréversible.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: FilledButton.styleFrom(backgroundColor: context.colors.successText),
-            child: const Text('Approuver'),
+            child: Text('Approuver'),
           ),
         ],
       ),
@@ -114,9 +114,9 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle_rounded,
+              Icon(Icons.check_circle_rounded,
                   color: Colors.white, size: 28),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: AppSpacing.sm),
               Text(
                 'Approuver',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -150,8 +150,8 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
-              const Icon(Icons.info_outline_rounded,
+              SizedBox(width: AppSpacing.sm),
+              Icon(Icons.info_outline_rounded,
                   color: Colors.white, size: 28),
             ],
           ),
@@ -220,7 +220,7 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     '${numberFormat.format(widget.request.entityAmount ?? 0)} FCFA',
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -230,21 +230,21 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.smd),
+              SizedBox(height: AppSpacing.smd),
               Text(
                 widget.request.entityLabel ?? 'Sans titre',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xxs),
+              SizedBox(height: AppSpacing.xxs),
               Text(
                 'Demandé le ${DateFormat('dd MMM yyyy').format(widget.request.requestedAt)}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
-              const SizedBox(height: AppSpacing.smd),
+              SizedBox(height: AppSpacing.smd),
               // Swipe hint
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -254,7 +254,7 @@ class _ApprovalCardState extends ConsumerState<ApprovalCard> {
                     size: AppSpacing.iconXs,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   ),
-                  const SizedBox(width: AppSpacing.xxs),
+                  SizedBox(width: AppSpacing.xxs),
                   Text(
                     'Glisser pour agir',
                     style: theme.textTheme.labelSmall?.copyWith(

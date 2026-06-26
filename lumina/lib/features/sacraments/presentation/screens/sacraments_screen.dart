@@ -33,8 +33,8 @@ class _SacramentsScreenState extends ConsumerState<SacramentsScreen> {
       onRefresh: () async => ref.invalidate(sacramentsProvider),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddSacrament(context),
-        label: const Text("Nouveau"),
-        icon: const Icon(Icons.add, color: Colors.white),
+        label: Text("Nouveau"),
+        icon: Icon(Icons.add, color: Colors.white),
         backgroundColor: LuminaDesign.primary,
       ),
       body: Column(
@@ -43,7 +43,7 @@ class _SacramentsScreenState extends ConsumerState<SacramentsScreen> {
           Expanded(
             child: sacramentsAsync.when(
               data: (list) {
-                if (list.isEmpty) return const Center(child: Text("Aucun sacrement trouvé."));
+                if (list.isEmpty) return Center(child: Text("Aucun sacrement trouvé."));
                 return ListView.builder(
                   padding: const EdgeInsets.all(LuminaDesign.paddingMd),
                   itemCount: list.length,
@@ -71,7 +71,7 @@ class _SacramentsScreenState extends ConsumerState<SacramentsScreen> {
             ),
             onChanged: (v) => setState(() => _searchQuery = v),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -124,7 +124,7 @@ class _SacramentCard extends StatelessWidget {
             backgroundColor: LuminaDesign.primary.withOpacity(0.1),
             child: Text(sacrament.type.icon),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

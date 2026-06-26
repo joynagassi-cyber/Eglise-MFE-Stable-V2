@@ -25,9 +25,9 @@ class ApprovalTaskboardScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.verified_user_outlined, size: 64, color: context.colors.textTertiary),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text("Tout est en règle !", style: LuminaDesign.h2Of(context)),
-                  const Text("Aucune demande en attente."),
+                  Text("Aucune demande en attente."),
                 ],
               ),
             );

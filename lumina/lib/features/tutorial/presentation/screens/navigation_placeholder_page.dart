@@ -22,7 +22,7 @@ class NavigationPlaceholderPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+          icon: Icon(Icons.arrow_back_ios_rounded),
           onPressed: () => context.pop(),
         ),
       ),
@@ -43,7 +43,7 @@ class NavigationPlaceholderPage extends StatelessWidget {
                   color: context.colors.brandPrimary,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Text(
                 'Cette fonctionnalité\narrive bientôt !',
                 textAlign: TextAlign.center,
@@ -54,7 +54,7 @@ class NavigationPlaceholderPage extends StatelessWidget {
                   height: 1.3,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 'Nous travaillons activement sur cette section. '
                 'Elle sera disponible dans une prochaine mise à jour.',
@@ -65,13 +65,13 @@ class NavigationPlaceholderPage extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               SizedBox(
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_rounded),
-                  label: const Text(
+                  icon: Icon(Icons.arrow_back_rounded),
+                  label: Text(
                     'Retour au tutoriel',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),

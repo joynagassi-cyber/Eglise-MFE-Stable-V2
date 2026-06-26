@@ -86,14 +86,14 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                       child: Icon(Icons.account_balance_wallet_rounded,
                           color: context.colors.brandPrimary, size: 20),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       'Nouveau Budget',
                       style: AppTypography.h4.copyWith(fontFamily: 'Outfit'),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
 
                 // Période (Info only)
                 Container(
@@ -107,7 +107,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                     children: [
                       Icon(Icons.calendar_today_rounded,
                           size: 16, color: context.colors.brandPrimary),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Text(
                         'Période: ${widget.period.label} ${widget.year}',
                         style: AppTypography.bodySmall.copyWith(
@@ -118,7 +118,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                     ],
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                SizedBox(height: AppSpacing.lg),
 
                 // Sélecteur Catégorie
                 categoriesAsync.when(
@@ -142,11 +142,11 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                         ? 'Veuillez sélectionner une catégorie'
                         : null,
                   ),
-                  loading: () => const Center(child: LoadingDots()),
+                  loading: () => Center(child: LoadingDots()),
                   error: (e, s) => Text('Erreur catégories: $e',
                       style: TextStyle(color: context.colors.errorText)),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Sélecteur Mois/Trimestre si nécessaire
                 if (widget.period == BudgetPeriod.monthly)
@@ -194,7 +194,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                   ),
 
                 if (widget.period != BudgetPeriod.annual)
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
 
                 // Montant Prévu
                 TextFormField(
@@ -219,7 +219,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                   },
                   onTap: () => HapticHelper.light(),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                SizedBox(height: AppSpacing.md),
 
                 // Notes
                 TextFormField(
@@ -233,7 +233,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                   maxLines: 2,
                   onTap: () => HapticHelper.light(),
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                SizedBox(height: AppSpacing.xl),
 
                 // Actions
                 Row(
@@ -244,10 +244,10 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                         style: TextButton.styleFrom(
                           minimumSize: const Size(0, 56),
                         ),
-                        child: const Text('Annuler'),
+                        child: Text('Annuler'),
                       ).withTouchTarget(),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       flex: 2,
                       child: ElevatedButton(
@@ -258,7 +258,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
                           minimumSize: const Size(0, 56),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                        child: const Text('Enregistrer'),
+                        child: Text('Enregistrer'),
                       ).withTouchTarget(),
                     ),
                   ],
@@ -303,7 +303,7 @@ class _BudgetFormDialogState extends ConsumerState<BudgetFormDialog> {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Budget créé avec succès'),
+            content: Text('Budget créé avec succès'),
             backgroundColor: context.colors.successText,
             behavior: SnackBarBehavior.floating,
           ),

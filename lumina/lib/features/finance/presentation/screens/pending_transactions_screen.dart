@@ -44,14 +44,14 @@ class PendingTransactionsScreen extends ConsumerWidget {
           return ListView.separated(
             padding: AppSpacing.screenPadding,
             itemCount: transactions.length,
-            separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+            separatorBuilder: (_, __) => SizedBox(height: AppSpacing.md),
             itemBuilder: (context, index) => AnimatedEntrance.fromBottom(
               delay: Duration(milliseconds: 100 + (index * 50)),
               child: _PendingTransactionCard(transaction: transactions[index]),
             ),
           );
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: LoadingState(),
         ),
         error: (e, stack) => AppErrorWidget.server(
@@ -78,14 +78,14 @@ class PendingTransactionsScreen extends ConsumerWidget {
               color: context.colors.successText,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.md),
           Text(
             'Tout est à jour !',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: AppSpacing.sm),
           Text(
             'Aucune transaction en attente de validation.',
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -160,7 +160,7 @@ class _PendingTransactionCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Row(
               children: [
                 _buildInfo(
@@ -170,7 +170,7 @@ class _PendingTransactionCard extends ConsumerWidget {
                   isDark,
                   theme,
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 _buildInfo(
                   context,
                   Icons.category_rounded,
@@ -180,11 +180,11 @@ class _PendingTransactionCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            SizedBox(height: AppSpacing.md),
             Divider(
               color: context.colors.borderSubtle,
             ),
-            const SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.sm),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -210,7 +210,7 @@ class _PendingTransactionCard extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.md),
+                SizedBox(width: AppSpacing.md),
                 Semantics(
                   label: 'Valider la transaction',
                   button: true,
@@ -222,7 +222,7 @@ class _PendingTransactionCard extends ConsumerWidget {
                         unawaited(_approve(context, ref));
                       }
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.check_rounded,
                       size: AppSpacing.iconSm,
                     ),
@@ -259,7 +259,7 @@ class _PendingTransactionCard extends ConsumerWidget {
           size: AppSpacing.iconXs,
           color: context.colors.textSecondary,
         ),
-        const SizedBox(width: AppSpacing.xxs),
+        SizedBox(width: AppSpacing.xxs),
         Text(
           text,
           style: theme.textTheme.bodySmall?.copyWith(
@@ -281,7 +281,7 @@ class _PendingTransactionCard extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Transaction validée'),
+              content: Text('Transaction validée'),
               backgroundColor: context.colors.successText,
             ),
           );
@@ -293,7 +293,7 @@ class _PendingTransactionCard extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Erreur lors de la validation')));
+          ).showSnackBar(SnackBar(content: Text('Erreur lors de la validation')));
         }
       }
     }
@@ -321,7 +321,7 @@ class _PendingTransactionCard extends ConsumerWidget {
               await HapticHelper.light();
               if (context.mounted) Navigator.pop(context, false);
             },
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: () async {
@@ -329,7 +329,7 @@ class _PendingTransactionCard extends ConsumerWidget {
               if (context.mounted) Navigator.pop(context, true);
             },
             style: TextButton.styleFrom(foregroundColor: context.colors.errorText),
-            child: const Text('Rejeter'),
+            child: Text('Rejeter'),
           ),
         ],
       ),
@@ -345,7 +345,7 @@ class _PendingTransactionCard extends ConsumerWidget {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Transaction rejetée'),
+                content: Text('Transaction rejetée'),
                 backgroundColor: context.colors.infoText,
               ),
             );
@@ -357,7 +357,7 @@ class _PendingTransactionCard extends ConsumerWidget {
           if (context.mounted) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(const SnackBar(content: Text('Erreur lors du rejet')));
+            ).showSnackBar(SnackBar(content: Text('Erreur lors du rejet')));
           }
         }
       }

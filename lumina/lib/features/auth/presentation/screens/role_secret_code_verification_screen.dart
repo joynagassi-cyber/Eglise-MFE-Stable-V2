@@ -188,7 +188,7 @@ class _RoleSecretCodeVerificationScreenState
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: AppSpacing.lg),
+                                SizedBox(height: AppSpacing.lg),
 
                                 // Titre
                                 AnimatedEntrance.fromBottom(
@@ -205,7 +205,7 @@ class _RoleSecretCodeVerificationScreenState
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const SizedBox(height: AppSpacing.sm),
+                                SizedBox(height: AppSpacing.sm),
 
                                 // Sous-titre
                                 AnimatedEntrance.fromBottom(
@@ -220,7 +220,7 @@ class _RoleSecretCodeVerificationScreenState
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const SizedBox(height: AppSpacing.md),
+                                SizedBox(height: AppSpacing.md),
 
                                 // Indicateur de format
                                 AnimatedEntrance.fade(
@@ -244,7 +244,7 @@ class _RoleSecretCodeVerificationScreenState
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: AppSpacing.xxl),
+                                SizedBox(height: AppSpacing.xxl),
 
                                 // Champ de saisie adaptatif
                                 AnimatedEntrance.fromBottom(
@@ -276,7 +276,7 @@ class _RoleSecretCodeVerificationScreenState
 
                                 // Message d'erreur
                                 if (_errorMessage != null) ...[
-                                  const SizedBox(height: AppSpacing.md),
+                                  SizedBox(height: AppSpacing.md),
                                   AnimatedEntrance.fade(
                                     child: Container(
                                       padding:
@@ -297,7 +297,7 @@ class _RoleSecretCodeVerificationScreenState
                                             color: context.colors.errorText,
                                             size: AppSpacing.iconMd,
                                           ),
-                                          const SizedBox(width: AppSpacing.sm),
+                                          SizedBox(width: AppSpacing.sm),
                                           Expanded(
                                             child: Text(
                                               _errorMessage!,
@@ -313,7 +313,7 @@ class _RoleSecretCodeVerificationScreenState
                                   ),
                                 ],
 
-                                const SizedBox(height: AppSpacing.xl),
+                                SizedBox(height: AppSpacing.xl),
 
                                 // Bouton Vérifier
                                 AnimatedEntrance.fromBottom(
@@ -336,12 +336,12 @@ class _RoleSecretCodeVerificationScreenState
                                         ),
                                       ),
                                       child: _isVerifying
-                                          ? const SizedBox(
+                                          ? SizedBox(
                                               height: 20,
                                               width: 20,
                                               child: LoadingDots(size: LuminaIcon.lg),
                                             )
-                                          : const Text(
+                                          : Text(
                                               'VÉRIFIER',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -353,7 +353,7 @@ class _RoleSecretCodeVerificationScreenState
                                   ),
                                 ),
 
-                                const SizedBox(height: AppSpacing.lg),
+                                SizedBox(height: AppSpacing.lg),
 
                                 // Aide
                                 AnimatedEntrance.fade(

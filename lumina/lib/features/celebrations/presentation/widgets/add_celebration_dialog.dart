@@ -100,14 +100,14 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
         if (mounted) {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Culte créé avec succès')),
+            SnackBar(content: Text('Culte créé avec succès')),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('Impossible d\'enregistrer la célébration')));
+          ).showSnackBar(SnackBar(content: Text('Impossible d\'enregistrer la célébration')));
         }
       }
     }
@@ -116,7 +116,7 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Nouveau Culte'),
+      title: Text('Nouveau Culte'),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -133,7 +133,7 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
                   if (val != null) setState(() => _selectedType = val);
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -150,7 +150,7 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: InkWell(
                       onTap: () => _selectTime(context),
@@ -165,19 +165,19 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(
                   labelText: 'Titre (Optionnel)',
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _themeController,
                 decoration: const InputDecoration(labelText: 'Thème'),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _preacherController,
                 decoration: const InputDecoration(labelText: 'Orateur'),
@@ -189,7 +189,7 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Annuler'),
+          child: Text('Annuler'),
         ),
         ElevatedButton(
           onPressed: _submit,
@@ -197,7 +197,7 @@ class _AddCelebrationDialogState extends ConsumerState<AddCelebrationDialog> {
             backgroundColor: context.colors.brandPrimary,
             foregroundColor: Colors.white,
           ),
-          child: const Text('Créer'),
+          child: Text('Créer'),
         ),
       ],
     );
