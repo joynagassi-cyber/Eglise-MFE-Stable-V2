@@ -1,0 +1,31 @@
+// Barrel file pour tous les widgets communs
+export 'package:lumina/core/theme/lumina_colors_extension.dart';
+
+export 'status_badge.dart';
+export 'avatar_widget.dart';
+export 'glass_button.dart';
+export 'glass_card.dart';
+export 'filter_chips.dart';
+export 'gradient_button.dart';
+export 'cached_image_widget.dart';
+export 'section_header.dart';
+export 'duo_tone_icon.dart';
+export 'empty_state.dart';
+export 'loading_state.dart';
+export 'loading_dots.dart';
+export 'stat_card.dart';
+export 'animated_entrance.dart';
+export 'app_error_widget.dart';
+export 'touch_target.dart';
+export 'shimmer_loading.dart';
+export 'scroll_to_top_fab.dart';
+export 'app_button.dart';
+export 'apple_style_widgets.dart';
+export 'scale_button_wrapper.dart';
+export 'skeletons/fire_skeleton_system.dart';
+export 'validation_checklist.dart';
+export 'app_progress_bar.dart';
+export 'app_navigation_drawer.dart';
+export 'dashboard_switcher.dart';
+export 'sync_status_indicator.dart';
+export 'lumina_error_widget.dart';

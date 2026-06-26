@@ -1,0 +1,143 @@
+{
+  "@@locale": "en",
+  "dashboardTitle": "Dashboard",
+  "quickActions": "Quick Actions",
+  "balance": "Balance",
+  "members": "Members",
+  "incomeMonth": "Income (Month)",
+  "expenseMonth": "Expenses (Month)",
+  "loading": "Loading data...",
+  "errorOccurred": "An error occurred",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "groupDashboard": "Group Dashboard",
+  "membersArea": "Members Area",
+  "activities": "Activities",
+  "expenses": "Expenses",
+  "reports": "Reports",
+  "auditSecurity": "Audit & Security",
+  "surveillanceReports": "Monitoring and Reports",
+  "rbacAdmin": "RBAC Administration",
+  "rolesPermissions": "Role & Permission Management",
+  "permissionsMatrix": "Permissions Matrix",
+  "auditReportSaved": "Audit report saved in \"Lumina\"",
+  "exportError": "Export error: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "quickNavigation": "Quick Navigation",
+  "community": "Community",
+  "communityDescription": "Members, groups, visitors",
+  "spiritualLife": "Spiritual Life",
+  "spiritualLifeDescription": "Sacraments, celebrations, events",
+  "team": "Team",
+  "teamDescription": "Shepherds, pastoral teams",
+  "ministry": "MFE-JC",
+  "ministryDescription": "Finance, sites, sections",
+  "communication": "Communication",
+  "communicationDescription": "Announcements, social, messaging",
+  "calendar": "Calendar",
+  "calendarDescription": "Events and appointments",
+  "groupDashboardTitle": "{role} Dashboard",
+  "@groupDashboardTitle": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "groupManagement": "Group Management: {group}",
+  "@groupManagement": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "groupActions": "Group Actions",
+  "memberContributions": "Member Contributions",
+  "alertsVigilance": "Alerts & Monitoring",
+  "sundayChecklist": "Sunday Checklist",
+  "viewAll": "View all",
+  "groupDataRestricted": "All data shown here are restricted to the scale of group \"{group}\".",
+  "@groupDataRestricted": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdaysAlert": "{count} Birthday(s)",
+  "@birthdaysAlert": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "birthdaysSubtitle": "To celebrate this week!",
+  "absenceAlerts": "{count} Absence Alert(s)",
+  "@absenceAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "absenceSubtitle": "More than 3 consecutive absences",
+  "newMilestones": "{count} New Milestones",
+  "@newMilestones": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "milestonesSubtitle": "Members who progressed this month",
+  "noAlerts": "No alerts at the moment.",
+  "topEngagedMembers": "Top Engaged Members",
+  "insufficientEngagementData": "Insufficient engagement data",
+  "groupMembers": "Group Members",
+  "groupBudget": "Group Budget",
+  "presence": "Attendance",
+  "addMember": "Add Member",
+  "transfer": "Transfer",
+  "quarterlyBilan": "Quarterly Report",
+  "history": "History",
+  "quarterlyBilanTitle": "Quarterly Report",
+  "quarterlyBilanConfirm": "Do you want to close the quarter and transfer funds to the general fund?\n\nThis will generate an outgoing transfer transaction from your group fund to the main church account.",
+  "later": "Later",
+  "transferFonds": "Transfer",
+  "insufficientBalance": "Insufficient balance for transfer.",
+  "transferSuccess": "Quarterly transfer successfully completed!",
+  "sundayServicePrep": "Sunday Service Preparation",
+  "bilan_title": "Financial Report",
+  "bilan_export_pdf": "Export PDF",
+  "bilan_report_ready": "The report is ready",
+  "bilan_data_incomplete": "Incomplete data for this period",
+  "bilan_revenues": "Revenues",
+  "bilan_expenses": "Expenses",
+  "bilan_net_balance": "Net Balance",
+  "bilan_sealed": "Sealed Report",
+  "bilan_temporal_evolution": "Temporal Evolution",
+  "bilan_dimension_analysis": "Dimension Analysis",
+  "bilan_by_category": "By Category",
+  "bilan_by_month": "By Month",
+  "donors_title": "Donor Management",
+  "donors_evolution": "Donations Evolution",
+  "donors_last_6_months": "Last 6 months",
+  "donors_active_campaigns": "Active Campaigns",
+  "donors_all_campaigns": "All Campaigns",
+  "donors_quick_actions": "Quick Actions",
+  "donors_action_list": "Donor List",
+  "donors_action_record": "Record Donation",
+  "donors_stats_loading": "Loading stats...",
+  "donors_new_donor": "New Donor",
+  "donors_stat_total": "Total Collected",
+  "donors_stat_avg": "Average Donation",
+  "donors_stat_retention": "Retention Rate"
+}

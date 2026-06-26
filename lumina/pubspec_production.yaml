@@ -1,0 +1,189 @@
+name: feu_evangile_flutter
+description: "Système de gestion d'église complet - Version Flutter."
+publish_to: "none"
+version: 1.0.0+1  # VERSION GOLD MASTER - PRODUCTION
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # STATE MANAGEMENT
+  # ═══════════════════════════════════════════════════════════════════════════
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SUPABASE & AUTH
+  # ═══════════════════════════════════════════════════════════════════════════
+  supabase_flutter: ^2.6.0
+  flutter_secure_storage: ^9.0.0
+  flutter_dotenv: ^5.1.0  # Pour les variables d'environnement
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # NAVIGATION
+  # ═══════════════════════════════════════════════════════════════════════════
+  go_router: ^13.2.0
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UI & DESIGN
+  # ═══════════════════════════════════════════════════════════════════════════
+  google_fonts: ^6.2.1
+  animations: ^2.0.11
+  font_awesome_flutter: ^10.7.0
+  shimmer: ^3.0.0  # Effet de chargement élégant
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CHARTS
+  # ═══════════════════════════════════════════════════════════════════════════
+  fl_chart: ^0.66.0
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PERSISTENCE & CONNECTIVITY
+  # ═══════════════════════════════════════════════════════════════════════════
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
+  connectivity_plus: ^6.0.3
+  shared_preferences: ^2.2.2
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # IMAGES & CACHE (PERFORMANCE)
+  # ═══════════════════════════════════════════════════════════════════════════
+  cached_network_image: ^3.3.1  # Cache obligatoire pour images réseau
+  image_picker: ^1.1.2
+  image_cropper: ^8.0.2
+  flutter_image_compress: ^2.3.0
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LOGGING & MONITORING (PRODUCTION)
+  # ═══════════════════════════════════════════════════════════════════════════
+  logger: ^2.2.0  # Logger structuré pour production
+  # firebase_crashlytics: ^3.4.18  # TODO: Décommenter pour crash reporting
+  # firebase_analytics: ^10.8.9   # TODO: Décommenter pour analytics
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UTILS
+  # ═══════════════════════════════════════════════════════════════════════════
+  intl: ^0.19.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+  url_launcher: ^6.3.1
+  uuid: ^4.5.1
+  crypto: ^3.0.3
+  permission_handler: ^11.3.0
+  device_info_plus: ^9.1.2
+  package_info_plus: ^5.0.1
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EXPORT/IMPORT
+  # ═══════════════════════════════════════════════════════════════════════════
+  csv: ^6.0.0
+  excel: ^4.0.6
+  share_plus: ^10.1.2
+  file_picker: ^8.1.6
+  pdf: ^3.11.1
+  path: ^1.9.0
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # NOTIFICATIONS
+  # ═══════════════════════════════════════════════════════════════════════════
+  flutter_local_notifications: ^16.3.2
+  timezone: ^0.9.2
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # QR CODE (BADGES)
+  # ═══════════════════════════════════════════════════════════════════════════
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^3.5.7
+
+dev_dependencies:
+  flutter_lints: ^3.0.1
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CODE GENERATION
+  # ═══════════════════════════════════════════════════════════════════════════
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.4.0
+  isar_generator: ^3.1.0+1
+  json_serializable: ^6.7.1
+  ##################################################################
+  # ICONS & SPLASH SCREEN - CONFIGURATION PRODUCTION
+  # ═══════════════════════════════════════════════════════════════════════════
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.10
+
+flutter:
+  uses-material-design: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ASSETS - OPTIMISÉS POUR PRODUCTION
+  # ═══════════════════════════════════════════════════════════════════════════
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/icons/
+    - .env  # Variables d'environnement (NE PAS COMMIT EN CLAIR)
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FONTS - GOOGLE FONTS PREFÉRÉ (PAS DE FICHIERS LOCAUX LOURDS)
+  # ═══════════════════════════════════════════════════════════════════════════
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: assets/fonts/CustomFont-Regular.ttf
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION ICÔNES - flutter_launcher_icons
+# ═══════════════════════════════════════════════════════════════════════════════
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_icon.png"  # TODO: Créer cette image (1024x1024)
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/app_icon_foreground.png"  # TODO
+  remove_alpha_ios: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION SPLASH SCREEN - flutter_native_splash
+# ═══════════════════════════════════════════════════════════════════════════════
+flutter_native_splash:
+  color: "#FFFFFF"  # Fond blanc minimaliste
+  image: "assets/images/splash_logo.png"  # TODO: Créer cette image (logo centré)
+  android: true
+  ios: true
+  web: false
+  
+  # Android 12+ specific
+  android_12:
+    image: "assets/images/splash_logo_android12.png"
+    icon_background_color: "#FFFFFF"
+  
+  # Mode fullscreen sans barre de statut pendant le splash
+  fullscreen: false
+  
+  # Désactiver le splash par défaut de Flutter
+  android_gravity: center
+  ios_content_mode: center
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYZER - RÈGLES STRICTES POUR PRODUCTION
+# ═══════════════════════════════════════════════════════════════════════════════
+analyzer:
+  errors:
+    missing_required_param: error
+    missing_return: error
+    invalid_assignment: warning
+    dead_code: warning
+    unused_import: warning
+    unused_element: warning
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated_plugin_registrant.dart"

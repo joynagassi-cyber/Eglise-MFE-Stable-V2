@@ -1,0 +1,104 @@
+# Build and cache directories
+build/
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+node_modules/
+dist/
+tmp/
+out/
+graphify-out/
+.mcp/
+
+# Fichiers temporaires
+temp_*
+tmp_*
+*.tmp
+.claw/
+.claw/settings.json
+**/client_secret*.json
+**/google-services.json
+.claude/
+.antigravity/
+.amazonq/
+.opencode/
+output/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+
+# Flutter/Dart specific
+*.iml
+*.log
+flutter_export_environment.sh
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android specific
+**/android/app/build/
+**/android/app/src/main/assets/
+**/android/local.properties
+**/android/key.properties
+**/.gradle/
+
+# iOS specific
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+
+# Web specific
+**/build/web/
+
+# Windows specific
+**/windows/flutter/ephemeral/
+**/windows/flutter/generated_plugin_registrant.cc
+
+# Environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Keys and credentials
+*.keystore
+*.pem
+*.jks
+*.json.secret
+secrets.json
+
+.agent/
+.agents/
+
+opencode.json
+.gemini/
+.agent/
+.agents/
+
+.git_backup/
+
+# Credentials de signature Android (ne JAMAIS committer)
+**/signing.properties
+
+# Recovery guide (contains secrets - not for git)
+RECOVERY_GUIDE.md

@@ -1,0 +1,14 @@
+name = "feu-evangile-storage-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-15"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "feu-evangile-storage"
+
+[vars]
+ENVIRONMENT = "production"
+MAX_FILE_SIZE_MB = "10"
+ALLOWED_MIME_TYPES = "image/jpeg,image/png,image/webp,application/pdf"

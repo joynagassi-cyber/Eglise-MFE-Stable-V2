@@ -1,0 +1,182 @@
+name: lumina
+description: "Lumina - Système de gestion d'église complet - Version Flutter."
+# The app name displayed to the user will be Lumina.
+publish_to: "none"
+version: 1.0.0+2
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.1.0
+  firebase_messaging: ^15.0.0
+  cupertino_icons: ^1.0.9
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.1.1
+
+  # Auth & Sync
+  supabase_flutter: ^2.12.2
+  google_sign_in: ^7.2.0
+  flutter_secure_storage: ^10.0.0
+  flutter_dotenv: ^6.0.0
+
+  # Navigation
+  go_router: ^17.2.1
+
+  # UI & Design
+  google_fonts: ^8.0.1
+  animations: ^2.1.2
+  flutter_animate: ^4.5.0
+  font_awesome_flutter: ^11.0.0
+  pinput: ^6.0.2
+  smooth_page_indicator: ^2.0.1
+
+  # Charts
+  fl_chart: ^1.2.0
+
+  # Persistence & Connectivity
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
+  connectivity_plus: ^7.0.0
+  workmanager: ^0.9.0+3
+
+  # System Info
+  device_info_plus: ^12.3.0
+  package_info_plus: ^9.0.0
+
+  # Utils
+  intl: ^0.20.2
+  timeago: ^3.7.0
+  logger: ^2.7.0
+  freezed_annotation: ^2.2.0
+  json_annotation: ^4.9.0
+  url_launcher: ^6.3.1
+  uuid: ^4.5.1
+  http: ^1.6.0
+  crypto: ^3.0.7
+  cryptography: ^2.7.0
+  record: 5.1.0
+  audioplayers: ^6.6.0
+  flutter_tts: ^4.2.0       # TTS natif — lecture Bible (Android/iOS/macOS)
+  pdfx: ^2.6.0              # Lecteur PDF pour les récompenses
+  confetti: ^0.8.0          # Animations de célébration (récompenses)
+  screenshot: ^3.0.0        # Capture d'écran pour partage de versets
+  flutter_cache_manager: ^3.3.1 # Cache local pour PDF et assets
+  # Export/Import
+  csv: ^6.0.0
+  excel: ^4.0.6
+
+  # Added to fix depend_on_referenced_packages lint from dependency_overrides
+  share_plus: ^12.0.1
+  file_picker: ^10.3.10
+  pdf: ^3.12.0
+  printing: ^5.14.3
+  open_file: ^3.5.7
+  permission_handler: ^12.0.1
+  camera: ^0.12.0+1
+  camera_android: ^0.10.10+16
+  mobile_scanner: ^5.2.0
+  qr_flutter: ^4.1.0
+  image_picker: ^1.1.2
+  image_cropper: ^11.0.0
+  flutter_image_compress: ^2.3.0
+  cached_network_image: ^3.3.1
+  webview_flutter: ^4.10.0
+  flutter_local_notifications: ^18.0.1
+  tutorial_coach_mark: ^1.2.11
+  sqflite: ^2.4.2
+  shared_preferences: ^2.5.5
+  sentry_flutter: ^8.11.0
+  encrypt: ^5.0.3
+  equatable: ^2.0.8
+  path: any
+  dartz: ^0.10.1
+  flutter_localizations:
+    sdk: flutter
+  flutter_svg: 2.0.10+1
+
+  animate_do: ^4.2.0
+dependency_overrides:
+  record_platform_interface: 1.1.0
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.4
+  # flutter_native_splash: ^2.4.0  # Temporairement désactivé
+
+  # Testing
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  patrol: ^3.0.0
+
+  # Code Generation
+  build_runner: ^2.4.13
+  go_router_builder: ^2.7.0
+  isar_generator: ^3.1.0+1
+  riverpod_generator: 2.3.5
+  json_serializable: ^6.8.0
+  freezed: 2.4.5
+  analyzer: 5.13.0
+  mocktail: ^1.0.5
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/launcher_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  background_color: "#4B2C82"
+  adaptive_icon_background: "#4B2C82"
+  adaptive_icon_foreground: "assets/icon/launcher_icon.png"
+
+flutter_native_splash:
+  color: "#4B2C82"
+  image: assets/icon/launcher_icon.png
+  android: true
+  ios: true
+  web: false
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/premium/
+    - assets/images/
+    - assets/icon/google_logo.svg
+    - assets/fonts/
+    - assets/icon/
+    - assets/bible/
+    - .env
+
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit-Regular.ttf
+        - asset: assets/fonts/Outfit-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Outfit-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Outfit-Bold.ttf
+          weight: 700
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
+        - asset: assets/fonts/Inter_18pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter_18pt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter_18pt-Bold.ttf
+          weight: 700
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: lumina
+  org: mfe-jc

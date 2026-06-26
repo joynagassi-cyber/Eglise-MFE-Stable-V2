@@ -1,0 +1,146 @@
+{
+  "@@locale": "fr",
+  "dashboardTitle": "Tableau de Bord",
+  "@dashboardTitle": {
+    "description": "Titre principal du tableau de bord"
+  },
+  "quickActions": "Actions Rapides",
+  "balance": "Solde",
+  "members": "Membres",
+  "incomeMonth": "Entrées (Mois)",
+  "expenseMonth": "Sorties (Mois)",
+  "loading": "Chargement des données...",
+  "errorOccurred": "Une erreur est survenue",
+  "retry": "Réessayer",
+  "cancel": "Annuler",
+  "auditSecurity": "Audit & Sécurité",
+  "surveillanceReports": "Surveillance et Rapports",
+  "rbacAdmin": "Administration RBAC",
+  "rolesPermissions": "Gestion des Rôles et Permissions",
+  "permissionsMatrix": "Matrice des Permissions",
+  "auditReportSaved": "Rapport d'Audit sauvegardé dans \"Lumina\"",
+  "exportError": "Erreur export: {error}",
+  "@exportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "groupDashboard": "Tableau de Bord Groupe",
+  "membersArea": "Espace Membres",
+  "activities": "Activités",
+  "expenses": "Dépenses",
+  "reports": "Rapports",
+  "quickNavigation": "Navigation Rapide",
+  "community": "Communauté",
+  "communityDescription": "Membres, groupes, visiteurs",
+  "spiritualLife": "Vie Spirituelle",
+  "spiritualLifeDescription": "Sacrements, célébrations, événements",
+  "team": "Équipe",
+  "teamDescription": "Bergers, équipes pastorales",
+  "ministry": "MFE-JC",
+  "ministryDescription": "Finance, sites, rubriques",
+  "communication": "Communication",
+  "communicationDescription": "Annonces, social, messagerie",
+  "calendar": "Calendrier",
+  "calendarDescription": "Événements et rendez-vous",
+  "groupDashboardTitle": "Dashboard {role}",
+  "@groupDashboardTitle": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "groupManagement": "Gestion du groupe : {group}",
+  "@groupManagement": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "groupActions": "Actions du Groupe",
+  "memberContributions": "Cotisations Membres",
+  "alertsVigilance": "Alertes & Vigilance",
+  "sundayChecklist": "Checklist de Dimanche",
+  "viewAll": "Voir tout",
+  "groupDataRestricted": "Toutes les données affichées ici sont restreintes au scope du groupe \"{group}\".",
+  "@groupDataRestricted": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdaysAlert": "{count} Anniversaire(s)",
+  "@birthdaysAlert": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "birthdaysSubtitle": "À fêter cette semaine !",
+  "absenceAlerts": "{count} Alerte(s) d'absence",
+  "@absenceAlerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "absenceSubtitle": "Plus de 3 absences consécutives",
+  "newMilestones": "{count} Nouveaux Jalons",
+  "@newMilestones": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "milestonesSubtitle": "Membres ayant progressé ce mois",
+  "noAlerts": "Aucune alerte pour le moment.",
+  "topEngagedMembers": "Top Fidèles Engagés",
+  "insufficientEngagementData": "Données d'engagement insuffisantes",
+  "groupMembers": "Membres du Groupe",
+  "groupBudget": "Budget Groupe",
+  "presence": "Présence",
+  "addMember": "Ajouter Membre",
+  "transfer": "Transfert",
+  "quarterlyBilan": "Bilan Trim.",
+  "history": "Historique",
+  "quarterlyBilanTitle": "Bilan Trimestriel",
+  "quarterlyBilanConfirm": "Voulez-vous clôturer le trimestre et transférer les fonds vers la caisse générale ?\n\nCela générera une transaction de transfert sortante de votre caisse de groupe vers le compte principal de l'église.",
+  "later": "Plus tard",
+  "transferFonds": "Transférer",
+  "insufficientBalance": "Solde insuffisant pour un transfert.",
+  "transferSuccess": "Transfert trimestriel effectué avec succès !",
+  "sundayServicePrep": "Préparation du Culte",
+  "bilan_title": "Bilan Financier",
+  "bilan_export_pdf": "Exporter PDF",
+  "bilan_report_ready": "Le rapport est prêt",
+  "bilan_data_incomplete": "Données incomplètes pour cette période",
+  "bilan_revenues": "Recettes",
+  "bilan_expenses": "Dépenses",
+  "bilan_net_balance": "Solde Net",
+  "bilan_sealed": "Bilan Scellé",
+  "bilan_temporal_evolution": "Évolution Temporelle",
+  "bilan_dimension_analysis": "Analyse par Dimensions",
+  "bilan_by_category": "Par Catégorie",
+  "bilan_by_month": "Par Mois",
+  "donors_title": "Gestion des Donateurs",
+  "donors_evolution": "Évolution des Dons",
+  "donors_last_6_months": "6 derniers mois",
+  "donors_active_campaigns": "Campagnes Actives",
+  "donors_all_campaigns": "Toutes les Campagnes",
+  "donors_quick_actions": "Actions Rapides",
+  "donors_action_list": "Liste Donateurs",
+  "donors_action_record": "Saisir un Don",
+  "donors_stats_loading": "Chargement des stats...",
+  "donors_new_donor": "Nouveau Donateur",
+  "donors_stat_total": "Total Collecté",
+  "donors_stat_avg": "Don Moyen",
+  "donors_stat_retention": "Taux Rétention"
+}

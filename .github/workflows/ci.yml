@@ -1,0 +1,230 @@
+# =============================================================================
+#  Lumina — CI (analyse + build APK release)
+#  Déclencheur : push sur main + pull requests
+#  Projet Flutter dans le sous-dossier lumina/
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: lumina
+
+env:
+  FLUTTER_CHANNEL: beta
+  JAVA_DISTRIBUTION: temurin
+  JAVA_VERSION: "17"
+  APP_PACKAGE: "com.lumina.mfejc"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1) ANALYZE
+  # ---------------------------------------------------------------------------
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Create stub .env for analyze
+        run: |
+          printf 'SUPABASE_URL=https://stub.supabase.co\n' > .env
+          printf 'SUPABASE_ANON_KEY=stub\n' >> .env
+          printf 'SENTRY_DSN=stub\n' >> .env
+          printf 'ENVIRONMENT=ci\n' >> .env
+          printf 'GOOGLE_WEB_CLIENT_ID=stub\n' >> .env
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+  # ---------------------------------------------------------------------------
+  # 2) BUILD APK
+  # ---------------------------------------------------------------------------
+  build-apk:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: analyze
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # --- Injection des secrets ---
+
+      - name: Create .env from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          printf 'SUPABASE_URL=%s\n'        "$SUPABASE_URL"        > .env
+          printf 'SUPABASE_ANON_KEY=%s\n'   "$SUPABASE_ANON_KEY"  >> .env
+          printf 'SENTRY_DSN=%s\n'          "$SENTRY_DSN"          >> .env
+          printf 'ENVIRONMENT=%s\n'         "$ENVIRONMENT"         >> .env
+          printf 'GOOGLE_WEB_CLIENT_ID=%s\n' "$GOOGLE_WEB_CLIENT_ID" >> .env
+
+      - name: Inject google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_B64: ${{ secrets.GOOGLE_SERVICES_JSON_B64 }}
+        run: |
+          printf '%s' "$GOOGLE_SERVICES_JSON_B64" | base64 -d > android/app/google-services.json
+
+      - name: Validate google-services.json package name
+        run: |
+          python3 -c "
+          import json, sys
+          with open('android/app/google-services.json') as f:
+              data = json.load(f)
+          pkgs = [c['client_info']['android_client_info']['package_name'] for c in data.get('client', [])]
+          if '$APP_PACKAGE' in pkgs:
+              print(f'OK: $APP_PACKAGE found in {pkgs}')
+          else:
+              print(f'MISMATCH: $APP_PACKAGE not found. Found: {pkgs}')
+              sys.exit(1)
+          "
+
+      - name: Inject keystore
+        env:
+          UPLOAD_KEYSTORE_B64: ${{ secrets.UPLOAD_KEYSTORE_B64 }}
+        run: |
+          printf '%s' "$UPLOAD_KEYSTORE_B64" | base64 -d > android/app/upload-keystore.jks
+
+      - name: Verify keystore integrity
+        run: |
+          echo "Keystore file size: $(wc -c < android/app/upload-keystore.jks) bytes"
+          keytool -list -keystore android/app/upload-keystore.jks \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -alias "${{ secrets.KEY_ALIAS }}" 2>&1 || {
+              echo "::error::Keystore verification failed — check UPLOAD_KEYSTORE_B64, KEYSTORE_PASSWORD and KEY_ALIAS"
+              exit 1
+            }
+
+      - name: Create signing.properties
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "fevStoreFile=upload-keystore.jks"  > android/app/signing.properties
+          echo "fevStorePassword=$KEYSTORE_PASSWORD" >> android/app/signing.properties
+          echo "fevKeyAlias=$KEY_ALIAS"             >> android/app/signing.properties
+          echo "fevKeyPassword=$KEY_PASSWORD"       >> android/app/signing.properties
+          echo "signing.properties content:"
+          cat android/app/signing.properties | sed 's/=.*/=***/'
+
+      # --- Build ---
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build APK (release)
+        # FIX: use set -o pipefail so the step fails if flutter build fails
+        # (previously, piping to tee masked the exit code)
+        run: |
+          set -o pipefail
+          flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols 2>&1 | tee build.log
+
+      - name: Diagnose — locate APK files
+        if: always()
+        run: |
+          echo "=== Searching for APK files ==="
+          find build -name "*.apk" 2>/dev/null || echo "No APK files found under build/"
+          echo ""
+          echo "=== Build output structure ==="
+          find build/app/outputs -type f 2>/dev/null | head -30 || echo "No outputs directory"
+
+      - name: Show Gradle error on failure
+        if: failure()
+        run: |
+          echo "=== GRADLE ERROR DETAILS ==="
+          grep -B2 -A10 "FAILURE\|What went wrong\|Execution failed\|signing\|Keytool\|keystore\|tampered\|Incorrect\|BUILD FAILED" build.log || echo "No matching error pattern found"
+          echo ""
+          echo "=== SIGNING CONFIG ==="
+          cat android/app/signing.properties 2>/dev/null | sed 's/=.*/=***/' || echo "signing.properties not found"
+          echo ""
+          echo "=== KEYSTORE FILE ==="
+          ls -la android/app/upload-keystore.jks 2>/dev/null || echo "keystore not found"
+          echo ""
+          echo "=== BUILD DIRECTORY TREE ==="
+          find build -name "*.apk" -o -name "output-metadata.json" 2>/dev/null || echo "No build output found"
+
+      # --- Upload ---
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Lumina-APK-${{ github.sha }}
+          path: |
+            lumina/build/app/outputs/flutter-apk/app-release.apk
+            lumina/build/app/outputs/apk/release/app-release.apk
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Lumina-symbols-${{ github.sha }}
+          path: lumina/build/app/outputs/symbols/
+          retention-days: 30
+          if-no-files-found: warn
+
+      # --- Nettoyage ---
+
+      - name: Cleanup secrets
+        if: always()
+        run: |
+          rm -f .env
+          rm -f android/app/google-services.json
+          rm -f android/app/upload-keystore.jks
+          rm -f android/app/signing.properties

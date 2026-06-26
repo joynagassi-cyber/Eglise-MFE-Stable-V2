@@ -1,0 +1,11 @@
+name = "feu-evangile-ocr-worker"
+main = "src/ocr-worker.ts"
+compatibility_date = "2024-01-15"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[ai]
+binding = "AI"
+
+[vars]
+ENVIRONMENT = "production"
