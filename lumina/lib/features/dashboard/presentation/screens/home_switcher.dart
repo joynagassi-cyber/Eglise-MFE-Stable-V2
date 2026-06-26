@@ -34,10 +34,47 @@ class HomeSwitcher extends ConsumerWidget {
 
     return profileAsync.when(
       data: (profile) {
+        // Profile null (nouvel utilisateur, pas encore de row dans profiles)
+        // → On continue quand même avec un profil par défaut plutôt que
+        //   de bloquer l'utilisateur sur un message d'erreur.
         if (profile == null) {
+          // Tombé ici → l'utilisateur n'a pas de profil mais peut quand
+          // même accéder à son dashboard. On construit le Scaffold avec
+          // les nav items par défaut (mode membre).
+          final roleLevel = userContextAsync.valueOrNull?.role.level ??
+              RoleLevel.membre;
+          final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
+          final isMemberViewMode = ref.watch(memberViewModeProvider);
+          final isProfessionalArea = hasLeaderAccess && !isMemberViewMode;
+          final navItems = _getNavItems(isProfessionalArea, roleLevel);
+
           return Scaffold(
-            body: Center(
-                child: Text('Profil non chargé. Veuillez vous reconnecter.')),
+            drawer: const MainDrawer(),
+            body: IndexedStack(
+              index: currentIndex,
+              children: navItems.map((item) => item.view).toList(),
+            ),
+            bottomNavigationBar: PremiumBottomBar(
+              currentIndex: currentIndex,
+              onTap: (index) =>
+                  ref.read(dashboardNavIndexProvider.notifier).state = index,
+              middleAction: RadialFireMenu(
+                items: _getRadialItems(context, hasLeaderAccess),
+              ),
+              items: navItems.asMap().entries.map((entry) {
+                final index = entry.key;
+                final item = entry.value;
+                return BottomNavigationBarItem(
+                  icon: DuoToneIcon(
+                    icon: item.icon,
+                    size: 24,
+                    backgroundOpacity: currentIndex == index ? 0.3 : 0.1,
+                    isFlamboyant: currentIndex == index,
+                  ),
+                  label: item.label,
+                );
+              }).toList(),
+            ),
           );
         }
 
@@ -88,7 +125,12 @@ class HomeSwitcher extends ConsumerWidget {
           ),
         );
       },
-      loading: () => Scaffold(body: LoadingState()),
+      loading: () => Scaffold(
+        // Au lieu d'un écran noir avec shimmer, on affiche le Scaffold
+        // avec une barre de navigation et un contenu de chargement discret.
+        // L'utilisateur voit immédiatement la structure de son dashboard.
+        body: _buildLoadingScaffold(context),
+      ),
       error: (e, st) => Scaffold(
         body: Center(
           child: Padding(
@@ -111,6 +153,27 @@ class HomeSwitcher extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Scaffold de chargement : montre la structure du dashboard pendant
+  /// que le profil se charge, au lieu d'un écran noir avec shimmer.
+  Widget _buildLoadingScaffold(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.home_rounded, size: 48, color: context.colors.textTertiary),
+          const SizedBox(height: 16),
+          Text(
+            'Chargement de votre espace...',
+            style: TextStyle(
+              color: context.colors.textSecondary,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }

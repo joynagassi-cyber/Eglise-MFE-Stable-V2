@@ -2,10 +2,12 @@ import "package:lumina/core/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
+import 'package:lumina/core/extensions/context_extension.dart';
 import '../providers/member_dashboard_provider.dart';
 import 'package:lumina/features/bible/reader/widgets/daily_bible_card.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
+import 'package:lumina/core/widgets/loading_state.dart';
 
 class MemberDashboardView extends ConsumerWidget {
   const MemberDashboardView({super.key});
@@ -14,25 +16,116 @@ class MemberDashboardView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardState = ref.watch(memberDashboardProvider);
 
+    // Au lieu de bloquer avec du shimmer, on affiche TOUJOURS le dashboard.
+    // En loading : on montre la structure avec des placeholders légers.
+    // En error : on montre un message d'accueil sans planter.
+    // En data : on montre le contenu complet.
     return dashboardState.when(
-      data: (state) => SingleChildScrollView(
-        padding: const EdgeInsets.all(LuminaDesign.paddingMd),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildWelcome(context, state),
-            SizedBox(height: LuminaDesign.paddingLg),
-            _buildKPIGrid(context, state),
-            SizedBox(height: LuminaDesign.paddingLg),
-            const DailyBibleCard(),
-            SizedBox(height: LuminaDesign.paddingLg),
-            _buildSectionTitle(context, "Ma Communauté"),
-            _buildGroupsList(context, state),
-          ],
-        ),
+      data: (state) => _buildContent(context, state),
+      loading: () => _buildLoadingContent(context),
+      error: (e, st) => _buildContent(context, MemberDashboardState.empty),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, MemberDashboardState state) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(LuminaDesign.paddingMd),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildWelcome(context, state),
+          SizedBox(height: LuminaDesign.paddingLg),
+          _buildKPIGrid(context, state),
+          SizedBox(height: LuminaDesign.paddingLg),
+          const DailyBibleCard(),
+          SizedBox(height: LuminaDesign.paddingLg),
+          _buildSectionTitle(context, "Ma Communauté"),
+          _buildGroupsList(context, state),
+        ],
       ),
-      loading: () => const LoadingState(),
-      error: (e, st) => Center(child: Text("Erreur : $e")),
+    );
+  }
+
+  /// Contenu de chargement : skeleton qui mime EXACTEMENT la structure du
+  /// dashboard final (recommandation NN/g — jamais de "frame-display" vide).
+  /// Chaque ShimmerBox correspond à un élément réel :
+  ///   - ligne "Bonjour," (label)
+  ///   - prénom (h1)
+  ///   - 2 cartes KPI (icône + label + valeur)
+  ///   - DailyBibleCard se charge indépendamment (vraie card)
+  ///   - titre section + ligne de groupes
+  /// Les couleurs proviennent des tokens shimmerBase/shimmerHighlight → visibles
+  /// en light ET dark mode (corrige le bug "page noire").
+  Widget _buildLoadingContent(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(LuminaDesign.paddingMd),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // En-tête de bienvenue — 2 lignes qui miment _buildWelcome
+          ShimmerBox(width: 90, height: 14),
+          const SizedBox(height: 6),
+          ShimmerBox(width: 140, height: 24),
+          SizedBox(height: LuminaDesign.paddingLg),
+          // 2 KPI cards — miment _buildKPIGrid (icône + label + valeur)
+          Row(
+            children: [
+              Expanded(child: _buildKPISkeleton(context)),
+              SizedBox(width: LuminaDesign.paddingMd),
+              Expanded(child: _buildKPISkeleton(context)),
+            ],
+          ),
+          SizedBox(height: LuminaDesign.paddingLg),
+          // La carte Bible se charge indépendamment (vraie card, pas skeleton)
+          const DailyBibleCard(),
+          SizedBox(height: LuminaDesign.paddingLg),
+          // Titre section Communauté
+          _buildSectionTitle(context, "Ma Communauté"),
+          const SizedBox(height: 8),
+          // Ligne horizontale de 4 avatars-groupes (miment _buildGroupsList)
+          SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              children: List.generate(4, (_) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: LuminaDesign.paddingMd),
+                  child: Column(
+                    children: [
+                      ShimmerBox(
+                        width: 60,
+                        height: 60,
+                        shape: BoxShape.circle,
+                      ),
+                      const SizedBox(height: 4),
+                      ShimmerBox(width: 48, height: 10),
+                    ],
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Skeleton d'une carte KPI : icône (cercle) + label + valeur.
+  /// Mimes la structure de _buildKPIGrid.
+  Widget _buildKPISkeleton(BuildContext context) {
+    return SizedBox(
+      height: 90,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ShimmerBox(width: 24, height: 24, shape: BoxShape.circle),
+          const SizedBox(height: 8),
+          ShimmerBox(width: 60, height: 10),
+          const SizedBox(height: 4),
+          ShimmerBox(width: 40, height: 16),
+        ],
+      ),
     );
   }
 
