@@ -18,7 +18,64 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- ÉTAPE 1 : RPC redeem_secret_code
+-- ÉTAPE 1 : RPC verify_secret_code (NON-DESTRUCTIVE — ne marque PAS comme utilisé)
+--
+-- Utilisée pour vérifier un code SANS le consommer (avant l'assignation du rôle).
+-- Retourne { role_code, raw_code, is_used } ou vide.
+-- ══════════════════════════════════════════════════════════════════════════════
+
+CREATE OR REPLACE FUNCTION public.verify_secret_code(p_code TEXT)
+RETURNS TABLE(role_code TEXT, raw_code TEXT, is_used BOOLEAN)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_row RECORD;
+    v_normalized TEXT;
+BEGIN
+    -- Normaliser le code entré : UPPER + supprimer les tirets et espaces
+    v_normalized := UPPER(REPLACE(REPLACE(p_code, '-', ''), ' ', ''));
+    
+    -- ── NIVEAU 1 : Vérification bcrypt (méthode sécurisée) ──
+    FOR v_row IN 
+        SELECT id, role_code, raw_code, is_used, code_hash
+        FROM public.role_secret_codes
+        WHERE code_hash = crypt(p_code, code_hash)
+        LIMIT 1
+    LOOP
+        RETURN QUERY SELECT v_row.role_code, v_row.raw_code, v_row.is_used;
+        RETURN;
+    END LOOP;
+    
+    -- ── NIVEAU 2 : Comparaison exacte sur raw_code ──
+    FOR v_row IN 
+        SELECT id, role_code, raw_code, is_used
+        FROM public.role_secret_codes
+        WHERE raw_code = UPPER(p_code)
+        LIMIT 1
+    LOOP
+        RETURN QUERY SELECT v_row.role_code, v_row.raw_code, v_row.is_used;
+        RETURN;
+    END LOOP;
+    
+    -- ── NIVEAU 3 : Comparaison sur normalized_code (sans tirets) ──
+    FOR v_row IN 
+        SELECT id, role_code, raw_code, is_used
+        FROM public.role_secret_codes
+        WHERE normalized_code = v_normalized
+        LIMIT 1
+    LOOP
+        RETURN QUERY SELECT v_row.role_code, v_row.raw_code, v_row.is_used;
+        RETURN;
+    END LOOP;
+    
+    -- Aucun match — retourner vide
+    RETURN;
+END;
+$$;
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- ÉTAPE 2 : RPC redeem_secret_code (DESTRUCTIVE — marque comme utilisé)
 --
 -- Flux DÉTERMINISTE (3 niveaux de vérification) :
 --   1. bcrypt : code_hash = crypt(p_code, code_hash) — SÉCURISÉ
@@ -39,11 +96,10 @@ DECLARE
     v_row RECORD;
     v_normalized TEXT;
 BEGIN
-    -- Normaliser le code entré : UPPER + supprimer les tirets
+    -- Normaliser le code entré : UPPER + supprimer les tirets et espaces
     v_normalized := UPPER(REPLACE(REPLACE(p_code, '-', ''), ' ', ''));
     
     -- ── NIVEAU 1 : Vérification bcrypt (méthode sécurisée) ──
-    -- crypt(input, stored_hash) retourne stored_hash si input correspond
     FOR v_row IN 
         SELECT id, role_code, raw_code, is_used, code_hash
         FROM public.role_secret_codes
@@ -98,17 +154,18 @@ BEGIN
         RETURN;
     END LOOP;
     
-    -- Aucun match — retourner vide (le client Flutter recevra null)
+    -- Aucun match — retourner vide
     RETURN;
 END;
 $$;
 
 -- Accorder les droits d'exécution
+GRANT EXECUTE ON FUNCTION public.verify_secret_code(TEXT) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.redeem_secret_code(TEXT) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.redeem_secret_code(TEXT) TO anon;
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- ÉTAPE 2 : RPC assign_user_role
+-- ÉTAPE 3 : RPC assign_user_role
 --
 -- Après vérification du code, cette RPC :
 --   1. Cherche le role_id dans la table roles
@@ -190,7 +247,7 @@ $$;
 GRANT EXECUTE ON FUNCTION public.assign_user_role(UUID, TEXT, UUID) TO authenticated;
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- ÉTAPE 3 : Vérifier les politiques RLS sur role_secret_codes
+-- ÉTAPE 4 : Vérifier les politiques RLS sur role_secret_codes
 -- ══════════════════════════════════════════════════════════════════════════════
 
 -- Activer RLS sur role_secret_codes (sécurité)
@@ -213,22 +270,22 @@ CREATE POLICY "Anon users denied"
     WITH CHECK (false);
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- ÉTAPE 4 : TESTS DE VALIDATION
+-- ÉTAPE 5 : TESTS DE VALIDATION (NON-DESTRUCTIFS — utilisent verify_secret_code)
 -- ══════════════════════════════════════════════════════════════════════════════
 
--- Test 1 : Vérifier que la RPC redeem_secret_code fonctionne avec bcrypt
-SELECT 'TEST 1 — redeem_secret_code bcrypt' AS test;
-SELECT * FROM public.redeem_secret_code('PASTEUR-0081-2026');
--- Attendu : role_code = "pasteur", raw_code = "PASTEUR-0081-2026", is_used = true
+-- Test 1 : Vérifier que la RPC verify_secret_code fonctionne avec bcrypt (NON-DESTRUCTIF)
+SELECT 'TEST 1 — verify_secret_code bcrypt' AS test;
+SELECT * FROM public.verify_secret_code('PASTEUR-0081-2026');
+-- Attendu : role_code = "pasteur", raw_code = "PASTEUR-0081-2026"
 
--- Test 2 : Vérifier avec un autre code
-SELECT 'TEST 2 — redeem_secret_code tresorier' AS test;
-SELECT * FROM public.redeem_secret_code('TRESORIER-5E47-2026');
--- Attendu : role_code = "tresorier"
+-- Test 2 : Vérifier avec un code normalisé (sans tirets)
+SELECT 'TEST 2 — verify_secret_code normalized' AS test;
+SELECT * FROM public.verify_secret_code('PASTEUR00812026');
+-- Attendu : role_code = "pasteur" (même résultat via normalized_code)
 
 -- Test 3 : Vérifier avec un code inexistant
 SELECT 'TEST 3 — code inexistant' AS test;
-SELECT * FROM public.redeem_secret_code('FAKE-CODE-9999-2026');
+SELECT * FROM public.verify_secret_code('FAKE-CODE-9999-2026');
 -- Attendu : 0 lignes (null côté Flutter)
 
 -- Test 4 : Vérifier que le bcrypt fonctionne vraiment
@@ -242,8 +299,8 @@ SELECT
 FROM public.role_secret_codes
 WHERE raw_code = 'PASTEUR-0081-2026';
 
--- Test 5 : Vérifier que la RPC assign_user_role est accessible
-SELECT 'TEST 5 — assign_user_role accessible' AS test;
+-- Test 5 : Vérifier que les RPC sont bien créées
+SELECT 'TEST 5 — RPC list' AS test;
 SELECT 
     p.proname,
     pg_get_function_arguments(p.oid) AS args,
@@ -251,10 +308,16 @@ SELECT
 FROM pg_proc p
 JOIN pg_namespace n ON p.pronamespace = n.oid
 WHERE n.nspname = 'public'
-  AND p.proname IN ('redeem_secret_code', 'assign_user_role');
+  AND p.proname IN ('verify_secret_code', 'redeem_secret_code', 'assign_user_role');
+
+-- Test 6 : Test DESTRUCTIF — redeem (uniquement si vous voulez tester le flux complet)
+-- ATTENTION : ceci marque le code comme UTILISÉ
+-- SELECT 'TEST 6 — redeem_secret_code (DESTRUCTIF)' AS test;
+-- SELECT * FROM public.redeem_secret_code('TRESORIER-5E47-2026');
+-- Attendu : role_code = "tresorier", is_used = true
 
 -- ══════════════════════════════════════════════════════════════════════════════
--- ÉTAPE 5 : Réinitialiser les codes marqués comme utilisés (optionnel)
+-- ÉTAPE 6 : Réinitialiser les codes marqués comme utilisés (optionnel)
 -- ══════════════════════════════════════════════════════════════════════════════
 
 -- Si tu veux que les codes soient réutilisables (multi-utilisateur),

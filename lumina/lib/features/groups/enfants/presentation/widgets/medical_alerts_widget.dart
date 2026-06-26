@@ -31,14 +31,14 @@ class MedicalAlertsWidget extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  color: context.colors.successText.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+                      color: context.colors.successText.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.check_circle_outline, color: Color(0xFF10B981)),
+                    Icon(Icons.check_circle_outline, color: context.colors.successText),
                     SizedBox(width: 12),
                     Text('Aucun incident ou alerte critique.'),
                   ],
@@ -99,8 +99,8 @@ class MedicalAlertsWidget extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: card.isActive
-                  ? const Color(0xFF10B981).withOpacity(0.2)
-                  : const Color(0xFFE0E0E0),
+                  ? context.colors.successText.withValues(alpha: 0.2)
+                  : context.colors.textTertiary.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -108,8 +108,8 @@ class MedicalAlertsWidget extends ConsumerWidget {
               style: AppText.caption(context).copyWith(
                 fontWeight: FontWeight.bold,
                 color: card.isActive
-                    ? const Color(0xFF10B981)
-                    : const Color(0xFF757575),
+                    ? context.colors.successText
+                    : context.colors.textTertiary,
               ),
             ),
           ),

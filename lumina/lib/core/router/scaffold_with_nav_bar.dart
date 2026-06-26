@@ -104,12 +104,23 @@ class ScaffoldWithNavBar extends ConsumerWidget {
         final int visibleIndex =
             _calculateSelectedIndex(navigationShell.currentIndex, visibility);
 
-        return FireFloatingNavScaffold(
-          body: navigationShell,
-          navBar: FireFloatingNavBar(
-            currentIndex: visibleIndex,
-            onTap: (index) => _onItemTapped(index, navigationShell, visibility),
-            items: destinations,
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, _) {
+            if (didPop) return;
+            // If not on the first tab, go to first tab (Dashboard)
+            if (navigationShell.currentIndex != 0) {
+              navigationShell.goBranch(0);
+            }
+            // If on the first tab, do nothing — stay in app
+          },
+          child: FireFloatingNavScaffold(
+            body: navigationShell,
+            navBar: FireFloatingNavBar(
+              currentIndex: visibleIndex,
+              onTap: (index) => _onItemTapped(index, navigationShell, visibility),
+              items: destinations,
+            ),
           ),
         );
       },

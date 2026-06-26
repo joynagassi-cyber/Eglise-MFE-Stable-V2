@@ -24,6 +24,48 @@ class RoleCodeRepository {
   String _normalize(String code) => code.trim().toUpperCase();
 
   // ──────────────────────────────────────────────────────────────────────────
+  // VÉRIFICATION NON-DESTRUCTIVE : verifySecretCode
+  //
+  // Vérifie le code SANS le marquer comme utilisé.
+  // Utile pour afficher une confirmation avant de consommer le code.
+  // ──────────────────────────────────────────────────────────────────────────
+
+  Future<Map<String, dynamic>?> verifySecretCode(String code) async {
+    final normalized = _normalize(code);
+    if (normalized.isEmpty) return null;
+
+    try {
+      AppLogger.d('verifySecretCode: "$normalized"', 'ROLE_CODE_REPO');
+
+      final response = await _supabase.rpc(
+        'verify_secret_code',
+        params: {'p_code': normalized},
+      ).timeout(const Duration(seconds: 8));
+
+      if (response == null) {
+        AppLogger.w('verify_secret_code retourne null — code "$normalized" invalide', 'ROLE_CODE_REPO');
+        return null;
+      }
+
+      if (response is List && response.isNotEmpty) {
+        final result = response[0] as Map<String, dynamic>;
+        AppLogger.i('Code vérifié (RPC) → rôle: ${result['role_code']}', 'ROLE_CODE_REPO');
+        return result;
+      }
+
+      if (response is Map<String, dynamic> && response.isNotEmpty) {
+        AppLogger.i('Code vérifié (RPC map) → rôle: ${response['role_code']}', 'ROLE_CODE_REPO');
+        return response;
+      }
+
+      return null;
+    } catch (e, st) {
+      AppLogger.e('verifySecretCode erreur', 'ROLE_CODE_REPO', e, st);
+      return null;
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
   // MÉTHODE PRINCIPALE : redeemSecretCode
   //
   // Flux déterministe via RPC (SECURITY DEFINER, bypass RLS) :
