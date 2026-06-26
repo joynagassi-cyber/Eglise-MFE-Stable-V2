@@ -54,15 +54,60 @@ class AdaptiveCodeFormatter extends TextInputFormatter {
     if (matches != null && matches.isNotEmpty) {
       formattedText = _applyPatternFormatting(stripped, matches, isDeleting);
     } else {
-      // Stratégie Universelle : Majuscules uniquement, pas de tirets forcés
-      // On garde le texte original (majuscule) tel quel pour laisser l'utilisateur libre
-      formattedText = text;
+      // Stratégie Universelle : insertion intelligente de tirets
+      // Tous les codes suivent la structure : MOTS-HEX4-2026
+      // On insère un tiret avant le bloc hex (4 chars) et avant l'année 2026
+      formattedText = _applyUniversalFormatting(stripped);
     }
 
     return TextEditingValue(
       text: formattedText,
       selection: TextSelection.collapsed(offset: formattedText.length),
     );
+  }
+
+  /// Formatage universel : insère les tirets selon la structure MOTS-HEX4-2026
+  ///
+  /// Tous les codes de l'application suivent ce schéma :
+  ///   - Un ou plusieurs mots (lettres uniquement)
+  ///   - Un bloc hexadécimal de 4 caractères (chiffres + lettres A-F)
+  ///   - L'année "2026"
+  ///
+  /// Exemples :
+  ///   PASTEUR00812026     → PASTEUR-0081-2026
+  ///   SUPERADMIN5FA12026  → SUPERADMIN-5FA1-2026
+  ///   CHEFCHORALE9B552026 → CHEFCHORALE-9B55-2026
+  String _applyUniversalFormatting(String stripped) {
+    // Si le code se termine par 2026, on peut structurer les tirets
+    if (stripped.length > 8 && stripped.endsWith('2026')) {
+      final year = '2026';
+      final hexEnd = stripped.length - 4; // position avant 2026
+      final hexStart = hexEnd - 4; // début du bloc hex (4 chars)
+      final prefix = hexStart > 0 ? stripped.substring(0, hexStart) : '';
+      final hex = stripped.substring(hexStart, hexEnd);
+
+      final buffer = StringBuffer();
+      if (prefix.isNotEmpty) buffer.write(prefix);
+      buffer.write('-');
+      buffer.write(hex);
+      buffer.write('-');
+      buffer.write(year);
+      return buffer.toString();
+    }
+
+    // Fallback : transitions lettre→chiffre (au moins un tiret)
+    final buffer = StringBuffer();
+    for (int i = 0; i < stripped.length; i++) {
+      if (i > 0) {
+        final prevIsLetter = RegExp(r'[A-Z]').hasMatch(stripped[i - 1]);
+        final currIsDigit = RegExp(r'[0-9]').hasMatch(stripped[i]);
+        if (prevIsLetter && currIsDigit) {
+          buffer.write('-');
+        }
+      }
+      buffer.write(stripped[i]);
+    }
+    return buffer.toString();
   }
 
   /// Applique le formatage basé sur des patterns connus

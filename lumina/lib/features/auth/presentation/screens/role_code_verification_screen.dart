@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lumina/core/utils/adaptive_code_formatter.dart';
 import '../../../../core/providers/auth_provider.dart';
 import 'package:lumina/core/providers/repository_providers_auth.dart';
 import '../../../onboarding/presentation/providers/onboarding_progress_provider.dart';
@@ -176,6 +178,9 @@ class _RoleCodeVerificationScreenState
                         errorText: _errorMessage,
                       ),
                       textCapitalization: TextCapitalization.characters,
+                      inputFormatters: [
+                        AdaptiveCodeFormatter(),
+                      ],
                       onSubmitted: (_) => _verifyCode(),
                     ),
                   ],

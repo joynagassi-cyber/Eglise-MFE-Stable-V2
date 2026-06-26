@@ -98,7 +98,8 @@ Deno.serve(async (req) => {
                 role: {
                     code: 'guest',
                     label: 'Invité',
-                    is_super: false
+                    is_super: false,
+                    level: 'membre',   // champ requis par UserContext.fromJson()
                 },
                 group: null,
                 permissions: {},
@@ -179,8 +180,10 @@ Deno.serve(async (req) => {
             }
         }
 
-        // 8. Fetch Member ID + Profile (needs_onboarding) in parallel
-        const [memberResult, profileResult] = await Promise.all([
+        // 8. Fetch Member ID + Profile (needs_onboarding) + Church ID in parallel
+        // NOTE: profiles table does NOT have a church_id column.
+        // church_id is stored in user_churches table.
+        const [memberResult, profileResult, churchResult] = await Promise.all([
             adminClient
                 .from('members')
                 .select('id')
@@ -188,12 +191,19 @@ Deno.serve(async (req) => {
                 .maybeSingle(),
             adminClient
                 .from('profiles')
-                .select('needs_onboarding, church_id')
+                .select('needs_onboarding')
                 .eq('id', user.id)
+                .maybeSingle(),
+            adminClient
+                .from('user_churches')
+                .select('church_id')
+                .eq('user_id', user.id)
+                .eq('is_active', true)
                 .maybeSingle()
         ])
         const memberData = memberResult.data
         const profileData = profileResult.data
+        const churchData = churchResult.data
 
         // 9. Construct specific User Context Object
         const responseData = {
@@ -206,7 +216,8 @@ Deno.serve(async (req) => {
             role: {
                 code: roleData?.code,
                 label: roleData?.label,
-                is_super: roleData?.is_super ?? false
+                is_super: roleData?.is_super ?? false,
+                level: roleData?.code ?? 'membre',   // champ toujours présent
             },
             group: groupData ? {
                 code: groupData.code,
@@ -216,7 +227,7 @@ Deno.serve(async (req) => {
             meta: {
                 generated_at: new Date().toISOString(),
                 needs_onboarding: profileData?.needs_onboarding ?? true,
-                church_id: profileData?.church_id ?? null,
+                church_id: churchData?.church_id ?? null,
             }
         }
 
