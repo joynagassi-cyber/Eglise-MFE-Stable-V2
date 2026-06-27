@@ -7,8 +7,8 @@ import '../models/event_model.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/utils/app_date_time.dart';
-import '../../../../core/data/models/sync_operation_model.dart';
 import '../../../../core/services/device_service.dart';
+import '../../../../core/data/models/sync_item_model.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
@@ -163,21 +163,21 @@ class EventRepositoryImpl implements IEventRepository {
         ..createdBy = userId
         ..updatedBy = userId;
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'events'
-        ..entityId = uuid
-        ..operation = 'INSERT'
-        ..payload = jsonEncode(data)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = newEvent.churchId
-        ..userId = userId;
-
       await _isar.db.writeTxn(() async {
         await _isar.db.eventModels.put(model);
-        await _isar.db.syncOperationModels.put(syncOp);
       });
+
+      // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+      await _isar.queueSyncItem(SyncItemModel()
+        ..tableName = 'events'
+        ..action = 'INSERT'
+        ..jsonData = jsonEncode(data)
+        ..createdAt = DateTime.now()
+        ..localId = uuid
+        ..churchId = churchId
+        ..operationId = const Uuid().v4()
+        ..deviceId = deviceId
+        ..userId = userId);
 
       return newEvent;
     } else {
@@ -205,21 +205,21 @@ class EventRepositoryImpl implements IEventRepository {
         ..createdBy = localModel?.createdBy ?? userId
         ..updatedBy = userId;
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'events'
-        ..entityId = updatedEvent.id
-        ..operation = 'UPDATE'
-        ..payload = jsonEncode(data)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = updatedEvent.churchId
-        ..userId = userId;
-
       await _isar.db.writeTxn(() async {
         await _isar.db.eventModels.put(model);
-        await _isar.db.syncOperationModels.put(syncOp);
       });
+
+      // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+      await _isar.queueSyncItem(SyncItemModel()
+        ..tableName = 'events'
+        ..action = 'UPDATE'
+        ..jsonData = jsonEncode(data)
+        ..createdAt = DateTime.now()
+        ..localId = updatedEvent.id
+        ..churchId = churchId
+        ..operationId = const Uuid().v4()
+        ..deviceId = deviceId
+        ..userId = userId);
 
       return updatedEvent;
     } else {
@@ -245,21 +245,21 @@ class EventRepositoryImpl implements IEventRepository {
           ..updatedBy = userId
           ..version = localModel.version + 1;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'events'
-          ..entityId = id
-          ..operation = 'DELETE'
-          ..payload = jsonEncode({'id': id})
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId
-          ..userId = userId;
-
         await _isar.db.writeTxn(() async {
           await _isar.db.eventModels.put(localModel);
-          await _isar.db.syncOperationModels.put(syncOp);
         });
+
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+        await _isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'events'
+          ..action = 'DELETE'
+          ..jsonData = jsonEncode({'id': id})
+          ..createdAt = DateTime.now()
+          ..localId = id
+          ..churchId = churchId
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
       }
     } else {
       await _client.from('events').update({

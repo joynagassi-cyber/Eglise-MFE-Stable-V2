@@ -9,8 +9,8 @@ import '../../../../core/data/local/isar_service.dart';
 import '../models/church_model.dart';
 import '../models/federation_model.dart';
 import '../../../../core/utils/app_date_time.dart';
-import '../../../../core/data/models/sync_operation_model.dart';
 import '../../../../core/services/device_service.dart';
+import '../../../../core/data/models/sync_item_model.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
@@ -237,21 +237,21 @@ class SupabaseChurchRepository implements ChurchRepository {
           ..createdBy = userId
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'churches'
-          ..entityId = uuid
-          ..operation = 'INSERT'
-          ..payload = jsonEncode(data)
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = uuid
-          ..userId = userId;
-
         await _isar.writeTxn(() async {
           await _isar.churchModels.put(churchModel);
-          await _isar.syncOperationModels.put(syncOp);
         });
+
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+        await _isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'churches'
+          ..action = 'INSERT'
+          ..jsonData = jsonEncode(data)
+          ..createdAt = DateTime.now()
+          ..localId = uuid
+          ..churchId = uuid
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
 
         return churchModel.toDomain();
       } else {
@@ -284,21 +284,21 @@ class SupabaseChurchRepository implements ChurchRepository {
           ..createdBy = localModel?.createdBy ?? userId
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'churches'
-          ..entityId = updatedChurch.id
-          ..operation = 'UPDATE'
-          ..payload = jsonEncode(data)
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = updatedChurch.id
-          ..userId = userId;
-
         await _isar.writeTxn(() async {
           await _isar.churchModels.put(churchModel);
-          await _isar.syncOperationModels.put(syncOp);
         });
+
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+        await _isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'churches'
+          ..action = 'UPDATE'
+          ..jsonData = jsonEncode(data)
+          ..createdAt = DateTime.now()
+          ..localId = updatedChurch.id
+          ..churchId = updatedChurch.id
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
 
         return churchModel.toDomain();
       } else {
@@ -333,21 +333,21 @@ class SupabaseChurchRepository implements ChurchRepository {
             ..updatedBy = userId
             ..version = local.version + 1;
 
-          final syncOp = SyncOperationModel()
-            ..operationId = const Uuid().v4()
-            ..entityType = 'churches'
-            ..entityId = id
-            ..operation = 'DELETE'
-            ..payload = jsonEncode({'id': id})
-            ..createdAt = DateTime.now()
-            ..deviceId = deviceId
-            ..churchId = id
-            ..userId = userId;
-
           await _isar.writeTxn(() async {
             await _isar.churchModels.put(local);
-            await _isar.syncOperationModels.put(syncOp);
           });
+
+          // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+          await _isar.queueSyncItem(SyncItemModel()
+            ..tableName = 'churches'
+            ..action = 'DELETE'
+            ..jsonData = jsonEncode({'id': id})
+            ..createdAt = DateTime.now()
+            ..localId = id
+            ..churchId = id
+            ..operationId = const Uuid().v4()
+            ..deviceId = deviceId
+            ..userId = userId);
         }
       } else {
         await _client.from(_churchTable).update({

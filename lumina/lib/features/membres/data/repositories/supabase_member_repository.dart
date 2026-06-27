@@ -15,7 +15,7 @@ import '../../domain/entities/member.dart';
 import '../models/member_models.dart' hide Member;
 import '../models/member_model.dart';
 import '../../../../core/utils/app_date_time.dart';
-import '../../../../core/data/models/sync_operation_model.dart';
+import '../../../../core/data/models/sync_item_model.dart';
 import '../../../../core/services/device_service.dart';
 
 class SupabaseMemberRepository
@@ -203,21 +203,20 @@ class SupabaseMemberRepository
           ..createdBy = userId
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'members'
-          ..entityId = uuid
-          ..operation = 'INSERT'
-          ..payload = jsonEncode(newMember.toJson())
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId ?? ''
-          ..userId = userId;
-
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
         await _isar.db.writeTxn(() async {
           await _isar.db.memberModels.put(model);
-          await _isar.db.syncOperationModels.put(syncOp);
         });
+        await _isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'members'
+          ..action = 'INSERT'
+          ..jsonData = jsonEncode(newMember.toJson())
+          ..createdAt = DateTime.now()
+          ..localId = uuid
+          ..churchId = churchId ?? ''
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
       } else {
         await _client.from('members').insert(newMember.toJson());
       }
@@ -248,21 +247,20 @@ class SupabaseMemberRepository
           ..createdBy = localModel?.createdBy ?? userId
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'members'
-          ..entityId = updatedMember.id
-          ..operation = 'UPDATE'
-          ..payload = jsonEncode(updatedMember.toJson())
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId ?? ''
-          ..userId = userId;
-
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
         await _isar.db.writeTxn(() async {
           await _isar.db.memberModels.put(model);
-          await _isar.db.syncOperationModels.put(syncOp);
         });
+        await _isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'members'
+          ..action = 'UPDATE'
+          ..jsonData = jsonEncode(updatedMember.toJson())
+          ..createdAt = DateTime.now()
+          ..localId = updatedMember.id
+          ..churchId = churchId ?? ''
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
       } else {
         await _client
             .from('members')
@@ -296,21 +294,20 @@ class SupabaseMemberRepository
             ..updatedBy = userId
             ..version = local.version + 1;
 
-          final syncOp = SyncOperationModel()
-            ..operationId = const Uuid().v4()
-            ..entityType = 'members'
-            ..entityId = id
-            ..operation = 'DELETE'
-            ..payload = jsonEncode({'id': id})
-            ..createdAt = DateTime.now()
-            ..deviceId = deviceId
-            ..churchId = local.churchId ?? churchId ?? ''
-            ..userId = userId;
-
+          // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
           await _isar.db.writeTxn(() async {
             await _isar.db.memberModels.put(local);
-            await _isar.db.syncOperationModels.put(syncOp);
           });
+          await _isar.queueSyncItem(SyncItemModel()
+            ..tableName = 'members'
+            ..action = 'DELETE'
+            ..jsonData = jsonEncode({'id': id})
+            ..createdAt = DateTime.now()
+            ..localId = id
+            ..churchId = local.churchId ?? churchId ?? ''
+            ..operationId = const Uuid().v4()
+            ..deviceId = deviceId
+            ..userId = userId);
         }
       } else {
         await _client.from('members').update({

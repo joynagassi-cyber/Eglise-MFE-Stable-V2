@@ -15,7 +15,6 @@ import '../../domain/entities/group_attendance.dart';
 import '../../domain/entities/member_transfer_request.dart';
 import 'package:lumina/core/logging/app_logger.dart';
 import 'package:lumina/core/utils/app_date_time.dart';
-import 'package:lumina/core/data/models/sync_operation_model.dart';
 import 'package:lumina/core/services/device_service.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
@@ -160,20 +159,8 @@ class GroupRepositoryImpl implements IGroupRepository {
         ..createdBy = userId
         ..updatedBy = userId;
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'groups'
-        ..entityId = uuid
-        ..operation = 'INSERT'
-        ..payload = jsonEncode(data)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = newGroup.churchId
-        ..userId = userId;
-
       await isar.writeTxn(() async {
         await isar.groupModels.put(model);
-        await isar.syncOperationModels.put(syncOp);
       });
     } else {
       await _supabase.from('groups').insert(data).timeout(const Duration(seconds: 15));
@@ -200,20 +187,8 @@ class GroupRepositoryImpl implements IGroupRepository {
         ..createdBy = existing?.createdBy ?? userId
         ..updatedBy = userId;
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'groups'
-        ..entityId = group.id
-        ..operation = 'UPDATE'
-        ..payload = jsonEncode(data)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = group.churchId
-        ..userId = userId;
-
       await isar.writeTxn(() async {
         await isar.groupModels.put(model);
-        await isar.syncOperationModels.put(syncOp);
       });
     } else {
       await _supabase.from('groups').update(data).eq('id', group.id).timeout(const Duration(seconds: 15));
@@ -238,20 +213,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           ..updatedBy = userId
           ..version = existing.version + 1;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'groups'
-          ..entityId = id
-          ..operation = 'DELETE'
-          ..payload = jsonEncode({'id': id})
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId
-          ..userId = userId;
-
         await isar.writeTxn(() async {
           await isar.groupModels.put(existing);
-          await isar.syncOperationModels.put(syncOp);
         });
       }
     } else {
@@ -385,20 +348,8 @@ class GroupRepositoryImpl implements IGroupRepository {
         ..createdBy = userId
         ..updatedBy = userId;
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'group_memberships'
-        ..entityId = uuid
-        ..operation = 'INSERT'
-        ..payload = jsonEncode(data)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = churchId
-        ..userId = userId;
-
       await isar.writeTxn(() async {
         await isar.groupMembershipModels.put(model);
-        await isar.syncOperationModels.put(syncOp);
       });
     } else {
       await _supabase.from('group_memberships').insert(data);
@@ -442,19 +393,7 @@ class GroupRepositoryImpl implements IGroupRepository {
 
       final operation = existing == null ? 'INSERT' : 'UPDATE';
 
-      final syncOp = SyncOperationModel()
-        ..operationId = const Uuid().v4()
-        ..entityType = 'group_memberships'
-        ..entityId = requestId
-        ..operation = operation
-        ..payload = jsonEncode(payload)
-        ..createdAt = DateTime.now()
-        ..deviceId = deviceId
-        ..churchId = churchId
-        ..userId = authUserId;
-
       await isar.writeTxn(() async {
-        await isar.syncOperationModels.put(syncOp);
         if (existing == null) {
           final domain = GroupMembership(
             id: requestId,
@@ -528,20 +467,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           ..updatedBy = userId
           ..version = existing.version + 1;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'group_memberships'
-          ..entityId = membershipId
-          ..operation = 'DELETE'
-          ..payload = jsonEncode({'id': membershipId})
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId
-          ..userId = userId;
-
         await isar.writeTxn(() async {
           await isar.groupMembershipModels.put(existing);
-          await isar.syncOperationModels.put(syncOp);
         });
       }
     } else {
@@ -568,20 +495,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           ..version = membership.version + 1
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'group_memberships'
-          ..entityId = membershipId
-          ..operation = 'UPDATE'
-          ..payload = jsonEncode({'id': membershipId, 'role': newRole.name.toUpperCase()})
-          ..createdAt = DateTime.now()
-          ..deviceId = deviceId
-          ..churchId = churchId
-          ..userId = userId;
-
         await isar.writeTxn(() async {
           await isar.groupMembershipModels.put(membership);
-          await isar.syncOperationModels.put(syncOp);
         });
       }
     } else {
@@ -616,25 +531,25 @@ class GroupRepositoryImpl implements IGroupRepository {
           ..createdBy = membership.createdBy
           ..updatedBy = userId;
 
-        final syncOp = SyncOperationModel()
-          ..operationId = const Uuid().v4()
-          ..entityType = 'group_memberships'
-          ..entityId = membershipId
-          ..operation = 'UPDATE'
-          ..payload = jsonEncode({
+        await isar.writeTxn(() async {
+          await isar.groupMembershipModels.put(updatedModel);
+        });
+        
+        // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
+        await isar.queueSyncItem(SyncItemModel()
+          ..tableName = 'group_memberships'
+          ..action = 'UPDATE'
+          ..jsonData = jsonEncode({
             'id': membershipId,
             'status': status.name.toLowerCase(),
             'is_active': status == MembershipStatus.active,
           })
           ..createdAt = DateTime.now()
-          ..deviceId = deviceId
+          ..localId = membershipId
           ..churchId = churchId
-          ..userId = userId;
-
-        await isar.writeTxn(() async {
-          await isar.groupMembershipModels.put(updatedModel);
-          await isar.syncOperationModels.put(syncOp);
-        });
+          ..operationId = const Uuid().v4()
+          ..deviceId = deviceId
+          ..userId = userId);
       }
     } else {
       final isApproved = status == MembershipStatus.active;
