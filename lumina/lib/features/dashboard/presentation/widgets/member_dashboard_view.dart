@@ -357,19 +357,19 @@ class MemberDashboardView extends ConsumerWidget {
         children: [
           const SizedBox(height: 20),
           // Skeleton header
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SkeletonTile(width: 80, height: 12),
-                    SizedBox(height: 6),
-                    SkeletonTile(width: 120, height: 24),
+                    const SkeletonTile(width: 80, height: 12),
+                    const SizedBox(height: 6),
+                    const SkeletonTile(width: 120, height: 24),
                   ],
                 ),
               ),
-              SkeletonTile(width: 52, height: 52, shape: BoxShape.circle),
+              const SkeletonTile(width: 52, height: 52, shape: BoxShape.circle),
             ],
           ),
           const SizedBox(height: 28),
@@ -392,9 +392,9 @@ class MemberDashboardView extends ConsumerWidget {
           // Section title
           const Row(
             children: [
-              SkeletonTile(width: 4, height: 16),
-              SizedBox(width: 8),
-              SkeletonTile(width: 100, height: 12),
+              const SkeletonTile(width: 4, height: 16),
+              const SizedBox(width: 8),
+              const SkeletonTile(width: 100, height: 12),
             ],
           ),
           const SizedBox(height: 12),
@@ -403,13 +403,13 @@ class MemberDashboardView extends ConsumerWidget {
             height: 110,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: List.generate(4, (index) => const Padding(
-                padding: EdgeInsets.only(right: 12),
+              children: List.generate(4, (index) => Padding(
+                padding: const EdgeInsets.only(right: 12),
                 child: Column(
                   children: [
-                    SkeletonTile(width: 60, height: 60, shape: BoxShape.circle),
-               const SizedBox(height: 8),
-                    SkeletonTile(width: 60, height: 10),
+                    const SkeletonTile(width: 60, height: 60, shape: BoxShape.circle),
+                    const SizedBox(height: 8),
+                    const SkeletonTile(width: 60, height: 10),
                   ],
                 ),
               )),
@@ -432,14 +432,14 @@ class MemberDashboardView extends ConsumerWidget {
           width: 0.5,
         ),
       ),
-      child:      const Column(
+      child:      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SkeletonTile(width: 40, height: 40, shape: BoxShape.circle),
+          const SkeletonTile(width: 40, height: 40, shape: BoxShape.circle),
           const SizedBox(height: 14),
-          SkeletonTile(width: 60, height: 10),
+          const SkeletonTile(width: 60, height: 10),
           const SizedBox(height: 4),
-          SkeletonTile(width: 40, height: 20),
+          const SkeletonTile(width: 40, height: 20),
         ],
       ),
     );
