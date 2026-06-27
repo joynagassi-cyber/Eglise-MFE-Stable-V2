@@ -363,13 +363,13 @@ class MemberDashboardView extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SkeletonTile(width: 80, height: 12),
+                    SkeletonTile(width: 80, height: 12),
                     const SizedBox(height: 6),
-                    const SkeletonTile(width: 120, height: 24),
+                    SkeletonTile(width: 120, height: 24),
                   ],
                 ),
               ),
-              const SkeletonTile(width: 52, height: 52, shape: BoxShape.circle),
+              SkeletonTile(width: 52, height: 52, shape: BoxShape.circle),
             ],
           ),
           const SizedBox(height: 28),
@@ -390,11 +390,11 @@ class MemberDashboardView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           // Section title
-          const Row(
+          Row(
             children: [
-              const SkeletonTile(width: 4, height: 16),
-              const SizedBox(width: 8),
-              const SkeletonTile(width: 100, height: 12),
+              SkeletonTile(width: 4, height: 16),
+              SizedBox(width: 8),
+              SkeletonTile(width: 100, height: 12),
             ],
           ),
           const SizedBox(height: 12),
@@ -407,9 +407,9 @@ class MemberDashboardView extends ConsumerWidget {
                 padding: const EdgeInsets.only(right: 12),
                 child: Column(
                   children: [
-                    const SkeletonTile(width: 60, height: 60, shape: BoxShape.circle),
+                    SkeletonTile(width: 60, height: 60, shape: BoxShape.circle),
                     const SizedBox(height: 8),
-                    const SkeletonTile(width: 60, height: 10),
+                    SkeletonTile(width: 60, height: 10),
                   ],
                 ),
               )),
@@ -435,11 +435,11 @@ class MemberDashboardView extends ConsumerWidget {
       child:      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SkeletonTile(width: 40, height: 40, shape: BoxShape.circle),
-          const SizedBox(height: 14),
-          const SkeletonTile(width: 60, height: 10),
-          const SizedBox(height: 4),
-          const SkeletonTile(width: 40, height: 20),
+          SkeletonTile(width: 40, height: 40, shape: BoxShape.circle),
+          SizedBox(height: 14),
+          SkeletonTile(width: 60, height: 10),
+          SizedBox(height: 4),
+          SkeletonTile(width: 40, height: 20),
         ],
       ),
     );

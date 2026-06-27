@@ -198,7 +198,6 @@ class GroupRepositoryImpl implements IGroupRepository {
 
   @override
   Future<void> deleteGroup(String id, {required String churchId}) async {
-    final deviceId = await DeviceService.getDeviceIdStatic();
     final userId = _supabase.auth.currentUser?.id ?? 'unknown';
 
     if (_isarService.isReady) {

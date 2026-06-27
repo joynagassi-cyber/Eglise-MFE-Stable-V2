@@ -180,7 +180,7 @@ class _RoleTile extends StatelessWidget {
               color: LuminaDesign.primary.withOpacity(0.05),
               shape: BoxShape.circle,
             ),
-            const child: isLoading
+            child: isLoading
                 ? const SizedBox(
                     width: 24,
                     height: 24,
