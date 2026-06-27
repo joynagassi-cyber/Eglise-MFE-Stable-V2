@@ -1,19 +1,17 @@
 // lib/core/presentation/screens/splash_screen.dart
 //
-// Branded Splash Screen — Lumina
-// Auto-navigating: listens to auth state and redirects when resolved.
-// Falls back to auth-home after 5 seconds if redirect hasn't fired.
+// Splash Screen Cinématique — Ministère le Feu de l'Évangile de Jésus-Christ
+// Motion Graphics : logo scale-in, cross-fade, staggered text reveal, fire pulse,
+// shimmer loader, exit animation déclenchée par le routeur.
 
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lumina/core/extensions/context_extension.dart';
-import 'package:lumina/core/theme/app_spacing.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import 'package:lumina/core/router/app_routes.dart';
 import 'package:lumina/core/router/router_policy.dart';
-import 'package:lumina/core/router/route_status_provider.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
 import 'package:lumina/features/onboarding/presentation/providers/onboarding_progress_provider.dart';
 import 'package:lumina/features/onboarding/domain/entities/onboarding_step.dart';
@@ -27,42 +25,38 @@ class LuminaSplashScreen extends ConsumerStatefulWidget {
 }
 
 class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _fadeIn;
-  late final Animation<double> _scale;
+    with SingleTickerProviderStateMixin, TickerProviderStateMixin {
+  late final AnimationController _masterController;
+  late final AnimationController _pulseController;
   Timer? _timeoutTimer;
   bool _hasNavigated = false;
+
+  // Phases d'animation (ms)
+  static const _logoIn = 0;
+  static const _churchNameIn = 400;
+  static const _subtitleIn = 700;
+  static const _loaderIn = 1000;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    // Master : timeline globale (2200ms total)
+    _masterController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
+      duration: const Duration(milliseconds: 2200),
+    )..forward();
 
-    _fadeIn = CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-    );
+    // Pulse continu pour le glow du logo (loop)
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat(reverse: true);
 
-    _scale = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.6, curve: Curves.elasticOut),
-      ),
-    );
-
-    _controller.forward();
-
-    // Safety timeout: if auth doesn't resolve in 5 seconds, navigate anyway
+    // Safety timeout
     _timeoutTimer = Timer(const Duration(seconds: 5), () {
       if (!_hasNavigated && mounted) {
-        AppLogger.w(
-          'Splash timeout — forcing navigation to authHome',
-          'SPLASH',
-        );
+        AppLogger.w('Splash timeout — forcing navigation to authHome', 'SPLASH');
         _navigateTo(AppRoutes.authHome);
       }
     });
@@ -71,7 +65,8 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
   @override
   void dispose() {
     _timeoutTimer?.cancel();
-    _controller.dispose();
+    _masterController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -79,39 +74,42 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
     if (_hasNavigated || !mounted) return;
     _hasNavigated = true;
     _timeoutTimer?.cancel();
-    context.go(route);
+    _masterController.reverse().then((_) {
+      if (mounted) context.go(route);
+    });
   }
+
+  // Helpers d'animation (staggered reveal)
+  Animation<double> _fadeIn(double begin, double end) =>
+      CurvedAnimation(parent: _masterController, curve: Interval(begin, end, curve: Curves.easeOut));
+
+  Animation<double> _slideUp(double begin, double end) =>
+      Tween<double>(begin: 20, end: 0).animate(
+        CurvedAnimation(parent: _masterController, curve: Interval(begin, end, curve: Curves.easeOutCubic)),
+      );
 
   @override
   Widget build(BuildContext context) {
-    // Listen to route status and navigate when auth is resolved
+    // Écoute le route status pour naviguer automatiquement
     ref.listen(routeStatusProvider, (previous, next) {
       if (_hasNavigated) return;
 
-      AppLogger.d(
-        'RouteStatus changed: $previous → $next',
-        'SPLASH',
-      );
+      AppLogger.d('RouteStatus changed: $previous → $next', 'SPLASH');
 
       switch (next) {
         case RouteStatus.unauthenticated:
-          // Small delay to let the splash animation play
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (!_hasNavigated && mounted) {
-              _navigateTo(AppRoutes.authHome);
-            }
+          Future.delayed(const Duration(milliseconds: 600), () {
+            if (!_hasNavigated && mounted) _navigateTo(AppRoutes.authHome);
           });
           break;
-
         case RouteStatus.authenticated:
           final initialRoute = ref.read(currentInitialRouteProvider);
-          Future.delayed(const Duration(milliseconds: 800), () {
+          Future.delayed(const Duration(milliseconds: 600), () {
             if (!_hasNavigated && mounted) {
               _navigateTo(initialRoute.isNotEmpty ? initialRoute : AppRoutes.dashboard);
             }
           });
           break;
-
         case RouteStatus.onboarding:
           final progress = ref.read(onboardingProgressNotifierProvider);
           final step = progress.currentStep;
@@ -120,146 +118,167 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
             OnboardingStep.identitySetup => AppRoutes.onboardingAdminCode,
             OnboardingStep.completed => AppRoutes.dashboard,
           };
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (!_hasNavigated && mounted) {
-              _navigateTo(route);
-            }
+          Future.delayed(const Duration(milliseconds: 600), () {
+            if (!_hasNavigated && mounted) _navigateTo(route);
           });
           break;
-
         case RouteStatus.loading:
-          // Still loading — keep showing splash
+          // Stay on splash
           break;
       }
     });
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: context.colors.brandGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(flex: 3),
+      body: AnimatedBuilder(
+        animation: _masterController,
+        builder: (context, child) {
+          final opacity = _masterController.value;
+          return Opacity(
+            opacity: opacity.clamp(0.0, 1.0),
+            child: child,
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment(0.3, -0.2),
+              radius: 1.4,
+              colors: [
+                Color(0xFF1A0500), // centre chaud
+                Color(0xFF0D0200), // milieu
+                Color(0xFF000000), // bord noir
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(flex: 4),
 
-              // Logo avec animation
-              AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  return Opacity(
-                    opacity: _fadeIn.value,
-                    child: Transform.scale(
-                      scale: _scale.value,
-                      child: child,
+                // ─── LOGO avec glow pulsant ───────────────────────
+                AnimatedBuilder(
+                  animation: _pulseController,
+                  builder: (context, child) {
+                    final glowAlpha = 0.35 + 0.15 * _pulseController.value;
+                    return Container(
+                      width: 130,
+                      height: 130,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFF6B00).withValues(alpha: glowAlpha),
+                            blurRadius: 50,
+                            spreadRadius: 12,
+                          ),
+                          BoxShadow(
+                            color: const Color(0xFFFFD700).withValues(alpha: glowAlpha * 0.5),
+                            blurRadius: 70,
+                            spreadRadius: 20,
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/icon/church_logo.png',
+                          width: 130,
+                          height: 130,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ).animate(controller: _masterController)
+                  .fadeIn(duration: const Duration(milliseconds: 500), curve: Curves.easeOut)
+                  .scale(begin: const Offset(0.75, 0.75), duration: const Duration(milliseconds: 700), curve: Curves.elasticOut),
+
+                const SizedBox(height: 32),
+
+                // ─── NOM COMPLET ÉGLISE — staggered reveal ──────
+                FadeTransition(
+                  opacity: _fadeIn(_churchNameIn / 2200, (_churchNameIn + 400) / 2200),
+                  child: SlideTransition(
+                    position: _slideUp(_churchNameIn / 2200, (_churchNameIn + 400) / 2200),
+                    child: const Text(
+                      'Ministère le Feu',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: 1.2,
+                        height: 1.2,
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: context.colors.brandPrimary.withOpacity(0.3),
-                        blurRadius: 12.0,
-                        spreadRadius: 2.0,
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _fadeIn((_churchNameIn + 120) / 2200, (_churchNameIn + 520) / 2200),
+                  child: SlideTransition(
+                    position: _slideUp((_churchNameIn + 120) / 2200, (_churchNameIn + 520) / 2200),
+                    child: const Text(
+                      'de l\'Évangile',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFFFD700),
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _fadeIn((_churchNameIn + 220) / 2200, (_churchNameIn + 620) / 2200),
+                  child: SlideTransition(
+                    position: _slideUp((_churchNameIn + 220) / 2200, (_churchNameIn + 620) / 2200),
+                    child: const Text(
+                      'de Jésus-Christ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const Spacer(flex: 3),
+
+                // ─── MARQUEUR + LOADER ───────────────────────────
+                FadeTransition(
+                  opacity: _fadeIn(_loaderIn / 2200, (_loaderIn + 300) / 2200),
+                  child: Column(
+                    children: [
+                      Text(
+                        'MFE-JC',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 3.0,
+                          color: Colors.white.withValues(alpha: 0.25),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      // Loader premium : barre horizontale avec gradient brand
+                      SizedBox(
+                        width: 120,
+                        height: 2.5,
+                        child: ShimmerLoading(
+                          borderRadius: 2,
+                          baseColor: Colors.white.withValues(alpha: 0.08),
+                          highlightColor: const Color(0xFFFF8C00).withValues(alpha: 0.5),
+                        ),
                       ),
                     ],
                   ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/icon/launcher_icon.png',
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
                 ),
-              ),
 
-              SizedBox(height: AppSpacing.xl),
-
-              // App Name
-              FadeTransition(
-                opacity: _fadeIn,
-                child: Text(
-                  'LUMINA',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 6,
-                    color: isDark ? context.colors.textOnBrand : context.colors.brandSecondary,
-                  ),
-                ),
-              ),
-
-              SizedBox(height: AppSpacing.sm),
-
-              // Subtitle — nom complet de l'église
-              FadeTransition(
-                opacity: _fadeIn,
-                child: Text(
-                  'Ministère le Feu de l\'Évangile',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.5,
-                    color: context.colors.brandSecondary.withValues(alpha: 0.9),
-                  ),
-                ),
-              ),
-              FadeTransition(
-                opacity: _fadeIn,
-                child: Text(
-                  'de Jésus-Christ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.5,
-                    color: Colors.white.withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-
-              Spacer(flex: 2),
-
-              // Loading indicator
-              FadeTransition(
-                opacity: _fadeIn,
-                child: SizedBox(
-                  height: 60,
-                  width: double.infinity,
-                  child: LoadingState(
-                    useShimmer: true,
-                  ),
-                ),
-              ),
-
-              SizedBox(height: AppSpacing.lg),
-
-              // Church abbreviation mark
-              FadeTransition(
-                opacity: _fadeIn,
-                child: Text(
-                  'MFE-JC',
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 2.5,
-                    color: Colors.white.withValues(alpha: 0.35),
-                  ),
-                ),
-              ),
-
-              Spacer(flex: 1),
-            ],
+                const Spacer(flex: 2),
+              ],
+            ),
           ),
         ),
       ),
