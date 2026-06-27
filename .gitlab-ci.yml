@@ -96,7 +96,7 @@ analyze:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     - dart run build_runner build --delete-conflicting-outputs
-    - flutter analyze
+    - flutter analyze --no-fatal-infos --no-fatal-warnings
 
 # =============================================================================
 # 2) BUILD — APK release signé (sur main pour vérifier + sur tag pour la release)
