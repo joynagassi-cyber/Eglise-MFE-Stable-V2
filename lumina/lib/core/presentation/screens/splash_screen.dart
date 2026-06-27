@@ -12,6 +12,8 @@ import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import 'package:lumina/core/router/app_routes.dart';
 import 'package:lumina/core/router/router_policy.dart';
+import 'package:lumina/core/router/route_status_provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
 import 'package:lumina/features/onboarding/presentation/providers/onboarding_progress_provider.dart';
 import 'package:lumina/features/onboarding/domain/entities/onboarding_step.dart';
@@ -25,16 +27,14 @@ class LuminaSplashScreen extends ConsumerStatefulWidget {
 }
 
 class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
-    with SingleTickerProviderStateMixin, TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _masterController;
   late final AnimationController _pulseController;
   Timer? _timeoutTimer;
   bool _hasNavigated = false;
 
-  // Phases d'animation (ms)
-  static const _logoIn = 0;
+  // Phases d'animation (ms) — gardées pour lisibilité du code
   static const _churchNameIn = 400;
-  static const _subtitleIn = 700;
   static const _loaderIn = 1000;
 
   @override
@@ -83,8 +83,8 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
   Animation<double> _fadeIn(double begin, double end) =>
       CurvedAnimation(parent: _masterController, curve: Interval(begin, end, curve: Curves.easeOut));
 
-  Animation<double> _slideUp(double begin, double end) =>
-      Tween<double>(begin: 20, end: 0).animate(
+  Animation<Offset> _slideUp(double begin, double end) =>
+      Tween<Offset>(begin: const Offset(0, 20), end: Offset.zero).animate(
         CurvedAnimation(parent: _masterController, curve: Interval(begin, end, curve: Curves.easeOutCubic)),
       );
 
@@ -266,10 +266,10 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
                       SizedBox(
                         width: 120,
                         height: 2.5,
-                        child: ShimmerLoading(
+                        child: ShimmerBox(
+                          width: 120,
+                          height: 2.5,
                           borderRadius: 2,
-                          baseColor: Colors.white.withValues(alpha: 0.08),
-                          highlightColor: const Color(0xFFFF8C00).withValues(alpha: 0.5),
                         ),
                       ),
                     ],

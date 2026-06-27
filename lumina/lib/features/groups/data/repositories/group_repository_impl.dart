@@ -536,7 +536,7 @@ class GroupRepositoryImpl implements IGroupRepository {
         });
         
         // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
-        await isar.queueSyncItem(SyncItemModel()
+        await _isarService.queueSyncItem(SyncItemModel()
           ..tableName = 'group_memberships'
           ..action = 'UPDATE'
           ..jsonData = jsonEncode({

@@ -174,7 +174,7 @@ class EventRepositoryImpl implements IEventRepository {
         ..jsonData = jsonEncode(data)
         ..createdAt = DateTime.now()
         ..localId = uuid
-        ..churchId = churchId
+        ..churchId = newEvent.churchId
         ..operationId = const Uuid().v4()
         ..deviceId = deviceId
         ..userId = userId);
@@ -216,7 +216,7 @@ class EventRepositoryImpl implements IEventRepository {
         ..jsonData = jsonEncode(data)
         ..createdAt = DateTime.now()
         ..localId = updatedEvent.id
-        ..churchId = churchId
+        ..churchId = updatedEvent.churchId
         ..operationId = const Uuid().v4()
         ..deviceId = deviceId
         ..userId = userId);

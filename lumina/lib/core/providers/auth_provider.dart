@@ -464,13 +464,20 @@ class Auth extends _$Auth with AuditableMixin {
         churchId: current.session.activeChurchId,
         label: c.role.code,
       );
+      final syncedRoleInfo = app_auth.RoleInfo(
+        code: syncedRole.name,
+        label: syncedRole.name,
+        isSuper: syncedRole.level == app_auth.RoleLevel.superadmin,
+        level: syncedRole.level,
+        initialRoute: syncedRole.initialRoute,
+      );
       final session = current.session.copyWith(
         needsOnboarding: false,
         role: syncedRole,
       );
       final updatedContext = app_auth.UserContext(
         user: c.user,
-        role: syncedRole,
+        role: syncedRoleInfo,
         group: c.group,
         permissions: c.permissions,
         generatedAt: c.generatedAt,
@@ -508,13 +515,20 @@ class Auth extends _$Auth with AuditableMixin {
         churchId: current.session.activeChurchId,
         label: c.role.code,
       );
+      final syncedRoleInfo = app_auth.RoleInfo(
+        code: syncedRole.name,
+        label: syncedRole.name,
+        isSuper: syncedRole.level == app_auth.RoleLevel.superadmin,
+        level: syncedRole.level,
+        initialRoute: syncedRole.initialRoute,
+      );
       final session = current.session.copyWith(
         needsOnboarding: false,
         role: syncedRole,
       );
       final updatedContext = app_auth.UserContext(
         user: c.user,
-        role: syncedRole,
+        role: syncedRoleInfo,
         group: c.group,
         permissions: c.permissions,
         generatedAt: c.generatedAt,

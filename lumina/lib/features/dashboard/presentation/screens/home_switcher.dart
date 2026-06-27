@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/widgets/widgets.dart';
-import '../../../profile/presentation/providers/profile_provider.dart';
+import 'package:lumina/features/profile/presentation/providers/profile_provider.dart';
+import 'package:lumina/core/extensions/context_extension.dart';
 import '../widgets/group_dashboard_view.dart';
 import '../widgets/member_dashboard_view.dart';
 import '../widgets/superadmin_dashboard_view.dart';
 import '../providers/dashboard_nav_provider.dart';
+import '../providers/member_view_mode_provider.dart';
 import '../widgets/main_drawer.dart';
-import '../../../../core/widgets/radial_fire_menu.dart';
-import '../../../../core/router/app_routes.dart';
+import 'package:lumina/core/widgets/radial_fire_menu.dart';
+import 'package:lumina/core/router/app_routes.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/providers/user_context_provider.dart';
-import '../../../../core/auth/domain/entities/enums/role_level.dart';
+import 'package:lumina/core/providers/user_context_provider.dart';
+import 'package:lumina/core/auth/domain/entities/enums/role_level.dart';
 
-import '../screens/member_list_screen.dart';
-import '../screens/finance_dashboard_screen.dart';
-import '../screens/inbox_screen.dart';
+import 'package:lumina/features/membres/presentation/screens/member_list_screen.dart';
+import 'package:lumina/features/finance/presentation/screens/finance_dashboard_screen.dart';
+import 'package:lumina/features/messaging/presentation/screens/inbox_screen.dart';
 import 'package:lumina/features/bible/reader/widgets/bible_view.dart';
 import '../screens/communaute_screen.dart';
 
@@ -385,17 +387,17 @@ class HomeSwitcher extends ConsumerWidget {
           icon: Icons.home_rounded,
           view: dashboardView,
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Brebis',
           icon: Icons.people_rounded,
           view: MemberListScreen(),
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Fonds',
           icon: Icons.account_balance_rounded,
           view: FinanceDashboardScreen(),
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Messages',
           icon: Icons.chat_bubble_rounded,
           view: InboxScreen(),
@@ -403,22 +405,22 @@ class HomeSwitcher extends ConsumerWidget {
       ];
     } else {
       return [
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Dashboard',
           icon: Icons.home_rounded,
           view: MemberDashboardView(),
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Bible',
           icon: Icons.menu_book_rounded,
           view: BibleView(),
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Communauté',
           icon: Icons.groups_rounded,
           view: CommunauteScreen(),
         ),
-        const _NavigationItem(
+        _NavigationItem(
           label: 'Messages',
           icon: Icons.chat_bubble_rounded,
           view: InboxScreen(),

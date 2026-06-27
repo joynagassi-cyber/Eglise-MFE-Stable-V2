@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import 'package:lumina/core/widgets/loading_state.dart';
 import 'package:lumina/core/extensions/context_extension.dart';
-import 'package:lumina/core/theme/app_spacing.dart';
+
 
 class MemberDashboardView extends ConsumerWidget {
   const MemberDashboardView({super.key});
@@ -386,7 +386,7 @@ class MemberDashboardView extends ConsumerWidget {
           SkeletonTile(
             width: double.infinity,
             height: 120,
-            borderRadius: 16,
+            borderRadius: BorderRadius.circular(16),
           ),
           const SizedBox(height: 20),
           // Section title
