@@ -10,6 +10,7 @@ tmp/
 out/
 graphify-out/
 .mcp/
+.firecrawl/
 
 # Fichiers temporaires
 temp_*

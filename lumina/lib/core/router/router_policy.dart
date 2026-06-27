@@ -183,13 +183,21 @@ class RouterPolicy {
       return authState.cachedSession != null ? RouteStatus.authenticated : RouteStatus.unauthenticated;
     }
 
+    // ⚠️ FIX: Si l'utilisateur est déjà authentifié, ne PAS le redescendre en loading
+    // à cause du profil qui charge encore. Le profil est un enrichissement, pas un prérequis
+    // pour l'accès au dashboard. Sans ce guard, après completeOnboarding() le user
+    // voit un flash du splash screen pendant que profileAsync se résout.
+    if (authState is app_auth.AuthAuthenticated) {
+      return RouteStatus.authenticated;
+    }
+
     if (authState is app_auth.AuthOnboardingRequired || authState.needsOnboarding) {
       return RouteStatus.onboarding;
     }
 
-    if (profileAsync is AsyncLoading && !profileAsync.hasValue) {
-      return RouteStatus.loading;
-    }
+    // Si on arrive ici, auth est résolu mais ni onboardé ni authentifié.
+    // On attend le profil seulement pour les cas ambigüs (needsOnboarding
+    // peut aussi venir du profil, pas seulement de la session).
 
     final profile = profileAsync.valueOrNull;
     if (profile != null && profile.needsOnboarding) {

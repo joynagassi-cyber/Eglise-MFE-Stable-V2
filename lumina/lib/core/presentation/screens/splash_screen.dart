@@ -202,16 +202,28 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
 
               SizedBox(height: AppSpacing.sm),
 
-              // Subtitle
+              // Subtitle — nom complet de l'église
               FadeTransition(
                 opacity: _fadeIn,
                 child: Text(
-                  'Système de Gestion d\'Église',
+                  'Ministère le Feu de l\'Évangile',
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                    color: context.colors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.5,
+                    color: context.colors.brandSecondary.withValues(alpha: 0.9),
+                  ),
+                ),
+              ),
+              FadeTransition(
+                opacity: _fadeIn,
+                child: Text(
+                  'de Jésus-Christ',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.5,
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ),
@@ -232,16 +244,16 @@ class _LuminaSplashScreenState extends ConsumerState<LuminaSplashScreen>
 
               SizedBox(height: AppSpacing.lg),
 
-              // Church name
+              // Church abbreviation mark
               FadeTransition(
                 opacity: _fadeIn,
                 child: Text(
                   'MFE-JC',
                   style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 2,
-                    color: context.colors.textTertiary.withOpacity(0.5),
+                    fontSize: 9,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 2.5,
+                    color: Colors.white.withValues(alpha: 0.35),
                   ),
                 ),
               ),

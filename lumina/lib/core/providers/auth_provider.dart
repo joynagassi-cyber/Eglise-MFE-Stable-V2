@@ -445,6 +445,44 @@ class Auth extends _$Auth with AuditableMixin {
     final current = state.valueOrNull;
     if (current is! app_auth.AuthOnboardingRequired) return;
 
+    // ⚠️ FIX: Si le contexte est un fallback (nouvel utilisateur sans profil RBAC,
+    // light_session=true), getUserContext() échouera systématiquement (timeout 3s)
+    // car il n'y a pas encore de ligne dans user_roles / profiles.
+    // Dans ce cas, on sync directement depuis le contexte fallback en mémoire.
+    final metadata = current.session.metadata ?? {};
+    final isLightSession = metadata['light_session'] == true;
+    final isFallbackRole = current.context.role.code == 'membre' ||
+        current.context.role.code == 'consultation';
+
+    if (isLightSession && isFallbackRole) {
+      AppLogger.i(
+        'completeOnboarding: light_session détecté → sync optimiste sans getUserContext()',
+        'AUTH_PROVIDER',
+      );
+      final c = current.context;
+      final syncedRole = app_auth.ChurchRole.fromLabel(
+        churchId: current.session.activeChurchId,
+        label: c.role.code,
+      );
+      final session = current.session.copyWith(
+        needsOnboarding: false,
+        role: syncedRole,
+      );
+      final updatedContext = app_auth.UserContext(
+        user: c.user,
+        role: syncedRole,
+        group: c.group,
+        permissions: c.permissions,
+        generatedAt: c.generatedAt,
+        needsOnboarding: false,
+        churchId: c.churchId,
+      );
+      state = AsyncData(
+          app_auth.AuthAuthenticated(session: session, context: updatedContext));
+      _lastSession = session;
+      return;
+    }
+
     try {
       final context =
           await ref.read(userContextRepositoryProvider).getUserContext()
@@ -476,7 +514,7 @@ class Auth extends _$Auth with AuditableMixin {
       );
       final updatedContext = app_auth.UserContext(
         user: c.user,
-        role: c.role,
+        role: syncedRole,
         group: c.group,
         permissions: c.permissions,
         generatedAt: c.generatedAt,

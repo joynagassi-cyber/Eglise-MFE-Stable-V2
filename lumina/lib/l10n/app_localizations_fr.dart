@@ -98,10 +98,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get teamDescription => 'Bergers, équipes pastorales';
 
   @override
-  String get ministry => 'Ministère';
+  String get ministry => 'MFE-JC';
 
   @override
-  String get ministryDescription => 'Finance, églises, rubriques';
+  String get ministryDescription => 'Finance, sites, rubriques';
 
   @override
   String get communication => 'Communication';

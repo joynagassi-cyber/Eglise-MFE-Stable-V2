@@ -47,11 +47,28 @@
             </intent-filter>
 
             <!-- Deep Linking for Supabase Auth -->
-            <intent-filter android:autoVerify="true">
+            <!-- tools:node="replace" empêche les doublons si google-services.json
+                 génère aussi un filtre io.supabase.gtfe (conflit → callback roman). -->
+            <intent-filter
+                android:autoVerify="true"
+                tools:node="replace">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="io.supabase.gtfe" android:host="login-callback" />
+            </intent-filter>
+
+            <!-- ⚠️ INTENT-FILTER OBLIGATOIRE pour google_sign_in v7+ (android 2023+)
+                 Sans ceci, le callback du navigateur Chrome Custom Tab retournant
+                 vers l'app après le consentement Google n'est pas intercepté —
+                 l'app reste bloquée dans le navigateur ou revient sans consentement.
+                 Le scheme doit correspondre au package de votre app :
+                 android:scheme = applicationId (com.lumina.mfejc). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.lumina.mfejc" />
             </intent-filter>
         </activity>
 

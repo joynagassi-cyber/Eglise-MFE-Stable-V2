@@ -275,13 +275,13 @@ abstract class AppLocalizations {
   /// No description provided for @ministry.
   ///
   /// In fr, this message translates to:
-  /// **'Ministère'**
+  /// **'MFE-JC'**
   String get ministry;
 
   /// No description provided for @ministryDescription.
   ///
   /// In fr, this message translates to:
-  /// **'Finance, églises, rubriques'**
+  /// **'Finance, sites, rubriques'**
   String get ministryDescription;
 
   /// No description provided for @communication.

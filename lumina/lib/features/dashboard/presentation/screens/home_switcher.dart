@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
@@ -14,12 +13,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/providers/user_context_provider.dart';
 import '../../../../core/auth/domain/entities/enums/role_level.dart';
 
-import '../providers/member_view_mode_provider.dart';
-
-// Import des modules pour la navigation
-import '../../../membres/presentation/screens/member_list_screen.dart';
-import '../../../finance/presentation/screens/finance_dashboard_screen.dart';
-import '../../../messaging/presentation/screens/inbox_screen.dart';
+import '../screens/member_list_screen.dart';
+import '../screens/finance_dashboard_screen.dart';
+import '../screens/inbox_screen.dart';
 import 'package:lumina/features/bible/reader/widgets/bible_view.dart';
 import '../screens/communaute_screen.dart';
 
@@ -38,9 +34,6 @@ class HomeSwitcher extends ConsumerWidget {
         // → On continue quand même avec un profil par défaut plutôt que
         //   de bloquer l'utilisateur sur un message d'erreur.
         if (profile == null) {
-          // Tombé ici → l'utilisateur n'a pas de profil mais peut quand
-          // même accéder à son dashboard. On construit le Scaffold avec
-          // les nav items par défaut (mode membre).
           final roleLevel = userContextAsync.valueOrNull?.role.level ??
               RoleLevel.membre;
           final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
@@ -50,9 +43,16 @@ class HomeSwitcher extends ConsumerWidget {
 
           return Scaffold(
             drawer: const MainDrawer(),
-            body: IndexedStack(
-              index: currentIndex,
-              children: navItems.map((item) => item.view).toList(),
+            body: Column(
+              children: [
+                _buildHomeHeader(context, ref, firstName: null),
+                Expanded(
+                  child: IndexedStack(
+                    index: currentIndex,
+                    children: navItems.map((item) => item.view).toList(),
+                  ),
+                ),
+              ],
             ),
             bottomNavigationBar: PremiumBottomBar(
               currentIndex: currentIndex,
@@ -81,26 +81,37 @@ class HomeSwitcher extends ConsumerWidget {
         // FIX: Utiliser la hiérarchie RoleLevel (RBAC source de vérité complète)
         final userContext = userContextAsync.valueOrNull;
         final roleLevel = userContext?.role.level ?? RoleLevel.membre;
-        
+
         // Accès leader pour tous ceux ayant un niveau hiérarchique >= 40
-        // (Superadmin, Admin, Finance, Staff, GroupLeader)
         final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
-                                
+
         // Mode Vue Membre forcé ?
         final isMemberViewMode = ref.watch(memberViewModeProvider);
-        
+
         // Dashboard pro seulement si on a l'accès ET qu'on n'est pas en mode membre
         final isProfessionalArea = hasLeaderAccess && !isMemberViewMode;
-        
+
         // 1. Définition des modules selon le niveau de rôle
         final List<_NavigationItem> navItems =
             _getNavItems(isProfessionalArea, roleLevel);
 
         return Scaffold(
           drawer: const MainDrawer(),
-          body: IndexedStack(
-            index: currentIndex,
-            children: navItems.map((item) => item.view).toList(),
+          body: Column(
+            children: [
+              _buildHomeHeader(
+                context,
+                ref,
+                firstName: profile.firstName,
+                roleLabel: userContext?.role.label,
+              ),
+              Expanded(
+                child: IndexedStack(
+                  index: currentIndex,
+                  children: navItems.map((item) => item.view).toList(),
+                ),
+              ),
+            ],
           ),
           bottomNavigationBar: PremiumBottomBar(
             currentIndex: currentIndex,
@@ -126,9 +137,6 @@ class HomeSwitcher extends ConsumerWidget {
         );
       },
       loading: () => Scaffold(
-        // Au lieu d'un écran noir avec shimmer, on affiche le Scaffold
-        // avec une barre de navigation et un contenu de chargement discret.
-        // L'utilisateur voit immédiatement la structure de son dashboard.
         body: _buildLoadingScaffold(context),
       ),
       error: (e, st) => Scaffold(
@@ -157,8 +165,190 @@ class HomeSwitcher extends ConsumerWidget {
     );
   }
 
+  /// ═══════════════════════════════════════════════════════════
+  /// Header premium avec gradient brand + logo + nom complet église
+  /// ═══════════════════════════════════════════════════════════
+  Widget _buildHomeHeader(
+    BuildContext context,
+    WidgetRef ref, {
+    String? firstName,
+    String? roleLabel,
+  }) {
+    final displayName = firstName?.trim().isNotEmpty == true
+        ? firstName!.trim().split(' ').first
+        : 'Disciple';
+
+    return Container(
+      constraints: const BoxConstraints(minHeight: 150),
+      decoration: BoxDecoration(
+        gradient: context.colors.brandGradient,
+      ),
+      child: Stack(
+        children: [
+          // Effet de lueur "fire" subtil en haut à droite
+          Positioned(
+            top: -30,
+            right: -20,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: context.colors.brandPrimary.withValues(alpha: 0.35),
+                    blurRadius: 40,
+                    spreadRadius: 10,
+                  ),
+                  BoxShadow(
+                    color: context.colors.brandSecondary.withValues(alpha: 0.2),
+                    blurRadius: 60,
+                    spreadRadius: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Glow subtil en bas à gauche
+          Positioned(
+            bottom: -20,
+            left: -10,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: context.colors.brandPrimary.withValues(alpha: 0.2),
+                    blurRadius: 30,
+                    spreadRadius: 8,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Contenu principal
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+              child: Row(
+                children: [
+                  // Logo de l'église — cercle avec bordure dorée
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(
+                        color: const Color(0xFFD4AF37).withValues(alpha: 0.6),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/icon/church_logo.png',
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Colonne texte : accueil + nom église
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Bonjour,',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withValues(alpha: 0.75),
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          displayName,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            letterSpacing: 0.2,
+                            height: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        // Nom complet de l'église en doré/blanc
+                        Text(
+                          'Ministère le Feu de l\'Évangile',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFFD4AF37).withValues(alpha: 0.9),
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        Text(
+                          'de Jésus-Christ',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white.withValues(alpha: 0.7),
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        if (roleLabel != null && roleLabel.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Text(
+                              roleLabel,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white.withValues(alpha: 0.9),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// Scaffold de chargement : montre la structure du dashboard pendant
-  /// que le profil se charge, au lieu d'un écran noir avec shimmer.
+  /// que le profil se charge.
   Widget _buildLoadingScaffold(BuildContext context) {
     return Center(
       child: Column(
@@ -181,14 +371,11 @@ class HomeSwitcher extends ConsumerWidget {
   List<_NavigationItem> _getNavItems(
       bool isProfessionalArea, RoleLevel roleLevel) {
     if (isProfessionalArea) {
-      // Choix du Dashboard selon le niveau hiérarchique du rôle
       Widget dashboardView;
-      
+
       if (roleLevel.hierarchyLevel >= 60) {
-        // Niveau 60+ : Superadmin, Admin, Finance, Staff -> Dashboard global
         dashboardView = const SuperadminDashboardView();
       } else {
-        // Niveau 40 : GroupLeader -> Dashboard de groupe (département, pasteur)
         dashboardView = const GroupDashboardView();
       }
 
