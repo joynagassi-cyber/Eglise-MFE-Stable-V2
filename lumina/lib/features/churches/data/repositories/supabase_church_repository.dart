@@ -242,7 +242,7 @@ class SupabaseChurchRepository implements ChurchRepository {
         });
 
         // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
-        await _isar.queueSyncItem(SyncItemModel()
+        await _isarService.queueSyncItem(SyncItemModel()
           ..tableName = 'churches'
           ..action = 'INSERT'
           ..jsonData = jsonEncode(data)
@@ -289,7 +289,7 @@ class SupabaseChurchRepository implements ChurchRepository {
         });
 
         // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
-        await _isar.queueSyncItem(SyncItemModel()
+        await _isarService.queueSyncItem(SyncItemModel()
           ..tableName = 'churches'
           ..action = 'UPDATE'
           ..jsonData = jsonEncode(data)
@@ -338,7 +338,7 @@ class SupabaseChurchRepository implements ChurchRepository {
           });
 
           // PHASE 5: SyncOperationModel supprimé → SyncItemModel direct
-          await _isar.queueSyncItem(SyncItemModel()
+          await _isarService.queueSyncItem(SyncItemModel()
             ..tableName = 'churches'
             ..action = 'DELETE'
             ..jsonData = jsonEncode({'id': id})
