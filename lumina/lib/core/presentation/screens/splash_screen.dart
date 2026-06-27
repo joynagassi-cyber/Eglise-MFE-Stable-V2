@@ -8,7 +8,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import 'package:lumina/core/router/app_routes.dart';
 import 'package:lumina/core/router/router_policy.dart';

@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:lumina/core/data/local/isar_service.dart'
     show IsarService;
 import 'package:lumina/core/services/offline_sync_manager.dart';
+import 'package:lumina/core/data/models/sync_item_model.dart';
 import '../../domain/entities/group.dart';
 import '../../domain/entities/group_membership.dart';
 import '../../domain/repositories/i_group_repository.dart';
