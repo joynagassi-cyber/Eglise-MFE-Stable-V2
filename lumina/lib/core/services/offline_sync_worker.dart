@@ -53,6 +53,7 @@ class OfflineSyncWorker {
     SupabaseClient supabase,
     IsarService isarService, {
     String workerId = 'unknown',
+    String? churchId,
   }) async {
     if (!isarService.isReady) return;
 
@@ -74,17 +75,21 @@ class OfflineSyncWorker {
     });
 
     try {
-      final allPendingItems = await isarService.syncItemModels
+      // FIX: Filtrer par churchId pour éviter le cross-tenant en environnement multi-église
+      final itemQuery = isarService.syncItemModels
           .filter()
           .isProcessingEqualTo(false)
-          .isConflictEqualTo(false)
-          .sortByCreatedAt()
-          .findAll();
+          .isConflictEqualTo(false);
+      final filteredItems = churchId != null && churchId.isNotEmpty
+          ? await itemQuery.churchIdEqualTo(churchId).sortByCreatedAt().findAll()
+          : await itemQuery.sortByCreatedAt().findAll();
 
-      for (final item in allPendingItems) {
+      for (final item in filteredItems) {
         await _syncSingleItem(item, supabase, isarService);
       }
 
+      // SyncOperationModel est legacy et va être supprimé en Phase 3.
+      // On le conserve pour compatibilité mais il ne devrait plus être alimenté.
       final allPendingOps = await isarService.syncOperationModels
           .filter()
           .isSyncedEqualTo(false)
@@ -124,13 +129,35 @@ class OfflineSyncWorker {
           await supabase.from(item.tableName).update(data).eq('id', id ?? '');
           break;
         case 'DELETE':
+          // FIX: Soft-delete aligné sur SyncService._pushItem()
+          // Le hard-delete causait une perte de données irréversible sans backup.
           final id = data['id'] ?? item.localId;
-          await supabase.from(item.tableName).delete().eq('id', id ?? '');
+          await supabase
+              .from(item.tableName)
+              .update({'is_deleted': true, 'deleted_at': DateTime.now().toIso8601String()})
+              .eq('id', id ?? '');
           break;
       }
       await isarService.deleteSyncItem(item.isarId);
     } catch (e) {
-      await isarService.markSyncItemProcessing(item.isarId, false);
+      // FIX: Harmoniser la gestion d'erreur avec SyncService._handlePushError
+      // Avant : seul isProcessing était reset, sans trace d'erreur ni comptage de tentatives.
+      final now = DateTime.now();
+      await isarService.db.writeTxn(() async {
+        final updated = SyncItemModel()
+          ..isarId = item.isarId
+          ..isProcessing = false
+          ..attempts = item.attempts + 1
+          ..lastUpdated = now
+          ..lastError = e.toString();
+        
+        if (updated.attempts >= _maxRetries) {
+          updated.isConflict = true;
+          updated.hasFailed = true;
+        }
+        
+        await isarService.syncItemModels.put(updated);
+      });
     }
   }
 

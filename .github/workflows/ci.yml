@@ -68,6 +68,9 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-infos
 
+      - name: Run unit tests
+        run: flutter test --no-tags --reporter=expanded
+
   # ---------------------------------------------------------------------------
   # 2) BUILD APK
   # ---------------------------------------------------------------------------

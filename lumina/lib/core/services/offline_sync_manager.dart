@@ -8,6 +8,7 @@ import 'package:lumina/core/api/supabase_service.dart';
 import 'package:lumina/core/data/local/isar_service.dart';
 import 'package:lumina/core/data/models/sync_item_model.dart';
 import 'package:lumina/core/logging/app_logger.dart';
+import 'package:lumina/core/services/device_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'offline_sync_worker.dart';
@@ -18,13 +19,14 @@ part 'offline_sync_manager.g.dart';
 OfflineSyncManager offlineSyncManager(OfflineSyncManagerRef ref) {
   final isar = ref.watch(isarServiceProvider);
   final supabase = ref.watch(supabaseServiceProvider).valueOrNull;
+  final device = ref.watch(deviceServiceProvider);
 
   if (supabase == null) {
     throw Exception(
         'SupabaseService must be initialized before OfflineSyncManager');
   }
 
-  return OfflineSyncManager(isar, supabase);
+  return OfflineSyncManager(isar, supabase, device);
 }
 
 @riverpod
@@ -39,6 +41,7 @@ class OfflineSyncManager extends ChangeNotifier {
   final Connectivity _connectivity = Connectivity();
   final IsarService _isarService;
   final SupabaseClient _supabase;
+  final DeviceService _deviceService;
 
   bool _isOnline = true;
   bool _isSyncing = false;
@@ -48,7 +51,7 @@ class OfflineSyncManager extends ChangeNotifier {
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
-  OfflineSyncManager(this._isarService, this._supabase);
+  OfflineSyncManager(this._isarService, this._supabase, this._deviceService);
 
   bool get isOnline => _isOnline;
   bool get isSyncing => _isSyncing;
@@ -183,13 +186,24 @@ class OfflineSyncManager extends ChangeNotifier {
     // Since OfflineSyncManager doesn't have direct access to ref inside this method without being passed,
     // we assume the Caller has verified the active church, OR we can check it if we inject ref.
 
+    // FIX CRITIQUE: Les champs late String operationId, deviceId, userId sont obligatoires
+    // dans SyncItemModel. Sans eux, un LateInitializationError crash le sync au premier read.
+    // On les hydrate ici avec les mêmes sources que SyncService.enqueueOperation().
+    final deviceId = await _deviceService.getDeviceId();
+    final userId = _supabase.auth.currentUser?.id ?? 'anonymous';
+    final operationId =
+        '${DateTime.now().millisecondsSinceEpoch}_$entityType${action.toLowerCase()}';
+
     final item = SyncItemModel()
       ..tableName = entityType
       ..action = action
       ..jsonData = jsonEncode(payload)
       ..createdAt = DateTime.now()
       ..localId = recordId ?? payload['id']?.toString()
-      ..churchId = churchId;
+      ..churchId = churchId
+      ..operationId = operationId
+      ..deviceId = deviceId
+      ..userId = userId;
 
     await _isarService.queueSyncItem(item);
 
@@ -199,9 +213,9 @@ class OfflineSyncManager extends ChangeNotifier {
         'Mutation queued for ${item.tableName} ($action) - Church: $churchId',
         'OSM');
 
-    // Si en ligne, synchroniser immédiatement
+    // Si en ligne, synchroniser immédiatement en passant le churchId pour filtrer
     if (_isOnline) {
-      unawaited(_triggerSync());
+      unawaited(_triggerSync(churchId: churchId));
     }
   }
 
@@ -210,7 +224,7 @@ class OfflineSyncManager extends ChangeNotifier {
   // Aucune déduction probabiliste n'est tolérée.
 
   /// Force la synchronisation de toutes les mutations en attente
-  Future<void> _triggerSync() async {
+  Future<void> _triggerSync({String? churchId}) async {
     if (_isSyncing || !_isOnline) return;
 
     _isSyncing = true;
@@ -219,7 +233,7 @@ class OfflineSyncManager extends ChangeNotifier {
 
     try {
       // FIX: On rafraîchit le pending count AVANT et APRÈS pour plus de précision UI
-      await syncItemsStandalone(_supabase, _isarService);
+      await syncItemsStandalone(_supabase, _isarService, churchId: churchId);
       _lastSyncAt = DateTime.now();
     } catch (e, st) {
       _lastError = e.toString();
@@ -230,12 +244,14 @@ class OfflineSyncManager extends ChangeNotifier {
     }
   }
 
-  /// Synchronise les items de manière autonome (utilisable en arrière-plan)
   static Future<void> syncItemsStandalone(
     SupabaseClient supabase,
-    IsarService isarService,
-  ) {
-    return OfflineSyncWorker.syncItemsStandalone(supabase, isarService);
+    IsarService isarService, {
+    String workerId = 'unknown',
+    String? churchId,
+  }) {
+    return OfflineSyncWorker.syncItemsStandalone(supabase, isarService,
+        workerId: workerId, churchId: churchId);
   }
 
   /// Force une synchronisation manuelle

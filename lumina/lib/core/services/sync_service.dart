@@ -405,7 +405,8 @@ class SyncService {
   // Phase PULL — Supabase → Isar (différentiel par watermark)
   // -------------------------------------------------------------------------
 
-  /// Tire les changements pour toutes les tables pullables.
+  /// Tire les changements pour toutes les tables pullables en parallèle
+  /// avec un limitateur de concurrence (max 4 tables simultanées).
   /// Retourne (totalPulled, totalConflicts).
   Future<(int, int)> _pullAll({required String churchId}) async {
     if (!_isar.isReady) return (0, 0);
@@ -413,17 +414,20 @@ class SyncService {
     int totalPulled = 0;
     int totalConflicts = 0;
 
-    for (final table in _pullableTables) {
-      try {
-        final (pulled, conflicts) = await _pullTable(
-          table: table,
-          churchId: churchId,
-        );
+    // FIX: Pull parallélisé avec limite de concurrence pour éviter
+    // de saturer Supabase (8 tables × 1-2s séquentiel → 3-4s en parallèle)
+    const maxConcurrent = 4;
+    final tables = _pullableTables;
+
+    for (var i = 0; i < tables.length; i += maxConcurrent) {
+      final batch = tables.skip(i).take(maxConcurrent).toList();
+      final results = await Future.wait(
+        batch.map((t) => _pullTable(table: t, churchId: churchId)),
+        eagerError: false,
+      );
+      for (final (pulled, conflicts) in results) {
         totalPulled += pulled;
         totalConflicts += conflicts;
-      } catch (e, st) {
-        AppLogger.e('Pull failed for ${table.name}: $e', _tag, e, st);
-        // On continue les autres tables même si l'une échoue
       }
     }
 
@@ -431,6 +435,8 @@ class SyncService {
   }
 
   /// Tire les changements d'une seule table depuis le dernier watermark.
+  /// FIX: Pagination automatique — si >500 rows, boucle avec offset.
+  /// Le watermark n'est avancé qu'après traitement de TOUTES les pages.
   Future<(int, int)> _pullTable({
     required SyncTable table,
     required String churchId,
@@ -442,49 +448,57 @@ class SyncService {
     AppLogger.d(
         'Pull ${table.name} since $watermarkStr (church: $churchId)', _tag);
 
-    // Requête différentielle : on récupère tout ce qui a été modifié
-    // depuis le watermark ET appartenant à notre église (RLS enforced)
-    final rows = await _supabase
-        .from(table.name)
-        .select()
-        .eq('church_id', churchId)
-        .gte('updated_at', watermarkStr)
-        .order('updated_at', ascending: true)
-        .limit(500)
-        .timeout(_defaultTimeout) as List<dynamic>;
-
-    if (rows.isEmpty) return (0, 0);
-
-    AppLogger.d('Pull ${table.name}: ${rows.length} rows received', _tag);
-
-    int pulled = 0;
-    int conflicts = 0;
+    const pageSize = 500;
+    int offset = 0;
+    int totalPulled = 0;
+    int totalConflicts = 0;
     DateTime? maxUpdatedAt;
 
-    for (final row in rows) {
-      final rowData = row as Map<String, dynamic>;
-      try {
-        final conflict = await _applyRemoteRow(table: table, row: rowData);
-        if (conflict) conflicts++;
-        pulled++;
+    // FIX: Boucle de pagination — traite toutes les pages jusqu'à épuisement
+    bool hasMore;
+    do {
+      final rows = await _supabase
+          .from(table.name)
+          .select()
+          .eq('church_id', churchId)
+          .gte('updated_at', watermarkStr)
+          .order('updated_at', ascending: true)
+          .range(offset, offset + pageSize - 1)
+          .timeout(_defaultTimeout) as List<dynamic>;
 
-        final rowUpdatedAt = _parseDateTime(rowData['updated_at']);
-        if (rowUpdatedAt != null) {
-          if (maxUpdatedAt == null || rowUpdatedAt.isAfter(maxUpdatedAt)) {
-            maxUpdatedAt = rowUpdatedAt;
+      hasMore = rows.length == pageSize;
+      offset += pageSize;
+
+      if (rows.isEmpty) break;
+
+      AppLogger.d('Pull ${table.name}: page at offset ${offset - rows.length}, ${rows.length} rows', _tag);
+
+      for (final row in rows) {
+        final rowData = row as Map<String, dynamic>;
+        try {
+          final conflict = await _applyRemoteRow(table: table, row: rowData);
+          if (conflict) totalConflicts++;
+          totalPulled++;
+
+          final rowUpdatedAt = _parseDateTime(rowData['updated_at']);
+          if (rowUpdatedAt != null) {
+            if (maxUpdatedAt == null || rowUpdatedAt.isAfter(maxUpdatedAt)) {
+              maxUpdatedAt = rowUpdatedAt;
+            }
           }
+        } catch (e) {
+          AppLogger.w('Failed to apply row from ${table.name}: $e', _tag);
         }
-      } catch (e) {
-        AppLogger.w('Failed to apply row from ${table.name}: $e', _tag);
       }
-    }
+    } while (hasMore);
 
-    // Avancer le watermark
+    // Avancer le watermark UNIQUEMENT après toutes les pages traitées
     if (maxUpdatedAt != null) {
       await _setWatermark(table.watermarkKey, churchId, maxUpdatedAt);
     }
 
-    return (pulled, conflicts);
+    AppLogger.d('Pull ${table.name} done: $totalPulled rows, $totalConflicts conflicts', _tag);
+    return (totalPulled, totalConflicts);
   }
 
   /// Applique une ligne distante dans Isar avec résolution LWW.
