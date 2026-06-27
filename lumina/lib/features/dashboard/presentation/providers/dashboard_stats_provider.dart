@@ -66,8 +66,3 @@ class DashboardStatsNotifier extends _$DashboardStatsNotifier {
     await future;
   }
 }
-
-// Legacy provider for backward compatibility
-final dashboardStatsProvider = FutureProvider<DashboardStats>((ref) async {
-  return ref.watch(dashboardStatsNotifierProvider.future);
-});

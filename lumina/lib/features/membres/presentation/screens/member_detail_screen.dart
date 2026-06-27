@@ -17,6 +17,8 @@ import 'package:lumina/features/vie-spirituelle/data/repositories/jalons_reposit
 import 'package:lumina/features/vie-spirituelle/domain/entities/jalon_spirituel.dart';
 import 'package:lumina/features/sacraments/presentation/providers/sacrament_providers.dart';
 import 'package:lumina/features/sacraments/domain/entities/sacrament.dart';
+import 'package:lumina/features/groups/domain/entities/group_membership.dart';
+import 'package:lumina/features/groups/presentation/providers/group_providers.dart';
 import 'package:intl/intl.dart';
 
 class MemberDetailScreen extends ConsumerStatefulWidget {
@@ -432,6 +434,7 @@ class _GeneralTab extends StatelessWidget {
             _InfoRow(label: 'Téléphone', value: member.phone),
             _InfoRow(label: 'Email', value: member.email ?? ''),
             _InfoRow(label: 'Adresse', value: member.address),
+            _InfoRow(label: 'Ville', value: member.city ?? ''),
             if (member.userId != null) ...[
               Divider(height: 24),
               _MessageAction(member: member),
@@ -446,9 +449,17 @@ class _GeneralTab extends StatelessWidget {
             _InfoRow(label: 'Genre', value: member.gender.label),
             _InfoRow(
               label: 'Anniversaire',
-              value: member.birthDate?.toIso8601String().split('T')[0],
+              value: member.birthDate != null
+                  ? '${member.birthDate!.day}/${member.birthDate!.month}/${member.birthDate!.year}'
+                  : '-',
             ),
             _InfoRow(label: 'Profession', value: member.profession),
+            _InfoRow(
+              label: 'Âge',
+              value: member.birthDate != null
+                  ? '${DateTime.now().year - member.birthDate!.year} ans'
+                  : '-',
+            ),
           ],
         ),
       ],
@@ -456,12 +467,107 @@ class _GeneralTab extends StatelessWidget {
   }
 }
 
-class _FamilyTab extends StatelessWidget {
+class _FamilyTab extends ConsumerWidget {
   final Member member;
   const _FamilyTab({required this.member});
+
   @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Famille de ${member.shortName}'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final familyAsync = ref.watch(familyRelationshipsProvider(member.id));
+
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        _InfoCard(
+          title: 'Situation Familiale',
+          icon: Icons.family_restroom_rounded,
+          children: [
+            _InfoRow(
+              label: 'Statut marital',
+              value: member.maritalStatus.label,
+            ),
+            if (member.spouseName != null && member.spouseName!.isNotEmpty)
+              _InfoRow(label: 'Conjoint(e)', value: member.spouseName!),
+            if (member.numberOfChildren > 0)
+              _InfoRow(
+                label: 'Enfants',
+                value: '${member.numberOfChildren}',
+              ),
+          ],
+        ),
+        SizedBox(height: 16),
+        familyAsync.when(
+          data: (relationships) {
+            if (relationships.isEmpty) {
+              return _InfoCard(
+                title: 'Liens Familiaux',
+                icon: Icons.link_rounded,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Aucun lien familial enregistré.',
+                      style: TextStyle(color: context.colors.textSecondary),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return _InfoCard(
+              title: 'Liens Familiaux (${relationships.length})',
+              icon: Icons.people_outline_rounded,
+              children: relationships.map((rel) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    children: [
+                      Icon(Icons.family_restroom_rounded,
+                          size: 18, color: context.colors.brandPrimary),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Membre lié (${rel.relatedMemberId.substring(0, 8)}…)',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            Text(
+                              _familyRelationLabel(rel.relationshipType),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.colors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+          },
+          loading: () => ShimmerBox(height: 80, borderRadius: 16),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  String _familyRelationLabel(String type) {
+    switch (type.toLowerCase()) {
+      case 'spouse':
+        return 'Conjoint(e)';
+      case 'parent':
+        return 'Parent';
+      case 'child':
+        return 'Enfant';
+      case 'sibling':
+        return 'Frère/Sœur';
+      default:
+        return type;
+    }
   }
 }
 
@@ -770,21 +876,182 @@ class _ValidateJalonDialogState extends State<_ValidateJalonDialog> {
   }
 }
 
-class _EngagementTab extends StatelessWidget {
+class _EngagementTab extends ConsumerWidget {
   final Member member;
   const _EngagementTab({required this.member});
+
   @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Engagements de ${member.shortName}'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsAsync = ref.watch(memberGroupsProvider(member.id));
+
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        _InfoCard(
+          title: 'Statut dans l\'Église',
+          icon: Icons.shield_rounded,
+          children: [
+            _InfoRow(label: 'Statut', value: member.status.label),
+            _InfoRow(label: 'Est baptisé(e)', value: member.isBaptized ? 'Oui' : 'Non'),
+            if (member.isBaptized && member.baptismDate != null)
+              _InfoRow(
+                label: 'Date de baptême',
+                value: '${member.baptismDate!.day}/${member.baptismDate!.month}/${member.baptismDate!.year}',
+              ),
+            _InfoRow(label: 'Rôle principal', value: member.primaryRole.label),
+            if (member.isLeader)
+              _InfoRow(label: 'Leader', value: 'Oui'),
+          ],
+        ),
+        SizedBox(height: 16),
+        groupsAsync.when(
+          data: (memberships) {
+            if (memberships.isEmpty) {
+              return _InfoCard(
+                title: 'Groupes & Ministères',
+                icon: Icons.groups_rounded,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Ce membre n\'a encore rejoint aucun groupe.',
+                      style: TextStyle(color: context.colors.textSecondary),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return _InfoCard(
+              title: 'Groupes (${memberships.length})',
+              icon: Icons.groups_rounded,
+              children: memberships.map((m) {
+                final isActive = m.status == MembershipStatus.active;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: context.colors.brandPrimary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(Icons.group_rounded,
+                            size: 16, color: context.colors.brandPrimary),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              m.memberName ?? 'Groupe',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            Text(
+                              'Rôle : ${_groupRoleLabel(m.role)}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.colors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? context.colors.successText.withValues(alpha: 0.1)
+                              : context.colors.warningText.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          isActive ? 'Actif' : 'En attente',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: isActive
+                                ? context.colors.successText
+                                : context.colors.warningText,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+          },
+          loading: () => ShimmerBox(height: 80, borderRadius: 16),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  String _groupRoleLabel(GroupRole role) {
+    switch (role) {
+      case GroupRole.leader:
+        return 'Leader';
+      case GroupRole.coLeader:
+        return 'Co-Leader';
+      case GroupRole.member:
+        return 'Membre';
+    }
   }
 }
 
-class _ContributionsTab extends StatelessWidget {
+class _ContributionsTab extends ConsumerWidget {
   final Member member;
   const _ContributionsTab({required this.member});
+
   @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Contributions de ${member.shortName}'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        _InfoCard(
+          title: 'Aperçu Financier',
+          icon: Icons.account_balance_wallet_rounded,
+          children: [
+            _InfoRow(
+              label: 'Contributeur régulier',
+              value: 'Données à venir',
+            ),
+            _InfoRow(
+              label: 'Dernière contribution',
+              value: '—',
+            ),
+            _InfoRow(
+              label: 'Total annuel estimé',
+              value: '—',
+            ),
+            SizedBox(height: 8),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline_rounded,
+                      size: 16, color: context.colors.textSecondary),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Les données de contributions détaillées seront disponibles prochainement.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: context.colors.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 
