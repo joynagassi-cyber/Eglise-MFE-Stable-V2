@@ -41,63 +41,38 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
   OnboardingNotifier(this._ref) : super(const OnboardingState());
 
+  /// Méthode unique d'onboarding — unifie les 3 implémentations dupliquées
+  /// précédentes (submitOnboarding, completeOnboardingAction, completeSimpleOnboarding).
+  /// Met à jour le profile distant, complète le statut, puis navigue vers le dashboard.
+  ///
+  /// Les deux appels sont dans des try-catch séparés pour que l'échec du premier
+  /// (timeout 3s) ne bloque pas le second (timeout 8s).
   Future<void> submitOnboarding() async {
     state = state.copyWith(isSubmitting: true, error: null);
 
-    try {
-      final userId = _ref.read(currentUserIdProvider);
-      if (userId != null) {
-        try {
-          await _ref.read(onboardingRepositoryProvider)
-              .completeSimpleOnboarding(userId)
-              .timeout(const Duration(seconds: 3));
-        } catch (_) {}
-      }
-    } catch (_) {}
-
-    try {
-      await _ref.read(authProvider.notifier)
-          .completeOnboarding()
-          .timeout(const Duration(seconds: 8));
-    } catch (_) {}
-
-    _ref.read(onboardingProgressNotifierProvider.notifier).reset();
-    _ref.invalidate(profileStateProvider);
-    state = state.copyWith(isSubmitting: false);
-  }
-
-  Future<void> completeOnboardingAction() async {
     final userId = _ref.read(currentUserIdProvider);
+
+    // Étape 1 : marquer needs_onboarding=false dans profiles
     if (userId != null) {
       try {
         await _ref.read(onboardingRepositoryProvider)
             .completeSimpleOnboarding(userId)
             .timeout(const Duration(seconds: 3));
-      } catch (_) {}
-    }
-    try {
-      await _ref.read(authProvider.notifier)
-          .completeOnboarding()
-          .timeout(const Duration(seconds: 8));
-    } catch (_) {}
-    _ref.read(onboardingProgressNotifierProvider.notifier).reset();
-    _ref.invalidate(profileStateProvider);
-  }
-
-  Future<void> completeSimpleOnboarding() async {
-    state = state.copyWith(isSubmitting: true, error: null);
-
-    try {
-      final userId = _ref.read(currentUserIdProvider);
-      if (userId != null) {
-        await _ref.read(onboardingRepositoryProvider)
-            .completeSimpleOnboarding(userId)
-            .timeout(const Duration(seconds: 3));
+      } catch (e) {
+        // ignore: avoid_print
+        print('Onboarding simple non-bloquant: $e');
       }
+    }
+
+    // Étape 2 : compléter l'onboarding dans l'auth provider
+    try {
       await _ref.read(authProvider.notifier)
           .completeOnboarding()
           .timeout(const Duration(seconds: 8));
-    } catch (_) {}
+    } catch (e) {
+      // ignore: avoid_print
+      print('Onboarding auth non-bloquant: $e');
+    }
 
     _ref.read(onboardingProgressNotifierProvider.notifier).reset();
     _ref.invalidate(profileStateProvider);

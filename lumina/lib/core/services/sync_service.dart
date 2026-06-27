@@ -408,16 +408,18 @@ class SyncService {
   /// Tire les changements pour toutes les tables pullables en parallèle
   /// avec un limitateur de concurrence (max 4 tables simultanées).
   /// Retourne (totalPulled, totalConflicts).
+  ///
+  /// FIX #4: Pull parallélisé — au lieu de 8 appels séquentiels (8-16s),
+  /// les pulls sont exécutés par batch de 4 tables en parallèle (~3-5s total).
   Future<(int, int)> _pullAll({required String churchId}) async {
     if (!_isar.isReady) return (0, 0);
 
     int totalPulled = 0;
     int totalConflicts = 0;
 
-    // FIX: Pull parallélisé avec limite de concurrence pour éviter
-    // de saturer Supabase (8 tables × 1-2s séquentiel → 3-4s en parallèle)
     const maxConcurrent = 4;
-    final tables = _pullableTables;
+    // ignore: prefer_const_literals_to_create_immutables
+    const tables = _pullableTables;
 
     for (var i = 0; i < tables.length; i += maxConcurrent) {
       final batch = tables.skip(i).take(maxConcurrent).toList();
@@ -435,7 +437,9 @@ class SyncService {
   }
 
   /// Tire les changements d'une seule table depuis le dernier watermark.
-  /// FIX: Pagination automatique — si >500 rows, boucle avec offset.
+  ///
+  /// FIX #5: Pagination automatique — boucle do-while avec pageSize=500.
+  /// Sans pagination, les lignes au-delà de 500 étaient silencieusement ignorées.
   /// Le watermark n'est avancé qu'après traitement de TOUTES les pages.
   Future<(int, int)> _pullTable({
     required SyncTable table,
@@ -454,7 +458,6 @@ class SyncService {
     int totalConflicts = 0;
     DateTime? maxUpdatedAt;
 
-    // FIX: Boucle de pagination — traite toutes les pages jusqu'à épuisement
     bool hasMore;
     do {
       final rows = await _supabase
@@ -492,7 +495,6 @@ class SyncService {
       }
     } while (hasMore);
 
-    // Avancer le watermark UNIQUEMENT après toutes les pages traitées
     if (maxUpdatedAt != null) {
       await _setWatermark(table.watermarkKey, churchId, maxUpdatedAt);
     }
