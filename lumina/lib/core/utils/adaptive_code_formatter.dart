@@ -80,7 +80,7 @@ class AdaptiveCodeFormatter extends TextInputFormatter {
   String _applyUniversalFormatting(String stripped) {
     // Si le code se termine par 2026, on peut structurer les tirets
     if (stripped.length > 8 && stripped.endsWith('2026')) {
-      final year = '2026';
+      const year = '2026';
       final hexEnd = stripped.length - 4; // position avant 2026
       final hexStart = hexEnd - 4; // début du bloc hex (4 chars)
       final prefix = hexStart > 0 ? stripped.substring(0, hexStart) : '';

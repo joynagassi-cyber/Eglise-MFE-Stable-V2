@@ -333,7 +333,6 @@ class GroupRepositoryImpl implements IGroupRepository {
   Future<void> addMemberToGroup(GroupMembership membership) async {
     final deviceId = await DeviceService.getDeviceIdStatic();
     final userId = _supabase.auth.currentUser?.id ?? 'unknown';
-    final churchId = membership.churchId;
     final uuid = membership.id.isEmpty ? const Uuid().v4() : membership.id;
 
     final newMembership = membership.copyWith(id: uuid);
@@ -382,17 +381,6 @@ class GroupRepositoryImpl implements IGroupRepository {
           .findFirst();
 
       final requestId = existing?.originalId ?? const Uuid().v4();
-      final payload = {
-        'id': requestId,
-        'group_id': groupId,
-        'member_id': resolvedMemberId,
-        'role': 'MEMBER',
-        'status': 'pending',
-        'joined_at': now,
-        'is_active': false,
-      };
-
-      final operation = existing == null ? 'INSERT' : 'UPDATE';
 
       await isar.writeTxn(() async {
         if (existing == null) {
@@ -454,7 +442,6 @@ class GroupRepositoryImpl implements IGroupRepository {
   @override
   Future<void> removeMemberFromGroup(String membershipId,
       {required String churchId}) async {
-    final deviceId = await DeviceService.getDeviceIdStatic();
     final userId = _supabase.auth.currentUser?.id ?? 'unknown';
 
     if (_isarService.isReady) {
@@ -480,7 +467,6 @@ class GroupRepositoryImpl implements IGroupRepository {
   @override
   Future<void> updateMemberRole(String membershipId, GroupRole newRole,
       {required String churchId}) async {
-    final deviceId = await DeviceService.getDeviceIdStatic();
     final userId = _supabase.auth.currentUser?.id ?? 'unknown';
 
     if (_isarService.isReady) {

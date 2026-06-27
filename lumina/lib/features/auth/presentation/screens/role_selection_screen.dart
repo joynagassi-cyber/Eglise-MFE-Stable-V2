@@ -19,7 +19,7 @@ class RoleSelectionScreen extends ConsumerStatefulWidget {
 
 class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
   bool _isProcessingMembre = false;
-  bool _isProcessingStaff = false;
+  final bool _isProcessingStaff = false;
 
   /// Détermine si on est en train de traiter un choix (pour désactiver les tuiles).
   bool get _isProcessing => _isProcessingMembre || _isProcessingStaff;
@@ -34,21 +34,19 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+        const SizedBox(height: 20),
               IconButton(
-                icon: Icon(Icons.arrow_back_ios_new_rounded),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: _isProcessing ? null : () => context.pop(),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               
               Text("Votre Rôle", style: LuminaDesign.h1Of(context)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 "Choisissez comment vous allez utiliser Lumina.",
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ),
-
-              SizedBox(height: 48),
 
               _RoleTile(
                 title: "Membre de l'Église",
@@ -58,7 +56,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
                 onTap: _isProcessing ? null : _handleMembreSelection,
               ),
               
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               _RoleTile(
                 title: "Staff & Administration",
@@ -68,13 +66,13 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
                 onTap: _isProcessing ? null : _handleStaffSelection,
               ),
 
-              SizedBox(height: 64),
+              const SizedBox(height: 64),
               
               Center(
                 child: TextButton.icon(
-                  onPressed: _isProcessing ? null : () => this.ref.read(authProvider.notifier).logout(),
-                  icon: Icon(Icons.logout_rounded, size: 18),
-                  label: Text("DÉCONNEXION"),
+             onPressed: _isProcessing ? null : () => ref.read(authProvider.notifier).logout(),
+                  icon: const Icon(Icons.logout_rounded, size: 18),
+                  label: const Text("DÉCONNEXION"),
                   style: TextButton.styleFrom(foregroundColor: LuminaDesign.primary),
                 ),
               ),
@@ -96,16 +94,16 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
     setState(() => _isProcessingMembre = true);
     try {
       // ÉTAPE 1 : marquer l'onboarding terminé AVANT completeOnboarding
-      // pour que le RouterPolicy / OnboardingGuard ne bloquent pas la navigation
-      this.ref.read(onboardingProgressNotifierProvider.notifier)
+      // pour que le RouterPolicy oardingGuard ne bloquent pas la navigation
+      ref.read(onboardingProgressNotifierProvider.notifier)
         ..setRole('consultation', route: '/dashboard')
         ..advance(OnboardingStep.completed);
 
-      // ÉTAPE 2 : assigner le rôle "membre" côté serveur (non-bloquant)
-      final userId = this.ref.read(currentUserIdProvider);
+      // ÉTAPE 2 : assigner le rôle "membre" serveur (non-bloquant)
+      final userId = ref.read(currentUserIdProvider);
       if (userId != null) {
-        try {
-          final roleCodeRepo = this.ref.read(roleCodeRepositoryProvider);
+   try {
+          final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
           bool assigned = await roleCodeRepo.assignRoleToUser(
             userId: userId,
             roleCode: 'membre',
@@ -123,8 +121,8 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
         }
       }
 
-      // ÉTAPE 3 : compléter l'onboarding dans le provider d'auth
-      await this.ref.read(authProvider.notifier).completeOnboarding()
+      // ÉTAPE 3 : compléter l'onboardins le provider d'auth
+      await ref.read(authProvider.notifier).completeOnboarding()
           .timeout(const Duration(seconds: 4));
 
       // ÉTAPE 4 : naviguer
@@ -135,7 +133,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
       AppLogger.e('Erreur onboarding membre', 'ROLE_SELECTION', e);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Une erreur est survenue. Réessayez.')),
+          const SnackBar(content: Text('Une erreur est survenue. Réessayez.')),
         );
       }
     } finally {
@@ -147,7 +145,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
   /// Staff : avance vers l'étape de vérification de code
   /// ═══════════════════════════════════════════════════════════════════
   void _handleStaffSelection() {
-    this.ref.read(onboardingProgressNotifierProvider.notifier)
+    ref.read(onboardingProgressNotifierProvider.notifier)
       .advance(OnboardingStep.identitySetup);
     if (mounted) {
       context.push('/onboarding/admin-code');
@@ -182,8 +180,8 @@ class _RoleTile extends StatelessWidget {
               color: LuminaDesign.primary.withOpacity(0.05),
               shape: BoxShape.circle,
             ),
-            child: isLoading
-                ? SizedBox(
+            const child: isLoading
+                ? const SizedBox(
                     width: 24,
                     height: 24,
                     child: CircularProgressIndicator(
@@ -193,13 +191,13 @@ class _RoleTile extends StatelessWidget {
                   )
                 : Icon(icon, color: LuminaDesign.primary, size: 24),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: LuminaDesign.h2Of(context).copyWith(fontSize: 16)),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(description, style: LuminaDesign.labelOf(context)),
               ],
             ),

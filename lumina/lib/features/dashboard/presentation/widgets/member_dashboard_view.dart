@@ -47,7 +47,7 @@ class MemberDashboardView extends ConsumerWidget {
   }
 
   Widget _buildWelcome(BuildContext context, MemberDashboardState state) {
-    final firstName = state.member?.firstName?.trim();
+    final firstName = state.member?.firstName.trim();
     final greeting = firstName != null && firstName.isNotEmpty ? firstName : 'Disciple';
     
     return Row(
@@ -126,7 +126,7 @@ class MemberDashboardView extends ConsumerWidget {
               ),
             ],
           ),
-          child: Icon(
+          child: const Icon(
             Icons.person_rounded,
             color: Colors.white,
             size: 28,
@@ -357,14 +357,14 @@ class MemberDashboardView extends ConsumerWidget {
         children: [
           const SizedBox(height: 20),
           // Skeleton header
-          Row(
+          const Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SkeletonTile(width: 80, height: 12),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     SkeletonTile(width: 120, height: 24),
                   ],
                 ),
@@ -390,10 +390,10 @@ class MemberDashboardView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           // Section title
-          Row(
+          const Row(
             children: [
               SkeletonTile(width: 4, height: 16),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               SkeletonTile(width: 100, height: 12),
             ],
           ),
@@ -403,12 +403,12 @@ class MemberDashboardView extends ConsumerWidget {
             height: 110,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: List.generate(4, (_) => Padding(
-                padding: const EdgeInsets.only(right: 12),
+              children: List.generate(4, (index) => const Padding(
+                padding: EdgeInsets.only(right: 12),
                 child: Column(
                   children: [
                     SkeletonTile(width: 60, height: 60, shape: BoxShape.circle),
-                    const SizedBox(height: 8),
+               const SizedBox(height: 8),
                     SkeletonTile(width: 60, height: 10),
                   ],
                 ),
@@ -432,7 +432,7 @@ class MemberDashboardView extends ConsumerWidget {
           width: 0.5,
         ),
       ),
-      child: Column(
+      child:      const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SkeletonTile(width: 40, height: 40, shape: BoxShape.circle),

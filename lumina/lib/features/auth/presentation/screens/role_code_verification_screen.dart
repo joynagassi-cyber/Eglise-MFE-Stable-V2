@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
@@ -139,7 +138,7 @@ class _RoleCodeVerificationScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // --- ICON ---
               Container(
                 padding: const EdgeInsets.all(24),
@@ -150,18 +149,18 @@ class _RoleCodeVerificationScreenState
                 child: Icon(Icons.vpn_key_outlined, color: LuminaDesign.primary, size: 48),
               ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
               
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // --- TITLES ---
               Text("Vérification d'accès", style: LuminaDesign.h2Of(context)).animate().fadeIn(delay: 200.ms),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 "Saisissez le code secret fourni par votre église pour activer vos privilèges.",
                 textAlign: TextAlign.center,
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ).animate().fadeIn(delay: 400.ms),
 
-              SizedBox(height: 48),
+              const SizedBox(height: 48),
 
               // --- INPUT ---
               LuminaCard(
@@ -187,7 +186,7 @@ class _RoleCodeVerificationScreenState
                 ),
               ).animate().slideY(begin: 0.2, duration: 400.ms),
 
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // --- BUTTON ---
               LuminaButton(
@@ -196,7 +195,7 @@ class _RoleCodeVerificationScreenState
                 onPressed: _verifyCode,
               ).animate().fadeIn(delay: 600.ms),
 
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               
               Text(
                 "Vous n'avez pas de code ?",
@@ -204,7 +203,7 @@ class _RoleCodeVerificationScreenState
               ),
               TextButton(
                 onPressed: () => context.pop(),
-                child: Text("Retourner au mode membre"),
+                child: const Text("Retourner au mode membre"),
               ),
             ],
           ),
