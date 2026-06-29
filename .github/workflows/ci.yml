@@ -69,7 +69,7 @@ jobs:
         run: flutter analyze --no-fatal-infos
 
       - name: Run unit tests
-        run: flutter test --no-tags --reporter=expanded
+        run: flutter test --reporter=expanded
 
   # ---------------------------------------------------------------------------
   # 2) BUILD APK
