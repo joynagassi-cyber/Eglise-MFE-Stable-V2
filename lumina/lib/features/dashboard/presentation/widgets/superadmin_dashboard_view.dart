@@ -23,20 +23,20 @@ class SuperadminDashboardView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, "Centre de Pilotage"),
-            SizedBox(height: LuminaDesign.paddingLg),
+            const const const SizedBox(height: LuminaDesign.paddingLg),
             
             // --- SECTION 1: ÉTAT GLOBAL ---
             Text("SANTÉ DU RÉSEAU", style: LuminaDesign.labelOf(context)),
-            SizedBox(height: 12),
+      const       const const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(child: _buildNetworkStat(context, "Antennes", "12", Icons.hub, Colors.blue)),
-                SizedBox(width: 12),
+    const             const const SizedBox(width: 12),
                 Expanded(child: _buildNetworkStat(context, "Membres", "${stats.membersCount}", Icons.people, Colors.orange)),
               ],
             ),
-            
-            SizedBox(height: LuminaDesign.paddingLg),
+        const     
+            const const SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 2: ALERTE DE CONFIANCE (AUDIT) ---
             Row(
@@ -45,20 +45,20 @@ class SuperadminDashboardView extends ConsumerWidget {
                 Text("FLUX DE VIGILANCE", style: LuminaDesign.labelOf(context)),
                 TextButton(
                   onPressed: () => context.push(AppRoutes.auditHistory),
-                  child: Text("Voir tout l'audit"),
+ const                  child: const Text("Voir tout l'audit"),
                 ),
               ],
             ),
-            _buildAuditPreview(context, ref),
+            _buildAuditPreview(const context, ref),
 
-            SizedBox(height: LuminaDesign.paddingLg),
+            const SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 3: ACTIONS CRITIQUES ---
-            Text("PILOTAGE STRATÉGIQUE", style: LuminaDesign.labelOf(context)),
-            SizedBox(height: 12),
+            Text("PILOTAGE STRATÉGIQUE", style: LuminaDesconst ign.labelOf(context)),
+            const SizedBox(height: 12),
             GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              const shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
@@ -68,15 +68,15 @@ class SuperadminDashboardView extends ConsumerWidget {
                 _AdminActionTile(label: "Sécurité & Rôles", icon: Icons.shield_outlined, onTap: () => context.push(AppRoutes.adminSettings)),
                 _AdminActionTile(label: "Rapports d'Activité", icon: Icons.analytics_outlined, onTap: () => context.push(AppRoutes.reports)),
                 _AdminActionTile(label: "Configuration", icon: Icons.settings_applications_outlined, onTap: () => context.push(AppRoutes.settings)),
-              ],
+            const   ],
             ),
             
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
           ],
         ),
       ),
-      loading: () => const LoadingState(),
-      error: (e, st) => Center(child: Text("Erreur de chargement du centre de pilotage")),
+      loading: () => const SuperadminDashboardSkeleton(),
+      error: (e, st) => const Center(child: Text("Erreur de chargement du centre de pilotage")),
     );
   }
 
@@ -94,7 +94,7 @@ class SuperadminDashboardView extends ConsumerWidget {
     return LuminaCard(
       color: color.withOpacity(0.05),
       child: Row(
-        children: [
+        children: const [
           Icon(icon, color: color, size: 20),
           SizedBox(width: 12),
           Column(
@@ -138,8 +138,8 @@ class _AdminActionTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, color: context.colors.textSecondary, size: 20),
-          SizedBox(width: 12),
+          Iconconst (icon, color: context.colors.textSecondary, size: 20),
+          const SizedBox(width: 12),
           Expanded(child: Text(label, style: LuminaDesign.bodyLargeOf(context).copyWith(fontSize: 13, fontWeight: FontWeight.bold))),
         ],
       ),

@@ -21,18 +21,18 @@ class GroupDashboardView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, "Gestion du Groupe"),
-            SizedBox(height: LuminaDesign.paddingLg),
+            const const const SizedBox(height: LuminaDesign.paddingLg),
             _buildKPIs(context, stats),
-            SizedBox(height: LuminaDesign.paddingLg),
+      const       const const SizedBox(height: LuminaDesign.paddingLg),
             _buildActions(context),
-            SizedBox(height: LuminaDesign.paddingLg),
+const             const const SizedBox(height: LuminaDesign.paddingLg),
             _buildSectionTitle(context, "Alertes de Vigilance"),
             _buildAlerts(stats, context),
           ],
         ),
       ),
-      loading: () => const LoadingState(),
-      error: (e, st) => Center(child: Text("Erreur de chargement")),
+      loading: () => const GroupDashboardSkeleton(),
+      error: (e, st) => const Center(child: Text("Erreur de chargement")),
     );
   }
 
@@ -58,9 +58,9 @@ class GroupDashboardView extends ConsumerWidget {
                 Text("${stats.membersCount}", style: LuminaDesign.h2Of(context)),
               ],
             ),
-          ),
+          const ),
         ),
-        SizedBox(width: LuminaDesign.paddingMd),
+        const SizedBox(width: LuminaDesign.paddingMd),
         Expanded(
           child: LuminaCard(
             color: Colors.green.withOpacity(0.05),
@@ -82,30 +82,30 @@ class GroupDashboardView extends ConsumerWidget {
         LuminaButton(
           label: "Prendre les présences",
           icon: Icons.checklist_rtl_rounded,
-          onPressed: () => context.push(AppRoutes.equipe),
+          onPressed: () => context.push(AppRoutes.const equipe),
         ),
-        SizedBox(height: LuminaDesign.paddingMd),
+        const SizedBox(height: LuminaDesign.paddingMd),
         Row(
           children: [
             Expanded(
               child: LuminaCard(
-                onTap: () => context.push(AppRoutes.brebis),
-                child: Column(
+                onTap: () => context.push(AppRoutconst es.brebis),
+                child: const Column(
                   children: [
                     Icon(Icons.person_add_alt_1, color: LuminaDesign.primary),
                     Text("Nouveau"),
                   ],
                 ),
-              ),
+    const           ),
             ),
-            SizedBox(width: LuminaDesign.paddingMd),
+            const SizedBox(width: LuminaDesign.paddingMd),
             Expanded(
               child: LuminaCard(
                 onTap: () => context.push(AppRoutes.financeHistory),
                 child: Column(
                   children: [
-                    Icon(Icons.history, color: context.colors.textTertiary),
-                    Text("Historique"),
+                    Icon(Icons.history, color: conconst text.colors.textTertiary),
+                    const Text("Historique"),
                   ],
                 ),
               ),
@@ -123,10 +123,10 @@ class GroupDashboardView extends ConsumerWidget {
           LuminaCard(
             color: Colors.pink.withOpacity(0.05),
             onTap: () => context.push(AppRoutes.brebis),
-            child: Row(
+            chconst ild: Row(
               children: [
-                Icon(Icons.cake_rounded, color: Colors.pink),
-                SizedBox(width: 16),
+                const Icoconst n(Icons.cake_rounded, color: Colors.pink),
+                const SizedBox(width: 16),
                 Text("${stats.birthdaysCount} Anniversaires cette semaine"),
               ],
             ),
@@ -135,10 +135,10 @@ class GroupDashboardView extends ConsumerWidget {
           LuminaCard(
             color: Colors.orange.withOpacity(0.05),
             onTap: () => context.push(AppRoutes.equipe),
-            child: Row(
+  const           child: Row(
               children: [
-                Icon(Icons.warning_amber_rounded, color: Colors.orange),
-                SizedBox(width: 16),
+                const Icconst on(Icons.warning_amber_rounded, color: Colors.orange),
+                const SizedBox(width: 16),
                 Text("${stats.absenceAlertsCount} Absences prolongées"),
               ],
             ),

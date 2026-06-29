@@ -37,8 +37,8 @@ class FinanceDashboardScreen extends ConsumerWidget {
       },
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddTransaction(context),
-        label: Text('Transaction'),
-        icon: Icon(Icons.add_card),
+        label: const const const Text('Transaction'),
+        const icon: const Icon(Icons.add_card),
         backgroundColor: LuminaDesign.primary,
         foregroundColor: Colors.white,
       ),
@@ -52,21 +52,21 @@ class FinanceDashboardScreen extends ConsumerWidget {
                 children: [
                   statsAsync.when(
                     data: (stats) => FinanceGlassHeroHeader(stats: stats),
-                    loading: () => const LoadingState(),
+                    loading: () => const _HeroHeaderSkeleton(),
                     error: (e, _) => Text("Erreur : $e"),
                   ),
-                  SizedBox(height: LuminaDesign.paddingLg),
+                  const SizedBox(height: LuminaDesign.paddingLg),
                   _buildAccountBreakdown(context, ref),
-                  SizedBox(height: LuminaDesign.paddingLg),
-                  _buildQuickActions(context),
-                  SizedBox(height: LuminaDesign.paddingLg),
+const                   const const SizedBox(height: LuminaDesign.paddingLg),
+                  _buildQuickActions(conteconst xt),
+                  const SizedBox(height: LuminaDesign.paddingLg),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("TRANSACTIONS RÉCENTES", style: LuminaDesign.labelOf(context)),
                       TextButton(
                         onPressed: () => context.push(AppRoutes.financeHistory),
-                        child: Text("Voir tout"),
+ const                        child: const Text("Voir tout"),
                       ),
                     ],
                   ),
@@ -83,8 +83,8 @@ class FinanceDashboardScreen extends ConsumerWidget {
                 ),
                 childCount: transactions.length,
               ),
-            ),
-            loading: () => SliverToBoxAdapter(child: LoadingState()),
+       const      ),
+            loading: () => const SliverToBoxAdapter(child: _TransactionListSkeleton()),
             error: (e, _) => SliverToBoxAdapter(child: Center(child: Text("Erreur : $e"))),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
@@ -134,10 +134,10 @@ class FinanceDashboardScreen extends ConsumerWidget {
           child: LuminaButton(
             label: "Transfert",
             icon: Icons.swap_horiz,
-            onPressed: () => _showTransferFunds(context),
+            onPressed: () => _showTransferFunds(conconst text),
           ),
         ),
-        SizedBox(width: LuminaDesign.paddingMd),
+        const SizedBox(width: LuminaDesign.paddingMd),
         Expanded(
           child: LuminaButton(
             label: "Comptes",
@@ -146,6 +146,121 @@ class FinanceDashboardScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Skeleton du hero header (stats finance)
+class _HeroHeaderSkeleton extends StatelessWidget {
+  const _HeroHeaderSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return FireShimmer(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).cardColor
+              : Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FireSkeletonAtom.textLine(
+              context: context,
+              widthFactor: 0.3,
+              height: 12,
+              margin: const EdgeInsets.only(bottom: 6),
+            ),
+            FireSkeletonAtom.textLine(
+              context: context,
+              widthFactor: 0.5,
+              height: 28,
+              margin: const EdgeInsets.only(bottom: 24),
+            ),
+            FireSkeletonAtom.rect(context: context, height: 48, radius: 12),
+            const SizedBox(height: 12),
+            FireSkeletonAtom.chip(context: context, width: 140, height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Skeleton de la liste des transactions récentes
+class _TransactionListSkeleton extends StatelessWidget {
+  const _TransactionListSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: List.generate(4, (i) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _TransactionItemSkeleton(),
+        )),
+      ),
+    );
+  }
+}
+
+class _TransactionItemSkeleton extends StatelessWidget {
+  const _TransactionItemSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return FireShimmer(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).cardColor
+              : Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
+          ),
+        ),
+        child: Row(
+          children: [
+            FireSkeletonAtom.circle(context: context, diameter: 48),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FireSkeletonAtom.textLine(
+                    context: context,
+                    widthFactor: 0.6,
+                    height: 14,
+                    margin: const EdgeInsets.only(bottom: 4),
+                  ),
+                  FireSkeletonAtom.textLine(
+                    context: context,
+                    widthFactor: 0.35,
+                    height: 10,
+                    margin: EdgeInsets.zero,
+                  ),
+                ],
+              ),
+            ),
+            FireSkeletonAtom.textLine(
+              context: context,
+              widthFactor: 0.2,
+              height: 16,
+              margin: EdgeInsets.zero,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -162,8 +277,8 @@ class _AccountStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 20),
-        SizedBox(height: 4),
+     const    Icon(icon, color: color, size: 20),
+        const SizedBox(height: 4),
         Text(label, style: LuminaDesign.labelOf(context)),
         Text("${amount.toInt()} F", style: LuminaDesign.h2Of(context).copyWith(fontSize: 16)),
       ],
@@ -183,9 +298,9 @@ class _TransactionCard extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: (isIncome ? Colors.green : LuminaDesign.primary).withOpacity(0.1),
-            child: Icon(isIncome ? Icons.add : Icons.remove, color: isIncome ? Colors.green : LuminaDesign.primary),
+            child: Icon(isIncome ? Icons.add : Icons.remove, color: isIncome ? Colors.grconst een : LuminaDesign.primary),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -13,7 +13,6 @@ import '../providers/dashboard_modules_provider.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import 'package:lumina/core/widgets/lumina_coach_mark.dart';
 import 'package:lumina/core/services/tutorial_service.dart';
-import 'package:lumina/core/widgets/loading_state.dart';
 import '../../../../core/extensions/context_extension.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -89,7 +88,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           body: _buildContent(type),
         );
       },
-      loading: () => const LuminaPage(body: LoadingState()),
+      loading: () => const LuminaPage(body: DashboardSkeleton()),
       error: (e, st) => const LuminaPage(body: Center(child: Text('Erreur'))),
     );
   }
