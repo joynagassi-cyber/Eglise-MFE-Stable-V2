@@ -87,7 +87,7 @@ class GroupDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const const const SizedBox(width: 16),
+                const SizedBox(width: 16),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -127,7 +127,7 @@ class GroupDetailScreen extends ConsumerWidget {
                                       letterSpacing: 1),
                                 ),
                             ),
-                      const       const const SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
                               group.name,
                               style: AppTypography.h3.copyWith(
@@ -166,7 +166,7 @@ class GroupDetailScreen extends ConsumerWidget {
                               color: context.colors.textSecondary,
                             ),
                           ),
-              const             const const SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           membersAsync.maybeWhen(
                             data: (members) => Container(
                               padding: const EdgeInsets.symmetric(
@@ -238,7 +238,7 @@ class GroupDetailScreen extends ConsumerWidget {
                                 color: context.colors.textInverse,
                                 size: LuminaIcon.md,
                               ),
-            const                   const const SizedBox(width: 8),
+            const SizedBox(width: 8),
                               Text(
                                 'Ajouter',
                                 style: AppTypography.bodySmall.copyWith(
@@ -257,7 +257,7 @@ class GroupDetailScreen extends ConsumerWidget {
           },
         ),
       );
-   const  },
+    },
     loading: () => const Scaffold(body: Center(child: AppLoadingIndicator())),
     error: (err, stack) => Scaffold(
       body: Center(child: core_error.AppErrorWidget(message: err.toString())),
@@ -279,7 +279,7 @@ class GroupDetailScreen extends ConsumerWidget {
               group.description!,
               style: AppTypography.bodyMedium.copyWith(
                 color: context.colors.textSecondary,
-              ),const 
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
           ],
@@ -298,7 +298,7 @@ class GroupDetailScreen extends ConsumerWidget {
                     child: Row(
                       children: [
                         Icon(Icons.location_on_rounded,
-                            size: LuminaIcon.sm, color: context.colors.branconst dPrimary),
+                            size: LuminaIcon.sm, color: context.colors.brandPrimary),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -314,13 +314,13 @@ class GroupDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                if (group.scheduleDesconst cription != null) ...[
+                if (group.scheduleDescription != null) ...[
                   const SizedBox(width: 16),
                   Expanded(
                     child: Row(
                       children: [
                         Icon(Icons.schedule_rounded,
-                            size: LuminaIcon.sm, color: contextconst .colors.brandPrimary),
+                            size: LuminaIcon.sm, color: context.colors.brandPrimary),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -340,7 +340,7 @@ class GroupDetailScreen extends ConsumerWidget {
             ),
           ),
           if (group.type == GroupType.chorale ||
-              (group.name.const toLowerCase().contains('chorale'))) ...[
+              (group.name.toLowerCase().contains('chorale'))) ...[
             const SizedBox(height: AppSpacing.lg),
             _buildDashboardButton(
               context,
@@ -350,7 +350,7 @@ class GroupDetailScreen extends ConsumerWidget {
             ),
           ],
           if (group.type == GroupType.hommes ||
-              (grouconst p.name.toLowerCase().contains('hommes'))) ...[
+              (group.name.toLowerCase().contains('hommes'))) ...[
             const SizedBox(height: AppSpacing.lg),
             _buildDashboardButton(
               context,
@@ -360,13 +360,13 @@ class GroupDetailScreen extends ConsumerWidget {
             ),
           ],
           if (group.type == GroupType.femmes ||
-             const  (group.name.toLowerCase().contains('femmes'),)) ...[
+             (group.name.toLowerCase().contains('femmes'))) ...[
             const SizedBox(height: AppSpacing.lg),
             _buildDashboardButton(
               context,
               'TABLEAU DE BORD FEMMES',
               context.colors.femmesGradient,
-              () => context.push(AppRoutes.const groupsFemmesWithId(group.id)),
+              () => context.push(AppRoutes.groupsFemmesWithId(group.id)),
             ),
           ],
           const SizedBox(height: AppSpacing.lg),
@@ -444,7 +444,7 @@ class GroupDetailScreen extends ConsumerWidget {
               child: Icon(
                 Icons.group_off_outlined,
                 size: LuminaIcon.xxl,
-                colorconst : context.colors.brandPrimary,
+                color: context.colors.brandPrimary,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
@@ -618,7 +618,7 @@ class _MemberRow extends ConsumerWidget {
                         Icon(
                           _getRoleIcon(role),
                           size: AppSpacing.iconSm,
-                          const color: _getRoleColor(context, role),
+                          color: _getRoleColor(context, role),
                         ),
                         const SizedBox(width: 8),
                         Text(_getRoleLabel(role)),
@@ -634,7 +634,7 @@ class _MemberRow extends ConsumerWidget {
                       Icon(
                         Icons.delete_outline_rounded,
                         size: AppSpacing.iconSm,
-          const               color: context.colors.errorText,
+          color: context.colors.errorText,
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -653,7 +653,7 @@ class _MemberRow extends ConsumerWidget {
       ),
       loading: () => Container(
         decoration: BoxDecoration(
-          color: cconst ontext.colors.bgCard,
+          color: context.colors.bgCard,
           borderRadius: BorderRadius.circular(12),
         ),
         child: const ListTile(title: AppProgressBar()),
@@ -791,7 +791,7 @@ class _ChatAccessButton extends ConsumerWidget {
             if (chatId != null && context.mounted) {
               unawaited(context.push(AppRoutes.messagingConversationWithId(chatId)));
             } else {
-         const      if (context.mounted) {
+              if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Impossible d\'ouvrir le chat du groupe')),
                 );
