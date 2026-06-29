@@ -74,7 +74,7 @@ class _MemberListScreenState extends ConsumerState<MemberListScreen> {
           
           Expanded(
             child: paginationState.members.isEmpty && paginationState.isLoading
-              ? const LoadingState()
+              ? const MemberListSkeleton()
               : ListView.builder(
                   padding: const EdgeInsets.all(LuminaDesign.paddingMd),
                   itemCount: filteredMembers.length,
