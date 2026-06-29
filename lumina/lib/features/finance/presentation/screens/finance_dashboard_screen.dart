@@ -37,8 +37,8 @@ class FinanceDashboardScreen extends ConsumerWidget {
       },
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddTransaction(context),
-        label: const const const Text('Transaction'),
-        const icon: const Icon(Icons.add_card),
+        label: const Text('Transaction'),
+        icon: const Icon(Icons.add_card),
         backgroundColor: LuminaDesign.primary,
         foregroundColor: Colors.white,
       ),
@@ -57,8 +57,8 @@ class FinanceDashboardScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: LuminaDesign.paddingLg),
                   _buildAccountBreakdown(context, ref),
-const                   const const SizedBox(height: LuminaDesign.paddingLg),
-                  _buildQuickActions(conteconst xt),
+                  const SizedBox(height: LuminaDesign.paddingLg),
+                  _buildQuickActions(context),
                   const SizedBox(height: LuminaDesign.paddingLg),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +66,7 @@ const                   const const SizedBox(height: LuminaDesign.paddingLg),
                       Text("TRANSACTIONS RÉCENTES", style: LuminaDesign.labelOf(context)),
                       TextButton(
                         onPressed: () => context.push(AppRoutes.financeHistory),
- const                        child: const Text("Voir tout"),
+                        child: const Text("Voir tout"),
                       ),
                     ],
                   ),
@@ -83,7 +83,7 @@ const                   const const SizedBox(height: LuminaDesign.paddingLg),
                 ),
                 childCount: transactions.length,
               ),
-       const      ),
+              ),
             loading: () => const SliverToBoxAdapter(child: _TransactionListSkeleton()),
             error: (e, _) => SliverToBoxAdapter(child: Center(child: Text("Erreur : $e"))),
           ),
@@ -134,7 +134,7 @@ const                   const const SizedBox(height: LuminaDesign.paddingLg),
           child: LuminaButton(
             label: "Transfert",
             icon: Icons.swap_horiz,
-            onPressed: () => _showTransferFunds(conconst text),
+            onPressed: () => _showTransferFunds(context),
           ),
         ),
         const SizedBox(width: LuminaDesign.paddingMd),
@@ -277,7 +277,7 @@ class _AccountStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-     const    Icon(icon, color: color, size: 20),
+          Icon(icon, color: color, size: 20),
         const SizedBox(height: 4),
         Text(label, style: LuminaDesign.labelOf(context)),
         Text("${amount.toInt()} F", style: LuminaDesign.h2Of(context).copyWith(fontSize: 16)),
@@ -298,7 +298,7 @@ class _TransactionCard extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: (isIncome ? Colors.green : LuminaDesign.primary).withOpacity(0.1),
-            child: Icon(isIncome ? Icons.add : Icons.remove, color: isIncome ? Colors.grconst een : LuminaDesign.primary),
+            child: Icon(isIncome ? Icons.add : Icons.remove, color: isIncome ? Colors.green : LuminaDesign.primary),
           ),
           const SizedBox(width: 16),
           Expanded(

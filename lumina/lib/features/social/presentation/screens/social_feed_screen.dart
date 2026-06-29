@@ -60,8 +60,8 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
       onRefresh: () async => ref.invalidate(allPostsProvider),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(AppRoutes.communicationSocialCreate),
-        label: const const const Text("Publier"),
-        const icon: const Icon(Icons.edit, color: Colors.white),
+        label: const Text("Publier"),
+        icon: const Icon(Icons.edit, color: Colors.white),
         backgroundColor: LuminaDesign.primary,
       ),
       body: postsAsync.when(
@@ -72,7 +72,7 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.feed_outlined, size: 60, color: context.colors.textTertiary),
-      const             const const SizedBox(height: 16),
+            const SizedBox(height: 16),
                   Text("Aucune publication pour le moment", style: LuminaDesign.bodyLargeOf(context)),
                   LuminaButton(
                     label: "Partager une pensée", 
