@@ -172,14 +172,6 @@ void main() {
       expect(
         RouterPolicy.redirectWithLocation(
           status: RouteStatus.onboarding,
-          location: AppRoutes.onboardingSelectGroup,
-        ),
-        isNull,
-      );
-
-      expect(
-        RouterPolicy.redirectWithLocation(
-          status: RouteStatus.onboarding,
           location: AppRoutes.dashboard,
         ),
         AppRoutes.onboarding,

@@ -10,7 +10,6 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String onboarding = '/onboarding';
   static const String welcomeTour = '/welcome-tour';
-  static const String onboardingSelectGroup = '/onboarding/select-group';
   static const String onboardingAdminCode = '/onboarding/admin-code';
   static const String onboardingMember = '/onboarding/member';
   static const String onboardingSuperadmin = '/onboarding-superadmin';
@@ -103,7 +102,6 @@ class AppRoutes {
   static const String groupsIntercession = '/groups/:id/intercession';
 
   // Group Dashboards (Specific)
-  static const String groupJoinRequests = '/groups/:groupId/join-requests';
   static const String groupDashboard = '/dashboard/group/:groupId';
   static const String groupFinance = '/dashboard/group/:groupId/finance';
   static const String groupEvents = '/dashboard/group/:groupId/events';
@@ -186,8 +184,6 @@ class AppRoutes {
       '/dashboard/group/$groupId/events';
   static String groupDashboardMembersWithId(String groupId) =>
       '/dashboard/group/$groupId/members';
-  static String groupDashboardJoinRequestsWithId(String groupId) =>
-      '/dashboard/group/$groupId/join-requests';
   static String annonceDetailsWithId(String id) =>
       '/communication/annonces/$id';
   static String taskEditWithId(String id) => '/communication/tasks/edit/$id';
@@ -195,8 +191,6 @@ class AppRoutes {
   static String biblePlanDetailWithId(String id) => '/bible/plans/$id';
 
   // Group Dashboard Helpers
-  static String groupJoinRequestsPath(String groupId) =>
-      '/groups/$groupId/join-requests';
   static String groupDashboardPath(String groupId) =>
       '/dashboard/group/$groupId';
   static String groupFinancePath(String groupId) =>
