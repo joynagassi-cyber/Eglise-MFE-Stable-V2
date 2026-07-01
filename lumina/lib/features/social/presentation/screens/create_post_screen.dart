@@ -5,10 +5,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lumina/core/router/app_routes.dart';
+
 import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:lumina/core/widgets/lumina_page.dart';
-import 'package:lumina/core/auth/domain/entities/user_session.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
 import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:lumina/features/social/presentation/providers/ai_social_providers.dart';
@@ -92,8 +91,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final editor = ref.read(postEditorProvider.notifier);
     final post = await editor.publish(
       authorId: session.userId,
-      authorName: session.name ?? session.email ?? 'Membre',
-      authorAvatarUrl: session.photoUrl,
+      authorName: session.name,
+      authorAvatarUrl: session.avatar,
     );
 
     if (post != null && mounted) {

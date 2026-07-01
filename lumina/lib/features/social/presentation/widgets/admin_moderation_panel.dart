@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
+import 'package:lumina/features/social/domain/repositories/i_social_repository.dart';
 import 'package:lumina/features/social/domain/entities/social_post.dart';
 import 'package:lumina/features/social/presentation/providers/social_providers.dart';
-import 'package:lumina/core/extensions/context_extension.dart';
 
 class AdminModerationPanel extends ConsumerWidget {
   final SocialPost post;

@@ -1,13 +1,11 @@
 // lib/features/social/presentation/screens/post_detail_screen.dart
-// Écran de détail d'une publication — avec badges IA et panel de modération admin
+// Écran de détail d'une publication — avec panel de modération admin
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:lumina/core/widgets/lumina_page.dart';
 import 'package:lumina/features/social/domain/entities/social_post.dart';
-import 'package:lumina/features/social/presentation/providers/social_providers.dart';
 import 'package:lumina/features/social/presentation/widgets/flagged_post_banner.dart';
 import 'package:lumina/features/social/presentation/widgets/admin_moderation_panel.dart';
 import 'package:lumina/core/extensions/context_extension.dart';

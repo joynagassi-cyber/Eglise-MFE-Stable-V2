@@ -207,6 +207,10 @@ class AppRoutes {
   static String memberTransferPath(String groupId) =>
       '/dashboard/group/$groupId/transfer';
 
+  // Group Join Requests
+  static String groupDashboardJoinRequestsWithId(String groupId) =>
+      '/dashboard/group/$groupId/join-requests';
+
   // Audit Helpers
   static String auditDetailWithId(String logId) => '/audit/detail/$logId';
 

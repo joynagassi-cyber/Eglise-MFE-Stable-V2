@@ -2,15 +2,12 @@
 // Providers Riverpod pour les fonctionnalités IA du social
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:lumina/core/providers/repository_providers_messaging.dart';
+import '../../domain/repositories/i_social_repository.dart' show ISocialRepository;
+import 'package:lumina/core/providers/supabase_provider.dart';
 import '../../data/services/ai_social_service.dart';
-import '../../../core/providers/repository_providers_messaging.dart';
-import '../../../core/providers/supabase_provider.dart';
-import '../../../core/providers/auth_provider.dart';
 import '../../domain/entities/social_post.dart';
-import '../../domain/repositories/i_social_repository.dart';
-import 'social_providers.dart';
 
 // ── Provider du service AI ─────────────────────────────────
 
@@ -116,7 +113,7 @@ class PostEditorNotifier extends StateNotifier<PostEditorState> {
       await _repository.createPost(post);
       
       // Déclencher la modération IA en arrière-plan avec le vrai ID
-      _moderatePost(post);
+      _moderatePost(post); // ignore: unawaited_futures
       
       state = state.copyWith(isPublishing: false, content: '');
       return post;
