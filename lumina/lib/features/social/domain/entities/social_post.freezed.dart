@@ -29,7 +29,17 @@ mixin _$SocialPost {
   int get likesCount => throw _privateConstructorUsedError;
   int get commentsCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt =>
+      throw _privateConstructorUsedError; // AI Social Features
+  bool get isAiGenerated => throw _privateConstructorUsedError;
+  String? get aiBibleVerse =>
+      throw _privateConstructorUsedError; // "Psaume 23:4"
+  String? get aiBibleText =>
+      throw _privateConstructorUsedError; // Texte du verset
+  String get status =>
+      throw _privateConstructorUsedError; // published, flagged, deleted
+  int? get moderationScore => throw _privateConstructorUsedError; // 0-100
+  String? get moderationReason => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +63,13 @@ abstract class $SocialPostCopyWith<$Res> {
       int likesCount,
       int commentsCount,
       DateTime createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      bool isAiGenerated,
+      String? aiBibleVerse,
+      String? aiBibleText,
+      String status,
+      int? moderationScore,
+      String? moderationReason});
 }
 
 /// @nodoc
@@ -79,6 +95,12 @@ class _$SocialPostCopyWithImpl<$Res, $Val extends SocialPost>
     Object? commentsCount = null,
     Object? createdAt = null,
     Object? updatedAt = freezed,
+    Object? isAiGenerated = null,
+    Object? aiBibleVerse = freezed,
+    Object? aiBibleText = freezed,
+    Object? status = null,
+    Object? moderationScore = freezed,
+    Object? moderationReason = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -121,6 +143,30 @@ class _$SocialPostCopyWithImpl<$Res, $Val extends SocialPost>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isAiGenerated: null == isAiGenerated
+          ? _value.isAiGenerated
+          : isAiGenerated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      aiBibleVerse: freezed == aiBibleVerse
+          ? _value.aiBibleVerse
+          : aiBibleVerse // ignore: cast_nullable_to_non_nullable
+              as String?,
+      aiBibleText: freezed == aiBibleText
+          ? _value.aiBibleText
+          : aiBibleText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      moderationScore: freezed == moderationScore
+          ? _value.moderationScore
+          : moderationScore // ignore: cast_nullable_to_non_nullable
+              as int?,
+      moderationReason: freezed == moderationReason
+          ? _value.moderationReason
+          : moderationReason // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -143,7 +189,13 @@ abstract class _$$SocialPostImplCopyWith<$Res>
       int likesCount,
       int commentsCount,
       DateTime createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      bool isAiGenerated,
+      String? aiBibleVerse,
+      String? aiBibleText,
+      String status,
+      int? moderationScore,
+      String? moderationReason});
 }
 
 /// @nodoc
@@ -167,6 +219,12 @@ class __$$SocialPostImplCopyWithImpl<$Res>
     Object? commentsCount = null,
     Object? createdAt = null,
     Object? updatedAt = freezed,
+    Object? isAiGenerated = null,
+    Object? aiBibleVerse = freezed,
+    Object? aiBibleText = freezed,
+    Object? status = null,
+    Object? moderationScore = freezed,
+    Object? moderationReason = freezed,
   }) {
     return _then(_$SocialPostImpl(
       id: null == id
@@ -209,6 +267,30 @@ class __$$SocialPostImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isAiGenerated: null == isAiGenerated
+          ? _value.isAiGenerated
+          : isAiGenerated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      aiBibleVerse: freezed == aiBibleVerse
+          ? _value.aiBibleVerse
+          : aiBibleVerse // ignore: cast_nullable_to_non_nullable
+              as String?,
+      aiBibleText: freezed == aiBibleText
+          ? _value.aiBibleText
+          : aiBibleText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      moderationScore: freezed == moderationScore
+          ? _value.moderationScore
+          : moderationScore // ignore: cast_nullable_to_non_nullable
+              as int?,
+      moderationReason: freezed == moderationReason
+          ? _value.moderationReason
+          : moderationReason // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -226,7 +308,13 @@ class _$SocialPostImpl implements _SocialPost {
       this.likesCount = 0,
       this.commentsCount = 0,
       required this.createdAt,
-      this.updatedAt})
+      this.updatedAt,
+      this.isAiGenerated = false,
+      this.aiBibleVerse,
+      this.aiBibleText,
+      this.status = 'published',
+      this.moderationScore,
+      this.moderationReason})
       : _imageUrls = imageUrls;
 
   factory _$SocialPostImpl.fromJson(Map<String, dynamic> json) =>
@@ -261,10 +349,29 @@ class _$SocialPostImpl implements _SocialPost {
   final DateTime createdAt;
   @override
   final DateTime? updatedAt;
+// AI Social Features
+  @override
+  @JsonKey()
+  final bool isAiGenerated;
+  @override
+  final String? aiBibleVerse;
+// "Psaume 23:4"
+  @override
+  final String? aiBibleText;
+// Texte du verset
+  @override
+  @JsonKey()
+  final String status;
+// published, flagged, deleted
+  @override
+  final int? moderationScore;
+// 0-100
+  @override
+  final String? moderationReason;
 
   @override
   String toString() {
-    return 'SocialPost(id: $id, authorId: $authorId, authorName: $authorName, authorAvatarUrl: $authorAvatarUrl, content: $content, imageUrls: $imageUrls, likesCount: $likesCount, commentsCount: $commentsCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'SocialPost(id: $id, authorId: $authorId, authorName: $authorName, authorAvatarUrl: $authorAvatarUrl, content: $content, imageUrls: $imageUrls, likesCount: $likesCount, commentsCount: $commentsCount, createdAt: $createdAt, updatedAt: $updatedAt, isAiGenerated: $isAiGenerated, aiBibleVerse: $aiBibleVerse, aiBibleText: $aiBibleText, status: $status, moderationScore: $moderationScore, moderationReason: $moderationReason)';
   }
 
   @override
@@ -289,7 +396,18 @@ class _$SocialPostImpl implements _SocialPost {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.isAiGenerated, isAiGenerated) ||
+                other.isAiGenerated == isAiGenerated) &&
+            (identical(other.aiBibleVerse, aiBibleVerse) ||
+                other.aiBibleVerse == aiBibleVerse) &&
+            (identical(other.aiBibleText, aiBibleText) ||
+                other.aiBibleText == aiBibleText) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.moderationScore, moderationScore) ||
+                other.moderationScore == moderationScore) &&
+            (identical(other.moderationReason, moderationReason) ||
+                other.moderationReason == moderationReason));
   }
 
   @JsonKey(ignore: true)
@@ -305,7 +423,13 @@ class _$SocialPostImpl implements _SocialPost {
       likesCount,
       commentsCount,
       createdAt,
-      updatedAt);
+      updatedAt,
+      isAiGenerated,
+      aiBibleVerse,
+      aiBibleText,
+      status,
+      moderationScore,
+      moderationReason);
 
   @JsonKey(ignore: true)
   @override
@@ -332,7 +456,13 @@ abstract class _SocialPost implements SocialPost {
       final int likesCount,
       final int commentsCount,
       required final DateTime createdAt,
-      final DateTime? updatedAt}) = _$SocialPostImpl;
+      final DateTime? updatedAt,
+      final bool isAiGenerated,
+      final String? aiBibleVerse,
+      final String? aiBibleText,
+      final String status,
+      final int? moderationScore,
+      final String? moderationReason}) = _$SocialPostImpl;
 
   factory _SocialPost.fromJson(Map<String, dynamic> json) =
       _$SocialPostImpl.fromJson;
@@ -357,6 +487,18 @@ abstract class _SocialPost implements SocialPost {
   DateTime get createdAt;
   @override
   DateTime? get updatedAt;
+  @override // AI Social Features
+  bool get isAiGenerated;
+  @override
+  String? get aiBibleVerse;
+  @override // "Psaume 23:4"
+  String? get aiBibleText;
+  @override // Texte du verset
+  String get status;
+  @override // published, flagged, deleted
+  int? get moderationScore;
+  @override // 0-100
+  String? get moderationReason;
   @override
   @JsonKey(ignore: true)
   _$$SocialPostImplCopyWith<_$SocialPostImpl> get copyWith =>

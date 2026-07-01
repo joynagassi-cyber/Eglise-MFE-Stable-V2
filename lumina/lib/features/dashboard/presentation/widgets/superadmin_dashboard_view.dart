@@ -23,20 +23,19 @@ class SuperadminDashboardView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, "Centre de Pilotage"),
-            const const const SizedBox(height: LuminaDesign.paddingLg),
+            const SizedBox(height: LuminaDesign.paddingLg),
             
             // --- SECTION 1: ÉTAT GLOBAL ---
             Text("SANTÉ DU RÉSEAU", style: LuminaDesign.labelOf(context)),
-      const       const const SizedBox(height: 12),
+      const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(child: _buildNetworkStat(context, "Antennes", "12", Icons.hub, Colors.blue)),
-    const             const const SizedBox(width: 12),
+    const SizedBox(width: 12),
                 Expanded(child: _buildNetworkStat(context, "Membres", "${stats.membersCount}", Icons.people, Colors.orange)),
               ],
             ),
-        const     
-            const const SizedBox(height: LuminaDesign.paddingLg),
+        const SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 2: ALERTE DE CONFIANCE (AUDIT) ---
             Row(
@@ -45,19 +44,19 @@ class SuperadminDashboardView extends ConsumerWidget {
                 Text("FLUX DE VIGILANCE", style: LuminaDesign.labelOf(context)),
                 TextButton(
                   onPressed: () => context.push(AppRoutes.auditHistory),
- const                  child: const Text("Voir tout l'audit"),
+ child: const Text("Voir tout l'audit"),
                 ),
               ],
             ),
-            _buildAuditPreview(const context, ref),
+            _buildAuditPreview(context, ref),
 
             const SizedBox(height: LuminaDesign.paddingLg),
 
             // --- SECTION 3: ACTIONS CRITIQUES ---
-            Text("PILOTAGE STRATÉGIQUE", style: LuminaDesconst ign.labelOf(context)),
+            Text("PILOTAGE STRATÉGIQUE", style: LuminaDesign.labelOf(context)),
             const SizedBox(height: 12),
             GridView.count(
-              const shrinkWrap: true,
+              shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               mainAxisSpacing: 12,
@@ -68,7 +67,7 @@ class SuperadminDashboardView extends ConsumerWidget {
                 _AdminActionTile(label: "Sécurité & Rôles", icon: Icons.shield_outlined, onTap: () => context.push(AppRoutes.adminSettings)),
                 _AdminActionTile(label: "Rapports d'Activité", icon: Icons.analytics_outlined, onTap: () => context.push(AppRoutes.reports)),
                 _AdminActionTile(label: "Configuration", icon: Icons.settings_applications_outlined, onTap: () => context.push(AppRoutes.settings)),
-            const   ],
+            ],
             ),
             
             const SizedBox(height: 100),
@@ -94,9 +93,9 @@ class SuperadminDashboardView extends ConsumerWidget {
     return LuminaCard(
       color: color.withOpacity(0.05),
       child: Row(
-        children: const [
+        children: [
           Icon(icon, color: color, size: 20),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -138,7 +137,7 @@ class _AdminActionTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Iconconst (icon, color: context.colors.textSecondary, size: 20),
+          Icon(icon, color: context.colors.textSecondary, size: 20),
           const SizedBox(width: 12),
           Expanded(child: Text(label, style: LuminaDesign.bodyLargeOf(context).copyWith(fontSize: 13, fontWeight: FontWeight.bold))),
         ],

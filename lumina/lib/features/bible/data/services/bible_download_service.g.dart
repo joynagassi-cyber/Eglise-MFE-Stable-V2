@@ -7,7 +7,7 @@ part of 'bible_download_service.dart';
 // **************************************************************************
 
 String _$bibleDownloadServiceHash() =>
-    r'f5995deb2ed197a0ca6ad06566b3ebbaa9d83b41';
+    r'24b66e74de818a504cb1a4de761ac3c8f02ebf6d';
 
 /// See also [BibleDownloadService].
 @ProviderFor(BibleDownloadService)

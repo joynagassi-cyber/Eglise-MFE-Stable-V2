@@ -17,73 +17,113 @@ const SocialPostModelSchema = CollectionSchema(
   name: r'SocialPostModel',
   id: -3555849722546335900,
   properties: {
-    r'authorAvatarUrl': PropertySchema(
+    r'aiBibleText': PropertySchema(
       id: 0,
+      name: r'aiBibleText',
+      type: IsarType.string,
+    ),
+    r'aiBibleVerse': PropertySchema(
+      id: 1,
+      name: r'aiBibleVerse',
+      type: IsarType.string,
+    ),
+    r'authorAvatarUrl': PropertySchema(
+      id: 2,
       name: r'authorAvatarUrl',
       type: IsarType.string,
     ),
     r'authorId': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'authorId',
       type: IsarType.string,
     ),
     r'authorName': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'authorName',
       type: IsarType.string,
     ),
+    r'churchId': PropertySchema(
+      id: 5,
+      name: r'churchId',
+      type: IsarType.string,
+    ),
     r'commentsCount': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'commentsCount',
       type: IsarType.long,
     ),
     r'content': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'content',
       type: IsarType.string,
     ),
     r'createdAt': PropertySchema(
-      id: 5,
+      id: 8,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'imageUrls': PropertySchema(
-      id: 6,
+      id: 9,
       name: r'imageUrls',
       type: IsarType.stringList,
     ),
+    r'isAiGenerated': PropertySchema(
+      id: 10,
+      name: r'isAiGenerated',
+      type: IsarType.bool,
+    ),
     r'isDeleted': PropertySchema(
-      id: 7,
+      id: 11,
       name: r'isDeleted',
       type: IsarType.bool,
     ),
     r'isSynced': PropertySchema(
-      id: 8,
+      id: 12,
       name: r'isSynced',
       type: IsarType.bool,
     ),
     r'jsonData': PropertySchema(
-      id: 9,
+      id: 13,
       name: r'jsonData',
       type: IsarType.string,
     ),
     r'lastSyncedAt': PropertySchema(
-      id: 10,
+      id: 14,
       name: r'lastSyncedAt',
       type: IsarType.dateTime,
     ),
     r'likesCount': PropertySchema(
-      id: 11,
+      id: 15,
       name: r'likesCount',
       type: IsarType.long,
     ),
+    r'moderatedAt': PropertySchema(
+      id: 16,
+      name: r'moderatedAt',
+      type: IsarType.dateTime,
+    ),
+    r'moderationReason': PropertySchema(
+      id: 17,
+      name: r'moderationReason',
+      type: IsarType.string,
+    ),
+    r'moderationScore': PropertySchema(
+      id: 18,
+      name: r'moderationScore',
+      type: IsarType.long,
+    ),
     r'remoteId': PropertySchema(
-      id: 12,
+      id: 19,
       name: r'remoteId',
       type: IsarType.string,
     ),
+    r'status': PropertySchema(
+      id: 20,
+      name: r'status',
+      type: IsarType.string,
+    ),
     r'updatedAt': PropertySchema(
-      id: 13,
+      id: 21,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -106,6 +146,19 @@ const SocialPostModelSchema = CollectionSchema(
           caseSensitive: true,
         )
       ],
+    ),
+    r'churchId': IndexSchema(
+      id: 8423068024602774628,
+      name: r'churchId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'churchId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
     )
   },
   links: {},
@@ -123,6 +176,18 @@ int _socialPostModelEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.aiBibleText;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.aiBibleVerse;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.authorAvatarUrl;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -131,6 +196,12 @@ int _socialPostModelEstimateSize(
   bytesCount += 3 + object.authorId.length * 3;
   {
     final value = object.authorName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.churchId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -149,7 +220,14 @@ int _socialPostModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.moderationReason;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.remoteId.length * 3;
+  bytesCount += 3 + object.status.length * 3;
   return bytesCount;
 }
 
@@ -159,20 +237,28 @@ void _socialPostModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.authorAvatarUrl);
-  writer.writeString(offsets[1], object.authorId);
-  writer.writeString(offsets[2], object.authorName);
-  writer.writeLong(offsets[3], object.commentsCount);
-  writer.writeString(offsets[4], object.content);
-  writer.writeDateTime(offsets[5], object.createdAt);
-  writer.writeStringList(offsets[6], object.imageUrls);
-  writer.writeBool(offsets[7], object.isDeleted);
-  writer.writeBool(offsets[8], object.isSynced);
-  writer.writeString(offsets[9], object.jsonData);
-  writer.writeDateTime(offsets[10], object.lastSyncedAt);
-  writer.writeLong(offsets[11], object.likesCount);
-  writer.writeString(offsets[12], object.remoteId);
-  writer.writeDateTime(offsets[13], object.updatedAt);
+  writer.writeString(offsets[0], object.aiBibleText);
+  writer.writeString(offsets[1], object.aiBibleVerse);
+  writer.writeString(offsets[2], object.authorAvatarUrl);
+  writer.writeString(offsets[3], object.authorId);
+  writer.writeString(offsets[4], object.authorName);
+  writer.writeString(offsets[5], object.churchId);
+  writer.writeLong(offsets[6], object.commentsCount);
+  writer.writeString(offsets[7], object.content);
+  writer.writeDateTime(offsets[8], object.createdAt);
+  writer.writeStringList(offsets[9], object.imageUrls);
+  writer.writeBool(offsets[10], object.isAiGenerated);
+  writer.writeBool(offsets[11], object.isDeleted);
+  writer.writeBool(offsets[12], object.isSynced);
+  writer.writeString(offsets[13], object.jsonData);
+  writer.writeDateTime(offsets[14], object.lastSyncedAt);
+  writer.writeLong(offsets[15], object.likesCount);
+  writer.writeDateTime(offsets[16], object.moderatedAt);
+  writer.writeString(offsets[17], object.moderationReason);
+  writer.writeLong(offsets[18], object.moderationScore);
+  writer.writeString(offsets[19], object.remoteId);
+  writer.writeString(offsets[20], object.status);
+  writer.writeDateTime(offsets[21], object.updatedAt);
 }
 
 SocialPostModel _socialPostModelDeserialize(
@@ -182,21 +268,29 @@ SocialPostModel _socialPostModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SocialPostModel();
-  object.authorAvatarUrl = reader.readStringOrNull(offsets[0]);
-  object.authorId = reader.readString(offsets[1]);
-  object.authorName = reader.readStringOrNull(offsets[2]);
-  object.commentsCount = reader.readLong(offsets[3]);
-  object.content = reader.readString(offsets[4]);
-  object.createdAt = reader.readDateTimeOrNull(offsets[5]);
-  object.imageUrls = reader.readStringList(offsets[6]) ?? [];
-  object.isDeleted = reader.readBool(offsets[7]);
-  object.isSynced = reader.readBool(offsets[8]);
+  object.aiBibleText = reader.readStringOrNull(offsets[0]);
+  object.aiBibleVerse = reader.readStringOrNull(offsets[1]);
+  object.authorAvatarUrl = reader.readStringOrNull(offsets[2]);
+  object.authorId = reader.readString(offsets[3]);
+  object.authorName = reader.readStringOrNull(offsets[4]);
+  object.churchId = reader.readStringOrNull(offsets[5]);
+  object.commentsCount = reader.readLong(offsets[6]);
+  object.content = reader.readString(offsets[7]);
+  object.createdAt = reader.readDateTimeOrNull(offsets[8]);
+  object.imageUrls = reader.readStringList(offsets[9]) ?? [];
+  object.isAiGenerated = reader.readBool(offsets[10]);
+  object.isDeleted = reader.readBool(offsets[11]);
+  object.isSynced = reader.readBool(offsets[12]);
   object.isarId = id;
-  object.jsonData = reader.readStringOrNull(offsets[9]);
-  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[10]);
-  object.likesCount = reader.readLong(offsets[11]);
-  object.remoteId = reader.readString(offsets[12]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[13]);
+  object.jsonData = reader.readStringOrNull(offsets[13]);
+  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[14]);
+  object.likesCount = reader.readLong(offsets[15]);
+  object.moderatedAt = reader.readDateTimeOrNull(offsets[16]);
+  object.moderationReason = reader.readStringOrNull(offsets[17]);
+  object.moderationScore = reader.readLongOrNull(offsets[18]);
+  object.remoteId = reader.readString(offsets[19]);
+  object.status = reader.readString(offsets[20]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[21]);
   return object;
 }
 
@@ -210,30 +304,46 @@ P _socialPostModelDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 6:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 7:
-      return (reader.readBool(offset)) as P;
-    case 8:
-      return (reader.readBool(offset)) as P;
-    case 9:
       return (reader.readStringOrNull(offset)) as P;
-    case 10:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 11:
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
       return (reader.readLong(offset)) as P;
-    case 12:
+    case 7:
       return (reader.readString(offset)) as P;
+    case 8:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 9:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 10:
+      return (reader.readBool(offset)) as P;
+    case 11:
+      return (reader.readBool(offset)) as P;
+    case 12:
+      return (reader.readBool(offset)) as P;
     case 13:
+      return (reader.readStringOrNull(offset)) as P;
+    case 14:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 15:
+      return (reader.readLong(offset)) as P;
+    case 16:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 17:
+      return (reader.readStringOrNull(offset)) as P;
+    case 18:
+      return (reader.readLongOrNull(offset)) as P;
+    case 19:
+      return (reader.readString(offset)) as P;
+    case 20:
+      return (reader.readString(offset)) as P;
+    case 21:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -431,10 +541,385 @@ extension SocialPostModelQueryWhere
       }
     });
   }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterWhereClause>
+      churchIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'churchId',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterWhereClause>
+      churchIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'churchId',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterWhereClause>
+      churchIdEqualTo(String? churchId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'churchId',
+        value: [churchId],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterWhereClause>
+      churchIdNotEqualTo(String? churchId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [],
+              upper: [churchId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [churchId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [churchId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [],
+              upper: [churchId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
 }
 
 extension SocialPostModelQueryFilter
     on QueryBuilder<SocialPostModel, SocialPostModel, QFilterCondition> {
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'aiBibleText',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'aiBibleText',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'aiBibleText',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'aiBibleText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'aiBibleText',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'aiBibleText',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleTextIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'aiBibleText',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'aiBibleVerse',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'aiBibleVerse',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'aiBibleVerse',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'aiBibleVerse',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'aiBibleVerse',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'aiBibleVerse',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      aiBibleVerseIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'aiBibleVerse',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
       authorAvatarUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -874,6 +1359,160 @@ extension SocialPostModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'authorName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'churchId',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'churchId',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'churchId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'churchId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'churchId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      churchIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'churchId',
         value: '',
       ));
     });
@@ -1371,6 +2010,16 @@ extension SocialPostModelQueryFilter
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      isAiGeneratedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isAiGenerated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
       isDeletedEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1731,6 +2380,308 @@ extension SocialPostModelQueryFilter
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'moderatedAt',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'moderatedAt',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'moderatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'moderatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'moderatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderatedAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'moderatedAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'moderationReason',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'moderationReason',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'moderationReason',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'moderationReason',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'moderationReason',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'moderationReason',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationReasonIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'moderationReason',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'moderationScore',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'moderationScore',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'moderationScore',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'moderationScore',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'moderationScore',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      moderationScoreBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'moderationScore',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
       remoteIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1867,6 +2818,142 @@ extension SocialPostModelQueryFilter
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'status',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'status',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
+      statusIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterFilterCondition>
       updatedAtIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1950,6 +3037,34 @@ extension SocialPostModelQueryLinks
 extension SocialPostModelQuerySortBy
     on QueryBuilder<SocialPostModel, SocialPostModel, QSortBy> {
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByAiBibleText() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleText', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByAiBibleTextDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleText', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByAiBibleVerse() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleVerse', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByAiBibleVerseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleVerse', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       sortByAuthorAvatarUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'authorAvatarUrl', Sort.asc);
@@ -1992,6 +3107,20 @@ extension SocialPostModelQuerySortBy
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByChurchId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByChurchIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       sortByCommentsCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'commentsCount', Sort.asc);
@@ -2029,6 +3158,20 @@ extension SocialPostModelQuerySortBy
       sortByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByIsAiGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isAiGenerated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByIsAiGeneratedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isAiGenerated', Sort.desc);
     });
   }
 
@@ -2103,6 +3246,48 @@ extension SocialPostModelQuerySortBy
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModeratedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModeratedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderatedAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModerationReason() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationReason', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModerationReasonDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationReason', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModerationScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByModerationScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationScore', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       sortByRemoteId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remoteId', Sort.asc);
@@ -2113,6 +3298,19 @@ extension SocialPostModelQuerySortBy
       sortByRemoteIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remoteId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy> sortByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      sortByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
@@ -2133,6 +3331,34 @@ extension SocialPostModelQuerySortBy
 
 extension SocialPostModelQuerySortThenBy
     on QueryBuilder<SocialPostModel, SocialPostModel, QSortThenBy> {
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByAiBibleText() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleText', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByAiBibleTextDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleText', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByAiBibleVerse() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleVerse', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByAiBibleVerseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'aiBibleVerse', Sort.desc);
+    });
+  }
+
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       thenByAuthorAvatarUrl() {
     return QueryBuilder.apply(this, (query) {
@@ -2176,6 +3402,20 @@ extension SocialPostModelQuerySortThenBy
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByChurchId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByChurchIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       thenByCommentsCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'commentsCount', Sort.asc);
@@ -2213,6 +3453,20 @@ extension SocialPostModelQuerySortThenBy
       thenByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByIsAiGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isAiGenerated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByIsAiGeneratedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isAiGenerated', Sort.desc);
     });
   }
 
@@ -2300,6 +3554,48 @@ extension SocialPostModelQuerySortThenBy
   }
 
   QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModeratedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModeratedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderatedAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModerationReason() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationReason', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModerationReasonDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationReason', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModerationScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByModerationScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'moderationScore', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
       thenByRemoteId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remoteId', Sort.asc);
@@ -2310,6 +3606,19 @@ extension SocialPostModelQuerySortThenBy
       thenByRemoteIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'remoteId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy> thenByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QAfterSortBy>
+      thenByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
@@ -2331,6 +3640,20 @@ extension SocialPostModelQuerySortThenBy
 extension SocialPostModelQueryWhereDistinct
     on QueryBuilder<SocialPostModel, SocialPostModel, QDistinct> {
   QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByAiBibleText({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'aiBibleText', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByAiBibleVerse({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'aiBibleVerse', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
       distinctByAuthorAvatarUrl({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'authorAvatarUrl',
@@ -2349,6 +3672,13 @@ extension SocialPostModelQueryWhereDistinct
       distinctByAuthorName({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'authorName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct> distinctByChurchId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'churchId', caseSensitive: caseSensitive);
     });
   }
 
@@ -2377,6 +3707,13 @@ extension SocialPostModelQueryWhereDistinct
       distinctByImageUrls() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'imageUrls');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByIsAiGenerated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isAiGenerated');
     });
   }
 
@@ -2415,10 +3752,39 @@ extension SocialPostModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByModeratedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'moderatedAt');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByModerationReason({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'moderationReason',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct>
+      distinctByModerationScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'moderationScore');
+    });
+  }
+
   QueryBuilder<SocialPostModel, SocialPostModel, QDistinct> distinctByRemoteId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'remoteId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialPostModel, SocialPostModel, QDistinct> distinctByStatus(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
     });
   }
 
@@ -2439,6 +3805,20 @@ extension SocialPostModelQueryProperty
   }
 
   QueryBuilder<SocialPostModel, String?, QQueryOperations>
+      aiBibleTextProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'aiBibleText');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, String?, QQueryOperations>
+      aiBibleVerseProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'aiBibleVerse');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, String?, QQueryOperations>
       authorAvatarUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'authorAvatarUrl');
@@ -2455,6 +3835,12 @@ extension SocialPostModelQueryProperty
       authorNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'authorName');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, String?, QQueryOperations> churchIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'churchId');
     });
   }
 
@@ -2481,6 +3867,13 @@ extension SocialPostModelQueryProperty
       imageUrlsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'imageUrls');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, bool, QQueryOperations>
+      isAiGeneratedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isAiGenerated');
     });
   }
 
@@ -2515,9 +3908,36 @@ extension SocialPostModelQueryProperty
     });
   }
 
+  QueryBuilder<SocialPostModel, DateTime?, QQueryOperations>
+      moderatedAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'moderatedAt');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, String?, QQueryOperations>
+      moderationReasonProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'moderationReason');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, int?, QQueryOperations>
+      moderationScoreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'moderationScore');
+    });
+  }
+
   QueryBuilder<SocialPostModel, String, QQueryOperations> remoteIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'remoteId');
+    });
+  }
+
+  QueryBuilder<SocialPostModel, String, QQueryOperations> statusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'status');
     });
   }
 

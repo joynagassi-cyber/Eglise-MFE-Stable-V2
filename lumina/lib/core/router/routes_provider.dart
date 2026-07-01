@@ -16,6 +16,7 @@ import '../../features/groups/presentation/providers/group_routes_provider.dart'
 import '../../features/donors/presentation/providers/donor_routes_provider.dart';
 import '../../features/settings/presentation/providers/settings_routes_provider.dart';
 import '../../features/bible/presentation/providers/bible_routes_provider.dart';
+import '../../features/social/presentation/providers/social_routes_provider.dart';
 import '../../features/tutorial/presentation/providers/tutorial_routes_provider.dart';
 
 part 'routes_provider.g.dart';
@@ -37,6 +38,7 @@ List<RouteBase> allFeatureRoutes(AllFeatureRoutesRef ref) {
   routes.addAll(ref.watch(groupRoutesProvider));
   routes.addAll(ref.watch(donorRoutesProvider));
   routes.addAll(ref.watch(adminRoutesProvider));
+  routes.addAll(ref.watch(socialRoutesProvider));
   routes.addAll(ref.watch(settingsRoutesProvider));
   routes.addAll(ref.watch(tutorialRoutesProvider));
 

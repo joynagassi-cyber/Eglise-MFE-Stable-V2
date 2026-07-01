@@ -64,11 +64,13 @@ class FireDiscoveryCard extends StatelessWidget {
                   child: _buildInfoOverlay(context, isDark),
                 ),
 
-                // Badge "Corps du Christ" (Optionnel - Type de post)
+                // Badge IA ou badge de type
                 Positioned(
                   top: 20,
                   right: 20,
-                  child: _buildTypeBadge(context, isDark),
+                  child: post.isAiGenerated
+                      ? _buildAiBadge(context)
+                      : _buildTypeBadge(context, isDark),
                 ),
               ],
             ),
@@ -240,6 +242,43 @@ class FireDiscoveryCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
               fontFamily: 'Outfit',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAiBadge(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFF5722), Color(0xFFFFC107)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFF5722).withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.auto_awesome, size: 12, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            post.aiBibleVerse != null ? '✝ ${post.aiBibleVerse}' : '✨ Verset du Jour',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.3,
             ),
           ),
         ],

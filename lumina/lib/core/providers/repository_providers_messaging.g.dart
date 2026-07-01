@@ -7,7 +7,7 @@ part of 'repository_providers_messaging.dart';
 // **************************************************************************
 
 String _$messagingRepositoryHash() =>
-    r'b1f1f82eb78798e4a59951571de53c315b1ada7d';
+    r'85d228a578f348814ba440090109e5dd40e29ba6';
 
 /// See also [messagingRepository].
 @ProviderFor(messagingRepository)
@@ -66,7 +66,7 @@ final voiceNoteServiceProvider = Provider<VoiceNoteService>.internal(
 );
 
 typedef VoiceNoteServiceRef = ProviderRef<VoiceNoteService>;
-String _$socialRepositoryHash() => r'e0445e9228fe1f91542afa5c278740f8e7d60425';
+String _$socialRepositoryHash() => r'18ae37e5ed24e4bc1c545c589051c4727ec4e00c';
 
 /// See also [socialRepository].
 @ProviderFor(socialRepository)

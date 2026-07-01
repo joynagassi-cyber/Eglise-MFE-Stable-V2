@@ -32,7 +32,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.brebis),
         backgroundColor: LuminaDesign.primary,
-        child: const const const Icon(Icons.edit, color: Colors.white),
+        child: const Icon(Icons.edit, color: Colors.white),
       ),
       body: Column(
         children: [
@@ -41,7 +41,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
             child: conversationsAsync.when(
               data: (conversations) {
                 final filtered = _filterConversations(conversations);
-                if (filtered.isEmpty) rconst eturn const Center(child: Text("Aucune discussion"));
+                if (filtered.isEmpty) return const Center(child: Text("Aucune discussion"));
                 
                 return ListView.builder(
                   padding: const EdgeInsets.all(LuminaDesign.paddingMd),
@@ -56,7 +56,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                       child: Row(
                         children: [
                           _buildAvatar(profileAsync),
-              const             const const SizedBox(width: 16),
+              const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,8 +118,8 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         backgroundImage: p?.avatarUrl != null ? NetworkImage(p!.avatarUrl!) : null,
         child: p?.avatarUrl == null ? Text(p?.initials ?? "?") : null,
       ),
-   const    loading: () => const CircleAvatar(radius: 25, child: LoadingDots()),
-const       error: (_, __) => const CircleAvatar(radius: 25, child: Icon(Icons.error)),
+      loading: () => const CircleAvatar(radius: 25, child: LoadingDots()),
+      error: (_, __) => const CircleAvatar(radius: 25, child: Icon(Icons.error)),
     );
   }
 

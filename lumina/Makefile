@@ -43,3 +43,13 @@ fix-web:
 
 run-web: fix-web
 	flutter run -d chrome
+
+# Corruption Scanner
+check-corruptions:
+	dart run scripts/check_corruptions.dart
+
+check-corruptions-fix:
+	dart run scripts/check_corruptions.dart --fix
+
+check-corruptions-json:
+	dart run scripts/check_corruptions.dart --json

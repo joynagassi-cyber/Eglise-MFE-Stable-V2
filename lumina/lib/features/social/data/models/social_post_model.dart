@@ -28,6 +28,15 @@ class SocialPostModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  // AI Social Features
+  bool isAiGenerated = false;
+  String? aiBibleVerse;
+  String? aiBibleText;
+  String status = 'published';
+  int? moderationScore;
+  String? moderationReason;
+  DateTime? moderatedAt;
+
   // Sync fields
   bool isSynced = true;
   bool isDeleted = false;
@@ -55,6 +64,12 @@ class SocialPostModel {
       commentsCount: commentsCount,
       createdAt: createdAt ?? DateTime.now(),
       updatedAt: updatedAt,
+      isAiGenerated: isAiGenerated,
+      aiBibleVerse: aiBibleVerse,
+      aiBibleText: aiBibleText,
+      status: status,
+      moderationScore: moderationScore,
+      moderationReason: moderationReason,
     );
   }
 
@@ -71,6 +86,14 @@ class SocialPostModel {
     model.commentsCount = post.commentsCount;
     model.createdAt = post.createdAt;
     model.updatedAt = post.updatedAt;
+
+    // AI Fields
+    model.isAiGenerated = post.isAiGenerated;
+    model.aiBibleVerse = post.aiBibleVerse;
+    model.aiBibleText = post.aiBibleText;
+    model.status = post.status;
+    model.moderationScore = post.moderationScore;
+    model.moderationReason = post.moderationReason;
 
     model.isSynced = false;
     model.jsonData = jsonEncode(post.toJson());

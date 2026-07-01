@@ -21,7 +21,7 @@ final churchRepositoryProvider = Provider<ChurchRepository>.internal(
 );
 
 typedef ChurchRepositoryRef = ProviderRef<ChurchRepository>;
-String _$auditRepositoryHash() => r'615f568dbedb1bc41138cd5b45d4598261767751';
+String _$auditRepositoryHash() => r'f66edd3288fb9c5606e811a50beefd3105ce1dc1';
 
 /// See also [auditRepository].
 @ProviderFor(auditRepository)
@@ -131,7 +131,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>.internal(
 
 typedef CategoryRepositoryRef = ProviderRef<CategoryRepository>;
 String _$notificationRepositoryHash() =>
-    r'9c2b5115451ec98eecaf4d56725357de7615c520';
+    r'50a9bb404bb9eac2023ec64b47ea205ac7786bc1';
 
 /// See also [notificationRepository].
 @ProviderFor(notificationRepository)

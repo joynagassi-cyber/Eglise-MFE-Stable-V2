@@ -16,6 +16,14 @@ class SocialPost with _$SocialPost {
     @Default(0) int commentsCount,
     required DateTime createdAt,
     DateTime? updatedAt,
+
+    // AI Social Features
+    @Default(false) bool isAiGenerated,
+    String? aiBibleVerse,      // "Psaume 23:4"
+    String? aiBibleText,       // Texte du verset
+    @Default('published') String status, // published, flagged, deleted
+    int? moderationScore,      // 0-100
+    String? moderationReason,  // Raison du flag
   }) = _SocialPost;
 
   factory SocialPost.fromJson(Map<String, dynamic> json) =>

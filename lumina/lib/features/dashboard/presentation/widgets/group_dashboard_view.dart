@@ -21,11 +21,11 @@ class GroupDashboardView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, "Gestion du Groupe"),
-            const const const SizedBox(height: LuminaDesign.paddingLg),
+            const SizedBox(height: LuminaDesign.paddingLg),
             _buildKPIs(context, stats),
-      const       const const SizedBox(height: LuminaDesign.paddingLg),
+      const SizedBox(height: LuminaDesign.paddingLg),
             _buildActions(context),
-const             const const SizedBox(height: LuminaDesign.paddingLg),
+const SizedBox(height: LuminaDesign.paddingLg),
             _buildSectionTitle(context, "Alertes de Vigilance"),
             _buildAlerts(stats, context),
           ],
@@ -58,7 +58,7 @@ const             const const SizedBox(height: LuminaDesign.paddingLg),
                 Text("${stats.membersCount}", style: LuminaDesign.h2Of(context)),
               ],
             ),
-          const ),
+          ),
         ),
         const SizedBox(width: LuminaDesign.paddingMd),
         Expanded(
@@ -82,21 +82,21 @@ const             const const SizedBox(height: LuminaDesign.paddingLg),
         LuminaButton(
           label: "Prendre les présences",
           icon: Icons.checklist_rtl_rounded,
-          onPressed: () => context.push(AppRoutes.const equipe),
+          onPressed: () => context.push(AppRoutes.equipe),
         ),
         const SizedBox(height: LuminaDesign.paddingMd),
         Row(
           children: [
             Expanded(
               child: LuminaCard(
-                onTap: () => context.push(AppRoutconst es.brebis),
+                onTap: () => context.push(AppRoutes.brebis),
                 child: const Column(
                   children: [
                     Icon(Icons.person_add_alt_1, color: LuminaDesign.primary),
                     Text("Nouveau"),
                   ],
                 ),
-    const           ),
+    ),
             ),
             const SizedBox(width: LuminaDesign.paddingMd),
             Expanded(
@@ -104,7 +104,7 @@ const             const const SizedBox(height: LuminaDesign.paddingLg),
                 onTap: () => context.push(AppRoutes.financeHistory),
                 child: Column(
                   children: [
-                    Icon(Icons.history, color: conconst text.colors.textTertiary),
+                    Icon(Icons.history, color: context.colors.textTertiary),
                     const Text("Historique"),
                   ],
                 ),
@@ -123,9 +123,9 @@ const             const const SizedBox(height: LuminaDesign.paddingLg),
           LuminaCard(
             color: Colors.pink.withOpacity(0.05),
             onTap: () => context.push(AppRoutes.brebis),
-            chconst ild: Row(
+            child: Row(
               children: [
-                const Icoconst n(Icons.cake_rounded, color: Colors.pink),
+                const Icon(Icons.cake_rounded, color: Colors.pink),
                 const SizedBox(width: 16),
                 Text("${stats.birthdaysCount} Anniversaires cette semaine"),
               ],
@@ -135,9 +135,9 @@ const             const const SizedBox(height: LuminaDesign.paddingLg),
           LuminaCard(
             color: Colors.orange.withOpacity(0.05),
             onTap: () => context.push(AppRoutes.equipe),
-  const           child: Row(
+  child: Row(
               children: [
-                const Icconst on(Icons.warning_amber_rounded, color: Colors.orange),
+                const Icon(Icons.warning_amber_rounded, color: Colors.orange),
                 const SizedBox(width: 16),
                 Text("${stats.absenceAlertsCount} Absences prolongées"),
               ],

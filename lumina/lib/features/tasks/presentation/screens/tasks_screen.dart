@@ -24,7 +24,7 @@ class TasksScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.communicationTasksNew),
         backgroundColor: LuminaDesign.primary,
-        child: const const const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       body: tasksAsync.when(
         data: (tasks) {
@@ -48,9 +48,9 @@ class TasksScreen extends ConsumerWidget {
                   ),
                 ).animate().fadeIn().slideY(begin: -0.1),
 
-          const       const const SizedBox(height: 24),
+          const SizedBox(height: 24),
                 Text("DÉFIS DU JOUR", style: LuminaDesign.labelOf(context)),
-    const             const const SizedBox(height: 12),
+    const SizedBox(height: 12),
 
                 // --- TASKS LIST ---
                 ...tasks.map((task) => _TaskItem(task: task).animate(delay: 50.ms).fadeIn().slideX(begin: 0.1)),
@@ -69,10 +69,10 @@ class TasksScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.auto_stories_outlined, size: 64, color: context.colors.textTertconst iary),
+          Icon(Icons.auto_stories_outlined, size: 64, color: context.colors.textTertiary),
           const SizedBox(height: 16),
-          Text("Votre carnet est vide", style: LuminaDesign.h2Oconst f(context)),
-          const Text("Commencez par planifier un tconst emps de prière."),
+          Text("Votre carnet est vide", style: LuminaDesign.h2Of(context)),
+          const Text("Commencez par planifier un temps de prière."),
           const SizedBox(height: 24),
           LuminaButton(
             label: "Ajouter une tâche", 
@@ -113,7 +113,7 @@ class _TaskItem extends StatelessWidget {
               isDone ? Icons.check : null,
               size: 16,
               color: Colors.white,
-    const         ),
+    ),
           ),
           const SizedBox(width: 16),
           Expanded(
