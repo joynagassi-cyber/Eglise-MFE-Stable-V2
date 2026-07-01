@@ -110,7 +110,15 @@ class PostEditorNotifier extends StateNotifier<PostEditorState> {
         createdAt: DateTime.now(),
       );
       
-      await _repository.createPost(post);
+      final result = await _repository.createPost(post);
+      
+      if (result.isFailure) {
+        state = state.copyWith(
+          isPublishing: false,
+          error: 'Erreur publication: ${result.failureOrNull?.message ?? "Erreur inconnue"}',
+        );
+        return null;
+      }
       
       // Déclencher la modération IA en arrière-plan avec le vrai ID
       _moderatePost(post); // ignore: unawaited_futures

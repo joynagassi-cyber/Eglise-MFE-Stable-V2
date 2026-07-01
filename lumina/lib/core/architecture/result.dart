@@ -1,5 +1,11 @@
 /// Modèle de résultat fonctionnel (Pattern Either / Result)
 /// Utilisé pour forcer la gestion des erreurs dans l'UI
+///
+/// Usage :
+///   Future<Result<void, Failure>> deleteMember(String id) async {
+///     try { ... return const Success(null); }
+///     catch (e) { return Failure(err.ServerFailure(e.toString())); }
+///   }
 sealed class Result<S, F> {
   const Result();
 
@@ -18,7 +24,8 @@ final class Success<S, F> extends Result<S, F> {
   const Success(this.value);
 
   @override
-  T fold<T>(T Function(S s) onSuccess, T Function(F f) onFailure) => onSuccess(value);
+  T fold<T>(T Function(S s) onSuccess, T Function(F f) onFailure) =>
+      onSuccess(value);
 }
 
 final class Failure<S, F> extends Result<S, F> {
@@ -26,5 +33,6 @@ final class Failure<S, F> extends Result<S, F> {
   const Failure(this.error);
 
   @override
-  T fold<T>(T Function(S s) onSuccess, T Function(F f) onFailure) => onFailure(error);
+  T fold<T>(T Function(S s) onSuccess, T Function(F f) onFailure) =>
+      onFailure(error);
 }

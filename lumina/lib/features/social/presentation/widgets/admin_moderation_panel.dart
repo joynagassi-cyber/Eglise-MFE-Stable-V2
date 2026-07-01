@@ -112,17 +112,37 @@ class AdminModerationPanel extends ConsumerWidget {
 
     if (confirmed == true && context.mounted) {
       final repository = ref.read(socialRepositoryProvider);
-      await repository.deletePost(post.id);
-      ref.invalidate(allPostsProvider);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Publication supprimée'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        onDeleted?.call();
-      }
+      final result = await repository.deletePost(post.id);
+
+      result.fold(
+        (_) {
+          ref.invalidate(allPostsProvider);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Publication supprimée'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+          try {
+            onDeleted?.call();
+          } catch (_) {
+            // Ignorer silencieusement — le callback ne doit pas casser l'UX
+          }
+        },
+        (failure) {
+          debugPrint('Erreur deletePost: $failure');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erreur : ${failure.message}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      );
     }
   }
 }

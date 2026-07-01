@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:isar/isar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../core/architecture/result.dart';
+import '../../../../core/errors/failures.dart' as err;
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/logging/app_logger.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/social_post.dart';
 import '../../domain/repositories/i_social_repository.dart';
@@ -12,7 +15,7 @@ import '../models/social_post_model.dart';
 import '../models/social_comment_model.dart';
 import '../../domain/entities/social_comment.dart';
 
-class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
+class SocialRepositoryImpl implements ISocialRepository {
   final SupabaseClient _supabase;
   final IsarService _isarService;
   final OfflineSyncManager _syncManager;
@@ -20,16 +23,19 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
 
   SocialRepositoryImpl(this._supabase, this._isarService, this._syncManager, this._ref);
 
+  /// Raccourci pour lire l'ID d'église active depuis le provider
+  String get _churchId => _ref.read(activeChurchIdProvider);
+
   @override
   Future<List<SocialPost>> getPosts({int limit = 20, int offset = 0}) async {
-    final churchId = getActiveChurchId(_ref);
+    final churchId = _churchId;
 
     if (!_isarService.isReady) {
-      final List<dynamic> data = await applyChurchFilter(
-        _supabase.from('social_posts').select('*, members(first_name, last_name, avatar_url)'),
-        churchId,
-        allowEmpty: true,
-      ).order('created_at', ascending: false)
+      final List<dynamic> data = await _supabase
+          .from('social_posts')
+          .select('*, members(first_name, last_name, avatar_url)')
+          .scoped(_ref, allowEmpty: true)
+          .order('created_at', ascending: false)
           .range(offset, offset + limit - 1)
           .timeout(const Duration(seconds: 20));
       return data.map((json) => _mapPostJson(json as Map<String, dynamic>)).toList();
@@ -37,11 +43,11 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
     final isar = _isarService.db;
 
     try {
-      final List<dynamic> data = await applyChurchFilter(
-        _supabase.from('social_posts').select(),
-        churchId,
-        allowEmpty: true,
-      ).order('created_at', ascending: false)
+      final List<dynamic> data = await _supabase
+          .from('social_posts')
+          .select()
+          .scoped(_ref, allowEmpty: true)
+          .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
 
       await isar.writeTxn(() async {
@@ -58,7 +64,7 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
     final query = isar.socialPostModels.where();
     final models = await query
         .filter()
-        .optional(churchId != null && churchId != '*', (q) => q.churchIdEqualTo(churchId!))
+        .optional(churchId != '*' && churchId != 'global', (q) => q.churchIdEqualTo(churchId))
         .sortByCreatedAtDesc()
         .offset(offset)
         .limit(limit)
@@ -69,8 +75,8 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
 
   @override
   Stream<List<SocialPost>> watchPosts() async* {
-    final churchId = getActiveChurchId(_ref);
-    
+    final churchId = _churchId;
+
     if (!_isarService.isReady) {
       yield* _supabase.from('social_posts')
           .stream(primaryKey: ['id'])
@@ -83,14 +89,14 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
     }
 
     final controller = StreamController<List<SocialPost>>();
-    
+
     final channel = _supabase
           .channel('social_posts')
           .onPostgresChanges(
             event: PostgresChangeEvent.all,
             schema: 'public',
             table: 'social_posts',
-            filter: churchId != null && churchId != '*'
+            filter: churchId != '*' && churchId != 'global'
                 ? PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'church_id', value: churchId)
                 : null,
             callback: (payload) async {
@@ -110,7 +116,7 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
 
     final query = _isarService.db.socialPostModels.where();
     final filteredQuery = query.filter()
-        .optional(churchId != null && churchId != '*', (q) => q.churchIdEqualTo(churchId!))
+        .optional(churchId != '*' && churchId != 'global', (q) => q.churchIdEqualTo(churchId))
         .sortByCreatedAtDesc();
 
     final isarSubscription = filteredQuery
@@ -129,34 +135,42 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
   }
 
   @override
-  Future<void> createPost(SocialPost post) async {
-    final churchId = getActiveChurchId(_ref);
-    
-    if (_isarService.isReady) {
-      final isar = _isarService.db;
-      final model = SocialPostModel.fromEntity(post)
-        ..churchId = churchId
-        ..isSynced = false;
+  Future<SocialResult> createPost(SocialPost post) async {
+    try {
+      final churchId = _churchId;
 
-      await isar.writeTxn(() async {
-        await isar.socialPostModels.put(model);
-      });
+      if (_isarService.isReady) {
+        final isar = _isarService.db;
+        final model = SocialPostModel.fromEntity(post)
+          ..churchId = churchId
+          ..isSynced = false;
 
-      await _syncManager.registerAction(
-        entityType: 'social_posts',
-        action: 'INSERT',
-        payload: post.toJson(),
-        churchId: churchId ?? '',
-        recordId: post.id,
+        await isar.writeTxn(() async {
+          await isar.socialPostModels.put(model);
+        });
+
+        await _syncManager.registerAction(
+          entityType: 'social_posts',
+          action: 'INSERT',
+          payload: post.toJson(),
+          churchId: churchId,
+          recordId: post.id,
+        );
+      } else {
+        await _supabase.from('social_posts').upsert(post.toJson());
+      }
+
+      return const Success(null);
+    } catch (e, st) {
+      return Failure(
+        err.ServerFailure('Échec de la création du post: $e', stackTrace: st),
       );
-    } else {
-      await _supabase.from('social_posts').upsert(post.toJson());
     }
   }
 
   @override
   Future<void> likePost(String postId) async {
-    final churchId = getActiveChurchId(_ref);
+    final churchId = _churchId;
 
     if (_isarService.isReady) {
       final isar = _isarService.db;
@@ -170,12 +184,12 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
           model.likesCount += 1;
           await isar.socialPostModels.put(model);
         });
-        
+
         await _syncManager.registerAction(
           entityType: 'social_posts',
           action: 'UPDATE',
           payload: {'id': postId, 'likes_count': model.likesCount},
-          churchId: churchId ?? '',
+          churchId: churchId,
           recordId: 'like_$postId',
         );
       }
@@ -185,38 +199,56 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
   }
 
   @override
-  Future<void> deletePost(String id) async {
-    final churchId = getActiveChurchId(_ref);
+  Future<SocialResult> deletePost(String id) async {
+    try {
+      final churchId = _churchId;
 
-    if (_isarService.isReady) {
-      final isar = _isarService.db;
-      final model =
-          await isar.socialPostModels.filter().remoteIdEqualTo(id).findFirst();
+      if (_isarService.isReady) {
+        final isar = _isarService.db;
+        final model = await isar.socialPostModels
+            .filter()
+            .remoteIdEqualTo(id)
+            .findFirst();
 
-      if (model != null) {
-        await isar.writeTxn(() async {
-          model.isDeleted = true;
-          model.isSynced = false;
-          await isar.socialPostModels.put(model);
-        });
+        if (model != null) {
+          await isar.writeTxn(() async {
+            model.isDeleted = true;
+            model.isSynced = false;
+            await isar.socialPostModels.put(model);
+          });
 
-        await _syncManager.registerAction(
-          entityType: 'social_posts',
-          action: 'DELETE',
-          payload: {'id': id},
-          churchId: churchId ?? '',
-          recordId: id,
-        );
+          await _syncManager.registerAction(
+            entityType: 'social_posts',
+            action: 'DELETE',
+            payload: {'id': id},
+            churchId: churchId,
+            recordId: id,
+          );
+        } else {
+          AppLogger.w(
+            'deletePost: post $id introuvable dans Isar (pas encore synchronisé)',
+            'SocialRepo',
+          );
+          return Failure(
+            err.CacheFailure('Publication $id introuvable. Peut-être pas encore synchronisée.'),
+          );
+        }
+      } else {
+        await _supabase.from('social_posts').delete().eq('id', id);
       }
-    } else {
-      await _supabase.from('social_posts').delete().eq('id', id);
+
+      return const Success(null);
+    } catch (e, st) {
+      return Failure(
+        err.ServerFailure('Échec de la suppression du post $id: $e', stackTrace: st),
+      );
     }
   }
 
   @override
   Future<List<SocialComment>> getComments(String postId) async {
-    final churchId = getActiveChurchId(_ref);
-    
+    final churchId = _churchId;
+
     if (!_isarService.isReady) {
       final List<dynamic> data = await _supabase
           .from('social_comments')
@@ -268,7 +300,7 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
     }
 
     final controller = StreamController<List<SocialComment>>();
-    
+
     final channel = _supabase
           .channel('social_comments:$postId')
           .onPostgresChanges(
@@ -313,7 +345,7 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
 
   @override
   Future<void> addComment(SocialComment comment) async {
-    final churchId = getActiveChurchId(_ref);
+    final churchId = _churchId;
 
     if (_isarService.isReady) {
       final isar = _isarService.db;
@@ -329,7 +361,7 @@ class SocialRepositoryImpl with ChurchFilterMixin implements ISocialRepository {
         entityType: 'social_comments',
         action: 'INSERT',
         payload: comment.toJson(),
-        churchId: churchId ?? '',
+        churchId: churchId,
         recordId: comment.id,
       );
     } else {

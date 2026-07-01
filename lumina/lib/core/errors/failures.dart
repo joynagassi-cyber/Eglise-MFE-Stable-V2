@@ -1,16 +1,22 @@
-// lib/core/error/failures.dart
-// Système de Failures Scellées (Sealed) - Phase A.2
+// lib/core/errors/failures.dart
+// Système de Failures Scellées (Sealed) — UNIFIED
 //
-// Hiérarchie déterministe des erreurs pour l'application Lumina.
+// Hiérarchie exhaustive des erreurs pour l'application Lumina.
 // Chaque Failure est typée et documentée pour garantir un traitement
-// exhaustif dans les use cases et providers.
+// exhaustif via pattern matching (switch).
+//
+// RÈGLE : Tout catch dans le domaine DOIT retourner une sous-classe
+// de Failure. Jamais d'exceptions nues.
 
-/// Classe de base abstraite pour toutes les erreurs métier.
+import 'package:flutter/foundation.dart';
+
+/// Classe de base scellée pour toutes les erreurs métier.
 ///
-/// Utilisation avec dartz: `Either<Failure, T>`
-/// Chaque sous-classe représente une catégorie d'erreur distincte
-/// qui DOIT être traitée explicitement par le code appelant.
-abstract class Failure {
+/// Le mot-clé `sealed` garantit l'exhaustivité du pattern matching :
+/// le compilateur sait que toutes les sous-classes sont dans ce fichier
+/// et prévient si un `switch` oublie un cas.
+@immutable
+sealed class Failure {
   final String message;
   final String? code;
   final StackTrace? stackTrace;
@@ -38,7 +44,7 @@ abstract class Failure {
 // ============================================================
 
 /// Erreur provenant du serveur Supabase (PostgrestException, RPC, etc.)
-class ServerFailure extends Failure {
+final class ServerFailure extends Failure {
   final int? statusCode;
 
   const ServerFailure(super.message,
@@ -46,12 +52,12 @@ class ServerFailure extends Failure {
 }
 
 /// Erreur de connectivité réseau (pas de connexion, timeout DNS, etc.)
-class NetworkFailure extends Failure {
+final class NetworkFailure extends Failure {
   const NetworkFailure(super.message, {super.code, super.stackTrace});
 }
 
 /// Erreur de timeout sur une opération réseau ou locale
-class TimeoutFailure extends Failure {
+final class TimeoutFailure extends Failure {
   final Duration? duration;
 
   const TimeoutFailure(super.message,
@@ -63,12 +69,12 @@ class TimeoutFailure extends Failure {
 // ============================================================
 
 /// Erreur d'authentification (login, token expiré, session invalide)
-class AuthFailure extends Failure {
+final class AuthFailure extends Failure {
   const AuthFailure(super.message, {super.code, super.stackTrace});
 }
 
 /// Erreur de permission (accès refusé à une ressource protégée)
-class PermissionFailure extends Failure {
+final class PermissionFailure extends Failure {
   final String? requiredPermission;
   final String? userRole;
 
@@ -86,12 +92,12 @@ class PermissionFailure extends Failure {
 // ============================================================
 
 /// Erreur de cache local (Isar read/write failure)
-class CacheFailure extends Failure {
+final class CacheFailure extends Failure {
   const CacheFailure(super.message, {super.code, super.stackTrace});
 }
 
 /// Erreur de synchronisation (file d'attente, conflit de données)
-class SyncFailure extends Failure {
+final class SyncFailure extends Failure {
   final String? entityType;
   final String? recordId;
 
@@ -105,7 +111,7 @@ class SyncFailure extends Failure {
 }
 
 /// Conflit de données entre local et distant (Last-Write-Wins decision)
-class ConflictFailure extends Failure {
+final class ConflictFailure extends Failure {
   final String? localVersion;
   final String? remoteVersion;
 
@@ -119,11 +125,20 @@ class ConflictFailure extends Failure {
 }
 
 // ============================================================
+// SÉCURITÉ MULTI-TENANT
+// ============================================================
+
+/// Erreur de sécurité (Multi-tenant, accès inter-églises)
+final class SecurityFailure extends Failure {
+  const SecurityFailure(super.message, {super.code, super.stackTrace});
+}
+
+// ============================================================
 // VALIDATION & LOGIQUE MÉTIER
 // ============================================================
 
 /// Erreur de validation des données d'entrée
-class ValidationFailure extends Failure {
+final class ValidationFailure extends Failure {
   final Map<String, String>? fieldErrors;
 
   const ValidationFailure(super.message,
@@ -131,7 +146,7 @@ class ValidationFailure extends Failure {
 }
 
 /// Erreur de logique métier (règle métier violée, état incohérent)
-class BusinessRuleFailure extends Failure {
+final class BusinessRuleFailure extends Failure {
   final String? ruleId;
 
   const BusinessRuleFailure(super.message,
@@ -143,7 +158,7 @@ class BusinessRuleFailure extends Failure {
 // ============================================================
 
 /// Erreur de contexte d'église (aucune église active, switch incomplet)
-class ChurchContextFailure extends Failure {
+final class ChurchContextFailure extends Failure {
   final String? expectedChurchId;
   final String? actualChurchId;
 
@@ -161,7 +176,7 @@ class ChurchContextFailure extends Failure {
 // ============================================================
 
 /// Erreur de stockage de fichiers (upload, download, accès disque)
-class StorageFailure extends Failure {
+final class StorageFailure extends Failure {
   final String? filePath;
 
   const StorageFailure(super.message,
@@ -174,7 +189,7 @@ class StorageFailure extends Failure {
 
 /// Erreur inattendue / non catégorisée
 /// À utiliser UNIQUEMENT comme dernier recours dans un catch global.
-class UnexpectedFailure extends Failure {
+final class UnexpectedFailure extends Failure {
   final Object? originalError;
 
   const UnexpectedFailure(super.message,

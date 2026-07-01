@@ -1,11 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/local/isar_service.dart';
-import '../providers/auth_state_leaf.dart';
+import '../providers/auth_provider.dart';
+import '../utils/supabase_extensions.dart';
 
 /// Base pour tous les repositories résilients de Lumina
-/// 
+///
 /// Pattern : Security Decorator + Multi-tenant Injection
+/// Utilise SupabaseScopedFilter (scoped) pour garantir l'isolation
+/// des données par église.
 abstract class ResilientRepository {
   final Ref ref;
   final SupabaseClient supabase;
@@ -17,21 +20,24 @@ abstract class ResilientRepository {
 
   /// Récupère l'ID d'église de manière sécurisée
   String get churchId {
-    final id = ref.read(activeChurchIdStateProvider);
-    if (id == null) {
-      throw Exception('SÉCURITÉ: Tentative d\'accès aux données sans ID d\'église');
+    final id = ref.read(activeChurchIdProvider);
+    if (id.isEmpty || id == 'global') {
+      throw Exception(
+        'SÉCURITÉ: Tentative d\'accès aux données sans ID d\'église',
+      );
     }
     return id;
   }
 
-  /// Prépare une requête Supabase sécurisée (auto-filtrée)
+  /// Prépare une requête SELECT Supabase sécurisée (auto-filtrée par church_id)
+  ///
+  /// Utilise l'extension `.scoped(ref)` pour injecter automatiquement
+  /// le filtre church_id.
+  ///
+  /// Usage :
+  ///   final data = await secure('members').select('*').order('name');
   PostgrestFilterBuilder<T> secure<T>(String table) {
-    final id = churchId;
-    final query = supabase.from(table).select();
-    
-    // Bypass filtre pour superadmin
-    if (id == '*') return query as PostgrestFilterBuilder<T>;
-    
-    return query.eq('church_id', id) as PostgrestFilterBuilder<T>;
+    final query = supabase.from(table).select() as PostgrestFilterBuilder<T>;
+    return query.scoped(ref);
   }
 }

@@ -18,14 +18,11 @@ abstract class BaseRepository<T> with ChurchFilterMixin {
   T fromJson(Map<String, dynamic> json);
 
   Future<List<T>> getAll({int page = 1, int perPage = 50}) async {
-    final churchId = getActiveChurchId(ref);
-
     return PerformanceMonitor().measureAsync(
       'db_get_all',
       () => RetryHelper.withRetry(
         operation: () async {
-          var query = supabase.from(tableName).select();
-          query = applyChurchFilter(query, churchId);
+          var query = supabase.from(tableName).select().scoped(ref);
 
           final start = (page - 1) * perPage;
           final response =
@@ -41,14 +38,11 @@ abstract class BaseRepository<T> with ChurchFilterMixin {
   }
 
   Future<T> getById(String id) async {
-    final churchId = getActiveChurchId(ref);
-
     return PerformanceMonitor().measureAsync(
       'db_get_by_id',
       () => RetryHelper.withRetry(
         operation: () async {
-          var query = supabase.from(tableName).select().eq('id', id);
-          query = applyChurchFilter(query, churchId);
+          var query = supabase.from(tableName).select().eq('id', id).scoped(ref);
           final record = await query.single().withTimeout();
           return fromJson(record);
         },
@@ -58,14 +52,11 @@ abstract class BaseRepository<T> with ChurchFilterMixin {
   }
 
   Future<void> create(Map<String, dynamic> data) async {
-    final churchId = getActiveChurchId(ref);
-
     return PerformanceMonitor().measureAsync(
       'db_create',
       () => RetryHelper.withRetry(
         operation: () async {
-          data['church_id'] = churchId;
-          await supabase.from(tableName).insert(data).withTimeout();
+          await supabase.from(tableName).insertScoped(ref, values: data).withTimeout();
         },
       ),
       metadata: {'table': tableName},
@@ -73,14 +64,12 @@ abstract class BaseRepository<T> with ChurchFilterMixin {
   }
 
   Future<void> update(String id, Map<String, dynamic> data) async {
-    final churchId = getActiveChurchId(ref);
-
     return PerformanceMonitor().measureAsync(
       'db_update',
       () => RetryHelper.withRetry(
         operation: () async {
           var query = supabase.from(tableName).update(data).eq('id', id);
-          query = applyChurchFilter(query, churchId);
+          query = query.scoped(ref);
           await query.withTimeout();
         },
       ),
@@ -89,14 +78,12 @@ abstract class BaseRepository<T> with ChurchFilterMixin {
   }
 
   Future<void> delete(String id) async {
-    final churchId = getActiveChurchId(ref);
-
     return PerformanceMonitor().measureAsync(
       'db_delete',
       () => RetryHelper.withRetry(
         operation: () async {
           var query = supabase.from(tableName).delete().eq('id', id);
-          query = applyChurchFilter(query, churchId);
+          query = query.scoped(ref);
           await query.withTimeout();
         },
       ),
