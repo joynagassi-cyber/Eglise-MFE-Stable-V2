@@ -8,7 +8,6 @@ import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:lumina/core/widgets/lumina_page.dart';
 import 'package:lumina/features/social/domain/entities/social_post.dart';
 import 'package:lumina/features/social/presentation/providers/social_providers.dart';
-import 'package:lumina/features/social/presentation/widgets/ai_post_badge.dart';
 import 'package:lumina/features/social/presentation/widgets/flagged_post_banner.dart';
 import 'package:lumina/features/social/presentation/widgets/admin_moderation_panel.dart';
 import 'package:lumina/core/extensions/context_extension.dart';
@@ -63,12 +62,7 @@ class PostDetailScreen extends ConsumerWidget {
                   ),
                 ),
 
-                // Badge IA si c'est un post généré
-                if (post.isAiGenerated)
-                  AiPostBadge(
-                    bibleVerse: post.aiBibleVerse,
-                    bibleText: post.aiBibleText,
-                  ),
+
               ],
             ),
 
