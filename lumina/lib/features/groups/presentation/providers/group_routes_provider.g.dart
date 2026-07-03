@@ -6,7 +6,7 @@ part of 'group_routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$groupRoutesHash() => r'57a34bfc1c3aed76215b968efe72e8b304d11e36';
+String _$groupRoutesHash() => r'88209e6d2a09e149336c3a3ae87dbb2878050f6c';
 
 /// See also [groupRoutes].
 @ProviderFor(groupRoutes)

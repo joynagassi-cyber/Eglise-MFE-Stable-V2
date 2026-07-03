@@ -6,7 +6,7 @@ part of 'spiritual_routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$spiritualRoutesHash() => r'380cb86a4c88d824643c309c27da3db87d2f0d51';
+String _$spiritualRoutesHash() => r'a543927dc01c313b338ee0bccc2d3136fe665b54';
 
 /// See also [spiritualRoutes].
 @ProviderFor(spiritualRoutes)

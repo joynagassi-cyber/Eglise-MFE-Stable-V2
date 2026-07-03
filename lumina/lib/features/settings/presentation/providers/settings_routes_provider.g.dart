@@ -6,7 +6,7 @@ part of 'settings_routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$settingsRoutesHash() => r'79ce5f27fc026dd2fef3df4aeb30c8a028f48bd1';
+String _$settingsRoutesHash() => r'af108c3d1e77d351354ce92c7ae5d131d60e9231';
 
 /// See also [settingsRoutes].
 @ProviderFor(settingsRoutes)

@@ -6,7 +6,7 @@ part of 'dashboard_routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dashboardRoutesHash() => r'fc5c633ac1a6e16e32a229ab879628e8596eca0b';
+String _$dashboardRoutesHash() => r'fcd670070388888253ef7df607eca98c62c65e2d';
 
 /// See also [dashboardRoutes].
 @ProviderFor(dashboardRoutes)

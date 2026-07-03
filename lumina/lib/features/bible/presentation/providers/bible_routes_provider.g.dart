@@ -6,7 +6,7 @@ part of 'bible_routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bibleRoutesHash() => r'71d5c98c4689f5e61f4fd138d32b43f4f8b03aa0';
+String _$bibleRoutesHash() => r'36bb63f6debfdc069bcf4d1fc0bf7a0d5d16d63b';
 
 /// See also [bibleRoutes].
 @ProviderFor(bibleRoutes)

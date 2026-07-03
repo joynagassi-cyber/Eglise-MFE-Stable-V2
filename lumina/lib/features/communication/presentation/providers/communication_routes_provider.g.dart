@@ -7,7 +7,7 @@ part of 'communication_routes_provider.dart';
 // **************************************************************************
 
 String _$communicationRoutesHash() =>
-    r'1579c26ca34e91b1904387d04a3b314b97e42d65';
+    r'7c358df67d198e88513b9bd04476c70ecb63d170';
 
 /// See also [communicationRoutes].
 @ProviderFor(communicationRoutes)

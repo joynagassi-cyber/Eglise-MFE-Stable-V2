@@ -11,18 +11,13 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lumina/core/auth/domain/entities/auth_state.dart' as app_auth;
 import 'package:lumina/core/auth/domain/entities/church_role.dart';
-import 'package:lumina/core/auth/domain/entities/enums/role_level.dart';
-import 'package:lumina/core/auth/domain/entities/user_session.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
 import 'package:lumina/core/providers/shared_preferences_provider.dart';
 import 'package:lumina/core/router/app_router.dart';
 import 'package:lumina/core/theme/app_theme.dart';
-import 'package:lumina/features/profile/presentation/providers/profile_provider.dart';
 import 'package:lumina/features/onboarding/presentation/providers/onboarding_provider.dart';
 import 'package:lumina/features/onboarding/data/repositories/onboarding_repository.dart';
 
-/// Délai standard pour pumpAndSettle
-const _kPumpTimeout = Duration(seconds: 5);
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────
 
