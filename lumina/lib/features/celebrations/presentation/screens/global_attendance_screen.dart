@@ -142,6 +142,7 @@ class _GlobalAttendanceScreenState
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
                   icon: Icon(Icons.clear_rounded),
+                  tooltip: 'Effacer la recherche',
                   onPressed: () {
                     _searchController.clear();
                     setState(() => _searchQuery = '');

@@ -146,6 +146,7 @@ class _ChoraleDashboardScreenState extends ConsumerState<ChoraleDashboardScreen>
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textInverse),
+        tooltip: 'Retour',
         onPressed: () => context.pop(),
       ),
       actions: [

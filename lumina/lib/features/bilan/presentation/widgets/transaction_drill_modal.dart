@@ -63,6 +63,7 @@ class TransactionDrillModal extends ConsumerWidget {
                   ),
                 ),
                 IconButton(
+                  tooltip: 'Fermer',
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close),
                 ),
@@ -190,6 +191,7 @@ class TransactionDrillModal extends ConsumerWidget {
                                 size: 20,
                                 color: Colors.green,
                               ),
+                              tooltip: 'Valider la transaction',
                               onPressed: () => _showValidationDialog(
                                 context,
                                 ref,
@@ -304,6 +306,7 @@ class TransactionDrillModal extends ConsumerWidget {
               ],
               leading: IconButton(
                 icon: const Icon(Icons.close),
+                tooltip: 'Fermer',
                 onPressed: () => Navigator.pop(context),
               ),
             ),

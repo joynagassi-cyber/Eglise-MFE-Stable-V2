@@ -3,6 +3,7 @@ import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/services/notifications/notification_provider.dart';
 import '../../../../core/services/notifications/notification_service.dart';
@@ -27,10 +28,11 @@ class NotificationsScreen extends ConsumerWidget {
           button: true,
           child: IconButton(
             icon: Icon(Icons.arrow_back),
+            tooltip: 'Retour',
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {
-                Navigator.of(context).pop();
+                context.pop();
               }
             },
           ),

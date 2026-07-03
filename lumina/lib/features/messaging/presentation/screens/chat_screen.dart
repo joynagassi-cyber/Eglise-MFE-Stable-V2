@@ -24,12 +24,10 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     _messageController.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -70,7 +68,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 itemBuilder: (ctx, i) {
                   final m = messages[i];
                   final isMe = m.senderId == auth?.userId;
-                  return _MessageBubble(message: m, isMe: isMe);
+                  return AnimatedEntrance.fromBottom(
+                    delay: Duration(milliseconds: 50 * i.clamp(0, 5)),
+                    child: _MessageBubble(message: m, isMe: isMe),
+                  );
                 },
               ),
               loading: () => const LoadingState(),
@@ -99,9 +100,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
           ),
           SizedBox(width: 8),
-          IconButton(
-            icon: Icon(Icons.send, color: LuminaDesign.primary),
-            onPressed: _sendMessage,
+          Semantics(
+            label: 'Envoyer le message',
+            button: true,
+            child: Tooltip(
+              message: 'Envoyer',
+              child: IconButton(
+                icon: Icon(Icons.send_rounded, color: LuminaDesign.primary),
+                onPressed: _sendMessage,
+              ).withTouchTarget(),
+            ),
           ),
         ],
       ),
@@ -122,7 +130,7 @@ class _MessageBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isMe ? LuminaDesign.primary : Colors.white,
+          color: isMe ? LuminaDesign.primary : context.colors.bgCard,
           borderRadius: BorderRadius.circular(16),
           boxShadow: LuminaDesign.shadowSm,
         ),

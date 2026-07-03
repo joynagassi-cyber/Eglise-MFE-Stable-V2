@@ -5,19 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../domain/entities/app_notification_entity.dart';
 import '../../domain/repositories/i_notification_repository.dart';
 import '../models/notification_model.dart';
 import '../../../../core/utils/app_date_time.dart';
 
-class NotificationRepositoryImpl with ChurchFilterMixin implements INotificationRepository {
+class NotificationRepositoryImpl implements INotificationRepository {
   final SupabaseClient _supabase;
   final IsarService _isarService;
   final OfflineSyncManager _syncManager;
   final Ref _ref;
 
   NotificationRepositoryImpl(this._supabase, this._isarService, this._syncManager, this._ref);
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   @override
   Future<List<AppNotificationEntity>> getNotifications({
@@ -90,8 +92,6 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
 
   @override
   Future<void> markAsRead(String id) async {
-    final churchId = getActiveChurchId(_ref);
-    
     if (_isarService.isReady) {
       final isar = _isarService.db;
       final model = await isar.notificationModels
@@ -111,7 +111,7 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
           entityType: 'notifications',
           action: 'UPDATE',
           payload: {'id': id, 'is_read': true, 'read_at': AppDateTime.nowIso()},
-          churchId: churchId ?? '',
+          churchId: _churchId,
           recordId: id,
         );
       }
@@ -125,8 +125,6 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
 
   @override
   Future<void> markAllAsRead() async {
-    final churchId = getActiveChurchId(_ref);
-    
     if (_isarService.isReady) {
       final isar = _isarService.db;
       final unread =
@@ -148,7 +146,7 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
           entityType: 'notifications',
           action: 'UPDATE',
           payload: {'id': model.remoteId, 'is_read': true, 'read_at': AppDateTime.nowIso()},
-          churchId: churchId ?? '',
+          churchId: _churchId,
           recordId: model.remoteId,
         );
       }
@@ -169,8 +167,6 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
 
   @override
   Future<void> deleteNotification(String id) async {
-    final churchId = getActiveChurchId(_ref);
-    
     if (_isarService.isReady) {
       final isar = _isarService.db;
       final model = await isar.notificationModels
@@ -187,7 +183,7 @@ class NotificationRepositoryImpl with ChurchFilterMixin implements INotification
           entityType: 'notifications',
           action: 'DELETE',
           payload: {'id': id},
-          churchId: churchId ?? '',
+          churchId: _churchId,
           recordId: id,
         );
       }

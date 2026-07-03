@@ -24,11 +24,18 @@ class AuditDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text('Détail de l\'action'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.share_outlined),
-            onPressed: () {
-              // Optionnel: Copier le log complet au presse-papier
-            },
+          Semantics(
+            label: 'Partager',
+            button: true,
+            child: Tooltip(
+              message: 'Partager',
+              child: IconButton(
+                icon: Icon(Icons.share_outlined),
+                onPressed: () {
+                  // Optionnel: Copier le log complet au presse-papier
+                },
+              ),
+            ),
           ),
         ],
       ),

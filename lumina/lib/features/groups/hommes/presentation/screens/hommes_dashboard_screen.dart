@@ -173,6 +173,7 @@ class _HommesDashboardScreenState extends ConsumerState<HommesDashboardScreen>
         ),
       ),
       leading: IconButton(
+        tooltip: 'Retour',
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

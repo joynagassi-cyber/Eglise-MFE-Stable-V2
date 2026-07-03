@@ -48,20 +48,26 @@ class LuminaPage extends ConsumerWidget {
               ? Text(title!, style: LuminaDesign.h2Of(context).copyWith(fontSize: 18, fontWeight: FontWeight.bold)) 
               : null,
             leading: showBackButton && context.canPop()
-              ? IconButton(
-                  icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textPrimary),
-                  onPressed: () => context.pop(),
+              ? Tooltip(
+                  message: 'Retour',
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textPrimary),
+                    onPressed: () => context.pop(),
+                  ),
                 )
               : null,
             actions: [
               ...?actions,
               if (showHomeButton)
-                IconButton(
-                  icon: Icon(Icons.home_rounded, color: LuminaDesign.primary),
-                  onPressed: () {
-                    HapticHelper.light();
-                    context.go(AppRoutes.dashboard);
-                  },
+                Tooltip(
+                  message: 'Accueil',
+                  child: IconButton(
+                    icon: Icon(Icons.home_rounded, color: LuminaDesign.primary),
+                    onPressed: () {
+                      HapticHelper.light();
+                      context.go(AppRoutes.dashboard);
+                    },
+                  ),
                 ),
               SizedBox(width: 8),
             ],

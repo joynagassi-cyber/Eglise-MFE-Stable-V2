@@ -214,6 +214,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                                   color: context.colors.textTertiary,
                                   size: AppSpacing.iconSm,
                                 ),
+                                tooltip: _obscurePassword
+                                    ? 'Afficher le mot de passe'
+                                    : 'Masquer le mot de passe',
                                 onPressed: () => setState(
                                     () => _obscurePassword = !_obscurePassword),
                               ),
@@ -250,6 +253,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage>
                             color: context.colors.textTertiary,
                             size: LuminaIcon.md,
                           ),
+                          tooltip: _obscureConfirm
+                              ? 'Afficher la confirmation'
+                              : 'Masquer la confirmation',
                           onPressed: () => setState(
                               () => _obscureConfirm = !_obscureConfirm),
                         ),

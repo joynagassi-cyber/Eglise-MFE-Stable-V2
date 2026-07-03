@@ -2,72 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumina/main.dart' as app;
 
+/// Délai standard pour pumpAndSettle lors des transitions
+const _kTransitionTimeout = Duration(seconds: 3);
+const _kNetworkTimeout = Duration(seconds: 5);
+
 void main() {
   testWidgets(
     'E2E Flow 1 — Membre Simple : Register → Onboarding → Dashboard',
-    
     (tester) async {
       app.main();
-      await Future.delayed(const Duration(seconds: 3));
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(_kNetworkTimeout);
 
       // ─── 1. INSCRIPTION ─────────────────────────────────────────────
-      final isOnLogin = find.byType(TextField).evaluate().isNotEmpty;
-      if (!isOnLogin) {
-        // Déjà connecté — aller sur /register
-        await tester.tap(find.text('S\'inscrire'));
-        await tester.pumpAndSettle();
+      // Si déjà connecté, naviguer vers /register
+      if (find.text('Inscription').evaluate().isNotEmpty) {
+        await tester.tap(find.text('Inscription'));
+        await tester.pumpAndSettle(_kTransitionTimeout);
       }
 
-      // Cliquer sur "S'inscrire" si on est sur la page d'accueil
-      if (find.text('S\'inscrire').evaluate().isNotEmpty) {
-        await tester.tap(find.text('S\'inscrire'));
-        await tester.pumpAndSettle();
+      // Sur la page d'accueil non connectée, le lien d'inscription existe aussi
+      if (find.text('Créer un compte').evaluate().isNotEmpty) {
+        await tester.tap(find.text('Créer un compte'));
+        await tester.pumpAndSettle(_kTransitionTimeout);
       }
 
       // Remplir le formulaire d'inscription
-      await tester.enterText(find.text('Email'), 'membre-test-${DateTime.now().millisecondsSinceEpoch}@lumina.app');
-      await tester.enterText(find.text('Mot de passe'), 'Test123!');
-      final nameField = find.byType(TextField).at(2);
-      if (nameField.evaluate().isNotEmpty) {
-        await tester.enterText(nameField, 'Test Membre');
+      // Ordre TextFormField sur SignUpPage: 0=Prénom, 1=Nom, 2=Email, 3=Password, 4=Confirmer
+      await tester.enterText(find.byType(TextFormField).at(2),
+          'membre-test-${DateTime.now().millisecondsSinceEpoch}@lumina.app');
+      await tester.enterText(
+          find.byType(TextFormField).at(3), 'Test123!');
+      await tester.enterText(
+          find.byType(TextFormField).at(0), 'Test Membre');
+
+      // Tenter l'inscription (le bouton est un SwipeAuthButton)
+      final submitBtn = find.text('Glisser pour s\'inscrire');
+      if (submitBtn.evaluate().isNotEmpty) {
+        await tester.tap(submitBtn);
+        await tester.pumpAndSettle(_kNetworkTimeout);
       }
-      await tester.tap(find.text('S\'inscrire'));
-      
-      // Attendre un peu plus pour l'inscription (mock ou réel)
-      await Future.delayed(const Duration(seconds: 2));
-      await tester.pumpAndSettle();
 
       // ─── 2. ONBOARDING — SÉLECTION RÔLE ─────────────────────────────
       if (find.text('Membre').evaluate().isNotEmpty) {
         await tester.tap(find.text('Membre'));
-        await Future.delayed(const Duration(seconds: 1));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(_kTransitionTimeout);
       }
 
       // ─── 3. ONBOARDING — SIMPLIFIÉ ──────────────────────────────────
-      // Étape 0: Bienvenue → TERMINER
       if (find.text('TERMINER').evaluate().isNotEmpty) {
         await tester.tap(find.text('TERMINER'));
-        await Future.delayed(const Duration(seconds: 2));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(_kTransitionTimeout);
       } else if (find.text('COMMENCER').evaluate().isNotEmpty) {
-        // Au cas où l'étape 0 demande d'abord COMMENCER puis TERMINER
         await tester.tap(find.text('COMMENCER'));
-        await Future.delayed(const Duration(seconds: 1));
-        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(_kTransitionTimeout);
         if (find.text('TERMINER').evaluate().isNotEmpty) {
           await tester.tap(find.text('TERMINER'));
-          await Future.delayed(const Duration(seconds: 2));
-          await tester.pumpAndSettle();
+          await tester.pumpAndSettle(_kTransitionTimeout);
         }
       }
 
       // ─── 4. VÉRIFICATION DASHBOARD ──────────────────────────────────
-      await Future.delayed(const Duration(seconds: 3));
-      await tester.pumpAndSettle();
-      
-      // Vérifier l'atterrissage sur le dashboard
+      await tester.pumpAndSettle(_kTransitionTimeout);
       await tester.pumpAndSettle();
       await tester.pumpAndSettle();
     },

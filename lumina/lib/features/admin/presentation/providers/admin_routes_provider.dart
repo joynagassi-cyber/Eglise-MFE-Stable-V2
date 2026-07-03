@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_animations.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../../../audit/presentation/audit_dashboard_screen.dart';
 import '../../../audit/presentation/audit_detail_screen.dart';
 import '../../../audit/presentation/screens/action_history_screen.dart';
@@ -27,8 +27,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
   return [
     GoRoute(
       path: AppRoutes.audit,
-      pageBuilder: (context, state) => AppAnimations.scalePage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.main,
         child: const RouteGuard(
           requiredRoles: [RoleLevel.superadmin, RoleLevel.admin],
           child: AuditDashboardScreen(),
@@ -37,8 +39,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.auditDetail,
-      pageBuilder: (context, state) => AppAnimations.slideRightPage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.detail,
         child: RouteGuard(
           requiredRoles: const [RoleLevel.superadmin, RoleLevel.admin],
           child: AuditDetailScreen(logId: state.pathParameters['logId'] ?? ''),
@@ -47,8 +51,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.auditHistory,
-      pageBuilder: (context, state) => AppAnimations.slideRightPage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.detail,
         child: const RouteGuard(
           requiredRoles: [RoleLevel.superadmin, RoleLevel.admin],
           child: ActionHistoryScreen(),
@@ -57,8 +63,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.approvals,
-      pageBuilder: (context, state) => AppAnimations.scalePage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.main,
         child: const RouteGuard(
           requiredRoles: [RoleLevel.superadmin, RoleLevel.admin],
           child: ApprovalTaskboardScreen(),
@@ -67,8 +75,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.adminRoles,
-      pageBuilder: (context, state) => AppAnimations.scalePage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.main,
         child: const RouteGuard(
           requiredRoles: [RoleLevel.superadmin],
           child: RbacDashboardScreen(),
@@ -77,8 +87,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
       routes: [
         GoRoute(
           path: 'matrix',
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: const RouteGuard(
               requiredRoles: [RoleLevel.superadmin],
               child: PermissionMatrixScreen(),
@@ -89,8 +101,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.bilan,
-      pageBuilder: (context, state) => AppAnimations.scalePage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.main,
         child: Builder(builder: (context) {
           final userContext = ref.read(userContextNotifierProvider).value;
           if (userContext?.role.isSuper != true) {
@@ -102,8 +116,10 @@ List<RouteBase> adminRoutes(AdminRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.adminSettings,
-      pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-        key: state.pageKey,
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
         child: Builder(builder: (context) {
           final userContext = ref.read(userContextNotifierProvider).value;
           if (userContext?.role.isSuper != true) {

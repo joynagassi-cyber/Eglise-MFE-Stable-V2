@@ -115,10 +115,17 @@ class CommunauteScreen extends StatelessWidget {
         ),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.notifications_none_rounded,
-              color: Colors.white70),
-          onPressed: () => _showComingSoon(context),
+        Semantics(
+          label: 'Notifications',
+          button: true,
+          child: Tooltip(
+            message: 'Notifications',
+            child: IconButton(
+              icon: Icon(Icons.notifications_none_rounded,
+                  color: Colors.white70),
+              onPressed: () => _showComingSoon(context),
+            ),
+          ),
         ),
         SizedBox(width: AppSpacing.sm),
       ],
@@ -190,10 +197,17 @@ class CommunauteScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.chevron_right_rounded,
-                        color: context.colors.brandSecondary),
-                    onPressed: () => _showComingSoon(context),
+                  Semantics(
+                    label: 'Voir le groupe',
+                    button: true,
+                    child: Tooltip(
+                      message: 'Voir le groupe',
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_right_rounded,
+                            color: context.colors.brandSecondary),
+                        onPressed: () => _showComingSoon(context),
+                      ),
+                    ),
                   ),
                 ],
               ),

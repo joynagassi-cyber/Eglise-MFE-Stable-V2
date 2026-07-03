@@ -143,6 +143,9 @@ class _AuthFormFieldState extends State<AuthFormField> {
                         color: context.colors.textSecondary,
                         size: LuminaIcon.md,
                       ),
+                      tooltip: _isObscured
+                          ? 'Afficher le mot de passe'
+                          : 'Masquer le mot de passe',
                       onPressed: () =>
                           setState(() => _isObscured = !_isObscured),
                     )

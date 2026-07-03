@@ -65,6 +65,7 @@ class _PasswordRecoveryScreenState
                     child: IconButton(
                       icon: Icon(Icons.arrow_back_ios_new_rounded,
                           color: Theme.of(context).colorScheme.onPrimary),
+                      tooltip: 'Retour',
                       onPressed: () => context.pop(),
                     ),
                   ),

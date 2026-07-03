@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/theme/app_spacing.dart';
 import '../providers/bilan_providers.dart';
 import 'group_breakdown_table.dart';
-import 'consolidation_table.dart';
 
 class BilanDimensionsTab extends ConsumerWidget {
   const BilanDimensionsTab({super.key});
@@ -31,13 +30,8 @@ class BilanDimensionsTab extends ConsumerWidget {
           ),
           SizedBox(height: AppSpacing.sm),
           const GroupBreakdownTable(),
-          SizedBox(height: AppSpacing.xl),
-          Text(
-            'Données Consolidées',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          SizedBox(height: AppSpacing.sm),
-          const ConsolidationTable(),
+          // Section consolidation supprimée — les transferts internes
+          // ne sont pas encore gérés côté backend.
         ],
       ),
     );

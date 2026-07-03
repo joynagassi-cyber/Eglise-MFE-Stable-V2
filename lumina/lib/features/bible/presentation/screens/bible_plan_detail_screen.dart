@@ -203,6 +203,7 @@ class BiblePlanDetailScreen extends ConsumerWidget {
                   }
                 },
                 icon: Icon(Icons.play_circle, color: context.colors.accent),
+                tooltip: 'Lire le passage du jour',
               )
             : null,
       ),

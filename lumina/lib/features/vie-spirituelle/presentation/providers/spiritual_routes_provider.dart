@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_animations.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../screens/vie_spirituelle_home_screen.dart';
 import '../../../events/presentation/screens/events_screen.dart';
 import '../../../events/presentation/screens/event_form_screen.dart';
@@ -40,8 +40,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
       routes: [
         GoRoute(
           path: 'events',
-          pageBuilder: (context, state) => AppAnimations.scalePage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.main,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersView},
               child: EventsScreen(),
@@ -50,8 +52,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
           routes: [
             GoRoute(
               path: 'new',
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: const RouteGuard(
                   requiredPermissions: {Permission.membersCreate},
                   child: EventFormScreen(),
@@ -60,8 +64,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
             ),
             GoRoute(
               path: ':id',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersView},
                   child: EventDetailScreen(eventId: state.pathParameters['id'] ?? ''),
@@ -70,8 +76,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
               routes: [
                 GoRoute(
                   path: 'edit',
-                  pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                    key: state.pageKey,
+                  pageBuilder: (context, state) => TransitionFactory.buildPage(
+                    context: context,
+                    state: state,
+                    type: PageType.form,
                     child: RouteGuard(
                       requiredPermissions: const {Permission.membersEdit},
                       child: EventFormScreen(eventId: state.pathParameters['id']),
@@ -104,8 +112,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
         ),
         GoRoute(
           path: 'jalons',
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersView},
               child: EtapesSpirituellesScreen(),
@@ -130,8 +140,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
           routes: [
             GoRoute(
               path: 'new',
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.adminManageRoles},
                   child: CategoryFormScreen(
@@ -142,8 +154,10 @@ List<RouteBase> spiritualRoutes(SpiritualRoutesRef ref) {
             ),
             GoRoute(
               path: 'edit',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.adminManageRoles},
                   child: Builder(

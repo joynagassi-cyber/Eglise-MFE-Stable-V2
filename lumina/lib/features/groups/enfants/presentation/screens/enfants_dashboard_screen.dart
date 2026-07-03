@@ -147,6 +147,7 @@ class _EnfantsDashboardScreenState extends ConsumerState<EnfantsDashboardScreen>
         ),
         IconButton(
           icon: Icon(Icons.notifications_active_outlined),
+          tooltip: 'Notifications',
           onPressed: () async {
             final messenger = ScaffoldMessenger.of(context);
             await HapticHelper.medium();

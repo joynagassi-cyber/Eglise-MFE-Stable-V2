@@ -79,6 +79,9 @@ class _AuthTextFieldState extends State<AuthTextField> {
                           : Icons.visibility_outlined,
                       size: AppSpacing.iconMd,
                     ),
+                    tooltip: _isObscured
+                        ? 'Afficher le mot de passe'
+                        : 'Masquer le mot de passe',
                     onPressed: () => setState(() => _isObscured = !_isObscured),
                   )
                 : null,

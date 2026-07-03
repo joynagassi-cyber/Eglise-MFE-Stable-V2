@@ -129,6 +129,7 @@ class _RoleCodeVerificationScreenState
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.textPrimary),
+          tooltip: 'Retour',
           onPressed: () => context.pop(),
         ),
       ),

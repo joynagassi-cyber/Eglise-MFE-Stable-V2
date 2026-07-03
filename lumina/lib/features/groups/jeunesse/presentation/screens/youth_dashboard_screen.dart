@@ -178,6 +178,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
         ),
       ),
       leading: IconButton(
+        tooltip: 'Retour',
         icon: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -199,6 +200,7 @@ class _YouthDashboardScreenState extends ConsumerState<YouthDashboardScreen> {
           ),
         ),
         IconButton(
+          tooltip: 'Notifications',
           icon: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

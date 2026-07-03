@@ -120,6 +120,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
         title: Text('Paramètres Admin'),
         actions: [
           IconButton(
+            tooltip: 'Sauvegarder',
             onPressed: _isSaving ? null : _saveAll,
             icon: _isSaving
                 ? SizedBox(

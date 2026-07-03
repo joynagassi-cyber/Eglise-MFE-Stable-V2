@@ -177,6 +177,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                       onPressed: () => _changeDate(-1),
                       icon: Icon(Icons.arrow_back_ios_new_rounded,
                           size: 16),
+                      tooltip: 'Jour précédent',
                       padding: EdgeInsets.zero,
                     ),
                     Semantics(
@@ -200,6 +201,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                       onPressed: () => _changeDate(1),
                       icon:
                           Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                      tooltip: 'Jour suivant',
                       padding: EdgeInsets.zero,
                     ),
                   ],

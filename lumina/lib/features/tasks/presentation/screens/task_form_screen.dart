@@ -110,39 +110,46 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
         ),
         actions: [
           if (widget.taskId != null)
-            IconButton(
-              icon: Icon(Icons.delete_outline_rounded,
-                  color: context.colors.errorText),
-              onPressed: () async {
-                await HapticHelper.warning();
-                if (!context.mounted) return;
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Supprimer ?'),
-                    content: Text(
-                        'Voulez-vous vraiment supprimer cette tâche ?'),
-                    actions: [
-                      TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text('Annuler')).withTouchTarget(),
-                      TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: Text('Supprimer',
-                              style: TextStyle(color: context.colors.errorText))).withTouchTarget(),
-                    ],
-                  ),
-                );
-                if (confirm == true) {
-                  await HapticHelper.medium();
-                  await ref
-                      .read(tasksControllerProvider.notifier)
-                      .deleteTask(widget.taskId!);
-                  if (!context.mounted) return;
-                  context.pop();
-                }
-              },
-            ).withTouchTarget(),
+            Semantics(
+              label: 'Supprimer la tâche',
+              button: true,
+              child: Tooltip(
+                message: 'Supprimer',
+                child: IconButton(
+                  icon: Icon(Icons.delete_outline_rounded,
+                      color: context.colors.errorText),
+                  onPressed: () async {
+                    await HapticHelper.warning();
+                    if (!context.mounted) return;
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Supprimer ?'),
+                        content: Text(
+                            'Voulez-vous vraiment supprimer cette tâche ?'),
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text('Annuler')).withTouchTarget(),
+                          TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text('Supprimer',
+                                  style: TextStyle(color: context.colors.errorText))).withTouchTarget(),
+                        ],
+                      ),
+                    );
+                    if (confirm == true) {
+                      await HapticHelper.medium();
+                      await ref
+                          .read(tasksControllerProvider.notifier)
+                          .deleteTask(widget.taskId!);
+                      if (!context.mounted) return;
+                      context.pop();
+                    }
+                  },
+                ),
+              ),
+            ),
         ],
       ),
       body: Form(

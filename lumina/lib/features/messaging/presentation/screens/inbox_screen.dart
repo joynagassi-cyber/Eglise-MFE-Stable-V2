@@ -29,10 +29,17 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
     return LuminaPage(
       title: "Messagerie",
       onRefresh: () async => ref.invalidate(conversationsProvider),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.brebis),
-        backgroundColor: LuminaDesign.primary,
-        child: const Icon(Icons.edit, color: Colors.white),
+      floatingActionButton: Semantics(
+        label: 'Nouveau message',
+        button: true,
+        child: Tooltip(
+          message: 'Nouveau message',
+          child: FloatingActionButton(
+            onPressed: () => context.push(AppRoutes.brebis),
+            backgroundColor: LuminaDesign.primary,
+            child: const Icon(Icons.edit_rounded, color: Colors.white),
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -51,9 +58,11 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                     final otherId = conv.participantsIds.firstWhere((id) => id != currentUserId, orElse: () => '');
                     final profileAsync = ref.watch(otherUserProfileProvider(otherId));
                     
-                    return LuminaCard(
-                      onTap: () => context.push(AppRoutes.messagingConversationWithId(conv.id)),
-                      child: Row(
+                    return AnimatedEntrance.fromBottom(
+                      delay: Duration(milliseconds: 50 * i.clamp(0, 10)),
+                      child: LuminaCard(
+                        onTap: () => context.push(AppRoutes.messagingConversationWithId(conv.id)),
+                        child: Row(
                         children: [
                           _buildAvatar(profileAsync),
               const SizedBox(width: 16),
@@ -70,7 +79,8 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                             CircleAvatar(radius: 10, backgroundColor: LuminaDesign.primary, child: Text("${conv.unreadCount}", style: const TextStyle(fontSize: 10, color: Colors.white))),
                         ],
                       ),
-                    );
+                    ),
+                  );
                   },
                 );
               },

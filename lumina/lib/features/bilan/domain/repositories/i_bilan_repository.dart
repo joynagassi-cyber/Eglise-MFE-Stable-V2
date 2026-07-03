@@ -20,6 +20,7 @@ abstract class IBilanRepository {
   });
 
   Future<List<BilanGroupSummary>> getBilanPerGroup({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
     bool includeDrafts = false,
@@ -27,12 +28,16 @@ abstract class IBilanRepository {
   });
 
   Future<ConsolidatedBilan> getConsolidatedBilan({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
     List<String>? groupIds,
   });
 
-  Future<List<TransactionAnomaly>> detectAnomalies({double threshold = 2.0});
+  Future<List<TransactionAnomaly>> detectAnomalies({
+    required String churchId,
+    double threshold = 2.0,
+  });
 
   Future<List<CurrencyConfig>> getCurrencies();
 
@@ -43,28 +48,20 @@ abstract class IBilanRepository {
   Future<void> updateChurchBranding(ChurchBranding branding);
 
   Future<List<FecLine>> getFecLines({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
   });
 
   Future<BilanFinancialSettings> getFinancialSettings();
 
+  // TODO: Implémenter la persistance des paramètres financiers
   Future<void> updateFinancialSettings(BilanFinancialSettings settings);
 
   Future<List<BilanHeatmapPoint>> getTransactionHeatmap({
     required DateTime startDate,
     required DateTime endDate,
     String? groupId,
-  });
-
-  Future<ReportSnapshot?> getPeriodSnapshot({
-    required DateTime startDate,
-    required DateTime endDate,
-  });
-
-  Future<List<BilanTransaction>> getInternalTransfers({
-    required DateTime startDate,
-    required DateTime endDate,
   });
 
   Future<List<BilanTransaction>> getTransactionsForDrillDown({
@@ -110,5 +107,22 @@ abstract class IBilanRepository {
   Future<List<Map<String, dynamic>>> getMonthlyTotals({
     required String churchId,
     required int year,
+  });
+
+  /// Verify that the stored seal hash matches a freshly computed hash.
+  /// Returns true if the period data is intact, false if tampered.
+  Future<bool> verifySeal({
+    required String churchId,
+    required int year,
+    required int month,
+  });
+
+  /// Initialize a new period as 'open' (no sealing, no hash).
+  /// Used during onboarding/initialization when there is no authenticated user
+  /// to seal with, or for months that have zero transactions.
+  Future<void> initializePeriod({
+    required String churchId,
+    required int year,
+    required int month,
   });
 }

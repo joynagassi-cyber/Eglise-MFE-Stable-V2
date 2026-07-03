@@ -60,14 +60,17 @@ class SocialPostCard extends StatelessWidget {
           ),
           if (post.imageUrls.isNotEmpty) ...[
             SizedBox(height: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(LuminaDesign.radiusSm),
-              child: Image.network(
-                post.imageUrls.first,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(Icons.broken_image),
+            Hero(
+              tag: 'post_image_${post.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(LuminaDesign.radiusSm),
+                child: Image.network(
+                  post.imageUrls.first,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Icon(Icons.broken_image),
+                ),
               ),
             ),
           ],
@@ -90,7 +93,14 @@ class SocialPostCard extends StatelessWidget {
                 onTap: onComment ?? () {},
               ),
               Spacer(),
-              Icon(Icons.share_outlined, color: context.colors.textTertiary, size: 20),
+              Tooltip(
+                message: 'Partager',
+                child: Semantics(
+                  label: 'Partager',
+                  button: true,
+                  child: Icon(Icons.share_outlined, color: context.colors.textTertiary, size: 20),
+                ),
+              ),
             ],
           ),
         ],

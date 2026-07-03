@@ -6,6 +6,7 @@ import 'package:lumina/core/theme/app_spacing.dart';
 import '../../../../core/providers/auth_provider.dart';
 import 'package:lumina/core/widgets/widgets.dart';
 import '../../../../core/auth/domain/entities/auth_state.dart' as app_auth;
+import 'package:lumina/core/providers/repository_providers_finance.dart';
 import '../../data/models/bilan_period.dart';
 import '../providers/bilan_providers.dart';
 import 'bilan_seal_dialog.dart';
@@ -53,12 +54,10 @@ class BilanSealTab extends ConsumerWidget {
           periodsAsync.when(
             loading: () => Center(child: LoadingState()),
             error: (e, _) => Center(child: Text('Impossible de charger le statut de clôture')),
-            data: (periodsList) {
-              // Ensure we have a list of BilanPeriod objects, even if Provider returns dynamic
-              final List<BilanPeriod> periods = List<BilanPeriod>.from(periodsList);
+            data: (periods) {
               
               if (periods.isEmpty) {
-                return _buildEmptyState(context, year);
+                return _buildEmptyState(context, ref, year);
               }
 
               return GridView.builder(
@@ -90,7 +89,7 @@ class BilanSealTab extends ConsumerWidget {
           Divider(),
           SizedBox(height: AppSpacing.md),
           Text(
-            'Journal d\'Audit',
+            "Journal d'Audit",
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -102,19 +101,48 @@ class BilanSealTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, int year) {
+  Widget _buildEmptyState(BuildContext context, WidgetRef ref, int year) {
     return Center(
       child: Column(
         children: [
           Icon(Icons.calendar_today, size: 48, color: Colors.grey),
           SizedBox(height: AppSpacing.sm),
           Text('Aucune période initialisée pour l\'année $year.'),
-          TextButton(
-            onPressed: () {
-              // Note: Usually we would have a 'init year' RPC or we just initialize 
-              // periods automatically upon transaction creation.
+          Text('Cliquez ci-dessous pour créer les 12 mois en statut "Ouvert".'),
+          SizedBox(height: AppSpacing.sm),
+          TextButton.icon(
+            onPressed: () async {
+              final repo = ref.read(bilanRepositoryProvider);
+              final churchId = ref.read(activeChurchIdProvider);
+              
+              try {
+                for (int m = 1; m <= 12; m++) {
+                  await repo.initializePeriod(
+                    churchId: churchId,
+                    year: year,
+                    month: m,
+                  );
+                }
+                
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('12 mois initialisés avec succès.'),
+                      backgroundColor: context.colors.successText,
+                    ),
+                  );
+                }
+                ref.invalidate(bilanPeriodsProvider(year));
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erreur: $e')),
+                  );
+                }
+              }
             },
-            child: Text('Générer les mois manquants'),
+            icon: Icon(Icons.auto_awesome),
+            label: Text('Initialiser les 12 mois'),
           )
         ],
       ),
@@ -152,6 +180,29 @@ class BilanSealTab extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildIntegrityBadge(BuildContext context, WidgetRef ref, BilanPeriod period) {
+    return FutureBuilder<bool>(
+      future: ref.read(bilanRepositoryProvider).verifySeal(
+        churchId: period.churchId,
+        year: period.year,
+        month: period.month,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            width: 12,
+            height: 12,
+            child: CircularProgressIndicator(strokeWidth: 1.5),
+          );
+        }
+        if (snapshot.data == true) {
+          return Icon(Icons.verified_user, size: 14, color: context.colors.successText);
+        }
+        return Icon(Icons.error_outline, size: 14, color: context.colors.errorText);
+      },
     );
   }
 
@@ -249,7 +300,15 @@ class BilanSealTab extends ConsumerWidget {
                     period.monthShortLabel,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  Icon(statusIcon, color: statusColor, size: 16),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (period.isSealed)
+                        _buildIntegrityBadge(context, ref, period),
+                      SizedBox(width: 4),
+                      Icon(statusIcon, color: statusColor, size: 16),
+                    ],
+                  ),
                 ],
               ),
               Spacer(),

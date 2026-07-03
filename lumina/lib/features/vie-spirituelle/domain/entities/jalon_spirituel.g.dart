@@ -11,16 +11,16 @@ _$JalonSpirituelImpl _$$JalonSpirituelImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       titre: json['titre'] as String,
       description: json['description'] as String? ?? '',
-      iconName: json['iconName'] as String? ?? 'flag',
-      colorHex: json['colorHex'] as String? ?? '#1976D2',
+      iconName: json['icon_name'] as String? ?? 'flag',
+      colorHex: json['color_hex'] as String? ?? '#1976D2',
       order: (json['order'] as num?)?.toInt() ?? 0,
-      isActive: json['isActive'] as bool? ?? true,
-      createdAt: json['createdAt'] == null
+      isActive: json['is_active'] as bool? ?? true,
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$$JalonSpirituelImplToJson(
@@ -29,90 +29,56 @@ Map<String, dynamic> _$$JalonSpirituelImplToJson(
       'id': instance.id,
       'titre': instance.titre,
       'description': instance.description,
-      'iconName': instance.iconName,
-      'colorHex': instance.colorHex,
+      'icon_name': instance.iconName,
+      'color_hex': instance.colorHex,
       'order': instance.order,
-      'isActive': instance.isActive,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
-    };
-
-Map<String, dynamic> _$JalonSpirituelToJson(JalonSpirituel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'titre': instance.titre,
-      'description': instance.description,
-      'iconName': instance.iconName,
-      'colorHex': instance.colorHex,
-      'order': instance.order,
-      'isActive': instance.isActive,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'is_active': instance.isActive,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 _$MembreJalonImpl _$$MembreJalonImplFromJson(Map<String, dynamic> json) =>
     _$MembreJalonImpl(
       id: json['id'] as String,
-      membreId: json['membreId'] as String,
-      jalonId: json['jalonId'] as String,
-      dateRealisation: DateTime.parse(json['dateRealisation'] as String),
+      membreId: json['membre_id'] as String,
+      jalonId: json['jalon_id'] as String,
+      dateRealisation: DateTime.parse(json['date_realisation'] as String),
       lieu: json['lieu'] as String? ?? '',
       temoin: json['temoin'] as String? ?? '',
       notes: json['notes'] as String? ?? '',
-      createdAt: json['createdAt'] == null
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
+          : DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$$MembreJalonImplToJson(_$MembreJalonImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'membreId': instance.membreId,
-      'jalonId': instance.jalonId,
-      'dateRealisation': instance.dateRealisation.toIso8601String(),
+      'membre_id': instance.membreId,
+      'jalon_id': instance.jalonId,
+      'date_realisation': instance.dateRealisation.toIso8601String(),
       'lieu': instance.lieu,
       'temoin': instance.temoin,
       'notes': instance.notes,
-      'createdAt': instance.createdAt?.toIso8601String(),
-    };
-
-Map<String, dynamic> _$MembreJalonToJson(MembreJalon instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'membreId': instance.membreId,
-      'jalonId': instance.jalonId,
-      'dateRealisation': instance.dateRealisation.toIso8601String(),
-      'lieu': instance.lieu,
-      'temoin': instance.temoin,
-      'notes': instance.notes,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
     };
 
 _$JalonStatsImpl _$$JalonStatsImplFromJson(Map<String, dynamic> json) =>
     _$JalonStatsImpl(
-      jalonId: json['jalonId'] as String,
+      jalonId: json['jalon_id'] as String,
       titre: json['titre'] as String,
-      colorHex: json['colorHex'] as String,
-      nombreMembres: (json['nombreMembres'] as num?)?.toInt() ?? 0,
-      derniereRealisation: json['derniereRealisation'] == null
+      colorHex: json['color_hex'] as String,
+      nombreMembres: (json['nombre_membres'] as num?)?.toInt() ?? 0,
+      derniereRealisation: json['derniere_realisation'] == null
           ? null
-          : DateTime.parse(json['derniereRealisation'] as String),
+          : DateTime.parse(json['derniere_realisation'] as String),
     );
 
 Map<String, dynamic> _$$JalonStatsImplToJson(_$JalonStatsImpl instance) =>
     <String, dynamic>{
-      'jalonId': instance.jalonId,
+      'jalon_id': instance.jalonId,
       'titre': instance.titre,
-      'colorHex': instance.colorHex,
-      'nombreMembres': instance.nombreMembres,
-      'derniereRealisation': instance.derniereRealisation?.toIso8601String(),
-    };
-
-Map<String, dynamic> _$JalonStatsToJson(JalonStats instance) =>
-    <String, dynamic>{
-      'jalonId': instance.jalonId,
-      'titre': instance.titre,
-      'colorHex': instance.colorHex,
-      'nombreMembres': instance.nombreMembres,
-      'derniereRealisation': instance.derniereRealisation?.toIso8601String(),
+      'color_hex': instance.colorHex,
+      'nombre_membres': instance.nombreMembres,
+      'derniere_realisation': instance.derniereRealisation?.toIso8601String(),
     };

@@ -214,17 +214,20 @@ class _AppTextFieldState extends State<AppTextField> {
 
   Widget? _buildSuffix() {
     if (widget.obscureText) {
-      return IconButton(
-        icon: Icon(
-          _isObscured
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
-          color: _isFocused
-              ? context.colors.brandPrimary
-              : context.colors.iconSecondary,
+      return Tooltip(
+        message: _isObscured ? 'Afficher le mot de passe' : 'Masquer le mot de passe',
+        child: IconButton(
+          icon: Icon(
+            _isObscured
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+            color: _isFocused
+                ? context.colors.brandPrimary
+                : context.colors.iconSecondary,
+          ),
+          onPressed: () => setState(() => _isObscured = !_isObscured),
+          splashRadius: 20,
         ),
-        onPressed: () => setState(() => _isObscured = !_isObscured),
-        splashRadius: 20,
       );
     }
     return widget.suffix;
@@ -257,13 +260,16 @@ class AppSearchField extends StatelessWidget {
       hint: hint,
       prefixIcon: Icons.search_rounded,
       suffix: controller?.text.isNotEmpty == true
-          ? IconButton(
-              icon: Icon(Icons.clear_rounded),
-              onPressed: () {
-                controller?.clear();
-                onClear?.call();
-              },
-              splashRadius: 20,
+          ? Tooltip(
+              message: 'Effacer la recherche',
+              child: IconButton(
+                icon: Icon(Icons.clear_rounded),
+                onPressed: () {
+                  controller?.clear();
+                  onClear?.call();
+                },
+                splashRadius: 20,
+              ),
             )
           : null,
       onChanged: onChanged,

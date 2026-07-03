@@ -6,7 +6,7 @@ import 'package:lumina/features/bergers/domain/entities/visite_pastorale.dart';
 import 'package:lumina/features/bergers/data/models/pastoral_visit_model.dart';
 import '../../../../core/services/offline_sync_manager.dart';
 import '../../../../core/data/local/isar_service.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
 import 'package:isar/isar.dart';
 import '../../../../core/utils/app_date_time.dart';
 
@@ -174,7 +174,7 @@ class VisitesNotifier extends AsyncNotifier<List<VisitePastorale>> {
 /// REPOSITORY - Accès données avec défense en profondeur
 /// ═══════════════════════════════════════════════════════════════════════════════
 
-class VisitesRepository with ChurchFilterMixin {
+class VisitesRepository {
   final Ref _ref;
   final SupabaseClient _supabase;
   final IsarService _isar;
@@ -182,6 +182,8 @@ class VisitesRepository with ChurchFilterMixin {
 
   VisitesRepository(this._ref, this._isar, this._syncManager)
       : _supabase = Supabase.instance.client;
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   /// Récupère toutes les visites (90 derniers jours par défaut)
   Future<List<VisitePastorale>> getAll() async {
@@ -274,7 +276,7 @@ class VisitesRepository with ChurchFilterMixin {
       id: AppDateTime.nowUtc()
           .millisecondsSinceEpoch
           .toString(), // ID temporaire
-      churchId: getActiveChurchId(_ref) ?? '',
+      churchId: _churchId,
       membreId: membreId,
       bergerId: userId,
       dateVisite: dateVisite,
@@ -295,7 +297,7 @@ class VisitesRepository with ChurchFilterMixin {
     try {
       await _supabase.from('visites_pastorales').insert({
         'id': visite.id,
-        'church_id': getActiveChurchId(_ref) ?? '',
+        'church_id': _churchId,
         'membre_id': membreId,
         'berger_id': userId,
         'date_visite': dateVisite.toIso8601String(),
@@ -312,7 +314,7 @@ class VisitesRepository with ChurchFilterMixin {
           action: 'INSERT',
           payload: {
             'id': visite.id,
-            'church_id': getActiveChurchId(_ref) ?? '',
+            'church_id': _churchId,
             'membre_id': membreId,
             'berger_id': userId,
             'date_visite': dateVisite.toIso8601String(),
@@ -322,7 +324,7 @@ class VisitesRepository with ChurchFilterMixin {
             'statut': 'planifiee',
           },
           recordId: visite.id,
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       }
     }

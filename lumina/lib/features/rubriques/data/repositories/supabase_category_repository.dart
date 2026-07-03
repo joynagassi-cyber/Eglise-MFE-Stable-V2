@@ -8,11 +8,10 @@ import '../../domain/entities/enums/category_type.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../models/category_model.dart';
 import '../seed/default_categories.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 import '../../../../core/data/local/isar_service.dart';
 
 class SupabaseCategoryRepository
-    with ChurchFilterMixin
     implements CategoryRepository {
   final SupabaseClient _client;
   final IsarService _isarService;
@@ -197,12 +196,9 @@ class SupabaseCategoryRepository
       final json = category.toJson();
       json.remove('id');
 
-      final churchId = getActiveChurchId(_ref);
-      await applyChurchFilter(
-        _client.from('transaction_categories').insert(json),
-        churchId,
-        columnName: 'churchId',
-      );
+      await _client
+          .from('transaction_categories')
+          .insertScoped(_ref, values: json, churchColumn: 'churchId');
     } catch (e) {
       // Offline-first
     }
@@ -220,12 +216,11 @@ class SupabaseCategoryRepository
     }
 
     try {
-      final churchId = getActiveChurchId(_ref);
-      await applyChurchFilter(
-        _client.from('transaction_categories').update(category.toJson()),
-        churchId,
-        columnName: 'churchId',
-      ).eq('id', category.id);
+      await _client
+          .from('transaction_categories')
+          .update(category.toJson())
+          .scoped(_ref, churchColumn: 'churchId')
+          .eq('id', category.id);
     } catch (e) {
       // Offline-first
     }
@@ -245,12 +240,11 @@ class SupabaseCategoryRepository
     }
 
     try {
-      final churchId = getActiveChurchId(_ref);
-      await applyChurchFilter(
-        _client.from('transaction_categories').update({'isActive': false}),
-        churchId,
-        columnName: 'churchId',
-      ).eq('id', id);
+      await _client
+          .from('transaction_categories')
+          .update({'isActive': false})
+          .scoped(_ref, churchColumn: 'churchId')
+          .eq('id', id);
     } catch (e) {
       // Offline-first
     }
@@ -265,12 +259,11 @@ class SupabaseCategoryRepository
     }
 
     try {
-      final churchId = getActiveChurchId(_ref);
-      await applyChurchFilter(
-        _client.from('transaction_categories').delete(),
-        churchId,
-        columnName: 'churchId',
-      ).eq('id', id);
+      await _client
+          .from('transaction_categories')
+          .delete()
+          .scoped(_ref, churchColumn: 'churchId')
+          .eq('id', id);
     } catch (e) {
       // Offline-first
     }
@@ -307,11 +300,10 @@ class SupabaseCategoryRepository
   @override
   Future<void> syncCategories(String churchId) async {
     try {
-      final records = await applyChurchFilter(
-        _client.from('transaction_categories').select(),
-        churchId,
-        columnName: 'churchId',
-      );
+      final records = await _client
+          .from('transaction_categories')
+          .select()
+          .scoped(_ref, churchColumn: 'churchId');
 
       if (_isarService.isReady) {
         await _isar.writeTxn(() async {

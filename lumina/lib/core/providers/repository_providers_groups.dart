@@ -21,7 +21,7 @@ IGroupRepository groupRepository(GroupRepositoryRef ref) {
   final supabase = ref.watch(supabaseProvider);
   final isar = ref.watch(isarServiceProvider);
   final syncManager = ref.watch(offlineSyncManagerProvider);
-  return GroupRepositoryImpl(supabase, isar, syncManager);
+  return GroupRepositoryImpl(supabase, isar, syncManager, ref);
 }
 
 @Riverpod(keepAlive: true)

@@ -137,6 +137,7 @@ class _AdminCodeVerificationScreenState
                                 size: LuminaIcon.md,
                                 color: context.colors.textOnBrand,
                               ),
+                              tooltip: 'Retour',
                               onPressed: () => context.pop(),
                             ),
                           ),

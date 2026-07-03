@@ -29,6 +29,7 @@ class BibleLibraryScreen extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: colors.iconPrimary, size: 20),
+          tooltip: 'Retour',
           onPressed: () => context.pop(),
         ),
       ),

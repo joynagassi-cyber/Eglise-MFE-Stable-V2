@@ -65,6 +65,7 @@ class _BibleOfflineScreenState extends ConsumerState<BibleOfflineScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
               color: context.colors.iconPrimary, size: 20),
+          tooltip: 'Retour',
           onPressed: () => context.pop(),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_animations.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../screens/communication_home_screen.dart';
 import '../../../annonces/presentation/screens/annonces_screen.dart';
 import '../../../annonces/presentation/screens/annonce_detail_screen.dart';
@@ -39,8 +39,10 @@ List<RouteBase> communicationRoutes(CommunicationRoutesRef ref) {
           routes: [
             GoRoute(
               path: ':id',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   child: AnnonceDetailScreen(
                     annonceId: state.pathParameters['id'] ?? '',
@@ -52,15 +54,19 @@ List<RouteBase> communicationRoutes(CommunicationRoutesRef ref) {
         ),
         GoRoute(
           path: 'messaging',
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: const RouteGuard(child: InboxScreen()),
           ),
           routes: [
             GoRoute(
               path: ':id',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   child: ChatScreen(
                     conversationId: state.pathParameters['id'] ?? '',
@@ -72,15 +78,19 @@ List<RouteBase> communicationRoutes(CommunicationRoutesRef ref) {
         ),
         GoRoute(
           path: 'social',
-          pageBuilder: (context, state) => AppAnimations.scalePage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.main,
             child: const RouteGuard(child: SocialFeedScreen()),
           ),
           routes: [
             GoRoute(
               path: 'detail',
-              pageBuilder: (context, state) => AppAnimations.scalePage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   child: PostDetailScreen(post: state.extra as SocialPost),
                 ),
@@ -90,24 +100,30 @@ List<RouteBase> communicationRoutes(CommunicationRoutesRef ref) {
         ),
         GoRoute(
           path: 'tasks',
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: const RouteGuard(child: TasksScreen()),
           ),
           routes: [
             GoRoute(
               path: 'new',
               parentNavigatorKey: rootNavigatorKey,
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: const RouteGuard(child: TaskFormScreen()),
               ),
             ),
             GoRoute(
               path: 'edit/:id',
               parentNavigatorKey: rootNavigatorKey,
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: RouteGuard(
                   child: TaskFormScreen(taskId: state.pathParameters['id']),
                 ),

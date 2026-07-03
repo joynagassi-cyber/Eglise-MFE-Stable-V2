@@ -94,6 +94,7 @@ class BilanFiltersBar extends ConsumerWidget {
             ),
             IconButton(
               icon: Icon(Icons.refresh_rounded, size: 20),
+              tooltip: 'Actualiser',
               onPressed: () {
                 ref.invalidate(bilanSummaryProvider);
                 ref.invalidate(bilanBreakdownProvider);

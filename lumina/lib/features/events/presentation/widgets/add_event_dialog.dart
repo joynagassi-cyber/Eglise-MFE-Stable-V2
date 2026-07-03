@@ -136,6 +136,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(Icons.close, color: context.colors.textOnBrand),
+            tooltip: 'Fermer',
           ),
         ],
       ),

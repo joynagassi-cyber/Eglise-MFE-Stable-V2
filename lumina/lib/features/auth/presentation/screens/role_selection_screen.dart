@@ -37,6 +37,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
         const SizedBox(height: 20),
               IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                tooltip: 'Retour',
                 onPressed: _isProcessing ? null : () => context.pop(),
               ),
               const SizedBox(height: 40),

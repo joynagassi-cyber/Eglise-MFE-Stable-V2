@@ -7,7 +7,7 @@ part of 'offline_sync_manager.dart';
 // **************************************************************************
 
 String _$offlineSyncManagerHash() =>
-    r'9d6c86cdc2d6f55ccf080339b449257e621858be';
+    r'b1ea8976dff158f9c426c9d52f20779512d38c62';
 
 /// See also [offlineSyncManager].
 @ProviderFor(offlineSyncManager)

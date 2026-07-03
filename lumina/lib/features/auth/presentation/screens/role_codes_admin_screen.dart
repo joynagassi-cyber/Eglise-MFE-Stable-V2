@@ -151,6 +151,7 @@ class _RoleCodesAdminScreenState extends ConsumerState<RoleCodesAdminScreen> {
                   if (!data.isUsed)
                     IconButton(
                       icon: Icon(Icons.copy, size: 18),
+                      tooltip: 'Copier le code',
                       onPressed: () => _copyToClipboard(data.rawCode),
                     ),
                 ],

@@ -36,6 +36,7 @@ class GroupListScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.search_rounded),
+            tooltip: 'Rechercher',
             onPressed: () async {
               await HapticHelper.medium();
               if (context.mounted) {
@@ -147,17 +148,20 @@ class _GroupCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(
-              _getIconForType(group.type),
-              color: color,
-              size: LuminaIcon.md,
+          Hero(
+            tag: 'group_icon_${group.id}',
+            child: Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                _getIconForType(group.type),
+                color: color,
+                size: LuminaIcon.md,
+              ),
             ),
           ),
           SizedBox(width: 16),

@@ -125,14 +125,17 @@ class PostDetailScreen extends ConsumerWidget {
             // Image
             if (post.imageUrls.isNotEmpty) ...[
               const SizedBox(height: 16),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(LuminaDesign.radiusMd),
-                child: Image.network(
-                  post.imageUrls.first,
-                  height: 280,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              Hero(
+                tag: 'post_image_${post.id}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(LuminaDesign.radiusMd),
+                  child: Image.network(
+                    post.imageUrls.first,
+                    height: 280,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
                 ),
               ),
             ],

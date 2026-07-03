@@ -11,16 +11,19 @@ import '../models/conversation_model.dart';
 import '../models/chat_message_model.dart';
 import '../../../../core/utils/app_date_time.dart';
 import '../../../../core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingRepository {
+class MessagingRepositoryImpl implements IMessagingRepository {
   final SupabaseClient _supabase;
   final IsarService _isarService;
   final OfflineSyncManager _syncManager;
   final Ref _ref;
 
   MessagingRepositoryImpl(this._supabase, this._isarService, this._syncManager, this._ref);
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   @override
   Future<void> dispose() async {
@@ -33,24 +36,18 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
 
   @override
   Future<List<Conversation>> getConversations() async {
-    final churchId = getActiveChurchId(_ref);
-    
     if (!_isarService.isReady) {
-      final List<dynamic> data = await applyChurchFilter(
-        _supabase.from('conversations').select(),
-        churchId,
-        allowEmpty: true,
-      ).order('last_message_at', ascending: false);
+      final List<dynamic> data = await _supabase
+          .from('conversations').select().scoped(_ref, allowEmpty: true)
+          .order('last_message_at', ascending: false);
       return data.map((json) => Conversation.fromJson(json)).toList();
     }
     final isar = _isarService.db;
 
     try {
-      final List<dynamic> data = await applyChurchFilter(
-        _supabase.from('conversations').select(),
-        churchId,
-        allowEmpty: true,
-      ).order('last_message_at', ascending: false)
+      final List<dynamic> data = await _supabase
+          .from('conversations').select().scoped(_ref, allowEmpty: true)
+          .order('last_message_at', ascending: false)
           .timeout(const Duration(seconds: 20));
 
       await isar.writeTxn(() async {
@@ -75,14 +72,13 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
 
   @override
   Stream<List<Conversation>> watchConversations() async* {
-    final churchId = getActiveChurchId(_ref);
-    
     if (!_isarService.isReady) {
-      final stream = _supabase.from('conversations').stream(primaryKey: ['id']);
-      final filteredStream = (churchId != null && churchId != '*') 
-        ? stream.eq('church_id', churchId) 
-        : stream;
-        
+      final stream = _supabase
+          .from('conversations').stream(primaryKey: ['id']);
+      final filteredStream = (_churchId != 'global' && _churchId != '*')
+          ? stream.eq('church_id', _churchId)
+          : stream;
+
       yield* filteredStream
           .order('last_message_at', ascending: false)
           .asyncMap((data) async =>
@@ -91,15 +87,15 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
     }
 
     final controller = StreamController<List<Conversation>>();
-    
+
     final channel = _supabase
           .channel('public:conversations')
           .onPostgresChanges(
             event: PostgresChangeEvent.all,
             schema: 'public',
             table: 'conversations',
-            filter: (churchId != null && churchId != '*') 
-              ? PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'church_id', value: churchId)
+            filter: (_churchId != 'global' && _churchId != '*')
+              ? PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'church_id', value: _churchId)
               : null,
             callback: (payload) async {
               if (payload.newRecord.isNotEmpty) {
@@ -193,7 +189,7 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
     }
 
     final controller = StreamController<List<ChatMessage>>();
-    
+
     final channel = _supabase
           .channel('chat_messages:$conversationId')
           .onPostgresChanges(
@@ -346,12 +342,10 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
 
   @override
   Future<void> sendMessage(ChatMessage message) async {
-    final churchId = getActiveChurchId(_ref);
-    
     try {
       final json = message.toJson();
       json.remove('id');
-      
+
       if (_isarService.isReady) {
         final model = ChatMessageModel.fromEntity(message)..isSynced = false;
         await _isarService.db.writeTxn(() => _isarService.db.chatMessageModels.put(model));
@@ -360,7 +354,7 @@ class MessagingRepositoryImpl with ChurchFilterMixin implements IMessagingReposi
           entityType: 'chat_messages',
           action: 'INSERT',
           payload: json,
-          churchId: churchId ?? '',
+          churchId: _churchId,
           recordId: message.id,
         );
       } else {

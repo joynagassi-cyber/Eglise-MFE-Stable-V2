@@ -32,8 +32,9 @@ class BilanRepository implements IBilanRepository {
         'new_value': newValue,
         'occurred_at': DateTime.now().toIso8601String(),
       });
-    } catch (_) {
-      // Ignore errors for audit logging
+    } catch (e) {
+      // 🔴 FIX: Log audit errors instead of silent swallow
+      debugPrint('⚠️ BilanRepository._logAudit failed: $e');
     }
   }
 
@@ -97,6 +98,7 @@ class BilanRepository implements IBilanRepository {
 
   @override
   Future<List<BilanGroupSummary>> getBilanPerGroup({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
     bool includeDrafts = false,
@@ -105,12 +107,20 @@ class BilanRepository implements IBilanRepository {
     try {
       var query = _supabase
           .from('finance_transactions')
-          .select('group_id, type, amount, status')
+          .select('group_id, type, amount, status, is_internal_transfer')
           .gte('date', startDate.toIso8601String().split('T').first)
           .lte('date', endDate.toIso8601String().split('T').first);
 
+      // 🔴 CRITICAL FIX: Filter by churchId to prevent inter-church data leak
+      query = query.eq('church_id', churchId);
+
       if (!includeDrafts) {
         query = query.neq('status', 'draft');
+      }
+
+      if (excludeInternal) {
+        // Filter out internal transfers (group-to-group, group-to-church)
+        query = query.eq('is_internal_transfer', false);
       }
 
       final records = await query;
@@ -157,8 +167,31 @@ class BilanRepository implements IBilanRepository {
     }).toList();
   }
 
+  /// Compute a deterministic SHA-256 hash for a bilan period.
+  /// Used both for sealing (sealPeriod) and verifying (verifySeal).
+  /// Must match the SQL RPC seal_period() algorithm exactly.
+  String _computePeriodHash({
+    required String churchId,
+    required int year,
+    required int month,
+    required double totalIncome,
+    required double totalExpense,
+    required Map<String, double> categoryBreakdown,
+  }) {
+    final sortedKeys = categoryBreakdown.keys.toList()..sort();
+    final breakdownStr =
+        sortedKeys.map((k) => '$k:${(categoryBreakdown[k] as num).toStringAsFixed(2)}').join(',');
+    final contentToHash = '$churchId$year$month'
+        '${totalIncome.toStringAsFixed(2)}'
+        '${totalExpense.toStringAsFixed(2)}'
+        '${(totalIncome - totalExpense).toStringAsFixed(2)}'
+        '$breakdownStr';
+    return sha256.convert(utf8.encode(contentToHash)).toString();
+  }
+
   @override
   Future<ConsolidatedBilan> getConsolidatedBilan({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
     List<String>? groupIds,
@@ -168,6 +201,7 @@ class BilanRepository implements IBilanRepository {
       var query = _supabase
           .from('finance_transactions')
           .select('type, amount, status')
+          .eq('church_id', churchId)
           .gte('date', startDate.toIso8601String().split('T').first)
           .lte('date', endDate.toIso8601String().split('T').first);
 
@@ -230,13 +264,16 @@ class BilanRepository implements IBilanRepository {
   }
 
   @override
-  Future<List<TransactionAnomaly>> detectAnomalies(
-      {double threshold = 2.0}) async {
+  Future<List<TransactionAnomaly>> detectAnomalies({
+    required String churchId,
+    double threshold = 2.0,
+  }) async {
     try {
       // Fetch recent transactions to detect statistical outliers
       final records = await _supabase
           .from('finance_transactions')
           .select('id, amount, type, category_name, date, description')
+          .eq('church_id', churchId)
           .order('date', ascending: false)
           .limit(500);
 
@@ -334,6 +371,7 @@ class BilanRepository implements IBilanRepository {
 
   @override
   Future<List<FecLine>> getFecLines({
+    required String churchId,
     required DateTime startDate,
     required DateTime endDate,
   }) async {
@@ -342,6 +380,7 @@ class BilanRepository implements IBilanRepository {
           .from('finance_transactions')
           .select(
               'id, date, description, amount, type, category_name, status, created_at')
+          .eq('church_id', churchId)
           .gte('date', startDate.toIso8601String().split('T').first)
           .lte('date', endDate.toIso8601String().split('T').first)
           .neq('status', 'draft')
@@ -367,7 +406,7 @@ class BilanRepository implements IBilanRepository {
           compteLib: r['category_name'] ?? 'Divers',
           compauxNum: '',
           compauxLib: '',
-          pieceRef: r['id'].toString().substring(0, 8),
+          pieceRef: sha256.convert(utf8.encode(r['id'].toString())).toString().substring(0, 12),
           pieceDate: date,
           ecritureLib: r['description'] ?? 'Sans libellé',
           debit: isIncome ? 0 : amount,
@@ -387,7 +426,7 @@ class BilanRepository implements IBilanRepository {
           compteLib: 'Banque/Caisse',
           compauxNum: '',
           compauxLib: '',
-          pieceRef: r['id'].toString().substring(0, 8),
+          pieceRef: sha256.convert(utf8.encode(r['id'].toString())).toString().substring(0, 12),
           pieceDate: date,
           ecritureLib: r['description'] ?? 'Sans libellé',
           debit: isIncome ? amount : 0,
@@ -419,9 +458,10 @@ class BilanRepository implements IBilanRepository {
     return const BilanFinancialSettings();
   }
 
+  // TODO: Implémenter la persistance des paramètres financiers
   @override
   Future<void> updateFinancialSettings(BilanFinancialSettings settings) async {
-    // Logic to update settings
+    // TODO: Implémenter la persistance des paramètres financiers
   }
 
   @override
@@ -463,22 +503,6 @@ class BilanRepository implements IBilanRepository {
     } catch (e) {
       return [];
     }
-  }
-
-  @override
-  Future<ReportSnapshot?> getPeriodSnapshot({
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    return null;
-  }
-
-  @override
-  Future<List<BilanTransaction>> getInternalTransfers({
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    return [];
   }
 
   @override
@@ -642,6 +666,18 @@ class BilanRepository implements IBilanRepository {
       // RPC not available — fallback to client-side sealing
     }
 
+    // 🔴 FIX: Check if period is already sealed before proceeding
+    final existingPeriods = await _supabase
+        .from('bilan_periods')
+        .select('status')
+        .eq('church_id', churchId)
+        .eq('year', year)
+        .eq('month', month)
+        .maybeSingle();
+    if (existingPeriods != null && existingPeriods['status'] == 'sealed') {
+      throw Exception('La période $month/$year est déjà scellée. Utilisez descellage d\'abord.');
+    }
+
     // Fallback: compute totals client-side and upsert
     final startDate = DateTime(year, month, 1);
     final endDate = DateTime(year, month + 1, 0, 23, 59, 59);
@@ -678,15 +714,16 @@ class BilanRepository implements IBilanRepository {
       categoryBreakdown[cat] = (categoryBreakdown[cat] ?? 0) + amount;
     }
 
-    // Compute SHA-256 hash robustement (inclut le contenu des transactions)
-    final contentToHash = {
-      'church_id': churchId,
-      'period': '$year-$month',
-      'totals': {'income': totalIncome, 'expense': totalExpense},
-      'transactions': records.map((r) => {'id': r['id'], 'amount': r['amount'], 'hash': sha256.convert(utf8.encode(jsonEncode(r))).toString()}).toList(),
-    };
-    
-    final sealHash = sha256.convert(utf8.encode(jsonEncode(contentToHash))).toString();
+    // Compute SHA-256 hash via shared method (unified with RPC SQL seal_period())
+    final categoryBreakdownTyped = categoryBreakdown.map((k, v) => MapEntry(k, v));
+    final sealHash = _computePeriodHash(
+      churchId: churchId,
+      year: year,
+      month: month,
+      totalIncome: totalIncome,
+      totalExpense: totalExpense,
+      categoryBreakdown: categoryBreakdownTyped,
+    );
 
     final now = DateTime.now().toIso8601String();
 
@@ -743,6 +780,73 @@ class BilanRepository implements IBilanRepository {
   }
 
   @override
+  Future<bool> verifySeal({
+    required String churchId,
+    required int year,
+    required int month,
+  }) async {
+    try {
+      // Fetch the stored period
+      final records = await _supabase
+          .from('bilan_periods')
+          .select()
+          .eq('church_id', churchId)
+          .eq('year', year)
+          .eq('month', month)
+          .limit(1);
+
+      if (records.isEmpty) return false;
+      final period = BilanPeriod.fromJson(records.first);
+      if (period.sealHash == null || period.sealHash!.isEmpty) return false;
+
+      // Fetch transactions and recompute hash
+      final startDate = DateTime(year, month, 1);
+      final endDate = DateTime(year, month + 1, 0, 23, 59, 59);
+
+      final txRecords = await _supabase
+          .from('finance_transactions')
+          .select('id, date, type, amount, category_name')
+          .eq('church_id', churchId)
+          .gte('date', startDate.toIso8601String().split('T').first)
+          .lte('date', endDate.toIso8601String().split('T').first)
+          .neq('status', 'draft')
+          .order('date', ascending: true)
+          .order('id', ascending: true);
+
+      double totalIncome = 0;
+      double totalExpense = 0;
+      final categoryBreakdown = <String, double>{};
+
+      for (final r in txRecords) {
+        final amount = (r['amount'] as num?)?.toDouble() ?? 0;
+        final type = r['type'] as String? ?? '';
+        final cat = r['category_name'] as String? ?? 'Autre';
+
+        if (type == 'income') {
+          totalIncome += amount;
+        } else if (type == 'expense') {
+          totalExpense += amount;
+        }
+        categoryBreakdown[cat] = (categoryBreakdown[cat] ?? 0) + amount;
+      }
+
+      final recomputedHash = _computePeriodHash(
+        churchId: churchId,
+        year: year,
+        month: month,
+        totalIncome: totalIncome,
+        totalExpense: totalExpense,
+        categoryBreakdown: categoryBreakdown,
+      );
+
+      return recomputedHash == period.sealHash;
+    } catch (e) {
+      debugPrint('⚠️ BilanRepository.verifySeal failed: $e');
+      return false;
+    }
+  }
+
+  @override
   Future<void> unsealPeriod({
     required String churchId,
     required int year,
@@ -750,6 +854,22 @@ class BilanRepository implements IBilanRepository {
     required String reason,
   }) async {
     try {
+      // 🔴 FIX: Verify period exists and is sealed before unsealing
+      final existing = await _supabase
+          .from('bilan_periods')
+          .select('status')
+          .eq('church_id', churchId)
+          .eq('year', year)
+          .eq('month', month)
+          .maybeSingle();
+
+      if (existing == null) {
+        throw Exception('Aucune période trouvée pour $month/$year');
+      }
+      if (existing['status'] != 'sealed') {
+        throw Exception('La période $month/$year n\'est pas scellée');
+      }
+
       await _supabase
           .from('bilan_periods')
           .update({
@@ -771,8 +891,9 @@ class BilanRepository implements IBilanRepository {
         entityType: 'bilan_period',
         newValue: {'status': 'open', 'reason': reason},
       );
-    } catch (_) {
-      // Table might not exist yet
+    } catch (e) {
+      debugPrint('⚠️ BilanRepository.unsealPeriod failed: $e');
+      rethrow;
     }
   }
 
@@ -833,6 +954,29 @@ class BilanRepository implements IBilanRepository {
     }
 
     return monthlyData;
+  }
+
+  @override
+  Future<void> initializePeriod({
+    required String churchId,
+    required int year,
+    required int month,
+  }) async {
+    await _supabase.from('bilan_periods').upsert({
+      'church_id': churchId,
+      'year': year,
+      'month': month,
+      'status': 'open',
+      'sealed_at': null,
+      'sealed_by': null,
+      'seal_hash': null,
+      'total_income': 0,
+      'total_expense': 0,
+      'net_balance': 0,
+      'category_breakdown': {},
+      'notes': 'Initialisé automatiquement',
+      'updated_at': DateTime.now().toIso8601String(),
+    }, onConflict: 'church_id,year,month');
   }
 }
 

@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../domain/entities/finance_transaction.dart';
 import '../../domain/entities/financial_account.dart';
@@ -19,9 +20,7 @@ import '../models/financial_account_model.dart';
 import 'package:lumina/core/utils/app_date_time.dart';
 import 'package:lumina/core/services/encryption_service.dart';
 
-class FinanceRepositoryImpl
-    with ChurchFilterMixin
-    implements IFinanceRepository {
+class FinanceRepositoryImpl implements IFinanceRepository {
   final SupabaseClient _client;
   final IsarService _isar;
   final OfflineSyncManager _syncManager;
@@ -35,6 +34,8 @@ class FinanceRepositoryImpl
     this._encryption,
     this._ref,
   );
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   Failure _handleError(dynamic e, String defaultMessage) {
     if (e is PostgrestException) {
@@ -54,7 +55,6 @@ class FinanceRepositoryImpl
     int? page,
     int? perPage,
   }) async {
-    final churchId = getActiveChurchId(_ref);
     final int effectivePage = page ?? 1;
     final int effectivePerPage = perPage ?? 50;
     final int from = (effectivePage - 1) * effectivePerPage;
@@ -64,10 +64,9 @@ class FinanceRepositoryImpl
       List<Map<String, dynamic>> records;
       
       if (forceRefresh || !_isar.isReady) {
-        records = await applyChurchFilter(
-          _client.from('finance_transactions').select(),
-          churchId,
-        ).order('date', ascending: false).range(from, to);
+        records = await _client
+            .from('finance_transactions').select().scoped(_ref)
+            .order('date', ascending: false).range(from, to);
       } else {
         final localModels = await _isar.financeTransactionModels
             .where()
@@ -80,10 +79,9 @@ class FinanceRepositoryImpl
           return Right(localModels.map((m) => m.toDomain()).toList());
         }
 
-        records = await applyChurchFilter(
-          _client.from('finance_transactions').select(),
-          churchId,
-        ).order('date', ascending: false).range(from, to);
+        records = await _client
+            .from('finance_transactions').select().scoped(_ref)
+            .order('date', ascending: false).range(from, to);
       }
 
       // Optimisation : Déchiffrement par batch
@@ -129,13 +127,26 @@ class FinanceRepositoryImpl
 
   @override
   Future<Either<Failure, List<FinanceTransaction>>> getAllTransactions() async {
-    return getTransactions();
+    // Fetch all pages to overcome the 50-per-page limit
+    final allTransactions = <FinanceTransaction>[];
+    int page = 1;
+    const perPage = 100;
+    
+    while (true) {
+      final result = await getTransactions(page: page, perPage: perPage);
+      final batch = result.getOrElse(() => <FinanceTransaction>[]);
+      if (batch.isEmpty) break;
+      allTransactions.addAll(batch);
+      if (batch.length < perPage) break;
+      page++;
+    }
+    
+    return Right(allTransactions);
   }
 
   @override
   Stream<List<FinanceTransaction>> watchTransactions() async* {
     if (!_isar.isReady) {
-      final churchId = getActiveChurchId(_ref);
       yield* _client
           .from('finance_transactions')
           .stream(primaryKey: ['id'])
@@ -143,8 +154,9 @@ class FinanceRepositoryImpl
           .asyncMap(
             (records) async {
               final list = <FinanceTransaction>[];
-              for (final r in records.where((r) => r['churchId'] == churchId)) {
-                list.add(await _mapRecordToTransaction(r));
+              for (final r in records.where((r) => r['church_id'] == _churchId)) {
+                final tx = FinanceTransaction.fromJson(r);
+                list.add(await _decryptTransaction(tx));
               }
               return list;
             },
@@ -177,7 +189,7 @@ class FinanceRepositoryImpl
           entityType: 'finance_transaction',
           action: 'UPSERT',
           payload: encryptedTx.toJson(),
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client
@@ -212,7 +224,7 @@ class FinanceRepositoryImpl
           entityType: 'finance_transaction',
           action: 'DELETE',
           payload: {'id': id},
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client.from('finance_transactions').delete().eq('id', id);
@@ -244,11 +256,9 @@ class FinanceRepositoryImpl
   Future<Either<Failure, List<Map<String, dynamic>>>> getApprovals(
       String transactionId) async {
     try {
-      final churchId = getActiveChurchId(_ref);
-      final response = await applyChurchFilter(
-        _client.from('approvals').select(),
-        churchId,
-      ).eq('entity_id', transactionId).eq('entity_type', 'finance_transaction');
+      final response = await _client
+          .from('approvals').select().scoped(_ref)
+          .eq('entity_id', transactionId).eq('entity_type', 'finance_transaction');
       return Right(List<Map<String, dynamic>>.from(response));
     } catch (e) {
       return Left(_handleError(e, 'Failed to fetch approvals'));
@@ -265,9 +275,6 @@ class FinanceRepositoryImpl
     int? page,
     int? perPage,
   }) async {
-    final churchId = getActiveChurchId(_ref);
-
-    // Pagination parameters
     final int effectivePage = page ?? 1;
     final int effectivePerPage = perPage ?? 50;
     final int from = (effectivePage - 1) * effectivePerPage;
@@ -275,10 +282,8 @@ class FinanceRepositoryImpl
 
     if (!_isar.isReady) {
       try {
-        var queryBuilder = applyChurchFilter(
-          _client.from('finance_transactions').select(),
-          churchId,
-        );
+        var queryBuilder = _client
+            .from('finance_transactions').select().scoped(_ref);
 
         if (query != null) {
           queryBuilder = queryBuilder.ilike('description', '%$query%');
@@ -289,6 +294,9 @@ class FinanceRepositoryImpl
         if (category != null) {
           queryBuilder = queryBuilder.eq('category', category);
         }
+
+        // Filter by church_id for safety (in addition to RLS)
+        queryBuilder = queryBuilder.eq('church_id', _churchId);
 
         final records =
             await queryBuilder.order('date', ascending: false).range(from, to);
@@ -356,7 +364,7 @@ class FinanceRepositoryImpl
           entityType: 'finance_transaction',
           action: 'UPDATE',
           payload: {'id': transactionId, ...payload},
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client
@@ -375,15 +383,10 @@ class FinanceRepositoryImpl
   @override
   Future<Either<Failure, List<RecurringTransaction>>> getRecurringTransactions({
     bool forceRefresh = false,
-  }) async {
-    final churchId = getActiveChurchId(_ref);
-
-    if (forceRefresh) {
+  }) async {    if (forceRefresh) {
       try {
-        final records = await applyChurchFilter(
-          _client.from('recurring_transactions').select(),
-          churchId,
-        );
+        final records = await _client
+            .from('recurring_transactions').select().scoped(_ref);
         final recurring = records.map(_mapRecordToRecurring).toList();
         await _saveRecurringToLocal(recurring);
         return Right(recurring);
@@ -394,10 +397,8 @@ class FinanceRepositoryImpl
 
     if (!_isar.isReady) {
       try {
-        final records = await applyChurchFilter(
-          _client.from('recurring_transactions').select(),
-          churchId,
-        );
+        final records = await _client
+            .from('recurring_transactions').select().scoped(_ref);
         return Right(records.map(_mapRecordToRecurring).toList());
       } catch (e) {
         return Left(
@@ -411,10 +412,8 @@ class FinanceRepositoryImpl
         return Right(localModels.map((m) => m.toDomain()).toList());
       }
 
-      final records = await applyChurchFilter(
-        _client.from('recurring_transactions').select(),
-        churchId,
-      );
+      final records = await _client
+          .from('recurring_transactions').select().scoped(_ref);
       final recurring = records.map(_mapRecordToRecurring).toList();
       await _saveRecurringToLocal(recurring);
       return Right(recurring);
@@ -426,12 +425,11 @@ class FinanceRepositoryImpl
   @override
   Stream<List<RecurringTransaction>> watchRecurringTransactions() async* {
     if (!_isar.isReady) {
-      final churchId = getActiveChurchId(_ref);
       yield* _client
           .from('recurring_transactions')
           .stream(primaryKey: ['id']).map(
         (records) => records
-            .where((r) => r['church_id'] == churchId)
+            .where((r) => r['church_id'] == _churchId)
             .map(_mapRecordToRecurring)
             .toList(),
       );
@@ -458,7 +456,7 @@ class FinanceRepositoryImpl
           entityType: 'recurring_transaction',
           action: 'UPSERT',
           payload: recurring.toJson(),
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client.from('recurring_transactions').upsert(recurring.toJson());
@@ -486,7 +484,7 @@ class FinanceRepositoryImpl
           entityType: 'recurring_transaction',
           action: 'DELETE',
           payload: {'id': id},
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client.from('recurring_transactions').delete().eq('id', id);
@@ -503,14 +501,10 @@ class FinanceRepositoryImpl
   Future<Either<Failure, List<FinancialAccount>>> getAccounts({
     bool forceRefresh = false,
   }) async {
-    final churchId = getActiveChurchId(_ref);
-
     if (forceRefresh) {
       try {
-        final records = await applyChurchFilter(
-          _client.from('financial_accounts').select(),
-          churchId,
-        );
+        final records = await _client
+            .from('financial_accounts').select().scoped(_ref);
         final accounts = records.map(_mapRecordToAccount).toList();
         await _saveAccountsToLocal(accounts);
         return Right(accounts);
@@ -521,10 +515,8 @@ class FinanceRepositoryImpl
 
     if (!_isar.isReady) {
       try {
-        final records = await applyChurchFilter(
-          _client.from('financial_accounts').select(),
-          churchId,
-        );
+        final records = await _client
+            .from('financial_accounts').select().scoped(_ref);
         return Right(records.map(_mapRecordToAccount).toList());
       } catch (e) {
         return Left(_handleError(e, 'Failed to fetch accounts online'));
@@ -537,10 +529,8 @@ class FinanceRepositoryImpl
         return Right(localModels.map((m) => m.toDomain()).toList());
       }
 
-      final records = await applyChurchFilter(
-        _client.from('financial_accounts').select(),
-        churchId,
-      );
+      final records = await _client
+          .from('financial_accounts').select().scoped(_ref);
       final accounts = records.map(_mapRecordToAccount).toList();
       await _saveAccountsToLocal(accounts);
       return Right(accounts);
@@ -552,10 +542,9 @@ class FinanceRepositoryImpl
   @override
   Stream<List<FinancialAccount>> watchAccounts() async* {
     if (!_isar.isReady) {
-      final churchId = getActiveChurchId(_ref);
       yield* _client.from('financial_accounts').stream(primaryKey: ['id']).map(
         (records) => records
-            .where((r) => r['churchId'] == churchId)
+            .where((r) => r['church_id'] == _churchId)
             .map(_mapRecordToAccount)
             .toList(),
       );
@@ -584,7 +573,7 @@ class FinanceRepositoryImpl
           entityType: 'financial_account',
           action: 'UPSERT',
           payload: account.toJson(),
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client.from('financial_accounts').upsert(account.toJson());
@@ -615,7 +604,7 @@ class FinanceRepositoryImpl
           entityType: 'financial_account',
           action: 'DELETE',
           payload: {'id': id},
-          churchId: getActiveChurchId(_ref) ?? '',
+          churchId: _churchId,
         );
       } else {
         await _client.from('financial_accounts').delete().eq('id', id);
@@ -660,10 +649,11 @@ class FinanceRepositoryImpl
   Future<Either<Failure, double>> getTotalIncome(
       DateTime start, DateTime end) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       if (!_isar.isReady) {
-        final res = await applyChurchFilter(_client.from('finance_transactions').select('amount'), churchId)
+        final res = await _client
+            .from('finance_transactions').select('amount').scoped(_ref)
             .eq('type', 'income')
+            .eq('church_id', _churchId)
             .gte('date', start.toIso8601String())
             .lte('date', end.toIso8601String());
         return Right((res as List).fold(0.0, (sum, item) => sum + (item['amount'] as num)));
@@ -671,7 +661,7 @@ class FinanceRepositoryImpl
       
       final total = await _isar.financeTransactionModels
           .filter()
-          .optional(churchId != null, (q) => q.churchIdEqualTo(churchId!))
+          .optional(_churchId != 'global', (q) => q.churchIdEqualTo(_churchId))
           .typeEqualTo('income')
           .dateBetween(start, end)
           .amountProperty()
@@ -687,10 +677,11 @@ class FinanceRepositoryImpl
   Future<Either<Failure, double>> getTotalExpense(
       DateTime start, DateTime end) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       if (!_isar.isReady) {
-        final res = await applyChurchFilter(_client.from('finance_transactions').select('amount'), churchId)
+        final res = await _client
+            .from('finance_transactions').select('amount').scoped(_ref)
             .eq('type', 'expense')
+            .eq('church_id', _churchId)
             .gte('date', start.toIso8601String())
             .lte('date', end.toIso8601String());
         return Right((res as List).fold(0.0, (sum, item) => sum + (item['amount'] as num)));
@@ -698,7 +689,7 @@ class FinanceRepositoryImpl
       
       final total = await _isar.financeTransactionModels
           .filter()
-          .optional(churchId != null, (q) => q.churchIdEqualTo(churchId!))
+          .optional(_churchId != 'global', (q) => q.churchIdEqualTo(_churchId))
           .typeEqualTo('expense')
           .dateBetween(start, end)
           .amountProperty()

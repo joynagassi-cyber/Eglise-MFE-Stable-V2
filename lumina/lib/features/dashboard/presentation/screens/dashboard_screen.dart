@@ -75,10 +75,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           drawer: const MainDrawer(),
           showBackButton: false,
           actions: [
-            IconButton(
-              key: _notificationsKey,
-              icon: Icon(Icons.notifications_none_rounded, color: context.colors.textSecondary),
-              onPressed: () {},
+            Semantics(
+              label: 'Notifications',
+              button: true,
+              child: Tooltip(
+                message: 'Notifications',
+                child: IconButton(
+                  key: _notificationsKey,
+                  icon: Icon(Icons.notifications_none_rounded, color: context.colors.textSecondary),
+                  onPressed: () {},
+                ),
+              ),
             ),
           ],
           onRefresh: () async {

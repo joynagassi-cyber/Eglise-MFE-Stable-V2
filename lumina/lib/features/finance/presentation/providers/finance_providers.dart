@@ -205,7 +205,7 @@ class ReconciliationActions extends _$ReconciliationActions {
       final repository = ref.read(financeRepositoryProvider);
       for (final imported in transactions) {
         final tx = FinanceTransaction(
-          id: '',
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
           amount: imported.amount,
           type: imported.type,
           date: imported.date,
@@ -591,9 +591,10 @@ final registreCulteProvider =
   );
 });
 
-/// Provider pour calculer les tendances dynamiques (Jan-Mar 2026)
+/// Provider pour calculer les tendances dynamiques (3 derniers mois)
 final financeTrendProvider = Provider<AsyncValue<Map<String, dynamic>>>((ref) {
   final transactionsAsync = ref.watch(transactionsProvider);
+  final now = DateTime.now();
 
   return transactionsAsync.whenData((txs) {
     if (txs.isEmpty) {
@@ -603,15 +604,16 @@ final financeTrendProvider = Provider<AsyncValue<Map<String, dynamic>>>((ref) {
       };
     }
 
-    // Filtrer pour la période Jan-Mar 2026
-    final periods =
-        txs.where((t) => t.date.year == 2026 && t.date.month <= 3).toList();
+    // Filtrer pour les ~3 derniers mois (safe: ne crash pas en janv/fév)
+    final threeMonthsAgo = DateTime(now.year, now.month, 1).subtract(const Duration(days: 61));
+    final periods = txs
+        .where((t) => t.date.isAfter(threeMonthsAgo.subtract(const Duration(days: 1))))
+        .toList();
     periods.sort((a, b) => a.date.compareTo(b.date));
 
-    // Aggréger par semaine pour le graphique (7 points)
+    // Aggréger par semaine pour le graphique (7 points max)
     final points = <double>[];
     if (periods.isNotEmpty) {
-      // Simplification: On prend les 7 dernières transactions ou agrégats
       int startIdx = periods.length - 7;
       if (startIdx < 0) startIdx = 0;
       for (var i = startIdx; i < periods.length; i++) {
@@ -619,15 +621,20 @@ final financeTrendProvider = Provider<AsyncValue<Map<String, dynamic>>>((ref) {
       }
     }
 
-    // Calculer la croissance (Mars 2026 vs Février 2026)
-    final febSum = periods
-        .where((t) => t.date.month == 2)
+    // Calculer la croissance (mois courant vs mois précédent)
+    final currentMonth = now.month;
+    final currentYear = now.year;
+    final previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
+    final prevYear = previousMonth == 12 ? currentYear - 1 : currentYear;
+    
+    final currentSum = txs
+        .where((t) => t.date.year == currentYear && t.date.month == currentMonth)
         .fold(0.0, (sum, t) => sum + t.amount);
-    final marSum = periods
-        .where((t) => t.date.month == 3)
+    final prevSum = txs
+        .where((t) => t.date.year == prevYear && t.date.month == previousMonth)
         .fold(0.0, (sum, t) => sum + t.amount);
 
-    final growth = febSum > 0 ? ((marSum - febSum) / febSum) * 100 : 0.0;
+    final growth = prevSum > 0 ? ((currentSum - prevSum) / prevSum) * 100 : 0.0;
 
     return {
       'data': points.isEmpty ? [0.0] : points,

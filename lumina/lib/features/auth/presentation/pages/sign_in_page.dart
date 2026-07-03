@@ -148,6 +148,9 @@ class _SignInPageState extends ConsumerState<SignInPage>
                             color: AppColors.textTertiary(context),
                             size: AppSpacing.iconSm,
                           ),
+                          tooltip: _obscurePassword
+                              ? 'Afficher le mot de passe'
+                              : 'Masquer le mot de passe',
                           onPressed: () => setState(
                               () => _obscurePassword = !_obscurePassword),
                         ),

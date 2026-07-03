@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_animations.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../screens/member_list_screen.dart';
 import '../screens/member_detail_screen.dart';
 import '../screens/member_form_screen.dart';
@@ -32,8 +32,10 @@ List<RouteBase> memberRoutes(MemberRoutesRef ref) {
         GoRoute(
           path: 'nouveau',
           parentNavigatorKey: rootNavigatorKey,
-          pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.form,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersCreate},
               child: MemberFormScreen(),
@@ -43,8 +45,10 @@ List<RouteBase> memberRoutes(MemberRoutesRef ref) {
         GoRoute(
           path: ':id',
           parentNavigatorKey: rootNavigatorKey,
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: RouteGuard(
               requiredPermissions: const {Permission.membersView},
               child: MemberDetailScreen(memberId: state.pathParameters['id'] ?? ''),
@@ -53,8 +57,10 @@ List<RouteBase> memberRoutes(MemberRoutesRef ref) {
           routes: [
             GoRoute(
               path: 'modifier',
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersEdit},
                   child: MemberFormScreen(memberId: state.pathParameters['id']),
@@ -65,8 +71,10 @@ List<RouteBase> memberRoutes(MemberRoutesRef ref) {
         ),
         GoRoute(
           path: 'stats',
-          pageBuilder: (context, state) => AppAnimations.scalePage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.modal,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersView},
               child: MemberStatsScreen(),
@@ -75,15 +83,19 @@ List<RouteBase> memberRoutes(MemberRoutesRef ref) {
         ),
         GoRoute(
           path: 'qr',
-          pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.form,
             child: const MemberQrScreen(),
           ),
         ),
         GoRoute(
           path: 'scanner',
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersView},
               child: QRScannerScreen(),

@@ -21,6 +21,7 @@ class BackupSettingsScreen extends ConsumerWidget {
           button: true,
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
+            tooltip: 'Retour',
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) {

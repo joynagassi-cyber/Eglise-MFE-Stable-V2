@@ -118,7 +118,7 @@ BEGIN
             SUM(CASE WHEN ft.type = 'income' THEN ft.amount ELSE 0 END) AS revenue,
             SUM(CASE WHEN ft.type = 'expense' THEN ft.amount ELSE 0 END) AS expense
         FROM public.finance_transactions ft
-        WHERE ft.status IN ('VALIDATED', 'SEALED', 'ARCHIVED')
+        WHERE ft.status IN ('validated', 'sealed', 'archived')
         AND ft.date >= date_trunc('month', CURRENT_DATE - interval '11 months')
         -- Optional: add church_id check by joining financial_accounts if needed.
         -- Assuming we skip it if it's too complex, or we do a simple query.

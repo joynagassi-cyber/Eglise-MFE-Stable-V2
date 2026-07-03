@@ -13,10 +13,10 @@ import '../models/budget_model.dart';
 import 'package:lumina/core/data/local/isar_service.dart';
 import '../../domain/entities/finance_transaction.dart';
 import 'package:lumina/core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import 'package:lumina/core/utils/supabase_extensions.dart';
 import '../../../../core/utils/app_date_time.dart';
 
-class BudgetRepositoryImpl with ChurchFilterMixin implements IBudgetRepository {
+class BudgetRepositoryImpl implements IBudgetRepository {
   final SupabaseClient _client;
   final IsarService _isar;
   final IFinanceRepository _financeRepo;
@@ -58,10 +58,9 @@ class BudgetRepositoryImpl with ChurchFilterMixin implements IBudgetRepository {
         }
       }
 
-      // Build Supabase query
-      final effectiveChurchId = churchId ?? getActiveChurchId(_ref);
-      var query = applyChurchFilter(
-          _client.from('budgets').select(), effectiveChurchId);
+      // Build Supabase query with church_id filter
+      var query = _client
+          .from('budgets').select().scoped(_ref, allowEmpty: true);
       if (year != null) {
         query = query.eq('year', year);
       }
@@ -109,11 +108,9 @@ class BudgetRepositoryImpl with ChurchFilterMixin implements IBudgetRepository {
     }
 
     try {
-      final churchId = getActiveChurchId(_ref);
-      final records = await applyChurchFilter(
-        _client.from('budgets').select(),
-        churchId,
-      ).eq('id', id).maybeSingle();
+      final records = await _client
+          .from('budgets').select().scoped(_ref, allowEmpty: true)
+          .eq('id', id).maybeSingle();
       if (records == null) return null;
       final budget = _mapRecordToDomain(records);
 
@@ -194,11 +191,9 @@ class BudgetRepositoryImpl with ChurchFilterMixin implements IBudgetRepository {
       }
     } else {
       try {
-        final churchId = getActiveChurchId(_ref);
-        await applyChurchFilter(
-          _client.from('budgets').delete(),
-          churchId,
-        ).eq('id', id);
+        await _client
+            .from('budgets').delete().scoped(_ref, allowEmpty: true)
+            .eq('id', id);
       } catch (e) {
         // Ignore network errors
       }

@@ -28,6 +28,7 @@ class BibleSearchScreen extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colors.textPrimary),
+          tooltip: 'Retour',
           onPressed: () => context.pop(),
         ),
         title: TextField(
@@ -46,6 +47,7 @@ class BibleSearchScreen extends ConsumerWidget {
           if (searchState.query.isNotEmpty)
             IconButton(
               icon: Icon(Icons.close, color: colors.textSecondary),
+              tooltip: 'Effacer la recherche',
               onPressed: searchNotifier.clearSearch,
             ),
         ],

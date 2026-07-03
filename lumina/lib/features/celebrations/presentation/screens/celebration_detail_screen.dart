@@ -144,6 +144,7 @@ class _CelebrationDetailScreenState
               ),
               child: IconButton(
                 icon: Icon(Icons.save_rounded, color: Colors.white),
+                tooltip: 'Enregistrer les modifications',
                 onPressed: _saveChanges,
               ),
             ),
@@ -413,6 +414,7 @@ class _CelebrationDetailScreenState
                   icon: Icon(Icons.remove_rounded,
                     color: context.colors.errorText,
                   ),
+                  tooltip: 'Diminuer',
                   onPressed: () async {
                     await HapticHelper.light();
                     onChanged(value > 0 ? value - 1 : 0);
@@ -441,6 +443,7 @@ class _CelebrationDetailScreenState
                 ),
                 child: IconButton(
                   icon: Icon(Icons.add_rounded, color: context.colors.successText),
+                  tooltip: 'Augmenter',
                   onPressed: () async {
                     await HapticHelper.light();
                     onChanged(value + 1);

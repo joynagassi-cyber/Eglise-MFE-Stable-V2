@@ -54,9 +54,16 @@ class PremiumDashboardScaffold extends ConsumerWidget {
               pinned: true,
               backgroundColor: context.colors.bgPage,
               surfaceTintColor: Colors.transparent,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).pop(),
+              leading: Semantics(
+                label: 'Retour',
+                button: true,
+                child: Tooltip(
+                  message: 'Retour',
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
               ),
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
@@ -89,9 +96,16 @@ class PremiumDashboardScaffold extends ConsumerWidget {
               actions: [
                 if (headerAction != null) headerAction!,
                 if (onRefresh != null && headerAction == null)
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: onRefresh,
+                  Semantics(
+                    label: 'Actualiser',
+                    button: true,
+                    child: Tooltip(
+                      message: 'Actualiser',
+                      child: IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: onRefresh,
+                      ),
+                    ),
                   ),
               ],
             ),

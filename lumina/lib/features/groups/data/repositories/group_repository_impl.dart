@@ -17,6 +17,8 @@ import '../../domain/entities/member_transfer_request.dart';
 import 'package:lumina/core/logging/app_logger.dart';
 import 'package:lumina/core/utils/app_date_time.dart';
 import 'package:lumina/core/services/device_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lumina/core/utils/supabase_extensions.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
@@ -24,8 +26,9 @@ class GroupRepositoryImpl implements IGroupRepository {
   final SupabaseClient _supabase;
   final IsarService _isarService;
   final OfflineSyncManager _syncManager;
+  final Ref _ref;
 
-  GroupRepositoryImpl(this._supabase, this._isarService, this._syncManager);
+  GroupRepositoryImpl(this._supabase, this._isarService, this._syncManager, this._ref);
 
   Map<String, dynamic> _injectChurchId(Map<String, dynamic> json) {
     final existingChurchId = json['church_id']?.toString();
@@ -113,7 +116,7 @@ class GroupRepositoryImpl implements IGroupRepository {
   Future<Group?> getGroup(String id) async {
     if (!_isarService.isReady) {
       final response = await _supabase
-          .from('groups').select().eq('id', id).single()
+          .from('groups').select().scoped(_ref, allowEmpty: true).eq('id', id).single()
           .timeout(const Duration(seconds: 15));
       return Group.fromJson(response);
     }
@@ -121,7 +124,7 @@ class GroupRepositoryImpl implements IGroupRepository {
 
     try {
       final response =
-          await _supabase.from('groups').select().eq('id', id).single();
+          await _supabase.from('groups').select().scoped(_ref, allowEmpty: true).eq('id', id).single();
       final group = Group.fromJson(response);
       await isar.writeTxn(() async {
         await isar.groupModels.put(GroupModel.fromDomain(group));
@@ -234,7 +237,8 @@ class GroupRepositoryImpl implements IGroupRepository {
       final List<dynamic> data = await _supabase
           .from('group_memberships')
           .select('*, members(first_name, last_name), groups(church_id, label, code)')
-          .eq('group_id', groupId);
+          .eq('group_id', groupId)
+          .scoped(_ref, allowEmpty: true);
       return data.map((json) {
         final membershipJson = _injectChurchId(Map<String, dynamic>.from(json));
         var membership = GroupMembership.fromJson(membershipJson);
@@ -254,7 +258,8 @@ class GroupRepositoryImpl implements IGroupRepository {
       final List<dynamic> data = await _supabase
           .from('group_memberships')
           .select('*, members(first_name, last_name), groups(church_id, label, code)')
-          .eq('group_id', groupId);
+          .eq('group_id', groupId)
+          .scoped(_ref, allowEmpty: true);
 
       await isar.writeTxn(() async {
         for (final json in data) {
@@ -291,7 +296,8 @@ class GroupRepositoryImpl implements IGroupRepository {
       final List<dynamic> data = await _supabase
           .from('group_memberships')
           .select('*, groups(church_id, label, code)')
-          .eq('member_id', memberId);
+          .eq('member_id', memberId)
+          .scoped(_ref, allowEmpty: true);
       return data
           .map((json) => GroupMembership.fromJson(
                 _injectChurchId(Map<String, dynamic>.from(json)),
@@ -304,7 +310,8 @@ class GroupRepositoryImpl implements IGroupRepository {
       final List<dynamic> data = await _supabase
           .from('group_memberships')
           .select('*, groups(church_id, label, code)')
-          .eq('member_id', memberId);
+          .eq('member_id', memberId)
+          .scoped(_ref, allowEmpty: true);
 
       await isar.writeTxn(() async {
         for (final json in data) {
@@ -553,7 +560,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           .from('group_memberships')
           .select('*, members(first_name, last_name, avatar_url), groups(church_id, label, code)')
           .eq('group_id', groupId)
-          .eq('status', 'pending');
+          .eq('status', 'pending')
+          .scoped(_ref, allowEmpty: true);
 
       return data.map((json) {
         var membership = GroupMembership.fromJson(
@@ -677,7 +685,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           .from('group_attendance')
           .select()
           .eq('group_id', groupId)
-          .eq('attendance_date', normalizedDate.toIso8601String());
+          .eq('attendance_date', normalizedDate.toIso8601String())
+          .scoped(_ref, allowEmpty: true);
       return data.map((json) => GroupAttendance.fromJson(json)).toList();
     }
     final isar = _isarService.db;
@@ -687,7 +696,8 @@ class GroupRepositoryImpl implements IGroupRepository {
           .from('group_attendance')
           .select()
           .eq('group_id', groupId)
-          .eq('attendance_date', normalizedDate.toIso8601String());
+          .eq('attendance_date', normalizedDate.toIso8601String())
+          .scoped(_ref, allowEmpty: true);
 
       await isar.writeTxn(() async {
         for (final json in data) {
@@ -738,27 +748,23 @@ class GroupRepositoryImpl implements IGroupRepository {
     DateTime? since,
   }) async {
     if (!_isarService.isReady) {
-      var query =
-          _supabase.from('group_attendance').select().eq('group_id', groupId);
-
-      if (since != null) {
-        query = query.gte('attendance_date', since.toIso8601String());
-      }
-      final List<dynamic> data =
-          await query.order('attendance_date', ascending: false);
+      final List<dynamic> data = await _supabase
+          .from('group_attendance')
+          .select()
+          .eq('group_id', groupId)
+          .order('attendance_date', ascending: false);
       return data.map((json) => GroupAttendance.fromJson(json)).toList();
     }
     final isar = _isarService.db;
     var query =
-        _supabase.from('group_attendance').select().eq('group_id', groupId);
+        _supabase.from('group_attendance').select().eq('group_id', groupId).scoped(_ref, allowEmpty: true);
 
     if (since != null) {
       query = query.gte('attendance_date', since.toIso8601String());
     }
 
     try {
-      final List<dynamic> data =
-          await query.order('attendance_date', ascending: false);
+      final List<dynamic> data = await query.order('attendance_date', ascending: false);
       await isar.writeTxn(() async {
         for (final json in data) {
           final attendance = GroupAttendance.fromJson(json);

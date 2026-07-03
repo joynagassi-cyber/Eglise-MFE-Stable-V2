@@ -31,7 +31,6 @@ class GroupDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final groupAsync = ref
         .watch(groupsProvider)
         .whenData((groups) => groups.where((g) => g.id == groupId).firstOrNull);
@@ -65,6 +64,7 @@ class GroupDetailScreen extends ConsumerWidget {
                     child: Icon(Icons.arrow_back_ios_rounded,
                         color: context.colors.textInverse, size: LuminaIcon.sm),
                   ),
+                  tooltip: 'Retour',
                   onPressed: () => context.pop(),
                 ),
               ),
@@ -82,6 +82,7 @@ class GroupDetailScreen extends ConsumerWidget {
                         child: Icon(Icons.edit_rounded,
                             color: context.colors.textInverse, size: LuminaIcon.sm),
                       ),
+                      tooltip: 'Modifier',
                       onPressed: () =>
                           context.push(AppRoutes.groupModifierWithId(group.id)),
                     ),
@@ -99,10 +100,13 @@ class GroupDetailScreen extends ConsumerWidget {
                     Positioned(
                       right: -30,
                       top: -30,
-                      child: Icon(
-                        _getIconForType(group.type),
-                        size: LuminaIcon.mega * 3, // Custom scale for large background icon
-                        color: context.colors.textInverse.withValues(alpha: 0.1),
+                      child: Hero(
+                        tag: 'group_icon_${group.id}',
+                        child: Icon(
+                          _getIconForType(group.type),
+                          size: LuminaIcon.mega * 3, // Custom scale for large background icon
+                          color: context.colors.textInverse.withValues(alpha: 0.1),
+                        ),
                       ),
                     ),
                     SafeArea(
@@ -190,7 +194,7 @@ class GroupDetailScreen extends ConsumerWidget {
                     Expanded(
                       child: membersAsync.when(
                         data: (members) =>
-                            _buildMembersList(context, ref, group, members, theme),
+                            _buildMembersList(context, ref, group, members),
                         loading: () => const AppLoadingIndicator(),
                         error: (err, stack) => core_error.AppErrorWidget(message: err.toString()),
                       ),
@@ -428,7 +432,6 @@ class GroupDetailScreen extends ConsumerWidget {
     WidgetRef ref,
     Group group,
     List<GroupMembership> memberships,
-    ThemeData theme,
   ) {
     if (memberships.isEmpty) {
       return Center(
@@ -450,7 +453,7 @@ class GroupDetailScreen extends ConsumerWidget {
             const SizedBox(height: AppSpacing.md),
             Text(
               'Aucun membre dans ce groupe',
-              style: theme.textTheme.titleSmall?.copyWith(
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: context.colors.textSecondary,
               ),
@@ -496,7 +499,7 @@ class GroupDetailScreen extends ConsumerWidget {
       case GroupType.hommes:
         return Icons.directions_run_rounded;
       case GroupType.femmes:
-        return Icons.auto_awesome_rounded;
+        return Icons.favorite_rounded;
       default:
         return Icons.group_rounded;
     }
@@ -660,7 +663,7 @@ class _MemberRow extends ConsumerWidget {
       ),
       error: (err, _) => ListTile(
         title: Text(
-          'Impossible de supprimer le membre',
+          'Impossible de charger ce membre',
           style: AppTypography.bodySmall.copyWith(
             color: context.colors.errorText,
           ),

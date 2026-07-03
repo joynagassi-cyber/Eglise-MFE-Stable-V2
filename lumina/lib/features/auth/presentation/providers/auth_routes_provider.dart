@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../../../../core/widgets/skeletons/fire_skeleton_system.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/sign_in_page.dart';
@@ -31,37 +32,77 @@ List<RouteBase> authRoutes(AuthRoutesRef ref) {
     ),
     GoRoute(
       path: AppRoutes.authHome,
-      builder: (context, state) => const HomePage(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.main,
+        child: const HomePage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.login,
-      builder: (context, state) => const SignInPage(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const SignInPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.register,
-      builder: (context, state) => const SignUpPage(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const SignUpPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
-      builder: (context, state) => const PasswordRecoveryScreen(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const PasswordRecoveryScreen(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.welcomeTour,
-      builder: (context, state) => const OnboardingScreen(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const OnboardingScreen(),
+      ),
     ),
 
     // ─── Routes onboarding avec :role dynamique ───
     GoRoute(
       path: AppRoutes.onboarding,
-      builder: (context, state) => const RoleSelectionScreen(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const RoleSelectionScreen(),
+      ),
     ),
     GoRoute(
       path: '/onboarding/admin-code',
-      builder: (context, state) => const RoleCodeVerificationScreen(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const RoleCodeVerificationScreen(),
+      ),
     ),
     GoRoute(
       path: '/onboarding/member',
-      builder: (context, state) => const MemberOnboardingScreen(),
+      pageBuilder: (context, state) => TransitionFactory.buildPage(
+        context: context,
+        state: state,
+        type: PageType.form,
+        child: const MemberOnboardingScreen(),
+      ),
     ),
 
   ];

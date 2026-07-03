@@ -53,12 +53,19 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      notifier.clearSearch();
-                      widget.onClose();
-                    },
+                  Semantics(
+                    label: 'Fermer la recherche',
+                    button: true,
+                    child: Tooltip(
+                      message: 'Fermer',
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          notifier.clearSearch();
+                          widget.onClose();
+                        },
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: TextField(
@@ -75,12 +82,19 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                             context.colors.bgSecondary,
                         prefixIcon: Icon(Icons.search),
                         suffixIcon: state.searchQuery.isNotEmpty
-                            ? IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {
-                                  _controller.clear();
-                                  notifier.clearSearch();
-                                },
+                            ? Semantics(
+                                label: 'Effacer la recherche',
+                                button: true,
+                                child: Tooltip(
+                                  message: 'Effacer',
+                                  child: IconButton(
+                                    icon: Icon(Icons.clear),
+                                    onPressed: () {
+                                      _controller.clear();
+                                      notifier.clearSearch();
+                                    },
+                                  ),
+                                ),
                               )
                             : null,
                         contentPadding:

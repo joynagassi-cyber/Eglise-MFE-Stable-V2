@@ -20,9 +20,16 @@ class ActionHistoryScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text('Historique des Actions'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () => _showFilterSheet(context, ref),
+          Semantics(
+            label: 'Filtrer',
+            button: true,
+            child: Tooltip(
+              message: 'Filtrer',
+              child: IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () => _showFilterSheet(context, ref),
+              ),
+            ),
           ),
         ],
       ),

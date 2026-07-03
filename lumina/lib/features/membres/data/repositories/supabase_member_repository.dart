@@ -7,7 +7,8 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 import 'package:isar/isar.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../domain/repositories/member_repository.dart';
@@ -18,14 +19,14 @@ import '../../../../core/utils/app_date_time.dart';
 import '../../../../core/data/models/sync_item_model.dart';
 import '../../../../core/services/device_service.dart';
 
-class SupabaseMemberRepository
-    with ChurchFilterMixin
-    implements MemberRepository {
+class SupabaseMemberRepository implements MemberRepository {
   final sb.SupabaseClient _client;
   final IsarService _isar;
   final Ref _ref;
 
   SupabaseMemberRepository(this._client, this._isar, this._ref);
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   Failure _handleError(dynamic e, String defaultMessage) {
     if (e is sb.PostgrestException) {
@@ -43,13 +44,11 @@ class SupabaseMemberRepository
     int perPage = 50,
     String? search,
   }) async {
-    final churchId = getActiveChurchId(_ref);
-
     // 1. Recherche par mot-clé
     if (search != null && search.isNotEmpty) {
       if (_isar.isReady) {
         try {
-          final models = await _isar.searchMembers(churchId, search);
+          final models = await _isar.searchMembers(_churchId, search);
           if (models.isNotEmpty) {
             return Right(models.map((m) {
               return Member.fromJson({
@@ -72,7 +71,7 @@ class SupabaseMemberRepository
       try {
         // Fallback Supabase Search
         var query =
-            applyChurchFilter(_client.from('members').select(), churchId);
+            _client.from('members').select().scoped(_ref);
         query =
             query.or('first_name.ilike.%$search%,last_name.ilike.%$search%');
         final response = await query.order('last_name').limit(perPage);
@@ -91,7 +90,7 @@ class SupabaseMemberRepository
       final end = start + perPage - 1;
 
       final query =
-          applyChurchFilter(_client.from('members').select(), churchId);
+          _client.from('members').select().scoped(_ref);
       final response = await query.order('last_name').range(start, end);
       final members =
           (response as List).map((e) => Member.fromJson(e)).toList();
@@ -124,11 +123,8 @@ class SupabaseMemberRepository
       }
 
       // 2. Fallback Supabase
-      final churchId = getActiveChurchId(_ref);
-      final response = await applyChurchFilter(
-        _client.from('members').select(),
-        churchId,
-      ).eq('id', id).single();
+      final response = await _client
+          .from('members').select().scoped(_ref).eq('id', id).single();
 
       final member = Member.fromJson(response);
 
@@ -159,11 +155,8 @@ class SupabaseMemberRepository
       }
 
       // 2. Fallback Supabase
-      final churchId = getActiveChurchId(_ref);
-      final response = await applyChurchFilter(
-        _client.from('members').select(),
-        churchId,
-      ).eq('user_id', userId).single();
+      final response = await _client
+          .from('members').select().scoped(_ref).eq('user_id', userId).single();
 
       final member = Member.fromJson(response);
 
@@ -182,11 +175,10 @@ class SupabaseMemberRepository
   @override
   Future<Either<Failure, void>> createMember(Member member) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       final uuid = const Uuid().v4();
       final newMember = member.copyWith(
         id: uuid,
-        churchId: churchId ?? member.churchId,
+        churchId: _churchId,
         createdAt: AppDateTime.nowUtc(),
         updatedAt: AppDateTime.nowUtc(),
       );
@@ -213,7 +205,7 @@ class SupabaseMemberRepository
           ..jsonData = jsonEncode(newMember.toJson())
           ..createdAt = DateTime.now()
           ..localId = uuid
-          ..churchId = churchId ?? ''
+          ..churchId = _churchId
           ..operationId = const Uuid().v4()
           ..deviceId = deviceId
           ..userId = userId);
@@ -229,7 +221,6 @@ class SupabaseMemberRepository
   @override
   Future<Either<Failure, void>> updateMember(Member member) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       final updatedMember = member.copyWith(updatedAt: AppDateTime.nowUtc());
       final deviceId = await DeviceService.getDeviceIdStatic();
       final userId = _client.auth.currentUser?.id ?? 'unknown';
@@ -257,7 +248,7 @@ class SupabaseMemberRepository
           ..jsonData = jsonEncode(updatedMember.toJson())
           ..createdAt = DateTime.now()
           ..localId = updatedMember.id
-          ..churchId = churchId ?? ''
+          ..churchId = _churchId
           ..operationId = const Uuid().v4()
           ..deviceId = deviceId
           ..userId = userId);
@@ -276,7 +267,6 @@ class SupabaseMemberRepository
   @override
   Future<Either<Failure, void>> deleteMember(String id) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       final deviceId = await DeviceService.getDeviceIdStatic();
       final userId = _client.auth.currentUser?.id ?? 'unknown';
 
@@ -304,7 +294,7 @@ class SupabaseMemberRepository
             ..jsonData = jsonEncode({'id': id})
             ..createdAt = DateTime.now()
             ..localId = id
-            ..churchId = local.churchId ?? churchId ?? ''
+            ..churchId = local.churchId ?? _churchId
             ..operationId = const Uuid().v4()
             ..deviceId = deviceId
             ..userId = userId);
@@ -324,13 +314,12 @@ class SupabaseMemberRepository
 
   @override
   Stream<List<Member>> watchMembers() async* {
-    final churchId = getActiveChurchId(_ref);
 
     if (!_isar.isReady) {
-      final stream = (churchId != null && churchId != '*')
+      final stream = (_churchId != 'global' && _churchId != '*')
           ? _client
               .from('members')
-              .stream(primaryKey: ['id']).eq('church_id', churchId)
+              .stream(primaryKey: ['id']).eq('church_id', _churchId)
           : _client.from('members').stream(primaryKey: ['id']);
 
       yield* stream.map((data) => data.map((e) => Member.fromJson(e)).toList());
@@ -338,10 +327,10 @@ class SupabaseMemberRepository
     }
 
     // Synchronisation en temps réel Supabase -> Isar
-    final supabaseStream = (churchId != null && churchId != '*')
+    final supabaseStream = (_churchId != 'global' && _churchId != '*')
         ? _client
             .from('members')
-            .stream(primaryKey: ['id']).eq('church_id', churchId)
+            .stream(primaryKey: ['id']).eq('church_id', _churchId)
         : _client.from('members').stream(primaryKey: ['id']);
 
     supabaseStream.listen((records) async {
@@ -365,8 +354,8 @@ class SupabaseMemberRepository
 
     // On écoute Isar pour la réactivité (Offline-First)
     final query = _isar.db.memberModels.where();
-    final filteredQuery = (churchId != null && churchId != '*')
-        ? query.filter().churchIdEqualTo(churchId)
+    final filteredQuery = (_churchId != 'global' && _churchId != '*')
+        ? query.filter().churchIdEqualTo(_churchId)
         : query;
 
     yield* filteredQuery.watch(fireImmediately: true).map((models) {
@@ -385,11 +374,10 @@ class SupabaseMemberRepository
     String memberId,
   ) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       var query = _client.from('family_relationships').select();
 
-      if (churchId != null && churchId != '*') {
-        query = query.eq('church_id', churchId);
+      if (_churchId != 'global' && _churchId != '*') {
+        query = query.eq('church_id', _churchId);
       }
 
       final response = await query
@@ -406,9 +394,8 @@ class SupabaseMemberRepository
   Future<Either<Failure, void>> addFamilyRelationship(
       FamilyRelationship relationship) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       final data = relationship.toJson();
-      if (churchId != null) data['church_id'] = churchId;
+      data['church_id'] = _churchId;
 
       await _client.from('family_relationships').insert(data);
       return const Right(null);
@@ -421,14 +408,13 @@ class SupabaseMemberRepository
   Future<Either<Failure, void>> removeFamilyRelationship(
       String relationshipId) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       var query = _client
           .from('family_relationships')
           .delete()
           .eq('id', relationshipId);
 
-      if (churchId != null && churchId != '*') {
-        query = query.eq('church_id', churchId);
+      if (_churchId != 'global' && _churchId != '*') {
+        query = query.eq('church_id', _churchId);
       }
 
       await query;
@@ -442,12 +428,11 @@ class SupabaseMemberRepository
   Future<Either<Failure, SpiritualTracking?>> getSpiritualTracking(
       String memberId) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       var query =
           _client.from('spiritual_tracking').select().eq('member_id', memberId);
 
-      if (churchId != null && churchId != '*') {
-        query = query.eq('church_id', churchId);
+      if (_churchId != 'global' && _churchId != '*') {
+        query = query.eq('church_id', _churchId);
       }
 
       final response = await query.maybeSingle();
@@ -462,9 +447,8 @@ class SupabaseMemberRepository
   Future<Either<Failure, void>> updateSpiritualTracking(
       SpiritualTracking tracking) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       final data = tracking.toJson();
-      if (churchId != null) data['church_id'] = churchId;
+      data['church_id'] = _churchId;
 
       await _client.from('spiritual_tracking').upsert(data);
       return const Right(null);
@@ -477,12 +461,11 @@ class SupabaseMemberRepository
   Future<Either<Failure, List<MemberHistory>>> getMemberHistory(
       String memberId) async {
     try {
-      final churchId = getActiveChurchId(_ref);
       var query =
           _client.from('member_history').select().eq('member_id', memberId);
 
-      if (churchId != null && churchId != '*') {
-        query = query.eq('church_id', churchId);
+      if (_churchId != 'global' && _churchId != '*') {
+        query = query.eq('church_id', _churchId);
       }
 
       final response = await query.order('event_date', ascending: false);
@@ -497,12 +480,9 @@ class SupabaseMemberRepository
   Future<Either<Failure, List<Member>>> getMembersByGroup(
       String groupId) async {
     try {
-      final churchId = getActiveChurchId(_ref);
-      
-      final response = await applyChurchFilter(
-        _client.from('members').select('*, group_memberships!inner(group_id)'),
-        churchId,
-      ).eq('group_memberships.group_id', groupId);
+      final response = await _client
+          .from('members').select('*, group_memberships!inner(group_id)').scoped(_ref)
+          .eq('group_memberships.group_id', groupId);
 
       return Right((response as List).map((e) => Member.fromJson(e)).toList());
     } catch (e) {

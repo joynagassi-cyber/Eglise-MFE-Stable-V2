@@ -2,7 +2,7 @@
 // Edge Function : generate-ai-post
 // DESCRIPTION : Génère 2 posts bibliques quotidiens avec
 //               des versets tirés de la Bible locale.
-//               Pipeline : Llama 3.3 70B → Gemini 3.1 Flash Lite
+//               Pipeline : GPT-100B → Gemini 3.1 Flash Lite
 // TRIGGER : pg_cron (08:00 et 19:00) ou appel manuel admin
 // ============================================================
 
@@ -318,8 +318,8 @@ Deno.serve(async (req: Request) => {
     const realVerse = await getRealBibleVerse(supabase);
     console.log(`[generate-ai-post] Verset choisi: ${realVerse.reference}`);
 
-    // Étape 1 : Llama 3.3 70B génère le post À PARTIR du verset réel
-    console.log(`[generate-ai-post] Étape 1: Llama 3.3 70B génération autour du verset réel (tone=${tone})`);
+    // Étape 1 : GPT-100B génère le post À PARTIR du verset réel
+    console.log(`[generate-ai-post] Étape 1: GPT-100B génération autour du verset réel (tone=${tone})`);
     
     const gptResult = await callOpenRouter({
       systemPrompt: SYSTEM_PROMPTS[tone as keyof typeof SYSTEM_PROMPTS],

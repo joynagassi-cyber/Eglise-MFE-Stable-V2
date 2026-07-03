@@ -150,6 +150,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
           button: true,
           child: IconButton(
             icon: Icon(Icons.arrow_back_rounded),
+            tooltip: 'Retour',
             onPressed: () async {
               await HapticHelper.light();
               if (context.mounted) context.pop();

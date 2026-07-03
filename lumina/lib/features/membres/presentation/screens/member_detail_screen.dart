@@ -84,6 +84,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                       color: context.colors.textPrimary,
                     ),
                   ),
+                  tooltip: 'Retour',
                   onPressed: () => context.pop(),
                 ).withTouchTarget(),
                 actions: [
@@ -96,6 +97,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                         color: context.colors.textPrimary,
                       ),
                     ),
+                    tooltip: 'Modifier le membre',
                     onPressed: () async {
                       await HapticHelper.light();
                       if (context.mounted) {
@@ -113,6 +115,7 @@ class _MemberDetailScreenState extends ConsumerState<MemberDetailScreen>
                         color: context.colors.textPrimary,
                       ),
                     ),
+                    tooltip: 'Plus d\'options',
                     onPressed: () async {
                       await HapticHelper.light();
                       if (context.mounted) {

@@ -54,6 +54,7 @@ class _BookPickerSheetState extends ConsumerState<BookPickerSheet> {
                 IconButton(
                   icon: Icon(Icons.arrow_back_rounded,
                       color: context.colors.iconPrimary, size: 20),
+                  tooltip: 'Retour aux livres',
                   onPressed: () => setState(() => _showingChapters = false),
                 ),
             ],

@@ -57,9 +57,8 @@ class EventsScreen extends ConsumerWidget {
         actions: [
           AnimatedEntrance.fromRight(
             delay: const Duration(milliseconds: 200),
-            child: Semantics(
-              label: 'Voir le calendrier',
-              button: true,
+            child: Tooltip(
+              message: 'Voir le calendrier',
               child: IconButton(
                 icon: Icon(
                   Icons.calendar_month_rounded,
@@ -75,9 +74,8 @@ class EventsScreen extends ConsumerWidget {
           ),
           AnimatedEntrance.fromRight(
             delay: const Duration(milliseconds: 300),
-            child: Semantics(
-              label: 'Filtrer les événements',
-              button: true,
+            child: Tooltip(
+              message: 'Filtrer les événements',
               child: IconButton(
                 icon: Icon(
                   Icons.filter_list_rounded,

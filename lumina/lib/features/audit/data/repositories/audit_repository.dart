@@ -3,17 +3,19 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/audit_log.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/utils/app_date_time.dart';
 import '../models/audit_log_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuditRepository with ChurchFilterMixin {
+class AuditRepository {
   final SupabaseClient _supabase;
   final IsarService _isar;
   final Ref _ref;
 
   AuditRepository(this._supabase, this._isar, this._ref);
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   Future<List<AuditLog>> getFilteredLogs({
     required String churchId,
@@ -77,7 +79,7 @@ class AuditRepository with ChurchFilterMixin {
     String? actorId,
     Map<String, dynamic>? metadata,
   }) async {
-    final churchId = getActiveChurchId(_ref) ?? '';
+    final churchId = _churchId;
     final body = {
       'church_id': churchId,
       'action': action.name,

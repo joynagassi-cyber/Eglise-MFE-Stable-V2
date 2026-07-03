@@ -135,6 +135,7 @@ class _TtsBar extends StatelessWidget {
               color: context.colors.accent,
               size: 32,
             ),
+            tooltip: state == TtsPlaybackState.playing ? 'Mettre en pause' : 'Lire',
             onPressed: state == TtsPlaybackState.playing ? onPause : onPlay,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -142,6 +143,7 @@ class _TtsBar extends StatelessWidget {
           // Stop
           IconButton(
             icon: Icon(Icons.stop_circle_outlined, size: 24),
+            tooltip: 'Arrêter la lecture',
             onPressed: onStop,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
@@ -149,6 +151,7 @@ class _TtsBar extends StatelessWidget {
           // Settings
           IconButton(
             icon: Icon(Icons.tune, size: 20),
+            tooltip: 'Paramètres audio',
             onPressed: onOpenSettings,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 36, minHeight: 36),

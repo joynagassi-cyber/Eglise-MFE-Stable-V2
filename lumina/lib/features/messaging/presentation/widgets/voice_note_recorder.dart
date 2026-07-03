@@ -148,6 +148,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                   child: IconButton(
                     onPressed: _cancel,
                     icon: Icon(Icons.close_rounded),
+                    tooltip: 'Annuler l\'enregistrement',
                     color: context.colors.errorText,
                     iconSize: AppSpacing.iconLg,
                   ),
@@ -195,6 +196,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder>
                     child: IconButton(
                       onPressed: _stopAndSend,
                       icon: Icon(Icons.send_rounded),
+                      tooltip: 'Envoyer la note vocale',
                       color: context.colors.textInverse,
                       iconSize: AppSpacing.iconMd,
                     ),

@@ -63,15 +63,6 @@ class FireDiscoveryCard extends StatelessWidget {
                   right: 0,
                   child: _buildInfoOverlay(context, isDark),
                 ),
-
-                // Badge IA ou badge de type
-                Positioned(
-                  top: 20,
-                  right: 20,
-                  child: post.isAiGenerated
-                      ? _buildAiBadge(context)
-                      : _buildTypeBadge(context, isDark),
-                ),
               ],
             ),
           ),
@@ -175,7 +166,39 @@ class FireDiscoveryCard extends StatelessWidget {
               ),
             ],
           ),
+          // Spacing constant avant le contenu
           SizedBox(height: AppSpacing.md),
+          // Verset biblique (pour les posts IA)
+          if (post.isAiGenerated && post.aiBibleVerse != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: contentColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: contentColor.withOpacity(0.2)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.auto_awesome, size: 14, color: Color(0xFFFFC107)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      post.aiBibleText ?? post.aiBibleVerse ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: contentColor.withOpacity(0.9),
+                        fontStyle: FontStyle.italic,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+          // Contenu du post
           Text(
             post.content,
             maxLines: 4,
@@ -242,70 +265,6 @@ class FireDiscoveryCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
               fontFamily: 'Outfit',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAiBadge(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFF5722), Color(0xFFFFC107)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFFF5722).withOpacity(0.3),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.auto_awesome, size: 12, color: Colors.white),
-          const SizedBox(width: 4),
-          Text(
-            post.aiBibleVerse != null ? '✝ ${post.aiBibleVerse}' : '✨ Verset du Jour',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTypeBadge(BuildContext context, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: context.colors.brandPrimary.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.brandPrimary.withOpacity(0.5), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FaIcon(FontAwesomeIcons.cross, size: 10, color: context.colors.brandPrimary),
-          SizedBox(width: 6),
-          Text(
-            'FOI',
-            style: TextStyle(
-              color: context.colors.brandPrimary,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1,
             ),
           ),
         ],

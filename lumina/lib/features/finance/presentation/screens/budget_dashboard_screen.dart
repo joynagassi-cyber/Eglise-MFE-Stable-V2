@@ -190,6 +190,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
           enabled: true,
           child: _buildActionButton(
             Icons.calendar_today_rounded,
+            'Sélectionner l\'année',
             () => _selectYear(context),
           ),
         ),
@@ -199,6 +200,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
           enabled: true,
           child: _buildActionButton(
             Icons.date_range_rounded,
+            'Sélectionner la période',
             () => _selectPeriod(context),
           ),
         ),
@@ -206,7 +208,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
           label: 'Exporter en PDF',
           button: true,
           enabled: true,
-          child: _buildActionButton(Icons.picture_as_pdf_rounded, () async {
+          child: _buildActionButton(Icons.picture_as_pdf_rounded, 'Exporter en PDF', () async {
             final userContext =
                 ref.read(userContextNotifierProvider).valueOrNull;
             final churchName = userContext?.group?.label ?? 'Mon Église';
@@ -223,6 +225,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
           enabled: true,
           child: _buildActionButton(
             Icons.refresh_rounded,
+            'Actualiser les montants',
             _updateActuals,
           ),
         ),
@@ -231,7 +234,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, VoidCallback onTap) {
+  Widget _buildActionButton(IconData icon, String tooltip, VoidCallback onTap) {
     return Container(
       margin: const EdgeInsets.only(right: AppSpacing.sm),
       decoration: BoxDecoration(
@@ -240,6 +243,7 @@ class _BudgetDashboardScreenState extends ConsumerState<BudgetDashboardScreen> {
       ),
       child: IconButton(
         icon: Icon(icon, color: context.colors.brandPrimary, size: AppSpacing.iconMd),
+        tooltip: tooltip,
         onPressed: () async {
           await HapticHelper.light();
           onTap();

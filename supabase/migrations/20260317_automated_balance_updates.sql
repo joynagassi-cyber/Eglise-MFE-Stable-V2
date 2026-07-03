@@ -13,18 +13,18 @@ BEGIN
     
     -- OLD Record Impact
     IF (TG_OP = 'UPDATE' OR TG_OP = 'DELETE') THEN
-        IF (OLD.type = 'income' AND OLD.status IN ('PENDING_VALIDATION', 'VALIDATED', 'SEALED', 'ARCHIVED')) THEN
+        IF (OLD.type = 'income' AND OLD.status IN ('pending', 'validated', 'sealed', 'archived')) THEN
             v_old_impact := OLD.amount;
-        ELSIF (OLD.type = 'expense' AND OLD.status IN ('VALIDATED', 'SEALED', 'ARCHIVED')) THEN
+        ELSIF (OLD.type = 'expense' AND OLD.status IN ('validated', 'sealed', 'archived')) THEN
             v_old_impact := -OLD.amount;
         END IF;
     END IF;
 
     -- NEW Record Impact
     IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
-        IF (NEW.type = 'income' AND NEW.status IN ('PENDING_VALIDATION', 'VALIDATED', 'SEALED', 'ARCHIVED')) THEN
+        IF (NEW.type = 'income' AND NEW.status IN ('pending', 'validated', 'sealed', 'archived')) THEN
             v_new_impact := NEW.amount;
-        ELSIF (NEW.type = 'expense' AND NEW.status IN ('VALIDATED', 'SEALED', 'ARCHIVED')) THEN
+        ELSIF (NEW.type = 'expense' AND NEW.status IN ('validated', 'sealed', 'archived')) THEN
             v_new_impact := -NEW.amount;
         END IF;
     END IF;
@@ -114,11 +114,11 @@ BEGIN
         p_from_account_id,
         'Transfert vers Caisse Générale',
         CURRENT_DATE,
-        'VALIDATED'::transaction_status,
+        'validated'::transaction_status,
         p_notes
     ) RETURNING (id::uuid) INTO v_transaction_id;
 
-    -- Income to Main (Status VALIDATED instead of 'approved')
+    -- Income to Main (Status validated instead of 'approved')
     INSERT INTO finance_transactions (
         type, 
         amount, 
@@ -133,7 +133,7 @@ BEGIN
         p_to_account_id,
         'Transfert depuis Caisse de Groupe',
         CURRENT_DATE,
-        'VALIDATED'::transaction_status,
+        'validated'::transaction_status,
         p_notes
     );
 

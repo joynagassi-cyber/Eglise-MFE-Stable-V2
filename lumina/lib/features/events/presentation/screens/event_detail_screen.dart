@@ -73,9 +73,8 @@ class EventDetailScreen extends ConsumerWidget {
             expandedHeight: 200,
             pinned: true,
             backgroundColor: Colors.transparent,
-            leading: Semantics(
-              label: 'Retour',
-              button: true,
+            leading: Tooltip(
+              message: 'Retour',
               child: IconButton(
                 icon: Container(
                   padding: const EdgeInsets.all(8),
@@ -189,20 +188,23 @@ class EventDetailScreen extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: context.colors.glassDark.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  event.type.label,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: context.colors.textOnBrand,
-                                    fontWeight: FontWeight.bold,
+                              Hero(
+                                tag: 'event_${event.id}',
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: context.colors.glassDark.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    '${event.type.icon} ${event.type.label}',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: context.colors.textOnBrand,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),

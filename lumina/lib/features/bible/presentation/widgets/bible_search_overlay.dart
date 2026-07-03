@@ -55,6 +55,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.arrow_back),
+                    tooltip: 'Fermer la recherche',
                     onPressed: () {
                       notifier.clearSearch();
                       widget.onClose();
@@ -77,6 +78,7 @@ class _BibleSearchOverlayState extends ConsumerState<BibleSearchOverlay> {
                         suffixIcon: state.searchQuery.isNotEmpty
                             ? IconButton(
                                 icon: Icon(Icons.clear),
+                                tooltip: 'Effacer la recherche',
                                 onPressed: () {
                                   _controller.clear();
                                   notifier.clearSearch();

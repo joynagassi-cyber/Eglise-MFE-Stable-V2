@@ -165,6 +165,7 @@ class _AddAnnonceDialogState extends ConsumerState<AddAnnonceDialog> {
                 }
               },
               icon: Icon(Icons.close, color: Colors.white),
+              tooltip: 'Fermer',
             ),
           ),
         ],

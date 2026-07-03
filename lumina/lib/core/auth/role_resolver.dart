@@ -37,9 +37,10 @@ class RoleResolver {
   /// Determine le rôle principal (celui avec la plus haute priorité)
   static UserRole? resolvePrimaryRole(List<UserRole> roles) {
     if (roles.isEmpty) return null;
-    // Sort by priority descending
-    roles.sort((a, b) => b.priorityLevel.compareTo(a.priorityLevel));
-    return roles.first;
+    // Sort by priority descending (copie pour ne pas muter la liste originale)
+    final sorted = List<UserRole>.from(roles)
+      ..sort((a, b) => b.priorityLevel.compareTo(a.priorityLevel));
+    return sorted.first;
   }
 
   /// Retourne tous les rôles liés à un groupe spécifique

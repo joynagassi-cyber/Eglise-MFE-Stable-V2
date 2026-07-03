@@ -153,6 +153,7 @@ class _PermissionToggle extends ConsumerWidget {
             has ? Icons.check_circle : Icons.cancel,
             color: has ? context.colors.successText : context.colors.errorText,
           ),
+          tooltip: has ? 'Révoquer la permission' : 'Accorder la permission',
           onPressed: () => _toggle(ref, has),
         );
       },

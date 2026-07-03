@@ -8,11 +8,9 @@ import '../../domain/entities/commentaire.dart';
 import '../../domain/repositories/i_annonce_repository.dart';
 import '../models/annonce_model.dart';
 import '../../../../core/data/local/isar_service.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/utils/supabase_extensions.dart';
 
-class AnnonceRepositoryImpl
-    with ChurchFilterMixin
-    implements IAnnonceRepository {
+class AnnonceRepositoryImpl implements IAnnonceRepository {
   final SupabaseClient _supabase;
   final IsarService _isar;
   final Ref _ref;
@@ -83,10 +81,9 @@ class AnnonceRepositoryImpl
         }
       }
 
-      //  ISCHUS: Filtrage church_id automatique
-      final effectiveChurchId = churchId ?? getActiveChurchId(_ref);
-      var query = applyChurchFilter(
-          _supabase.from('annonces').select(), effectiveChurchId);
+      //  ISCHUS: Filtrage church_id automatique via SecureInterceptor
+      var query = _supabase
+          .from('annonces').select().scoped(_ref);
 
       //  Filtrage par groupes d'appartenance
       final userId = _supabase.auth.currentUser?.id;
@@ -165,11 +162,8 @@ class AnnonceRepositoryImpl
         if (localModel != null) return localModel.toDomain();
       }
 
-      final churchId = getActiveChurchId(_ref);
-      final response = await applyChurchFilter(
-        _supabase.from('annonces').select(),
-        churchId,
-      ).eq('id', id).maybeSingle();
+      final response = await _supabase
+          .from('annonces').select().scoped(_ref).eq('id', id).maybeSingle();
       if (response == null) return null;
       return Annonce.fromJson(response);
     } catch (e) {
@@ -248,11 +242,8 @@ class AnnonceRepositoryImpl
     }
 
     try {
-      final churchId = getActiveChurchId(_ref);
-      await applyChurchFilter(
-        _supabase.from('annonces').delete(),
-        churchId,
-      ).eq('id', id);
+      await _supabase
+          .from('annonces').delete().scoped(_ref).eq('id', id);
     } catch (e) {
       _logger.e('Error deleting annonce remote', error: e);
     }

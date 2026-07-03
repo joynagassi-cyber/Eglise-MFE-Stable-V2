@@ -149,22 +149,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
     StorageService storageService,
   ) async {
     final activeChurchId = ref.read(activeChurchIdProvider);
-    final periodType = ref.read(bilanPeriodProvider);
-    final customRange = ref.read(bilanDateRangeProvider);
-    
-    DateTimeRange getRange() {
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      switch (periodType) {
-        case BilanPeriodType.today: return DateTimeRange(start: today, end: today);
-        case BilanPeriodType.week: return DateTimeRange(start: today.subtract(Duration(days: today.weekday - 1)), end: today);
-        case BilanPeriodType.month: return DateTimeRange(start: DateTime(now.year, now.month, 1), end: today);
-        case BilanPeriodType.quarter: return DateTimeRange(start: DateTime(now.year, ((now.month - 1) ~/ 3) * 3 + 1, 1), end: today);
-        case BilanPeriodType.ytd: return DateTimeRange(start: DateTime(now.year, 1, 1), end: today);
-        case BilanPeriodType.custom: return customRange ?? DateTimeRange(start: today, end: today);
-      }
-    }
-    final range = getRange();
+    final range = ref.read(bilanComputedDateRangeProvider);
     
     final repo = ref.read(bilanRepositoryProvider);
     final fecService = ref.read(fecExportServiceProvider);
@@ -176,6 +161,7 @@ class _BilanScreenState extends ConsumerState<BilanScreen>
 
     try {
       final lines = await repo.getFecLines(
+        churchId: activeChurchId,
         startDate: range.start,
         endDate: range.end,
       );

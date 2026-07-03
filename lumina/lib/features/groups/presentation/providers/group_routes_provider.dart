@@ -2,7 +2,7 @@
 
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../../core/theme/app_animations.dart';
+import '../../../../core/router/transition_factory.dart';
 import '../screens/group_list_screen.dart';
 import '../screens/group_form_screen.dart';
 import '../screens/group_detail_screen.dart';
@@ -32,8 +32,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
         GoRoute(
           path: 'nouveau',
           parentNavigatorKey: rootNavigatorKey,
-          pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.form,
             child: const RouteGuard(
               requiredPermissions: {Permission.membersCreate},
               child: GroupFormScreen(),
@@ -43,8 +45,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
         GoRoute(
           path: ':id',
           parentNavigatorKey: rootNavigatorKey,
-          pageBuilder: (context, state) => AppAnimations.slideRightPage(
-            key: state.pageKey,
+          pageBuilder: (context, state) => TransitionFactory.buildPage(
+            context: context,
+            state: state,
+            type: PageType.detail,
             child: RouteGuard(
               requiredPermissions: const {Permission.membersView},
               child: GroupDetailScreen(groupId: state.pathParameters['id'] ?? ''),
@@ -53,8 +57,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
           routes: [
             GoRoute(
               path: 'modifier',
-              pageBuilder: (context, state) => AppAnimations.slideBottomPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.form,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersEdit},
                   child: GroupFormScreen(groupId: state.pathParameters['id']),
@@ -63,8 +69,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
             ),
             GoRoute(
               path: 'chorale',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersView},
                   child: ChoraleDashboardScreen(groupId: state.pathParameters['id'] ?? ''),
@@ -73,8 +81,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
             ),
             GoRoute(
               path: 'hommes',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersView},
                   child: HommesDashboardScreen(groupId: state.pathParameters['id'] ?? ''),
@@ -83,8 +93,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
             ),
             GoRoute(
               path: 'femmes',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersView},
                   child: FemmesDashboardScreen(groupId: state.pathParameters['id'] ?? ''),
@@ -93,8 +105,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
             ),
             GoRoute(
               path: 'enfants',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: const RouteGuard(
                   requiredPermissions: {Permission.membersView},
                   child: EnfantsDashboardScreen(),
@@ -103,8 +117,10 @@ List<RouteBase> groupRoutes(GroupRoutesRef ref) {
             ),
             GoRoute(
               path: 'intercession',
-              pageBuilder: (context, state) => AppAnimations.slideRightPage(
-                key: state.pageKey,
+              pageBuilder: (context, state) => TransitionFactory.buildPage(
+                context: context,
+                state: state,
+                type: PageType.detail,
                 child: RouteGuard(
                   requiredPermissions: const {Permission.membersView},
                   child: IntercessionDashboardScreen(groupId: state.pathParameters['id'] ?? ''),

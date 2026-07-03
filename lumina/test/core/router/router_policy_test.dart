@@ -69,7 +69,7 @@ void main() {
       expect(status, RouteStatus.onboarding);
     });
 
-    test('returns loading while profile is loading for authenticated user', () {
+    test('returns authenticated even when profile is loading (FIX: ne pas flash au splash)', () {
       final status = RouterPolicy.resolveStatus(
         AsyncData<app_auth.AuthState>(
           app_auth.AuthAuthenticated(
@@ -80,7 +80,7 @@ void main() {
         const AsyncLoading<Profile?>(),
       );
 
-      expect(status, RouteStatus.loading);
+      expect(status, RouteStatus.authenticated);
     });
 
     test('returns authenticated when profile load fails', () {
@@ -100,7 +100,7 @@ void main() {
       expect(status, RouteStatus.authenticated);
     });
 
-    test('returns onboarding when profile still requires onboarding', () {
+    test('returns authenticated even when profile needs onboarding (auth est source de vérité)', () {
       final status = RouterPolicy.resolveStatus(
         AsyncData<app_auth.AuthState>(
           app_auth.AuthAuthenticated(
@@ -112,7 +112,7 @@ void main() {
             _profile(needsOnboarding: true, roleLevel: 'visitor')),
       );
 
-      expect(status, RouteStatus.onboarding);
+      expect(status, RouteStatus.authenticated);
     });
 
     test('returns authenticated for a healthy authenticated user', () {

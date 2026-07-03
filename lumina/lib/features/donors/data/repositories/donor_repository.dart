@@ -4,9 +4,9 @@ import '../../../../core/mixins/auditable_mixin.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
 import 'package:lumina/features/donors/domain/repositories/i_donor_repository.dart';
 import 'package:lumina/features/donors/data/models/donor_models.dart';
-import 'package:lumina/core/utils/church_filter_mixin.dart';
+import 'package:lumina/core/utils/supabase_extensions.dart';
 
-class DonorRepository with ChurchFilterMixin, AuditableMixin implements IDonorRepository {
+class DonorRepository with AuditableMixin implements IDonorRepository {
   final SupabaseClient _supabase;
   final Ref _ref;
 
@@ -14,9 +14,7 @@ class DonorRepository with ChurchFilterMixin, AuditableMixin implements IDonorRe
 
   @override
   Future<List<Donor>> getDonors({required String? churchId}) async {
-    // Utilisation du mixin pour sécuriser la requête
-    var query = _supabase.from('donors').select();
-    query = applyChurchFilter(query, churchId);
+    var query = _supabase.from('donors').select().scoped(_ref);
 
     final data = await query.eq('is_active', true).order('display_name');
     return (data as List).map((e) => Donor.fromJson(e)).toList();
@@ -120,8 +118,7 @@ class DonorRepository with ChurchFilterMixin, AuditableMixin implements IDonorRe
   Future<List<DonationCampaign>> getDonationCampaigns({
     required String? churchId,
   }) async {
-    var query = _supabase.from('donation_campaigns').select();
-    query = applyChurchFilter(query, churchId);
+    var query = _supabase.from('donation_campaigns').select().scoped(_ref);
 
     final data = await query.order('created_at', ascending: false);
     return (data as List).map((e) => DonationCampaign.fromJson(e)).toList();
@@ -180,8 +177,7 @@ class DonorRepository with ChurchFilterMixin, AuditableMixin implements IDonorRe
     try {
       // On récupère les colonnes pertinentes de tous les donateurs pour agréger
       var query =
-          _supabase.from('donors').select('total_donated, donation_count');
-      query = applyChurchFilter(query, churchId);
+          _supabase.from('donors').select('total_donated, donation_count').scoped(_ref);
 
       final donorsRaw = await query.eq('is_active', true);
       final donors = donorsRaw as List;

@@ -117,6 +117,7 @@ class VerseActionBar extends ConsumerWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: Icon(Icons.format_color_reset, color: context.colors.textPrimary, size: 20),
+                tooltip: 'Supprimer les surlignages',
                 onPressed: () {
                   // TODO: Implement color removal
                   onClear();

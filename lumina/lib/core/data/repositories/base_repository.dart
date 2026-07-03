@@ -2,12 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../local/isar_service.dart';
 import '../../utils/retry_helper.dart';
-import '../../utils/church_filter_mixin.dart';
 import '../../utils/supabase_extensions.dart';
 import '../../performance/performance_monitor.dart';
 
 /// Repository de base avec fonctionnalités communes
-abstract class BaseRepository<T> with ChurchFilterMixin {
+abstract class BaseRepository<T> {
   final SupabaseClient supabase;
   final IsarService isar;
   final Ref ref;

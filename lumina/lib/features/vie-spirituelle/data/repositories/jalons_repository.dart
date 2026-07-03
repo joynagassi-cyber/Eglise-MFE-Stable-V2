@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/services/offline_sync_manager.dart';
-import '../../../../core/utils/church_filter_mixin.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../domain/entities/jalon_spirituel.dart';
 import '../models/jalon_spirituel_model.dart';
 import '../../../../core/utils/app_date_time.dart';
@@ -77,13 +77,15 @@ final jalonsRepositoryProvider = Provider<JalonsRepository>((ref) {
   return JalonsRepository(supabase, isar, syncManager, ref);
 });
 
-class JalonsRepository with ChurchFilterMixin {
+class JalonsRepository {
   final SupabaseClient _supabase;
   final IsarService _isarService;
   final OfflineSyncManager _syncManager;
   final Ref _ref;
 
   JalonsRepository(this._supabase, this._isarService, this._syncManager, this._ref);
+
+  String get _churchId => _ref.read(activeChurchIdProvider);
 
   Future<List<JalonSpirituel>> getAll() async {
     if (!_isarService.isReady) {
@@ -145,7 +147,7 @@ class JalonsRepository with ChurchFilterMixin {
     String? temoin,
     String? notes,
   }) async {
-    final churchId = getActiveChurchId(_ref);
+    final churchId = _churchId;
     final id = AppDateTime.tempId();
     
     final membreJalon = MembreJalon(
@@ -168,7 +170,7 @@ class JalonsRepository with ChurchFilterMixin {
         entityType: 'membres_jalons',
         action: 'INSERT',
         payload: membreJalon.toJson(),
-        churchId: churchId ?? '',
+        churchId: churchId,
         recordId: id,
       );
     } else {

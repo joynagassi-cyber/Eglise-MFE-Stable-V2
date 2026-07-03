@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+JalonSpirituel _$JalonSpirituelFromJson(Map<String, dynamic> json) {
+  return _JalonSpirituel.fromJson(json);
+}
+
 /// @nodoc
 mixin _$JalonSpirituel {
   String get id => throw _privateConstructorUsedError;
@@ -26,6 +30,7 @@ mixin _$JalonSpirituel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $JalonSpirituelCopyWith<JalonSpirituel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -196,7 +201,7 @@ class __$$JalonSpirituelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$JalonSpirituelImpl extends _JalonSpirituel {
   const _$JalonSpirituelImpl(
       {required this.id,
@@ -209,6 +214,9 @@ class _$JalonSpirituelImpl extends _JalonSpirituel {
       this.createdAt,
       this.updatedAt})
       : super._();
+
+  factory _$JalonSpirituelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$JalonSpirituelImplFromJson(json);
 
   @override
   final String id;
@@ -261,6 +269,7 @@ class _$JalonSpirituelImpl extends _JalonSpirituel {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, titre, description, iconName,
       colorHex, order, isActive, createdAt, updatedAt);
@@ -271,6 +280,13 @@ class _$JalonSpirituelImpl extends _JalonSpirituel {
   _$$JalonSpirituelImplCopyWith<_$JalonSpirituelImpl> get copyWith =>
       __$$JalonSpirituelImplCopyWithImpl<_$JalonSpirituelImpl>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$JalonSpirituelImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _JalonSpirituel extends JalonSpirituel {
@@ -285,6 +301,9 @@ abstract class _JalonSpirituel extends JalonSpirituel {
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$JalonSpirituelImpl;
   const _JalonSpirituel._() : super._();
+
+  factory _JalonSpirituel.fromJson(Map<String, dynamic> json) =
+      _$JalonSpirituelImpl.fromJson;
 
   @override
   String get id;
@@ -310,6 +329,10 @@ abstract class _JalonSpirituel extends JalonSpirituel {
       throw _privateConstructorUsedError;
 }
 
+MembreJalon _$MembreJalonFromJson(Map<String, dynamic> json) {
+  return _MembreJalon.fromJson(json);
+}
+
 /// @nodoc
 mixin _$MembreJalon {
   String get id => throw _privateConstructorUsedError;
@@ -321,6 +344,7 @@ mixin _$MembreJalon {
   String get notes => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $MembreJalonCopyWith<MembreJalon> get copyWith =>
       throw _privateConstructorUsedError;
@@ -479,7 +503,7 @@ class __$$MembreJalonImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$MembreJalonImpl extends _MembreJalon {
   const _$MembreJalonImpl(
       {required this.id,
@@ -491,6 +515,9 @@ class _$MembreJalonImpl extends _MembreJalon {
       this.notes = '',
       this.createdAt})
       : super._();
+
+  factory _$MembreJalonImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MembreJalonImplFromJson(json);
 
   @override
   final String id;
@@ -535,6 +562,7 @@ class _$MembreJalonImpl extends _MembreJalon {
                 other.createdAt == createdAt));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, membreId, jalonId,
       dateRealisation, lieu, temoin, notes, createdAt);
@@ -544,6 +572,13 @@ class _$MembreJalonImpl extends _MembreJalon {
   @pragma('vm:prefer-inline')
   _$$MembreJalonImplCopyWith<_$MembreJalonImpl> get copyWith =>
       __$$MembreJalonImplCopyWithImpl<_$MembreJalonImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MembreJalonImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _MembreJalon extends MembreJalon {
@@ -557,6 +592,9 @@ abstract class _MembreJalon extends MembreJalon {
       final String notes,
       final DateTime? createdAt}) = _$MembreJalonImpl;
   const _MembreJalon._() : super._();
+
+  factory _MembreJalon.fromJson(Map<String, dynamic> json) =
+      _$MembreJalonImpl.fromJson;
 
   @override
   String get id;
@@ -580,6 +618,10 @@ abstract class _MembreJalon extends MembreJalon {
       throw _privateConstructorUsedError;
 }
 
+JalonStats _$JalonStatsFromJson(Map<String, dynamic> json) {
+  return _JalonStats.fromJson(json);
+}
+
 /// @nodoc
 mixin _$JalonStats {
   String get jalonId => throw _privateConstructorUsedError;
@@ -588,6 +630,7 @@ mixin _$JalonStats {
   int get nombreMembres => throw _privateConstructorUsedError;
   DateTime? get derniereRealisation => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $JalonStatsCopyWith<JalonStats> get copyWith =>
       throw _privateConstructorUsedError;
@@ -710,7 +753,7 @@ class __$$JalonStatsImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$JalonStatsImpl extends _JalonStats {
   const _$JalonStatsImpl(
       {required this.jalonId,
@@ -719,6 +762,9 @@ class _$JalonStatsImpl extends _JalonStats {
       this.nombreMembres = 0,
       this.derniereRealisation})
       : super._();
+
+  factory _$JalonStatsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$JalonStatsImplFromJson(json);
 
   @override
   final String jalonId;
@@ -752,6 +798,7 @@ class _$JalonStatsImpl extends _JalonStats {
                 other.derniereRealisation == derniereRealisation));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, jalonId, titre, colorHex,
       nombreMembres, derniereRealisation);
@@ -761,6 +808,13 @@ class _$JalonStatsImpl extends _JalonStats {
   @pragma('vm:prefer-inline')
   _$$JalonStatsImplCopyWith<_$JalonStatsImpl> get copyWith =>
       __$$JalonStatsImplCopyWithImpl<_$JalonStatsImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$JalonStatsImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _JalonStats extends JalonStats {
@@ -771,6 +825,9 @@ abstract class _JalonStats extends JalonStats {
       final int nombreMembres,
       final DateTime? derniereRealisation}) = _$JalonStatsImpl;
   const _JalonStats._() : super._();
+
+  factory _JalonStats.fromJson(Map<String, dynamic> json) =
+      _$JalonStatsImpl.fromJson;
 
   @override
   String get jalonId;

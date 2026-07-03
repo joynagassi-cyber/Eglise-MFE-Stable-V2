@@ -69,7 +69,7 @@ BEGIN
     AND EXTRACT(MONTH FROM date) = p_month
     AND status != 'draft';
 
-  -- Calculer le breakdown par catégorie
+  -- Calculer le breakdown par catégorie (format JSONB pour stockage)
   SELECT jsonb_object_agg(category_name, cat_total) INTO v_breakdown
   FROM (
     SELECT category_name, SUM(amount) as cat_total
@@ -81,18 +81,46 @@ BEGIN
     GROUP BY category_name
   ) sub;
 
-  -- Générer le hash de scellage (SHA-256)
+  -- Générer le hash de scellage (SHA-256) — déterministe, basé uniquement sur les données
+  -- Même jeu de données → même hash, vérifiable côté client
+  -- Format: church_id||year||month||income||expense||net||cat1:amt1,cat2:amt2 (trié par catégorie)
+  -- Les montants sont formatés avec ROUND(val, 2)::text qui correspond à toStringAsFixed(2) en Dart
   v_hash := encode(
     digest(
       p_church_id::text || p_year::text || p_month::text
-        || v_totals.total_income::text || v_totals.total_expense::text
-        || now()::text,
+        || ROUND(v_totals.total_income, 2)::text || ROUND(v_totals.total_expense, 2)::text
+        || ROUND((v_totals.total_income - v_totals.total_expense), 2)::text
+        || COALESCE(
+          (SELECT string_agg(category_name || ':' || ROUND(cat_total, 2)::text, ',' ORDER BY category_name)
+           FROM (
+             SELECT category_name, SUM(amount) as cat_total
+             FROM finance_transactions
+             WHERE church_id = p_church_id
+               AND EXTRACT(YEAR FROM date) = p_year
+               AND EXTRACT(MONTH FROM date) = p_month
+               AND status != 'draft'
+             GROUP BY category_name
+           ) sub),
+          ''
+        ),
       'sha256'
     ),
     'hex'
   );
 
-  -- Upsert bilan_periods
+  -- Vérifier que la période n'est pas déjà scellée (protection anti-écrasement)
+  IF EXISTS (
+    SELECT 1 FROM bilan_periods
+    WHERE church_id = p_church_id
+      AND year = p_year
+      AND month = p_month
+      AND status = 'sealed'
+  ) THEN
+    RAISE EXCEPTION 'La période %/% est déjà scellée. Utilisez descellage d''abord.', p_month, p_year
+      USING HINT = 'Appelez unseal_period avant de re-sceller une période déjà scellée';
+  END IF;
+
+  -- Upsert bilan_periods (INSERT car sealed est exclusif via le check ci-dessus)
   INSERT INTO bilan_periods (church_id, year, month, status, sealed_at, sealed_by, seal_hash, total_income, total_expense, net_balance, category_breakdown)
   VALUES (
     p_church_id, 
@@ -117,6 +145,7 @@ BEGIN
     total_expense = v_totals.total_expense,
     net_balance = v_totals.total_income - v_totals.total_expense,
     category_breakdown = COALESCE(v_breakdown, '{}'::jsonb),
+    notes = CASE WHEN bilan_periods.status = 'open' THEN NULL ELSE bilan_periods.notes END,
     updated_at = now();
 
   RETURN jsonb_build_object(

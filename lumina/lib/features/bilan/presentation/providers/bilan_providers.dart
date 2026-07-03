@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/models/bilan_period.dart';
 import '../../domain/entities/bilan_entities.dart';
 export '../../domain/entities/bilan_entities.dart';
 import '../../domain/services/number_formatter_service.dart';
@@ -15,6 +16,10 @@ import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/mixins/auditable_mixin.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
 import 'dart:async';
+
+// Note: bilanSnapshotProvider et internalTransfersProvider ont été supprimés
+// car leurs méthodes sous-jacentes (getPeriodSnapshot → null,
+// getInternalTransfers → []) ne faisaient rien.
 
 // Redundant provider removed to use the split repository provider module.
 
@@ -49,7 +54,7 @@ final bilanExcludeInternalProvider = StateProvider<bool>((ref) {
 });
 
 /// Computed date range based on period type
-DateTimeRange _computeDateRange(BilanPeriodType type, DateTimeRange? custom) {
+DateTimeRange computeBilanDateRange(BilanPeriodType type, DateTimeRange? custom) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
 
@@ -73,6 +78,13 @@ DateTimeRange _computeDateRange(BilanPeriodType type, DateTimeRange? custom) {
       return custom ?? DateTimeRange(start: today, end: today);
   }
 }
+
+/// Provider: Shared computed date range (removes duplication with bilan_screen.dart)
+final bilanComputedDateRangeProvider = Provider<DateTimeRange>((ref) {
+  final type = ref.watch(bilanPeriodProvider);
+  final custom = ref.watch(bilanDateRangeProvider);
+  return computeBilanDateRange(type, custom);
+});
 
 /// Helper for N-1 comparison (Previous Period)
 DateTimeRange _getPreviousRange(
@@ -104,14 +116,14 @@ final bilanPerGroupProvider = FutureProvider<List<BilanGroupSummary>>((
   ref,
 ) async {
   final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
+  final churchId = ref.watch(activeChurchIdProvider);
   final includeDrafts = ref.watch(bilanIncludeDraftsProvider);
   final excludeInternal = ref.watch(bilanExcludeInternalProvider);
 
-  final range = _computeDateRange(period, customRange);
+  final range = ref.watch(bilanComputedDateRangeProvider);
 
   final data = await repo.getBilanPerGroup(
+    churchId: churchId,
     startDate: range.start,
     endDate: range.end,
     includeDrafts: includeDrafts,
@@ -135,13 +147,13 @@ final consolidatedBilanProvider = FutureProvider<ConsolidatedBilan>((
   ref,
 ) async {
   final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
+  final churchId = ref.watch(activeChurchIdProvider);
   final selectedGroups = ref.watch(bilanSelectedGroupsProvider);
 
-  final range = _computeDateRange(period, customRange);
+  final range = ref.watch(bilanComputedDateRangeProvider);
 
   return repo.getConsolidatedBilan(
+    churchId: churchId,
     startDate: range.start,
     endDate: range.end,
     groupIds: selectedGroups,
@@ -154,14 +166,15 @@ final bilanVariationProvider = FutureProvider<Map<String, BilanVariation>>((
 ) async {
   final repo = ref.watch(bilanRepositoryProvider);
   final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
   final selectedGroups = ref.watch(bilanSelectedGroupsProvider);
 
-  final currentRange = _computeDateRange(period, customRange);
+  final currentRange = ref.watch(bilanComputedDateRangeProvider);
   final previousRange = _getPreviousRange(period, currentRange);
 
   final current = await ref.watch(consolidatedBilanProvider.future);
+  final churchId = ref.watch(activeChurchIdProvider);
   final previous = await repo.getConsolidatedBilan(
+    churchId: churchId,
     startDate: previousRange.start,
     endDate: previousRange.end,
     groupIds: selectedGroups,
@@ -196,9 +209,13 @@ final bilanAnomaliesProvider = FutureProvider<List<TransactionAnomaly>>((
   ref,
 ) async {
   final repo = ref.watch(bilanRepositoryProvider);
+  final churchId = ref.watch(activeChurchIdProvider);
   final settings = await ref.watch(financialSettingsProvider.future);
 
-  return repo.detectAnomalies(threshold: settings.anomalySigmaThreshold);
+  return repo.detectAnomalies(
+    churchId: churchId,
+    threshold: settings.anomalySigmaThreshold,
+  );
 });
 
 /// Available currencies (async)
@@ -228,12 +245,15 @@ final bilanCsvServiceProvider = Provider((ref) => BilanCsvService());
 /// FEC Lines provider (async)
 final bilanFecLinesProvider = FutureProvider<List<FecLine>>((ref) async {
   final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
+  final churchId = ref.watch(activeChurchIdProvider);
 
-  final range = _computeDateRange(period, customRange);
+  final range = ref.watch(bilanComputedDateRangeProvider);
 
-  return repo.getFecLines(startDate: range.start, endDate: range.end);
+  return repo.getFecLines(
+    churchId: churchId,
+    startDate: range.start,
+    endDate: range.end,
+  );
 });
 
 /// Sealing Service provider
@@ -254,11 +274,9 @@ final bilanHeatmapProvider = FutureProvider<List<BilanHeatmapPoint>>((
   ref,
 ) async {
   final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
   final selectedGroups = ref.watch(bilanSelectedGroupsProvider);
 
-  final range = _computeDateRange(period, customRange);
+  final range = ref.watch(bilanComputedDateRangeProvider);
 
   // For heatmap, we usually only care about the first selected group or global
   final groupId =
@@ -269,30 +287,6 @@ final bilanHeatmapProvider = FutureProvider<List<BilanHeatmapPoint>>((
     endDate: range.end,
     groupId: groupId,
   );
-});
-
-/// Period Snapshot provider (async)
-final bilanSnapshotProvider = FutureProvider<ReportSnapshot?>((ref) async {
-  final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
-
-  final range = _computeDateRange(period, customRange);
-
-  return repo.getPeriodSnapshot(startDate: range.start, endDate: range.end);
-});
-
-/// Internal Transfers provider (async) - for consolidation detail
-final internalTransfersProvider = FutureProvider<List<BilanTransaction>>((
-  ref,
-) async {
-  final repo = ref.watch(bilanRepositoryProvider);
-  final period = ref.watch(bilanPeriodProvider);
-  final customRange = ref.watch(bilanDateRangeProvider);
-
-  final range = _computeDateRange(period, customRange);
-
-  return repo.getInternalTransfers(startDate: range.start, endDate: range.end);
 });
 
 /// Drill down transactions provider (async) - Item #02
@@ -327,12 +321,10 @@ final bilanSelectedYearProvider = StateProvider<int>((ref) => DateTime.now().yea
 final bilanOilModeProvider = StateProvider<bool>((ref) => false);
 
 /// List of periods for the selected year
-final bilanPeriodsProvider = FutureProvider.family<List<dynamic>, int>((ref, year) async {
+final bilanPeriodsProvider = FutureProvider.family<List<BilanPeriod>, int>((ref, year) async {
   final repo = ref.watch(bilanRepositoryProvider);
   final churchId = ref.watch(activeChurchIdProvider);
   
-  // Note: Cast as dynamic because the model import might not be explicit here, 
-  // but it's guaranteed to be BilanPeriod from the repository.
   return repo.getBilanPeriods(churchId: churchId, year: year);
 });
 

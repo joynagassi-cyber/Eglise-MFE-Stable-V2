@@ -35,17 +35,24 @@ class _MemberListScreenState extends ConsumerState<MemberListScreen> {
       title: _isSearching ? null : "Annuaire des Brebis",
       onRefresh: () => ref.read(paginatedMembersProvider.notifier).refresh(),
       actions: [
-        IconButton(
-          icon: Icon(_isSearching ? Icons.close : Icons.search),
-          onPressed: () {
-            setState(() {
-              _isSearching = !_isSearching;
-              if (!_isSearching) {
-                _searchController.clear();
-                ref.read(memberSearchProvider.notifier).state = '';
-              }
-            });
-          },
+        Semantics(
+          label: _isSearching ? 'Fermer la recherche' : 'Rechercher un membre',
+          button: true,
+          child: Tooltip(
+            message: _isSearching ? 'Fermer' : 'Rechercher',
+            child: IconButton(
+              icon: Icon(_isSearching ? Icons.close : Icons.search),
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                  if (!_isSearching) {
+                    _searchController.clear();
+                    ref.read(memberSearchProvider.notifier).state = '';
+                  }
+                });
+              },
+            ),
+          ),
         ),
       ],
       floatingActionButton: FloatingActionButton.extended(

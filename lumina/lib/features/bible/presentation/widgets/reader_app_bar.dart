@@ -84,6 +84,7 @@ class _OverflowMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<String>(
       icon: Icon(Icons.more_vert),
+      tooltip: 'Plus d\'options',
       onSelected: (value) async {
         final notifier = ref.read(bibleNotifierProvider.notifier);
         switch (value) {

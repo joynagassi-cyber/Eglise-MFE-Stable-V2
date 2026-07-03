@@ -33,9 +33,8 @@ class CalendarScreen extends ConsumerWidget {
           style: AppTypography.h3.copyWith(fontFamily: 'Outfit'),
         ),
         actions: [
-          Semantics(
-            label: 'Retour à aujourd\'hui',
-            button: true,
+          Tooltip(
+            message: "Retour à aujourd'hui",
             child: IconButton(
               icon: Icon(Icons.calendar_today_rounded,
                 color: context.colors.brandPrimaryFire,

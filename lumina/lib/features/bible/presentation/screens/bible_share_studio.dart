@@ -60,6 +60,7 @@ class _BibleShareStudioState extends ConsumerState<BibleShareStudio> {
           IconButton(
             icon: Icon(Icons.check_circle_rounded,
                 color: context.colors.accent),
+            tooltip: 'Partager l\'image',
             onPressed: _shareImage,
           ),
         ],

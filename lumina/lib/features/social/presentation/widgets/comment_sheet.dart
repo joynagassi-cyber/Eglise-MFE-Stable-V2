@@ -91,9 +91,16 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: context.colors.textPrimary),
                 ),
                 Spacer(),
-                IconButton(
-                  icon: Icon(Icons.close_rounded),
-                  onPressed: () => Navigator.pop(context),
+                Semantics(
+                  label: 'Fermer les commentaires',
+                  button: true,
+                  child: Tooltip(
+                    message: 'Fermer',
+                    child: IconButton(
+                      icon: Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -201,16 +208,23 @@ class _CommentSheetState extends ConsumerState<CommentSheet> {
                   ),
                 ),
                 SizedBox(width: 8),
-                IconButton(
-                  onPressed: _isSending ? null : _sendComment,
-                  icon: _isSending
-                      ? const ShimmerBox(
-                          width: 20,
-                          height: 20,
-                          borderRadius: 10,
-                        )
-                      : Icon(Icons.send_rounded,
-                          color: context.colors.brandPrimary),
+                Semantics(
+                  label: 'Envoyer le commentaire',
+                  button: true,
+                  child: Tooltip(
+                    message: 'Envoyer',
+                    child: IconButton(
+                      onPressed: _isSending ? null : _sendComment,
+                      icon: _isSending
+                          ? const ShimmerBox(
+                              width: 20,
+                              height: 20,
+                              borderRadius: 10,
+                            )
+                          : Icon(Icons.send_rounded,
+                              color: context.colors.brandPrimary),
+                    ),
+                  ),
                 ),
               ],
             ),

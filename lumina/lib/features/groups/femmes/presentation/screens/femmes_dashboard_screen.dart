@@ -178,6 +178,7 @@ class _FemmesDashboardScreenState extends ConsumerState<FemmesDashboardScreen>
         ),
       ),
       leading: IconButton(
+        tooltip: 'Retour',
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

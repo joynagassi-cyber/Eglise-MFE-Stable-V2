@@ -59,9 +59,16 @@ class _AddGroupMemberDialogState extends ConsumerState<AddGroupMemberDialog> {
                     color: context.colors.textPrimary,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.close_rounded, color: context.colors.textSecondary),
-                  onPressed: () => Navigator.pop(context),
+                Semantics(
+                  label: 'Fermer',
+                  button: true,
+                  child: Tooltip(
+                    message: 'Fermer',
+                    child: IconButton(
+                      icon: Icon(Icons.close_rounded, color: context.colors.textSecondary),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
               ],
             ),

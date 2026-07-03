@@ -87,6 +87,7 @@ class AnnonceDetailScreen extends ConsumerWidget {
                     size: AppSpacing.iconSm,
                   ),
                 ),
+                tooltip: 'Retour',
                 onPressed: () async {
                   await HapticHelper.light();
                   if (context.mounted) context.pop();

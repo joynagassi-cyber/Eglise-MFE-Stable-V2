@@ -272,6 +272,7 @@ class _AddTransactionDialogState extends ConsumerState<AddTransactionDialog> {
                             radius: 18,
                             child: IconButton(
                               icon: Icon(Icons.close_rounded, size: 16, color: Colors.white),
+                              tooltip: 'Supprimer la preuve',
                               onPressed: () async {
                                 await HapticHelper.light();
                                 setState(() => _proofImage = null);
