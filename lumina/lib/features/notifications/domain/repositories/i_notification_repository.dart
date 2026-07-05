@@ -25,4 +25,60 @@ abstract class INotificationRepository {
 
   /// Watch notifications stream (real-time)
   Stream<List<AppNotificationEntity>> watchNotifications();
+
+  /// Create a single notification via Supabase RPC
+  Future<AppNotificationEntity?> createNotification({
+    required String userId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+    String? churchId,
+  });
+
+  /// Create notifications for all members of a group
+  Future<int> createNotificationsForGroup({
+    required String groupId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  });
+
+  /// Create notifications for all admins of a church
+  Future<int> createNotificationsForAdmins({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  });
+
+  /// Create notifications for all group leaders of a church
+  Future<int> createNotificationsForGroupLeaders({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  });
+
+  /// Create notifications for all members of a church
+  Future<int> createNotificationsForAllMembers({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  });
 }

@@ -1,25 +1,23 @@
-// import 'package:lumina/core/theme/lumina_colors_extension.dart';
+import 'dart:async';
 import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/services/notifications/notification_provider.dart';
-import '../../../../core/services/notifications/notification_service.dart';
 import 'package:lumina/core/theme/app_spacing.dart';
 import '../../../../core/utils/haptic_helper.dart';
 import '../../../../core/widgets/animated_entrance.dart';
 import '../../../../core/widgets/empty_state.dart';
-// import 'package:lumina/core/extensions/build_context_extensions.dart';
+import '../controllers/notification_controller.dart';
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifications = ref.watch(notificationsProvider);
-    final service = ref.watch(notificationServiceProvider);
+    final notificationsAsync = ref.watch(notificationListProvider);
+    final controller = ref.watch(notificationControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,78 +35,98 @@ class NotificationsScreen extends ConsumerWidget {
             },
           ),
         ),
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
         actions: [
-          if (notifications.isNotEmpty)
+          if (notificationsAsync is AsyncData &&
+              notificationsAsync.valueOrNull != null &&
+              notificationsAsync.valueOrNull!.isNotEmpty)
             Semantics(
               label: 'Tout marquer comme lu',
               button: true,
               child: TextButton(
                 onPressed: () async {
                   await HapticHelper.medium();
-                  service.markAllAsRead();
+                  await controller.markAllAsRead();
                   await HapticHelper.success();
                 },
-                child: Text('Tout marquer lu'),
+                child: const Text('Tout marquer lu'),
               ),
             ),
-          if (notifications.isNotEmpty)
+          if (notificationsAsync is AsyncData &&
+              notificationsAsync.valueOrNull != null &&
+              notificationsAsync.valueOrNull!.isNotEmpty)
             Semantics(
               label: 'Tout supprimer',
               button: true,
               child: Tooltip(
                 message: 'Tout supprimer',
                 child: IconButton(
-                  icon: Icon(Icons.delete_sweep),
+                  icon: const Icon(Icons.delete_sweep),
                   onPressed: () async {
                     await HapticHelper.warning();
-                    service.clearAll();
+                    await controller.clearAll();
                   },
                 ),
               ),
             ),
         ],
       ),
-      body: notifications.isEmpty
-          ? const AnimatedEntrance.fade(
+      body: notificationsAsync.when(
+        data: (notifications) {
+          if (notifications.isEmpty) {
+            return const AnimatedEntrance.fade(
               delay: Duration(milliseconds: 200),
               child: EmptyState(
                 icon: Icons.notifications_none_rounded,
                 title: 'Aucune notification',
-                subtitle: 'Vous serez notifié des événements importants',
+                subtitle: 'Vous serez notifie des evenements importants',
               ),
-            )
-          : ListView.separated(
-              padding: AppSpacing.screenPadding,
-              itemCount: notifications.length,
-              separatorBuilder: (_, __) => Divider(height: 1),
-              itemBuilder: (context, index) {
-                final notification = notifications[index];
-                return AnimatedEntrance.fromLeft(
-                  delay: Duration(milliseconds: 50 + (index * 50)),
-                  child: _NotificationTile(notification: notification),
-                );
-              },
-            ),
+            );
+          }
+          return ListView.separated(
+            padding: AppSpacing.screenPadding,
+            itemCount: notifications.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final notification = notifications[index];
+              return AnimatedEntrance.fromLeft(
+                delay: Duration(milliseconds: 50 + (index * 50)),
+                child: _NotificationTile(notification: notification),
+              );
+            },
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => AnimatedEntrance.fade(
+          delay: const Duration(milliseconds: 200),
+          child: EmptyState(
+            icon: Icons.error_outline,
+            title: 'Erreur de chargement',
+            subtitle: error.toString(),
+          ),
+        ),
+      ),
     );
   }
+
+
 }
 
 class _NotificationTile extends ConsumerWidget {
-  final AppNotification notification;
+  final NotificationDisplayItem notification;
 
   const _NotificationTile({required this.notification});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final service = ref.watch(notificationServiceProvider);
+    final controller = ref.watch(notificationControllerProvider.notifier);
 
     return Semantics(
       label: '${notification.title}, ${notification.body}',
       customSemanticsActions: {
         const CustomSemanticsAction(label: 'Supprimer'): () {
-          service.deleteNotification(notification.id);
+          unawaited(controller.deleteNotification(notification.id));
         },
       },
       child: Dismissible(
@@ -118,7 +136,7 @@ class _NotificationTile extends ConsumerWidget {
           color: Colors.red,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: AppSpacing.lg),
-          child: Icon(
+          child: const Icon(
             Icons.delete,
             color: Colors.white,
             size: AppSpacing.iconLg,
@@ -126,14 +144,14 @@ class _NotificationTile extends ConsumerWidget {
         ),
         onDismissed: (_) async {
           await HapticHelper.medium();
-          service.deleteNotification(notification.id);
+          await controller.deleteNotification(notification.id);
         },
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: () async {
               await HapticHelper.light();
-              service.markAsRead(notification.id);
+              await controller.markAsRead(notification.id);
             },
             child: ListTile(
               leading: Semantics(
@@ -160,9 +178,9 @@ class _NotificationTile extends ConsumerWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: AppSpacing.xs),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(notification.body),
-                  SizedBox(height: AppSpacing.xs),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     _formatDate(notification.createdAt),
                     style: theme.textTheme.labelSmall?.copyWith(
@@ -178,7 +196,8 @@ class _NotificationTile extends ConsumerWidget {
                       child: Container(
                         width: AppSpacing.sm,
                         height: AppSpacing.sm,
-                        decoration: BoxDecoration(color: context.colors.brandPrimary,
+                        decoration: BoxDecoration(
+                          color: context.colors.brandPrimary,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -193,47 +212,77 @@ class _NotificationTile extends ConsumerWidget {
     );
   }
 
-  IconData _getTypeIcon(NotificationType type) {
+  IconData _getTypeIcon(String type) {
     switch (type) {
-      case NotificationType.event:
+      case 'event':
         return Icons.event;
-      case NotificationType.birthday:
+      case 'birthday':
         return Icons.cake;
-      case NotificationType.reminder:
+      case 'reminder':
         return Icons.notifications;
-      case NotificationType.finance:
+      case 'finance':
         return Icons.account_balance_wallet;
-      case NotificationType.general:
+      case 'group':
+        return Icons.groups;
+      case 'announcement':
+        return Icons.campaign;
+      case 'member':
+        return Icons.person_add;
+      case 'approval':
+        return Icons.approval;
+      case 'system':
+        return Icons.settings;
+      default:
         return Icons.info;
     }
   }
 
-  String _getTypeLabel(NotificationType type) {
+  String _getTypeLabel(String type) {
     switch (type) {
-      case NotificationType.event:
-        return 'Événement';
-      case NotificationType.birthday:
+      case 'event':
+        return 'Evenement';
+      case 'birthday':
         return 'Anniversaire';
-      case NotificationType.reminder:
+      case 'reminder':
         return 'Rappel';
-      case NotificationType.finance:
+      case 'finance':
         return 'Finance';
-      case NotificationType.general:
-        return 'Général';
+      case 'group':
+        return 'Groupe';
+      case 'announcement':
+        return 'Annonce';
+      case 'member':
+        return 'Membre';
+      case 'approval':
+        return 'Approbation';
+      case 'system':
+        return 'Systeme';
+      default:
+        return 'General';
     }
   }
 
-  Color _getTypeColor(BuildContext context, NotificationType type) {
+  Color _getTypeColor(BuildContext context, String type) {
     switch (type) {
-      case NotificationType.event:
+      case 'event':
         return context.colors.brandPrimary;
-      case NotificationType.birthday:
+      case 'birthday':
         return Colors.pink;
-      case NotificationType.reminder:
+      case 'reminder':
         return Colors.orange;
-      case NotificationType.finance:
+      case 'finance':
         return context.colors.successText;
-      case NotificationType.general:
+      case 'group':
+        return Colors.teal;
+      case 'announcement':
+        return Colors.amber;
+      case 'member':
+        return Colors.indigo;
+      case 'approval':
+        return Colors.purple;
+      case 'system':
+        return Colors.grey;
+      default:
         return Colors.blue;
     }
   }
@@ -242,7 +291,7 @@ class _NotificationTile extends ConsumerWidget {
     final now = DateTime.now();
     final diff = now.difference(date);
 
-    if (diff.inMinutes < 1) return 'À l\'instant';
+    if (diff.inMinutes < 1) return "A l'instant";
     if (diff.inHours < 1) return 'Il y a ${diff.inMinutes} min';
     if (diff.inDays < 1) return 'Il y a ${diff.inHours}h';
     if (diff.inDays < 7) return 'Il y a ${diff.inDays}j';

@@ -106,6 +106,23 @@ class OnboardingScreen extends ConsumerWidget {
           AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
         } catch (e) {
           AppLogger.w('assignRoleToUser échoué (non bloquant): $e', 'ONBOARDING');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
+                    SizedBox(width: 12),
+                    Expanded(child: Text("Erreur lors de l'attribution du rôle, mais vous serez redirigé.")),
+                  ],
+                ),
+                backgroundColor: Colors.orange.shade700,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                duration: Duration(seconds: 4),
+              ),
+            );
+          }
         }
       }
 
@@ -122,6 +139,23 @@ class OnboardingScreen extends ConsumerWidget {
         AppLogger.i('completeOnboarding réussi (membre)', 'ONBOARDING');
       } catch (e) {
         AppLogger.w('completeOnboarding timeout (membre, navigating anyway): $e', 'ONBOARDING');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.info_outline_rounded, color: Colors.white, size: 20),
+                  SizedBox(width: 12),
+                  Expanded(child: Text('Finalisation en cours, veuillez patienter…')),
+                ],
+              ),
+              backgroundColor: Colors.blue.shade700,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
       }
 
       if (context.mounted) {

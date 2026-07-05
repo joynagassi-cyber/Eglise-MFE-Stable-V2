@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:lumina/features/churches/presentation/providers/church_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:lumina/core/providers/repository_providers_content.dart';
@@ -7,6 +8,7 @@ import 'package:lumina/core/providers/user_context_provider.dart';
 import '../../domain/entities/group.dart';
 import '../../domain/entities/group_membership.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 
 part 'group_providers.g.dart';
 
@@ -81,6 +83,13 @@ class GroupController extends _$GroupController {
           },
         );
       }
+
+      // Notification: notifier les admins
+      final notifService = ref.read(notificationServiceProvider);
+      unawaited(notifService.onGroupCreated(
+        groupName: group.name,
+        groupId: group.id,
+      ));
     });
   }
 
@@ -179,6 +188,15 @@ class GroupController extends _$GroupController {
           },
         );
       }
+
+      // Notification: notifier les chefs de groupe
+      final notifService = ref.read(notificationServiceProvider);
+      unawaited(notifService.onMemberJoinedGroup(
+        groupId: groupId,
+        groupName: '', // On ne peut pas recuperer le nom facilement ici
+        memberName: userContext?.user.name ?? 'Un membre',
+        memberId: memberId,
+      ));
     });
     ref.invalidate(groupMembersProvider(groupId));
   }

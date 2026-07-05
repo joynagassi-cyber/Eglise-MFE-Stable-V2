@@ -53,14 +53,14 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
     final userId = _ref.read(currentUserIdProvider);
 
     // Étape 1 : marquer needs_onboarding=false dans profiles
+    // L'échec de cette étape ne bloque pas la suite
     if (userId != null) {
       try {
         await _ref.read(onboardingRepositoryProvider)
             .completeSimpleOnboarding(userId)
             .timeout(const Duration(seconds: 3));
-      } catch (e) {
-        // ignore: avoid_print
-        print('Onboarding simple non-bloquant: $e');
+      } catch (_) {
+        // Non bloquant : on continue même si cette étape échoue
       }
     }
 
@@ -70,13 +70,16 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
           .completeOnboarding()
           .timeout(const Duration(seconds: 8));
     } catch (e) {
-      // ignore: avoid_print
-      print('Onboarding auth non-bloquant: $e');
+      state = state.copyWith(
+        isSubmitting: false,
+        error: 'Une erreur est survenue lors de la finalisation. Veuillez réessayer.',
+      );
+      return;
     }
 
     _ref.read(onboardingProgressNotifierProvider.notifier).reset();
     _ref.invalidate(profileStateProvider);
-    state = state.copyWith(isSubmitting: false);
+    state = state.copyWith(isSubmitting: false, error: null);
   }
 }
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/member.dart';
 import '../providers/member_list_provider.dart';
@@ -9,6 +10,7 @@ import '../../../../core/logging/app_logger.dart';
 import '../../../../core/providers/auth_provider.dart';
 import 'package:lumina/core/providers/user_context_provider.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 
 /// État du formulaire membre
 class MemberFormState {
@@ -119,6 +121,18 @@ class MemberFormController
             actorId: userContext.user.id,
             metadata: auditMetadata,
           );
+
+      // Notification: notifier les admins (uniquement pour création)
+      if (!isUpdate) {
+        final notifService = ref.read(notificationServiceProvider);
+        unawaited(notifService.onMemberCreated(
+          memberName: member.firstName.isNotEmpty
+              ? '${member.firstName} ${member.lastName}'
+              : member.lastName,
+          memberId: member.id,
+          email: member.email,
+        ));
+      }
 
       // Upload de la photo si présente
       if (currentState.selectedPhoto != null) {

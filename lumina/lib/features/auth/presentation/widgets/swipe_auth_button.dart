@@ -31,8 +31,8 @@ class _SwipeAuthButtonState extends State<SwipeAuthButton>
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
-  static const double _thumbSize = 56;
-  static const double _trackHeight = 60;
+  static const double _thumbSize = 48;
+  static const double _trackHeight = 56;
 
   @override
   void initState() {

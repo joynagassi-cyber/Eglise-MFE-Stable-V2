@@ -204,33 +204,38 @@ class _HomePageState extends State<HomePage>
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    // MFE-JC (nom de l'église)
-                    Text(
-                      'MFE-JC',
-                      style: TextStyle(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary
-                            .withValues(alpha: 0.85),
-                        fontSize: isSmallScreen ? 16 : 20,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 6,
+                    // Nom de l'église
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'Ministère Le Feu de L\'Évangile de Jésus-Christ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withValues(alpha: 0.85),
+                          fontSize: isSmallScreen ? 12 : 15,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 2,
+                          height: 1.3,
+                        ),
                       ),
                     ),
 
                     // Slogan
                     Padding(
                       padding: EdgeInsets.only(
-                          top: isSmallScreen ? 6.0 : 12.0, left: 32, right: 32),
+                          top: isSmallScreen ? 6.0 : 10.0, left: 32, right: 32),
                       child: Text(
-                        "Mission du Feu Évangélique\nJésus-Christ",
+                        "Application de Gestion d'Église",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimary
-                              .withValues(alpha: 0.7),
-                          fontSize: isSmallScreen ? 11 : 13,
+                              .withValues(alpha: 0.6),
+                          fontSize: isSmallScreen ? 10 : 12,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.w500,
                           height: 1.4,

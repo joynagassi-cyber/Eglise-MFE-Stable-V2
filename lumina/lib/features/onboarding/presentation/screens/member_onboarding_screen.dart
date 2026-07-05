@@ -36,12 +36,56 @@ class MemberOnboardingScreen extends ConsumerWidget {
               LuminaButton(
                 label: "Terminer",
                 isLoading: state.isSubmitting,
-                onPressed: () => ref.read(onboardingProvider.notifier).submitOnboarding(),
+                onPressed: () async {
+                  await ref.read(onboardingProvider.notifier).submitOnboarding();
+                  final updatedState = ref.read(onboardingProvider);
+                  if (updatedState.error != null && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+                            SizedBox(width: 12),
+                            Expanded(child: Text(updatedState.error!)),
+                          ],
+                        ),
+                        backgroundColor: Colors.red.shade700,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        duration: Duration(seconds: 4),
+                        action: SnackBarAction(
+                          label: 'Réessayer',
+                          textColor: Colors.white,
+                          onPressed: () => ref.read(onboardingProvider.notifier).submitOnboarding(),
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
               if (state.error != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: Text(state.error!, style: const TextStyle(color: Colors.red)),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: context.colors.errorText.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: context.colors.errorText.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: context.colors.errorText, size: 20),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            state.error!,
+                            style: TextStyle(color: context.colors.errorText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
             ],
           ),

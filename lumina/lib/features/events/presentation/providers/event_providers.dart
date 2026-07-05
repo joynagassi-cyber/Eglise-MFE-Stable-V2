@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumina/core/providers/repository_providers_content.dart';
+import 'package:lumina/core/providers/user_context_provider.dart';
 import '../../domain/entities/event.dart';
 import 'package:lumina/features/churches/presentation/providers/church_providers.dart';
 import '../../../../core/mixins/auditable_mixin.dart';
 import '../../../../core/domain/entities/enums/audit_action.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 import 'dart:async';
 
 final eventsProvider = StreamProvider<List<Event>>((ref) {
@@ -63,6 +65,14 @@ class EventNotifier extends AsyncNotifier<List<Event>> with AuditableMixin {
         newData: event.toJson(),
       ));
 
+      // Notification: notifier tous les membres
+      final notifService = ref.read(notificationServiceProvider);
+      unawaited(notifService.onEventCreated(
+        eventTitle: event.title,
+        eventId: event.id,
+        eventDate: event.date,
+      ));
+
       return await repository.getEvents();
     });
   }
@@ -115,6 +125,19 @@ class EventNotifier extends AsyncNotifier<List<Event>> with AuditableMixin {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(eventRepositoryProvider);
       await repository.registerMember(eventId, userId);
+
+      // Notification: notifier les admins
+      final userContext = ref.read(userContextNotifierProvider).valueOrNull;
+      final event = await repository.getEventById(eventId);
+      if (event != null) {
+        final notifService = ref.read(notificationServiceProvider);
+        unawaited(notifService.onMemberRegisteredToEvent(
+          eventTitle: event.title,
+          eventId: eventId,
+          memberName: userContext?.user.name ?? 'Un membre',
+        ));
+      }
+
       return await repository.getEvents();
     });
   }

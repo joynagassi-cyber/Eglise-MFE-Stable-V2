@@ -7,7 +7,7 @@ part of 'notification_controller.dart';
 // **************************************************************************
 
 String _$unreadNotificationCountHash() =>
-    r'c0c228b72fda1b569d2ffcf4bd10dcf2b1b6bb2e';
+    r'6ec388b884aeb7ae510af86a8318bd1d958fb6f6';
 
 /// See also [unreadNotificationCount].
 @ProviderFor(unreadNotificationCount)
@@ -22,6 +22,26 @@ final unreadNotificationCountProvider = AutoDisposeFutureProvider<int>.internal(
 );
 
 typedef UnreadNotificationCountRef = AutoDisposeFutureProviderRef<int>;
+String _$notificationListHash() => r'f37aba1f4a403697da0b8567d1cd3a2adf102faf';
+
+/// Provider qui expose les notifications comme des [NotificationDisplayItem]
+/// pour l'UI, en mappant depuis [AppNotificationEntity]
+///
+/// Copied from [notificationList].
+@ProviderFor(notificationList)
+final notificationListProvider =
+    AutoDisposeFutureProvider<List<NotificationDisplayItem>>.internal(
+  notificationList,
+  name: r'notificationListProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$notificationListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef NotificationListRef
+    = AutoDisposeFutureProviderRef<List<NotificationDisplayItem>>;
 String _$notificationControllerHash() =>
     r'2cf0b199551fdef646bef202d8db50e8678c6864';
 

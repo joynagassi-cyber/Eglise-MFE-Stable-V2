@@ -62,6 +62,36 @@ class _SignInPageState extends ConsumerState<SignInPage>
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
+    } else {
+      // Afficher un SnackBar si la validation échoue
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Veuillez corriger les erreurs dans le formulaire',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.orange.shade700,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
     }
   }
 
@@ -80,13 +110,35 @@ class _SignInPageState extends ConsumerState<SignInPage>
 
     ref.listen<AsyncValue>(authProvider, (previous, next) {
       if (next is AsyncError) {
+        final errorMsg = next.error.toString().replaceAll('Exception: ', '');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(next.error.toString()),
-            backgroundColor: AppColors.errorOf(context),
+            content: Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.white, size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    errorMsg,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: context.colors.errorBg,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
+            ),
+            duration: Duration(seconds: 4),
+            action: SnackBarAction(
+              label: 'OK',
+              textColor: Colors.white,
+              onPressed: () {},
             ),
           ),
         );
@@ -110,6 +162,7 @@ class _SignInPageState extends ConsumerState<SignInPage>
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -343,9 +396,8 @@ class _SignInPageState extends ConsumerState<SignInPage>
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Lumina MFE-JC',
+                  SizedBox(height: 8),                    Text(
+                    'Lumina',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: Colors.white.withValues(alpha: 0.9),
                           letterSpacing: 1.2,

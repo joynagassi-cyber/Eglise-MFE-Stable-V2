@@ -245,7 +245,8 @@ class Auth extends _$Auth with AuditableMixin {
     try {
       final result = await ref
           .read(authRepositoryProvider)
-          .login(email: email, password: password);
+          .login(email: email, password: password)
+          .timeout(const Duration(seconds: 20));
 
       if (result.isRight()) {
         final session = result.getOrElse(() => throw Exception());
@@ -320,7 +321,8 @@ class Auth extends _$Auth with AuditableMixin {
     try {
       final result = await ref
           .read(authRepositoryProvider)
-          .register(email: email, password: password, name: name);
+          .register(email: email, password: password, name: name)
+          .timeout(const Duration(seconds: 20));
 
       if (result.isRight()) {
         final session = result.getOrElse(() => null);
@@ -369,7 +371,8 @@ class Auth extends _$Auth with AuditableMixin {
     state = const AsyncLoading();
     _manualAuthInProgress = true;
     try {
-      final result = await ref.read(signInWithGoogleUseCaseProvider).call();
+      final result = await ref.read(signInWithGoogleUseCaseProvider).call()
+          .timeout(const Duration(seconds: 30));
 
       if (result.isLeft()) {
         state = result.fold(

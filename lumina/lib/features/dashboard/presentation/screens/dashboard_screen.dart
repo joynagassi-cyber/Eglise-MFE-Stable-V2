@@ -96,7 +96,41 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         );
       },
       loading: () => const LuminaPage(body: DashboardSkeleton()),
-      error: (e, st) => const LuminaPage(body: Center(child: Text('Erreur'))),
+      error: (e, st) => LuminaPage(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline_rounded, size: 64, color: context.colors.errorText.withValues(alpha: 0.6)),
+                SizedBox(height: 16),
+                Text(
+                  'Impossible de charger votre espace',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: context.colors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Veuillez vérifier votre connexion et réessayer.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: context.colors.textTertiary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: () => ref.invalidate(userContextNotifierProvider),
+                  icon: Icon(Icons.refresh_rounded),
+                  label: Text('Réessayer'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 

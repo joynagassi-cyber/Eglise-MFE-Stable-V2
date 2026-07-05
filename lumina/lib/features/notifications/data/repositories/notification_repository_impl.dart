@@ -211,6 +211,171 @@ class NotificationRepositoryImpl implements INotificationRepository {
     }
   }
 
+  // ─── Create Notification via RPC ─────────────────────────────────────
+
+  @override
+  Future<AppNotificationEntity?> createNotification({
+    required String userId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+    String? churchId,
+  }) async {
+    try {
+      final result = await _supabase.rpc(
+        'create_notification',
+        params: {
+          'p_user_id': userId,
+          'p_title': title,
+          'p_message': message,
+          'p_type': type,
+          if (linkUrl != null) 'p_link_url': linkUrl,
+          'p_payload': payload,
+          'p_priority': priority,
+          if (churchId != null) 'p_church_id': churchId,
+        },
+      );
+      if (result != null) {
+        final entity = AppNotificationEntity.fromJson(result as Map<String, dynamic>);
+        // Cache local si Isar ready
+        if (_isarService.isReady) {
+          final model = NotificationModel.fromEntity(entity)..isSynced = true;
+          await _isarService.db.writeTxn(() async {
+            await _isarService.db.notificationModels.put(model);
+          });
+        }
+        return entity;
+      }
+      return null;
+    } catch (e) {
+      AppLogger.w('Failed to create notification: $e', 'NOTIF_REPO');
+      return null;
+    }
+  }
+
+  @override
+  Future<int> createNotificationsForGroup({
+    required String groupId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  }) async {
+    try {
+      final result = await _supabase.rpc(
+        'create_notifications_for_group',
+        params: {
+          'p_group_id': groupId,
+          'p_title': title,
+          'p_message': message,
+          'p_type': type,
+          if (linkUrl != null) 'p_link_url': linkUrl,
+          'p_payload': payload,
+          'p_priority': priority,
+        },
+      );
+      return (result as num?)?.toInt() ?? 0;
+    } catch (e) {
+      AppLogger.w('Failed to create notifications for group: $e', 'NOTIF_REPO');
+      return 0;
+    }
+  }
+
+  @override
+  Future<int> createNotificationsForAdmins({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  }) async {
+    try {
+      final result = await _supabase.rpc(
+        'create_notifications_for_admins',
+        params: {
+          'p_church_id': churchId,
+          'p_title': title,
+          'p_message': message,
+          'p_type': type,
+          if (linkUrl != null) 'p_link_url': linkUrl,
+          'p_payload': payload,
+          'p_priority': priority,
+        },
+      );
+      return (result as num?)?.toInt() ?? 0;
+    } catch (e) {
+      AppLogger.w('Failed to create notifications for admins: $e', 'NOTIF_REPO');
+      return 0;
+    }
+  }
+
+  @override
+  Future<int> createNotificationsForGroupLeaders({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  }) async {
+    try {
+      final result = await _supabase.rpc(
+        'create_notifications_for_group_leaders',
+        params: {
+          'p_church_id': churchId,
+          'p_title': title,
+          'p_message': message,
+          'p_type': type,
+          if (linkUrl != null) 'p_link_url': linkUrl,
+          'p_payload': payload,
+          'p_priority': priority,
+        },
+      );
+      return (result as num?)?.toInt() ?? 0;
+    } catch (e) {
+      AppLogger.w('Failed to create notifications for group leaders: $e', 'NOTIF_REPO');
+      return 0;
+    }
+  }
+
+  @override
+  Future<int> createNotificationsForAllMembers({
+    required String churchId,
+    required String title,
+    required String message,
+    String type = 'general',
+    String? linkUrl,
+    Map<String, dynamic> payload = const {},
+    String priority = 'NORMAL',
+  }) async {
+    try {
+      final result = await _supabase.rpc(
+        'create_notifications_for_all_members',
+        params: {
+          'p_church_id': churchId,
+          'p_title': title,
+          'p_message': message,
+          'p_type': type,
+          if (linkUrl != null) 'p_link_url': linkUrl,
+          'p_payload': payload,
+          'p_priority': priority,
+        },
+      );
+      return (result as num?)?.toInt() ?? 0;
+    } catch (e) {
+      AppLogger.w('Failed to create notifications for all members: $e', 'NOTIF_REPO');
+      return 0;
+    }
+  }
+
   @override
   Stream<List<AppNotificationEntity>> watchNotifications() {
     if (!_isarService.isReady) {

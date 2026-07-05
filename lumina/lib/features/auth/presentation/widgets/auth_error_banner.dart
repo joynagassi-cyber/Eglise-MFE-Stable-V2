@@ -23,9 +23,9 @@ class AuthErrorBanner extends StatelessWidget {
         vertical: AppSpacing.smd,
       ),
       decoration: BoxDecoration(
-        color: context.colors.errorText.withOpacity(0.1),
+        color: context.colors.errorBg,
         borderRadius: AppSpacing.borderRadiusMd,
-        border: Border.all(color: context.colors.errorText.withOpacity(0.3)),
+        border: Border.all(color: context.colors.errorBorder, width: 1.5),
       ),
       child: Row(
         children: [
@@ -36,7 +36,8 @@ class AuthErrorBanner extends StatelessWidget {
               message,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.colors.errorText,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
                   ),
             ),
           ),

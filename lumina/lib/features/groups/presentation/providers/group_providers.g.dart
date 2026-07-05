@@ -614,7 +614,7 @@ final availableGroupsForAdminProvider =
 );
 
 typedef AvailableGroupsForAdminRef = AutoDisposeFutureProviderRef<List<Group>>;
-String _$groupControllerHash() => r'6d56c1da02c61ac0d0f82b9178a5367001599946';
+String _$groupControllerHash() => r'f0833e7e78304816288dc92e6af9a64963cc3098';
 
 /// See also [GroupController].
 @ProviderFor(GroupController)

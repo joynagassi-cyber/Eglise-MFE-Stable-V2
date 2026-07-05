@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:async';
 import 'package:lumina/core/logging/app_logger.dart';
 import 'package:logger/logger.dart';
 import '../../domain/entities/annonce.dart';
@@ -9,6 +10,7 @@ import '../../domain/repositories/i_annonce_repository.dart';
 import '../models/annonce_model.dart';
 import '../../../../core/data/local/isar_service.dart';
 import '../../../../core/utils/supabase_extensions.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 
 class AnnonceRepositoryImpl implements IAnnonceRepository {
   final SupabaseClient _supabase;
@@ -189,6 +191,15 @@ class AnnonceRepositoryImpl implements IAnnonceRepository {
         final syncedModel = AnnonceModel.fromDomain(createdAnnonce)
           ..lastSyncedAt = DateTime.now();
         await _isar.saveAnnonce(syncedModel);
+      }
+
+      // Notification: notifier tous les membres si l'annonce est publiee
+      if (createdAnnonce.isPublished) {
+        final notifService = NotificationService(_ref);
+        unawaited(notifService.onAnnouncementCreated(
+          title: createdAnnonce.title,
+          announcementId: createdAnnonce.id,
+        ));
       }
 
       return createdAnnonce;
