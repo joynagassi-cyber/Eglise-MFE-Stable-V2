@@ -33,6 +33,12 @@ class Auth extends _$Auth with AuditableMixin {
   bool _isInitialized = false;
   UserSession? _lastSession;
   bool _manualAuthInProgress = false;
+  DateTime? _lastManualAuthAt;
+
+  /// Durée de cooldown après une action manuelle (login/register/Google)
+  /// pendant laquelle les événements du stream sont ignorés pour éviter
+  /// les overrides intempestifs (race condition avec getUserContext()).
+  static const Duration _manualAuthCooldown = Duration(seconds: 3);
 
   @override
   Future<app_auth.AuthState> build() async {
@@ -70,6 +76,19 @@ class Auth extends _$Auth with AuditableMixin {
         return;
       }
 
+      // Cooldown post-auth manuelle : ignorer les événements stream
+      // qui arrivent juste après une action manuelle, pour éviter que
+      // getUserContext() (appelé par loadSavedSession()) ne retourne
+      // null ou une session différente et override l'état correct.
+      if (_lastManualAuthAt != null &&
+          DateTime.now().difference(_lastManualAuthAt!) < _manualAuthCooldown) {
+        AppLogger.d(
+          'Event auth ignoré (cooldown ${_manualAuthCooldown.inSeconds}s après action manuelle)',
+          'AUTH_PROVIDER',
+        );
+        return;
+      }
+
       _lastSession = session;
       await _handleSessionChange(session);
     });
@@ -80,6 +99,20 @@ class Auth extends _$Auth with AuditableMixin {
   /// Gère les changements de session de manière centralisée
   Future<void> _handleSessionChange(UserSession? session) async {
     if (session == null) {
+      // ⚠️ FIX: Ne pas override un état AuthAuthenticated valide avec
+      // AuthUnauthenticated à cause d'une erreur transitoire de
+      // loadSavedSession() / getUserContext() dans le stream listener.
+      // L'utilisateur reste connecté jusqu'à la prochaine mise à jour valide.
+      final currentState = state.valueOrNull;
+      if (currentState is app_auth.AuthAuthenticated &&
+          _lastSession != null) {
+        AppLogger.d(
+          'Session null ignorée — état AuthAuthenticated préservé '
+          '(erreur transitoire loadSavedSession)',
+          'AUTH_PROVIDER',
+        );
+        return;
+      }
       AppLogger.d('Session null - utilisateur déconnecté', 'AUTH_PROVIDER');
       _lastSession = null;
       state = const AsyncData(app_auth.AuthUnauthenticated());
@@ -262,6 +295,7 @@ class Auth extends _$Auth with AuditableMixin {
                     session: session, context: context),
           );
           _lastSession = session;
+          _lastManualAuthAt = DateTime.now();
 
           // Audit Log: Login
           unawaited(logAuditAction(
@@ -281,6 +315,7 @@ class Auth extends _$Auth with AuditableMixin {
             context: _buildFallbackContext(session),
           ));
           _lastSession = session;
+          _lastManualAuthAt = DateTime.now();
         }
       } else {
         state = result.fold(
@@ -342,8 +377,9 @@ class Auth extends _$Auth with AuditableMixin {
           context: _buildFallbackContext(session),
         ));
         _lastSession = session;
+        _lastManualAuthAt = DateTime.now();
 
-        // Audit Log: Register
+          // Audit Log: Register
         unawaited(logAuditAction(
           ref,
           action: AuditAction.register,
@@ -399,6 +435,7 @@ class Auth extends _$Auth with AuditableMixin {
 
       _lastSession = session;
       await _handleSessionChange(session);
+      _lastManualAuthAt = DateTime.now();
       AppLogger.d(
         'Google OAuth natif synchronisé immédiatement',
         'AUTH_PROVIDER',

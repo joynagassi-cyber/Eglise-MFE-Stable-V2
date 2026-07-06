@@ -55,24 +55,41 @@ class AppBootstrap {
     DelayFn? delay,
   }) async {
     (setupGlobalErrorHandlers ?? ErrorReporter.instance.setupGlobalHandlers)();
-    await (initLogger ?? AppLogger.instance.initialize)().timeout(loggerTimeout);
+    await (initLogger ?? AppLogger.instance.initialize)(timeout: loggerTimeout);
     (configureImageCache ?? ImageCacheConfig.configure)();
 
-    final dotenvFuture = (loadDotEnv ??
-        (fileName) => dotenv.load(fileName: fileName))(dotenvFileName);
-    if (dotenvTimeout != null) {
-      await dotenvFuture.timeout(dotenvTimeout);
-    } else {
-      await dotenvFuture;
+    // ─── 1. Charger les variables d'environnement ─────────────────────────────
+    // Priority: --dart-define (compile-time) > flutter_dotenv (runtime .env file)
+    // This allows CI to inject secrets via --dart-define without needing a .env file.
+    String? getEnv(String key) {
+      // First, try compile-time dart-define (set by CI via --dart-define)
+      final dartDefine = const String.fromEnvironment(key);
+      if (dartDefine.isNotEmpty) return dartDefine;
+      // Fallback: runtime dotenv (local dev with .env file)
+      return (readEnv ?? (k) => dotenv.env[k])(key);
     }
 
-    final env = readEnv ?? (key) => dotenv.env[key];
+    // Load dotenv file for local development (silently fails if file doesn't exist)
+    try {
+      final dotenvLoader = loadDotEnv ?? (fileName) => dotenv.load(fileName: fileName);
+      if (dotenvTimeout != null) {
+        await dotenvLoader(dotenvFileName).timeout(dotenvTimeout);
+      } else {
+        await dotenvLoader(dotenvFileName);
+      }
+    } catch (e) {
+      // .env file not found — OK in CI mode where --dart-define provides everything
+      AppLogger.d('No .env file found (expected in CI mode)', 'APP_BOOTSTRAP');
+    }
 
-    final supabaseUrl = env('SUPABASE_URL');
-    final supabaseAnonKey = env('SUPABASE_ANON_KEY');
+    final supabaseUrl = getEnv('SUPABASE_URL');
+    final supabaseAnonKey = getEnv('SUPABASE_ANON_KEY');
 
     if (supabaseUrl == null || supabaseAnonKey == null) {
-      throw Exception('Configuration Supabase manquante dans $dotenvFileName');
+      throw Exception(
+        'Configuration Supabase manquante. '
+        'Fournir SUPABASE_URL et SUPABASE_ANON_KEY via --dart-define ou le fichier $dotenvFileName.',
+      );
     }
 
     final supabaseInitializer = initSupabase ??
@@ -139,7 +156,8 @@ class AppBootstrap {
       isarService: isarService,
       sharedPreferences: prefs,
     );
-    }
+  }
+
   static Future<void> initializeSecondaryServices(
     ProviderContainer container, {
     required String loggerTag,

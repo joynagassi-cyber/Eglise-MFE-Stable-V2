@@ -544,17 +544,40 @@ String? _firstNonEmptyString(Iterable<Object?> values) {
         final result = await loadSavedSession();
         final session = result.fold<UserSession?>(
           (failure) {
-            AppLogger.e('Stream error: ${failure.message}', 'AUTH_REPO');
-            return null;
+            // ⚠️ FIX: Ne pas retourner null sur erreur transitoire de
+            // loadSavedSession() / getUserContext(). À la place, on tente
+            // de construire une session légère avec les données disponibles.
+            // Sinon le _sub listener dans AuthProvider override l'état
+            // AuthAuthenticated avec AuthUnauthenticated.
+            AppLogger.e(
+              'watchAuthState: loadSavedSession échoué, fallback light session. Erreur: ${failure.message}',
+              'AUTH_REPO',
+            );
+            return _buildLightSessionFromCurrent();
           },
           (s) => s,
         );
         return session;
       } catch (err) {
-        AppLogger.e('Stream fatal error: $err', 'AUTH_REPO');
-        return null;
+        AppLogger.e('watchAuthState: erreur fatale, fallback light session. Erreur: $err', 'AUTH_REPO');
+        return _buildLightSessionFromCurrent();
       }
     });
+  }
+
+  /// Construit une session légère à partir des données Supabase courantes
+  /// sans appeler l'Edge Function (getUserContext). Utilisé comme fallback
+  /// par watchAuthState() quand loadSavedSession() échoue.
+  UserSession? _buildLightSessionFromCurrent() {
+    try {
+      final session = supabase.auth.currentSession;
+      final user = supabase.auth.currentUser;
+      if (session == null || user == null) return null;
+      return _buildLightSession(user, session);
+    } catch (e) {
+      AppLogger.e('_buildLightSessionFromCurrent échoué: $e', 'AUTH_REPO');
+      return null;
+    }
   }
 
   // ─── Méthodes stub (compatibilité interface) ───────────────────────────────

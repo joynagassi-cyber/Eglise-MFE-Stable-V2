@@ -50,8 +50,9 @@ void main() async {
     AppLogger.i('Starting application...', 'PROD');
 
     // Sentry & App Launch
-    final environment = dotenv.env['ENVIRONMENT'] ?? 'production';
-    final sentryDsn = dotenv.env['SENTRY_DSN'] ?? '';
+    // Priority: --dart-define (compile-time) > dotenv (runtime)
+    final environment = const String.fromEnvironment('ENVIRONMENT', defaultValue: 'production');
+    final sentryDsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
 
     if (sentryDsn.isNotEmpty) {
       await SentryFlutter.init(
