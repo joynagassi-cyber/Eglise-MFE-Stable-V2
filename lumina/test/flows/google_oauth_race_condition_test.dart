@@ -426,7 +426,7 @@ void main() {
     });
 
     test('UserContext → RoleInfo.initialRoute = /dashboard pour membre', () async {
-      final context = _makeContext(roleCode: 'membre');
+      final context = _makeContext();
       expect(context.role.initialRoute, '/dashboard',
           reason: 'Route initiale du membre = /dashboard');
       expect(context.role.level, RoleLevel.consultation,
