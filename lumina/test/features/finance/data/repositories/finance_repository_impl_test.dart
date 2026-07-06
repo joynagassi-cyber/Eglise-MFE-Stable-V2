@@ -137,12 +137,12 @@ class TestableFinanceRepository extends FinanceRepositoryImpl {
   Stream<List<FinanceTransaction>> Function()? onWatchTransactions;
 
   TestableFinanceRepository(
-    supabase,
-    isar,
-    syncManager,
-    encryption,
-    ref,
-  ) : super(supabase, isar, syncManager, encryption, ref);
+    super.supabase,
+    super.isar,
+    super.syncManager,
+    super.encryption,
+    super.ref,
+  );
 
   @override
   Future<Either<Failure, List<FinanceTransaction>>> getTransactions({

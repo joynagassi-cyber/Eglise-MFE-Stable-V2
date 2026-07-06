@@ -45,6 +45,10 @@ class AppBootstrap {
     Duration loggerTimeout = const Duration(seconds: 5),
     Duration criticalInitTimeout = const Duration(seconds: 15),
     int maxAttempts = 3,
+    // CI injecte ces valeurs via --dart-define (compile-time).
+    // En local elles sont lues depuis le fichier .env.
+    String? ciSupabaseUrl,
+    String? ciSupabaseAnonKey,
     void Function()? setupGlobalErrorHandlers,
     Future<void> Function()? initLogger,
     void Function()? configureImageCache,
@@ -55,17 +59,14 @@ class AppBootstrap {
     DelayFn? delay,
   }) async {
     (setupGlobalErrorHandlers ?? ErrorReporter.instance.setupGlobalHandlers)();
-    await (initLogger ?? AppLogger.instance.initialize)(timeout: loggerTimeout);
+    await (initLogger ?? AppLogger.instance.initialize)().timeout(loggerTimeout);
     (configureImageCache ?? ImageCacheConfig.configure)();
 
     // ─── 1. Charger les variables d'environnement ─────────────────────────────
-    // Priority: --dart-define (compile-time) > flutter_dotenv (runtime .env file)
-    // This allows CI to inject secrets via --dart-define without needing a .env file.
+    // Priority: paramètre (--dart-define CI) > flutter_dotenv (runtime .env local)
+    // En CI, il n'y a pas de fichier .env — les secrets passent par --dart-define.
+    // En local, elles sont lues depuis le fichier .env.
     String? getEnv(String key) {
-      // First, try compile-time dart-define (set by CI via --dart-define)
-      final dartDefine = const String.fromEnvironment(key);
-      if (dartDefine.isNotEmpty) return dartDefine;
-      // Fallback: runtime dotenv (local dev with .env file)
       return (readEnv ?? (k) => dotenv.env[k])(key);
     }
 
@@ -82,10 +83,12 @@ class AppBootstrap {
       AppLogger.d('No .env file found (expected in CI mode)', 'APP_BOOTSTRAP');
     }
 
-    final supabaseUrl = getEnv('SUPABASE_URL');
-    final supabaseAnonKey = getEnv('SUPABASE_ANON_KEY');
+    // CI > dotenv : les paramètres ciSupabaseUrl/ciSupabaseAnonKey sont résolus
+    // depuis --dart-define dans main_production.dart (const String.fromEnvironment).
+    final supabaseUrl = ciSupabaseUrl ?? getEnv('SUPABASE_URL');
+    final supabaseAnonKey = ciSupabaseAnonKey ?? getEnv('SUPABASE_ANON_KEY');
 
-    if (supabaseUrl == null || supabaseAnonKey == null) {
+    if (supabaseUrl == null || supabaseAnonKey == null || supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
       throw Exception(
         'Configuration Supabase manquante. '
         'Fournir SUPABASE_URL et SUPABASE_ANON_KEY via --dart-define ou le fichier $dotenvFileName.',

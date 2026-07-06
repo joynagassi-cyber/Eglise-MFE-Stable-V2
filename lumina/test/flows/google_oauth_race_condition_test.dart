@@ -10,8 +10,6 @@
 // - Tests sur la structure des sessions (invariants non-régressifs)
 // - Tests comportementaux des scénarios spécifiques
 
-import 'dart:async';
-import 'dart:collection';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +20,6 @@ import 'package:lumina/core/auth/domain/entities/church_role.dart';
 import 'package:lumina/core/auth/domain/entities/user_context.dart';
 import 'package:lumina/core/auth/domain/entities/enums/role_level.dart';
 import 'package:lumina/core/providers/auth_provider.dart';
-import 'package:lumina/core/providers/shared_preferences_provider.dart';
 import 'package:lumina/features/onboarding/presentation/providers/onboarding_provider.dart';
 import 'package:lumina/features/onboarding/data/repositories/onboarding_repository.dart';
 
@@ -31,7 +28,6 @@ import 'package:lumina/features/onboarding/data/repositories/onboarding_reposito
 UserSession _makeSession({
   bool needsOnboarding = false,
   String userId = 'test-user-123',
-  String roleCode = 'membre',
 }) {
   return UserSession(
     userId: userId,
@@ -51,7 +47,6 @@ UserSession _makeSession({
 
 UserContext _makeContext({
   bool needsOnboarding = false,
-  String roleCode = 'membre',
   String initialRoute = '/dashboard',
 }) {
   return UserContext(
@@ -61,8 +56,8 @@ UserContext _makeContext({
       name: 'Test User',
     ),
     role: RoleInfo(
-      code: roleCode,
-      label: roleCode,
+      code: 'membre',
+      label: 'membre',
       isSuper: false,
       level: RoleLevel.consultation,
       initialRoute: initialRoute,
@@ -78,7 +73,6 @@ UserContext _makeContext({
 class FakeAuthWithRaceCondition extends Auth {
   // Contrôle du comportement
   bool _simulateNullOnHandleSessionChange = false;
-  bool _simulateDelayedOverride = false;
 
   // Expose l'état interne pour le test
   DateTime? lastManualAuthAt;
@@ -87,13 +81,10 @@ class FakeAuthWithRaceCondition extends Auth {
 
   void reset() {
     _simulateNullOnHandleSessionChange = false;
-    _simulateDelayedOverride = false;
     lastManualAuthAt = null;
     lastSession = null;
     callLog.clear();
   }
-
-  void enableNullOverride() => _simulateNullOnHandleSessionChange = true;
 
   @override
   Future<app_auth.AuthState> build() async {
@@ -153,7 +144,6 @@ class FakeAuthWithRaceCondition extends Auth {
       // _handleSessionChange(null) sans être bloqué par le cooldown
       // (simule le bug de race condition)
       final session = _makeSession(needsOnboarding: false);
-      final context = _makeContext(needsOnboarding: false);
       lastSession = session;
       callLog.add('completeOnboarding.nullOverride.end');
     } else {

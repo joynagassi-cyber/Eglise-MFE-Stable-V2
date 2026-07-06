@@ -4,7 +4,6 @@ import 'package:lumina/core/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/theme/app_theme.dart';
@@ -34,11 +33,18 @@ void main() async {
   );
 
   try {
+    // Les secrets CI sont injectés via --dart-define (compile-time).
+    // Ils prennent priorité sur le fichier .env local.
+    const ciSupabaseUrl = String.fromEnvironment('SUPABASE_URL');
+    const ciSupabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
     final bootstrap = await AppBootstrap.initialize(
       loggerTag: 'PROD',
       dotenvFileName: '.env',
       debugSupabase: false,
       dotenvTimeout: const Duration(seconds: 5),
+      ciSupabaseUrl: ciSupabaseUrl.isNotEmpty ? ciSupabaseUrl : null,
+      ciSupabaseAnonKey: ciSupabaseAnonKey.isNotEmpty ? ciSupabaseAnonKey : null,
     );
 
     // Async secondary services
@@ -51,8 +57,8 @@ void main() async {
 
     // Sentry & App Launch
     // Priority: --dart-define (compile-time) > dotenv (runtime)
-    final environment = const String.fromEnvironment('ENVIRONMENT', defaultValue: 'production');
-    final sentryDsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+    const environment = String.fromEnvironment('ENVIRONMENT', defaultValue: 'production');
+    const sentryDsn = String.fromEnvironment('SENTRY_DSN', defaultValue: '');
 
     if (sentryDsn.isNotEmpty) {
       await SentryFlutter.init(
