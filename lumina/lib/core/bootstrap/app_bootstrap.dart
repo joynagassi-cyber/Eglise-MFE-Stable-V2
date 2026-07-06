@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show File;
 
 import 'package:lumina/core/api/supabase_service.dart';
 import 'package:lumina/core/config/image_cache_config.dart';
@@ -63,14 +64,11 @@ class AppBootstrap {
     (configureImageCache ?? ImageCacheConfig.configure)();
 
     // ─── 1. Charger les variables d'environnement ─────────────────────────────
-    // Priority: paramètre (--dart-define CI) > flutter_dotenv (runtime .env local)
+    // Priority: paramètre (--dart-define CI) > fichier .env (local) > flutter_dotenv (legacy)
     // En CI, il n'y a pas de fichier .env — les secrets passent par --dart-define.
-    // En local, elles sont lues depuis le fichier .env.
-    String? getEnv(String key) {
-      return (readEnv ?? (k) => dotenv.env[k])(key);
-    }
+    // En local, les valeurs sont lues directement depuis le fichier .env sur le disque.
 
-    // Load dotenv file for local development (silently fails if file doesn't exist)
+    // Load dotenv from asset bundle (legacy) — silently fails in CI where .env gitignored
     try {
       final dotenvLoader = loadDotEnv ?? (fileName) => dotenv.load(fileName: fileName);
       if (dotenvTimeout != null) {
@@ -79,8 +77,42 @@ class AppBootstrap {
         await dotenvLoader(dotenvFileName);
       }
     } catch (e) {
-      // .env file not found — OK in CI mode where --dart-define provides everything
-      AppLogger.d('No .env file found (expected in CI mode)', 'APP_BOOTSTRAP');
+      // .env not in asset bundle — expected in CI
+    }
+
+    // Fallback: read .env from filesystem for local development
+    // (.env is .gitignored so it's not in CI — dart:io File works during flutter run)
+    final Map<String, String> fileEnv = {};
+    try {
+      final envFile = File(dotenvFileName);
+      if (await envFile.exists()) {
+        final content = await envFile.readAsString();
+        for (final line in content.split('\n')) {
+          final trimmed = line.trim();
+          if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+          final eqIdx = trimmed.indexOf('=');
+          if (eqIdx > 0) {
+            var value = trimmed.substring(eqIdx + 1).trim();
+            // Strip surrounding quotes
+            if (value.length >= 2) {
+              final first = value[0];
+              final last = value[value.length - 1];
+              if ((first == '"' && last == '"') || (first == "'" && last == "'")) {
+                value = value.substring(1, value.length - 1);
+              }
+            }
+            fileEnv[trimmed.substring(0, eqIdx).trim()] = value;
+          }
+        }
+      }
+    } catch (_) {
+      // Silently ignore filesystem errors
+    }
+
+    // Read: injected reader > filesystem (.env) > flutter_dotenv (asset bundle)
+    String? getEnv(String key) {
+      if (readEnv != null) return readEnv!(key);
+      return fileEnv[key] ?? dotenv.env[key];
     }
 
     // CI > dotenv : les paramètres ciSupabaseUrl/ciSupabaseAnonKey sont résolus

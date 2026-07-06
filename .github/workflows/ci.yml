@@ -54,6 +54,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create .env placeholder for analysis
+        run: touch .env
+
       - name: Generate code (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
 
@@ -90,6 +93,9 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Create .env placeholder for build
+        run: touch .env
 
       # --- Injection des secrets ---
 
