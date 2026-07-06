@@ -499,9 +499,14 @@ String? _firstNonEmptyString(Iterable<Object?> values) {
       final data = await supabase
           .rpc('verify_admin_code', params: {'input_code': normalizedCode});
       if (data is List && data.isNotEmpty) {
-        return Right(
-          (data.first as Map<String, dynamic>)['is_valid'] == true,
-        );
+        final raw = data.first;
+        final map = raw is Map ? Map<String, dynamic>.from(raw) : null;
+        if (map == null) return const Right(false);
+        return Right(map['is_valid'] == true);
+      }
+      if (data is Map && data.isNotEmpty) {
+        final map = Map<String, dynamic>.from(data);
+        return Right(map['is_valid'] == true);
       }
       return const Right(false);
     } catch (e) {

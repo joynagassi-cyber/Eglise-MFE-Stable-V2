@@ -48,14 +48,20 @@ class RoleCodeRepository {
       }
 
       if (response is List && response.isNotEmpty) {
-        final result = response[0] as Map<String, dynamic>;
+        final raw = response[0];
+        final result = raw is Map ? Map<String, dynamic>.from(raw) : null;
+        if (result == null) {
+          AppLogger.w('verify_secret_code réponse inattendue (pas un Map): $raw', 'ROLE_CODE_REPO');
+          return null;
+        }
         AppLogger.i('Code vérifié (RPC) → rôle: ${result['role_code']}', 'ROLE_CODE_REPO');
         return result;
       }
 
-      if (response is Map<String, dynamic> && response.isNotEmpty) {
-        AppLogger.i('Code vérifié (RPC map) → rôle: ${response['role_code']}', 'ROLE_CODE_REPO');
-        return response;
+      if (response is Map && response.isNotEmpty) {
+        final result = Map<String, dynamic>.from(response);
+        AppLogger.i('Code vérifié (RPC map) → rôle: ${result['role_code']}', 'ROLE_CODE_REPO');
+        return result;
       }
 
       return null;
@@ -94,15 +100,24 @@ class RoleCodeRepository {
 
       // La RPC retourne une List (table function)
       if (response is List && response.isNotEmpty) {
-        final result = response[0] as Map<String, dynamic>;
+        // FIX: supabase_flutter peut retourner Map<String, Object?> au lieu de
+        // Map<String, dynamic> pour les résultats TABLE FUNCTION à 1 ligne.
+        // Utiliser Map.from() pour éviter le TypeError sur le cast direct.
+        final raw = response[0];
+        final result = raw is Map ? Map<String, dynamic>.from(raw) : null;
+        if (result == null) {
+          AppLogger.w('redeem_secret_code réponse inattendue (pas un Map): $raw', 'ROLE_CODE_REPO');
+          return null;
+        }
         AppLogger.i('Code valide (RPC) → rôle: ${result['role_code']}', 'ROLE_CODE_REPO');
         return result;
       }
 
       // Parfois Supabase retourne directement un Map
-      if (response is Map<String, dynamic> && response.isNotEmpty) {
-        AppLogger.i('Code valide (RPC map) → rôle: ${response['role_code']}', 'ROLE_CODE_REPO');
-        return response;
+      if (response is Map && response.isNotEmpty) {
+        final result = Map<String, dynamic>.from(response);
+        AppLogger.i('Code valide (RPC map) → rôle: ${result['role_code']}', 'ROLE_CODE_REPO');
+        return result;
       }
 
       AppLogger.w('Code "$normalized" — RPC réponse inattendue: $response', 'ROLE_CODE_REPO');
@@ -148,7 +163,12 @@ class RoleCodeRepository {
       // La RPC retourne TABLE(success BOOLEAN, message TEXT)
       bool success = false;
       if (response is List && response.isNotEmpty) {
-        final result = response[0] as Map<String, dynamic>;
+        final raw = response[0];
+        final result = raw is Map ? Map<String, dynamic>.from(raw) : null;
+        if (result == null) {
+          AppLogger.w('assign_user_role réponse inattendue (pas un Map): $raw', 'ROLE_CODE_REPO');
+          return false;
+        }
         success = result['success'] == true;
         final message = result['message'] as String? ?? '';
         if (success) {

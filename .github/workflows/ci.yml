@@ -54,14 +54,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Create stub .env for analyze
-        run: |
-          printf 'SUPABASE_URL=https://stub.supabase.co\n' > .env
-          printf 'SUPABASE_ANON_KEY=stub\n' >> .env
-          printf 'SENTRY_DSN=stub\n' >> .env
-          printf 'ENVIRONMENT=ci\n' >> .env
-          printf 'GOOGLE_WEB_CLIENT_ID=stub\n' >> .env
-
       - name: Generate code (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
 
@@ -101,19 +93,7 @@ jobs:
 
       # --- Injection des secrets ---
 
-      - name: Create .env from secrets
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
-        run: |
-          printf 'SUPABASE_URL=%s\n'        "$SUPABASE_URL"        > .env
-          printf 'SUPABASE_ANON_KEY=%s\n'   "$SUPABASE_ANON_KEY"  >> .env
-          printf 'SENTRY_DSN=%s\n'          "$SENTRY_DSN"          >> .env
-          printf 'ENVIRONMENT=%s\n'         "$ENVIRONMENT"         >> .env
-          printf 'GOOGLE_WEB_CLIENT_ID=%s\n' "$GOOGLE_WEB_CLIENT_ID" >> .env
+      # --- Injection des secrets via --dart-define (pas de .env sur le disque) ---
 
       - name: Inject google-services.json
         env:
@@ -157,10 +137,10 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "fevStoreFile=upload-keystore.jks"  > android/app/signing.properties
-          echo "fevStorePassword=$KEYSTORE_PASSWORD" >> android/app/signing.properties
-          echo "fevKeyAlias=$KEY_ALIAS"             >> android/app/signing.properties
-          echo "fevKeyPassword=$KEY_PASSWORD"       >> android/app/signing.properties
+          echo "storeFile=upload-keystore.jks"      > android/app/signing.properties
+          echo "storePassword=$KEYSTORE_PASSWORD"   >> android/app/signing.properties
+          echo "keyAlias=$KEY_ALIAS"                >> android/app/signing.properties
+          echo "keyPassword=$KEY_PASSWORD"          >> android/app/signing.properties
           echo "signing.properties content:"
           cat android/app/signing.properties | sed 's/=.*/=***/'
 
@@ -169,12 +149,22 @@ jobs:
       - name: Generate code (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK (release)
-        # FIX: use set -o pipefail so the step fails if flutter build fails
-        # (previously, piping to tee masked the exit code)
+      - name: Build APK (release) with secrets injected
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
           set -o pipefail
-          flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols 2>&1 | tee build.log
+          flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN" \
+            --dart-define=ENVIRONMENT="$ENVIRONMENT" \
+            --dart-define=GOOGLE_WEB_CLIENT_ID="$GOOGLE_WEB_CLIENT_ID" \
+            2>&1 | tee build.log
 
       - name: Diagnose — locate APK files
         if: always()
@@ -227,7 +217,6 @@ jobs:
       - name: Cleanup secrets
         if: always()
         run: |
-          rm -f .env
           rm -f android/app/google-services.json
           rm -f android/app/upload-keystore.jks
           rm -f android/app/signing.properties
