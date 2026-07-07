@@ -143,10 +143,10 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "storeFile=upload-keystore.jks"      > android/app/signing.properties
-          echo "storePassword=$KEYSTORE_PASSWORD"   >> android/app/signing.properties
-          echo "keyAlias=$KEY_ALIAS"                >> android/app/signing.properties
-          echo "keyPassword=$KEY_PASSWORD"          >> android/app/signing.properties
+          echo "fevStoreFile=upload-keystore.jks"      > android/app/signing.properties
+          echo "fevStorePassword=$KEYSTORE_PASSWORD"   >> android/app/signing.properties
+          echo "fevKeyAlias=$KEY_ALIAS"                >> android/app/signing.properties
+          echo "fevKeyPassword=$KEY_PASSWORD"          >> android/app/signing.properties
           echo "signing.properties content:"
           cat android/app/signing.properties | sed 's/=.*/=***/'
 
