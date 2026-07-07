@@ -53,6 +53,11 @@ void main() async {
   Intl.defaultLocale = 'fr_FR';
 
   try {
+    // Les secrets CI sont injectés via --dart-define (compile-time).
+    // Ils prennent priorité sur le fichier .env local.
+    const ciSupabaseUrl = String.fromEnvironment('SUPABASE_URL');
+    const ciSupabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
     // 2. Firebase Init
     await Firebase.initializeApp();
 
@@ -60,6 +65,9 @@ void main() async {
       loggerTag: 'MAIN',
       dotenvFileName: '.env',
       debugSupabase: kDebugMode,
+      dotenvTimeout: const Duration(seconds: 5),
+      ciSupabaseUrl: ciSupabaseUrl.isNotEmpty ? ciSupabaseUrl : null,
+      ciSupabaseAnonKey: ciSupabaseAnonKey.isNotEmpty ? ciSupabaseAnonKey : null,
     );
 
     // 3. Secondary Services (Non-blocking)
