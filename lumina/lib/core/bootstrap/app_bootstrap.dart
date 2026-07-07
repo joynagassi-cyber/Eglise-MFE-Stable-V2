@@ -111,7 +111,7 @@ class AppBootstrap {
 
     // Read: injected reader > filesystem (.env) > flutter_dotenv (asset bundle)
     String? getEnv(String key) {
-      if (readEnv != null) return readEnv!(key);
+      if (readEnv != null) return readEnv(key);
       return fileEnv[key] ?? dotenv.env[key];
     }
 
