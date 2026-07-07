@@ -9,8 +9,9 @@ import 'router_policy.dart';
 
 part 'route_status_provider.g.dart';
 
-@riverpod(keepAlive: true)
+@riverpod
 RouteStatus routeStatus(RouteStatusRef ref) {
+  ref.keepAlive();
   final auth = ref.watch(authProvider);
   final profileAsync = ref.watch(profileStateProvider);
 
