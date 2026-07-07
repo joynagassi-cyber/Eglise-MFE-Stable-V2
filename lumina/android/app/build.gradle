@@ -17,12 +17,12 @@ android {
     ndkVersion = "28.2.13676358"
 
     signingConfigs {
-        fev_release {
-            keyAlias = keystoreProperties['fevKeyAlias']
-            keyPassword = keystoreProperties['fevKeyPassword']
-            storePassword = keystoreProperties['fevStorePassword']
-            
-            def kFile = keystoreProperties['fevStoreFile'] ?: 'upload-keystore.jks'
+        release {
+            keyAlias = keystoreProperties['KEY_ALIAS']
+            keyPassword = keystoreProperties['KEY_PASSWORD']
+            storePassword = keystoreProperties['KEYSTORE_PASSWORD']
+
+            def kFile = keystoreProperties['KEYSTORE_FILE'] ?: 'upload-keystore.jks'
             // Ensure we use a clean path relative to the app directory
             storeFile = file(kFile)
         }
@@ -50,7 +50,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.fev_release
+            signingConfig = signingConfigs.release
             
             shrinkResources true
             minifyEnabled true

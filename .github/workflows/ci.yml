@@ -140,15 +140,15 @@ jobs:
       - name: Create signing.properties
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEYSTORE_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "fevStoreFile=upload-keystore.jks"      > android/app/signing.properties
-          echo "fevStorePassword=$KEYSTORE_PASSWORD"   >> android/app/signing.properties
-          echo "fevKeyAlias=$KEY_ALIAS"                >> android/app/signing.properties
-          echo "fevKeyPassword=$KEY_PASSWORD"          >> android/app/signing.properties
-          echo "signing.properties content:"
-          cat android/app/signing.properties | sed 's/=.*/=***/'
+          echo "KEYSTORE_FILE=upload-keystore.jks"        > android/app/signing.properties
+          echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"     >> android/app/signing.properties
+          echo "KEY_ALIAS=$KEYSTORE_ALIAS"                >> android/app/signing.properties
+          echo "KEY_PASSWORD=$KEY_PASSWORD"               >> android/app/signing.properties
+          echo "signing.properties keys:"
+          grep -E '^[A-Za-z_]' android/app/signing.properties | sed 's/=.*/=<redacted>/'
 
       # --- Build ---
 
