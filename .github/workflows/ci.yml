@@ -208,7 +208,7 @@ jobs:
         if: success() && github.ref == 'refs/heads/main'
         run: |
           TAG="v${VERSION:-1.0.5}"
-          APK="lumina/build/app/outputs/flutter-apk/app-release.apk"
+          APK="build/app/outputs/flutter-apk/app-release.apk"
           if [ ! -f "$APK" ]; then
             echo "::warning::APK not found at $APK — skipping release asset upload"
             exit 0
