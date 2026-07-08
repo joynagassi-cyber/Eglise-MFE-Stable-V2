@@ -206,13 +206,17 @@ jobs:
 
       - name: Upload APK to release
         if: success() && github.ref == 'refs/heads/main'
-        uses: softprops/upload-release-assets@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file_path: lumina/build/app/outputs/apk/release/app-release.apk
-          asset_name: Lumina-v${{ env.VERSION || '1.0.5' }}.apk
-          tag_name: v${{ env.VERSION || '1.0.5' }}
+        run: |
+          TAG="v${VERSION:-1.0.5}"
+          APK="lumina/build/app/outputs/flutter-apk/app-release.apk"
+          if [ ! -f "$APK" ]; then
+            echo "::warning::APK not found at $APK — skipping release asset upload"
+            exit 0
+          fi
+          echo "Uploading $APK to release $TAG..."
+          gh release upload "$TAG" "$APK" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber 2>&1
 
       - name: Upload APK artifact (CI artifact, zipped)
         uses: actions/upload-artifact@v4
