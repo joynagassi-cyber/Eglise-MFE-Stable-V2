@@ -1,9 +1,7 @@
-// Fichier de re-export pour compatibilite ascendante.
+// Fichier de re-export pour compatibilité ascendante.
 //
-// failures.dart a ete deplace de core/error/ vers core/errors/ (convention
-// Dart au pluriel, regroupe avec error_handler.dart).
-// Ce fichier preserve les imports existants vers l'ancien chemin.
-//
-// TODO: migrer progressivement les imports vers
-// 'package:lumina/core/errors/failures.dart' puis supprimer ce fichier.
+// failures.dart a été déplacé de core/error/ vers core/errors/ (convention
+// Dart au pluriel).
+// Ce fichier préserve les imports existants vers l'ancien chemin.
+// ponytail: kept — 1-line re-export, zero harm, deleting would touch 55+ files
 export 'package:lumina/core/errors/failures.dart';
