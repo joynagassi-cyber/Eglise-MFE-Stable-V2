@@ -242,3 +242,7 @@ jobs:
           rm -f android/app/google-services.json
           rm -f android/app/upload-keystore.jks
           rm -f android/app/signing.properties
+
+
+# trigger ci release asset
+
