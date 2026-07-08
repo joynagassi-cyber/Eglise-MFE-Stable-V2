@@ -25,6 +25,7 @@ env:
   JAVA_DISTRIBUTION: temurin
   JAVA_VERSION: "17"
   APP_PACKAGE: "com.lumina.mfejc"
+  VERSION: ""
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -152,8 +153,13 @@ jobs:
 
       # --- Build ---
 
-      - name: Generate code (build_runner)
-        run: dart run build_runner build --delete-conflicting-outputs
+      - name: Read app version from pubspec.yaml
+        id: app_version
+        run: |
+          VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected app version: $VERSION"
 
       - name: Build APK (release) with secrets injected
         env:
@@ -198,7 +204,17 @@ jobs:
 
       # --- Upload ---
 
-      - name: Upload APK
+      - name: Upload APK to release
+        if: success() && github.ref == 'refs/heads/main'
+        uses: softprops/action-upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file_path: lumina/build/app/outputs/apk/release/app-release.apk
+          asset_name: Lumina-v${{ env.VERSION || '1.0.5' }}.apk
+          tag_name: v${{ env.VERSION || '1.0.5' }}
+
+      - name: Upload APK artifact (CI artifact, zipped)
         uses: actions/upload-artifact@v4
         if: always()
         with:
