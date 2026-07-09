@@ -141,7 +141,8 @@ class GoogleAuthServiceImpl implements IGoogleAuthService {
         tag: 'GOOGLE_AUTH_FLOW',
       );
 
-      final String? idToken = googleUser.authentication.idToken;
+      final GoogleSignInAuthentication auth = googleUser.authentication;
+      final String? idToken = auth.idToken;
       if (idToken == null || idToken.trim().isEmpty) {
         _error(
           'idToken Google manquant ou vide',
@@ -151,17 +152,23 @@ class GoogleAuthServiceImpl implements IGoogleAuthService {
       }
       _debug('idToken Google reçu', tag: 'GOOGLE_AUTH_FLOW');
 
-      final GoogleSignInClientAuthorization clientAuth =
-          await googleUser.authorizationClient.authorizeScopes(scopes);
-      final String accessToken = clientAuth.accessToken;
-      if (accessToken.trim().isEmpty) {
-        _error(
-          'accessToken Google manquant ou vide',
-          tag: 'GOOGLE_AUTH_FLOW',
-        );
-        throw const GoogleAuthTokenException('accessToken manquant ou vide');
+      // FIX google_sign_in v7 : authorizationClient.authorizeScopes peut échouer
+      // ou retourner un accessToken vide sur certaines configs Android.
+      // Supabase accepte signInWithIdToken avec idToken seul, donc on ne
+      // bloque plus ici : on envoie accessToken vide dans ce cas.
+      String accessToken = '';
+      try {
+        final GoogleSignInClientAuthorization clientAuth =
+            await googleUser.authorizationClient.authorizeScopes(scopes);
+        accessToken = clientAuth.accessToken;
+        _debug('accessToken Google reçu (${accessToken.length} chars)',
+            tag: 'GOOGLE_AUTH_FLOW');
+      } on GoogleSignInException catch (_) {
+        _debug('authorizeScopes indisponible, tentative sans accessToken',
+            tag: 'GOOGLE_AUTH_FLOW');
+      } catch (_) {
+        _debug('Erreur authorizeScopes ignorée', tag: 'GOOGLE_AUTH_FLOW');
       }
-      _debug('accessToken Google reçu', tag: 'GOOGLE_AUTH_FLOW');
 
       return AuthResult(
         idToken: idToken,

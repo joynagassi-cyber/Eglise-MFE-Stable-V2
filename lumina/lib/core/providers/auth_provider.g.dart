@@ -251,7 +251,7 @@ final isMemberProvider = Provider<bool>.internal(
 );
 
 typedef IsMemberRef = ProviderRef<bool>;
-String _$authHash() => r'35fe95d5e6468717afbe817c2aca0bf6564f0447';
+String _$authHash() => r'7eaff740c88f2e0cdafe74ffed85ab46a7ba344c';
 
 /// See also [Auth].
 @ProviderFor(Auth)

@@ -485,100 +485,62 @@ class Auth extends _$Auth with AuditableMixin {
     final current = state.valueOrNull;
     if (current is! app_auth.AuthOnboardingRequired) return;
 
-    // ⚠️ FIX: Si le contexte est un fallback (nouvel utilisateur sans profil RBAC,
-    // light_session=true), getUserContext() échouera systématiquement (timeout 3s)
-    // car il n'y a pas encore de ligne dans user_roles / profiles.
-    // Dans ce cas, on sync directement depuis le contexte fallback en mémoire.
-    final metadata = current.session.metadata ?? {};
-    final isLightSession = metadata['light_session'] == true;
-    final isFallbackRole = current.context.role.code == 'membre' ||
-        current.context.role.code == 'consultation';
-
-    if (isLightSession && isFallbackRole) {
-      AppLogger.i(
-        'completeOnboarding: light_session détecté → sync optimiste sans getUserContext()',
-        'AUTH_PROVIDER',
-      );
-      final c = current.context;
-      final syncedRole = app_auth.ChurchRole.fromLabel(
-        churchId: current.session.activeChurchId,
-        label: c.role.code,
-      );
-      final syncedRoleInfo = app_auth.RoleInfo(
-        code: syncedRole.name,
-        label: syncedRole.name,
-        isSuper: syncedRole.level == app_auth.RoleLevel.superadmin,
-        level: syncedRole.level,
-        initialRoute: syncedRole.initialRoute,
-      );
-      final session = current.session.copyWith(
-        needsOnboarding: false,
-        role: syncedRole,
-      );
-      final updatedContext = app_auth.UserContext(
-        user: c.user,
-        role: syncedRoleInfo,
-        group: c.group,
-        permissions: c.permissions,
-        generatedAt: c.generatedAt,
-        needsOnboarding: false,
-        churchId: c.churchId,
-      );
-      state = AsyncData(
-          app_auth.AuthAuthenticated(session: session, context: updatedContext));
-      _lastSession = session;
-      return;
-    }
-
-    try {
-      final context =
-          await ref.read(userContextRepositoryProvider).getUserContext()
+    // 1. Tenter de récupérer le contexte backend AVANT de transitionner.
+    //    Si getUserContext() réussit, on a la source de vérité (rôle, groupe...).
+    //    Si l'Edge Function retourne needs_onboarding=true, c'est que le rôle
+    //    n'est pas encore visible en DB : on retente 2 fois avant de basculer.
+    app_auth.UserContext? backendContext;
+    int tries = 0;
+    while (tries < 2) {
+      try {
+        backendContext =
+            await ref.read(userContextRepositoryProvider).getUserContext()
               .timeout(const Duration(seconds: 3));
-      final syncedRole = app_auth.ChurchRole.fromLabel(
-        churchId: current.session.activeChurchId,
-        label: context.role.code,
-      );
-      final session = current.session.copyWith(
-        needsOnboarding: false,
-        role: syncedRole,
-      );
-      state = AsyncData(
-          app_auth.AuthAuthenticated(session: session, context: context));
-      _lastSession = session;
-    } catch (e) {
-      AppLogger.w(
-        'getUserContext() echoue apres onboarding, fallback optimiste. Erreur: $e',
-        'AUTH_PROVIDER',
-      );
-      final c = current.context;
-      final syncedRole = app_auth.ChurchRole.fromLabel(
-        churchId: current.session.activeChurchId,
-        label: c.role.code,
-      );
-      final syncedRoleInfo = app_auth.RoleInfo(
-        code: syncedRole.name,
-        label: syncedRole.name,
-        isSuper: syncedRole.level == app_auth.RoleLevel.superadmin,
-        level: syncedRole.level,
-        initialRoute: syncedRole.initialRoute,
-      );
-      final session = current.session.copyWith(
-        needsOnboarding: false,
-        role: syncedRole,
-      );
-      final updatedContext = app_auth.UserContext(
-        user: c.user,
-        role: syncedRoleInfo,
-        group: c.group,
-        permissions: c.permissions,
-        generatedAt: c.generatedAt,
-        needsOnboarding: false,
-        churchId: c.churchId,
-      );
-      state = AsyncData(
-          app_auth.AuthAuthenticated(session: session, context: updatedContext));
-      _lastSession = session;
+        if (!backendContext.needsOnboarding) break;
+        AppLogger.w(
+          'getUserContext() après onboarding: needs_onboarding=true (tentative ${tries + 1}/2)',
+          'AUTH_PROVIDER',
+        );
+      } catch (e) {
+        AppLogger.w(
+          'getUserContext() échec tentative ${tries + 1}/2: $e',
+          'AUTH_PROVIDER',
+        );
+      }
+      tries++;
+      if (tries < 2) {
+        await Future.delayed(const Duration(milliseconds: 600));
+      }
     }
+
+    final c = backendContext ?? current.context;
+    final syncedRole = app_auth.ChurchRole.fromLabel(
+      churchId: current.session.activeChurchId,
+      label: c.role.code,
+    );
+    final syncedRoleInfo = app_auth.RoleInfo(
+      code: syncedRole.name,
+      label: syncedRole.name,
+      isSuper: syncedRole.level == app_auth.RoleLevel.superadmin,
+      level: syncedRole.level,
+      initialRoute: syncedRole.initialRoute,
+    );
+    final session = current.session.copyWith(
+      needsOnboarding: false,
+      role: syncedRole,
+    );
+    final updatedContext = app_auth.UserContext(
+      user: c.user,
+      role: syncedRoleInfo,
+      group: c.group,
+      permissions: c.permissions,
+      generatedAt: c.generatedAt,
+      needsOnboarding: false,
+      churchId: c.churchId,
+    );
+    state = AsyncData(
+        app_auth.AuthAuthenticated(session: session, context: updatedContext));
+    _lastSession = session;
   }
 
   // ─── Church switching ─────────────────────────────────────────────────────

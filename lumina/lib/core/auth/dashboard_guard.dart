@@ -5,19 +5,25 @@ import '../providers/auth_provider.dart';
 import 'domain/entities/auth_state.dart';
 
 class DashboardGuard {
-  /// Redirige si l'utilisateur n'a pas accès au dashboard spécifique
+  /// Redirige si l'utilisateur n'a pas accès au dashboard spécifique.
+  ///
+  /// LOGIQUE DÉTERMINISTE :
+  /// 1. Super-admin / admin total → accès immédiat (pas de groupe requis).
+  /// 2. Dashboard 'generic' → accessible à tout utilisateur authentifié.
+  /// 3. Si l'utilisateur n'a PAS de groupe assigné (group == null) → rediriger
+  ///    vers GroupSelectionScreen pour qu'il choisisse un groupe.
+  ///    AVANT ce fix : renvoyait vers /access-denied, ce qui bloquait
+  ///    indéfiniment tout utilisateur dont active_group_id est NULL en DB
+  ///    (cas typique : membre qui vient de choisir son rôle).
+  /// 4. Si le groupe ne correspond pas au type demandé → /access-denied.
   static String? checkAccess(
       BuildContext context, GoRouterState state, Ref ref) {
-    // FIX: Utilisation de watch pour la réactivité, mais GoRouter guards sont sync.
-    // On utilise read pour le guard, mais on s'appuie sur le refreshListenable du routeur
-    // pour déclencher la re-vérification.
     final authState = ref.read(authProvider).valueOrNull;
 
     UserContext? userContext;
     if (authState is AuthAuthenticated) {
       userContext = authState.context;
     } else if (authState is AuthOnboardingRequired) {
-      // Bloquer l'accès au dashboard si l'onboarding est requis
       return '/onboarding';
     }
 
@@ -28,26 +34,20 @@ class DashboardGuard {
     // 1. Accès Global (Super Admin)
     if (userContext.role.isSuper) return null;
 
-    // 2. Vérification du Rôle pour le type de dashboard
-    if (type != null) {
-      // a. Exception: Le dashboard 'generic' est accessible à tous les membres connectés
-      if (type == 'generic') {
-        return null; // Accès autorisé pour tout utilisateur authentifié
-      }
+    // 2. Dashboard 'generic' accessible à tous les membres connectés
+    if (type == 'generic') return null;
 
-      // b. Vérification via le Groupe Assigné (Source de vérité: DB)
-      // On compare le code du groupe de l'utilisateur avec le type demandé dans l'URL
-      final userGroupCode = userContext.group?.code;
+    // 3. Aucun groupe assigné → rediriger vers la liste de groupes
+    //    pour que l'utilisateur puisse rejoindre un groupe existant.
+    //    IMPORTANT : use only existing routes to keep the redirect valid
+    //    until a dedicated GroupSelectionScreen is created.
+    if (userContext.group == null || userContext.group!.code.isEmpty) {
+      return '/groups';
+    }
 
-      if (userGroupCode == null) {
-        // L'utilisateur n'a pas de groupe assigné, il ne peut pas accéder aux dashboards spécifiques
-        return '/access-denied';
-      }
-
-      if (userGroupCode != type) {
-        // L'utilisateur tente d'accéder au dashboard d'un autre groupe
-        return '/access-denied';
-      }
+    // 4. Vérification via le Groupe Assigné (Source de vérité: DB)
+    if (userContext.group!.code != type) {
+      return '/access-denied';
     }
 
     return null;

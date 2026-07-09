@@ -72,17 +72,19 @@ class _RoleCodeVerificationScreenState
       AppLogger.i('Code valide ! role_code = "$roleCode"', 'ROLE_CODE_VERIFY');
 
       // ── ÉTAPE 2 : Assigner le rôle côté serveur (user_roles + user_sessions + profiles) ──
+      // FIX #3a : l'assignation serveur est maintenant bloquante. Sans ligne dans
+      // user_roles, getUserContext() après completeOnboarding retournera
+      // needs_onboarding=true → l'utilisateur reste bloqué sur le splash.
       if (userId != null) {
-        try {
-          await roleCodeRepo.assignRoleToUser(
-            userId: userId,
-            roleCode: roleCode,
-          ).timeout(const Duration(seconds: 5));
-          AppLogger.i('Rôle assigné côté serveur pour userId=$userId', 'ROLE_CODE_VERIFY');
-        } catch (e) {
-          // Ne pas bloquer — le rôle sera résolu côté client par ChurchRole.fromLabel
-          AppLogger.w('assignRoleToUser échoué (non bloquant): $e', 'ROLE_CODE_VERIFY');
+        final bool assigned = await roleCodeRepo.assignRoleToUser(
+          userId: userId,
+          roleCode: roleCode,
+        ).timeout(const Duration(seconds: 8));
+
+        if (!assigned) {
+          throw Exception('Impossible d\'assigner le rôle "$roleCode" côté serveur. Réessayez.');
         }
+        AppLogger.i('Rôle assigné côté serveur pour userId=$userId', 'ROLE_CODE_VERIFY');
       }
 
       // ── ÉTAPE 3 : Marquer l'onboarding comme complété AVANT completeOnboarding ──

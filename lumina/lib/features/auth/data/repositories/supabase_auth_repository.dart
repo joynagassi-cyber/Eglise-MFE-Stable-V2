@@ -296,10 +296,14 @@ String? _firstNonEmptyString(Iterable<Object?> values) {
       return const Left(AuthFailure('ID token Google invalide ou manquant'));
     }
 
+    // FIX google_sign_in v7 : accessToken n'est pas toujours disponible
+    // via authorizationClient sur Android. Supabase accepte idToken seul
+    // pour signInWithIdToken, donc on ne bloque plus ici.
     if (accessToken.trim().isEmpty) {
-      AppLogger.e('Access token manquant ou vide', 'AUTH_REPO');
-      return const Left(
-          AuthFailure('Access token Google invalide ou manquant'));
+      AppLogger.w(
+        'Access token Google vide — tentative avec idToken uniquement',
+        'AUTH_REPO',
+      );
     }
 
     AppLogger.d(

@@ -100,26 +100,30 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
         ..setRole('consultation', route: '/dashboard')
         ..advance(OnboardingStep.completed);
 
-      // ÉTAPE 2 : assigner le rôle "membre" serveur (non-bloquant)
+      // ÉTAPE 2 : assigner le rôle "membre" serveur (OBLIGATOIRE)
+      // FIX #3a : l'échec de l'assignation serveur empêche maintenant la
+      // progression et affiche une erreur à l'utilisateur. Sans rôle en DB,
+      // completeOnboarding() échouerait au getUserContext() et bloquerait
+      // l'utilisateur sur le splash au redémarrage.
       final userId = ref.read(currentUserIdProvider);
       if (userId != null) {
-   try {
-          final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
-          bool assigned = await roleCodeRepo.assignRoleToUser(
+        final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
+        bool assigned = await roleCodeRepo.assignRoleToUser(
+          userId: userId,
+          roleCode: 'membre',
+        ).timeout(const Duration(seconds: 8));
+        
+        if (!assigned) {
+          assigned = await roleCodeRepo.assignRoleToUser(
             userId: userId,
-            roleCode: 'membre',
-          ).timeout(const Duration(seconds: 5));
-          
-          if (!assigned) {
-            assigned = await roleCodeRepo.assignRoleToUser(
-              userId: userId,
-              roleCode: 'consultation',
-            ).timeout(const Duration(seconds: 5));
-          }
-          AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
-        } catch (e) {
-          AppLogger.w('assignRoleToUser échoué (non bloquant): $e', 'ONBOARDING');
+            roleCode: 'consultation',
+          ).timeout(const Duration(seconds: 8));
         }
+        
+        if (!assigned) {
+          throw Exception('Impossible d\'assigner le rôle membre. Réessayez.');
+        }
+        AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
       }
 
       // ÉTAPE 3 : compléter l'onboardins le provider d'auth

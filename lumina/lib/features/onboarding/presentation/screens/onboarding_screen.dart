@@ -86,44 +86,26 @@ class OnboardingScreen extends ConsumerWidget {
     if (role == 'member') {
       // ── ÉTAPE 1 : Assigner le rôle côté serveur ──
       // Le rôle "membre" dans la base = consultation (pas de code secret requis)
+      // FIX #3a : l'assignation serveur est maintenant bloquante.
       final userId = ref.read(currentUserIdProvider);
       if (userId != null) {
-        try {
-          final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
-          // Essayer d'abord "membre", puis "consultation" comme fallback
-          // car le code dans la table roles peut varier
-          bool assigned = await roleCodeRepo.assignRoleToUser(
+        final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
+        bool assigned = await roleCodeRepo.assignRoleToUser(
+          userId: userId,
+          roleCode: 'membre',
+        ).timeout(const Duration(seconds: 8));
+
+        if (!assigned) {
+          assigned = await roleCodeRepo.assignRoleToUser(
             userId: userId,
-            roleCode: 'membre',
-          ).timeout(const Duration(seconds: 5));
-          
-          if (!assigned) {
-            assigned = await roleCodeRepo.assignRoleToUser(
-              userId: userId,
-              roleCode: 'consultation',
-            ).timeout(const Duration(seconds: 5));
-          }
-          AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
-        } catch (e) {
-          AppLogger.w('assignRoleToUser échoué (non bloquant): $e', 'ONBOARDING');
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
-                    SizedBox(width: 12),
-                    Expanded(child: Text("Erreur lors de l'attribution du rôle, mais vous serez redirigé.")),
-                  ],
-                ),
-                backgroundColor: Colors.orange.shade700,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                duration: Duration(seconds: 4),
-              ),
-            );
-          }
+            roleCode: 'consultation',
+          ).timeout(const Duration(seconds: 8));
         }
+
+        if (!assigned) {
+          throw Exception('Impossible d\'assigner le rôle membre côté serveur. Réessayez.');
+        }
+        AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
       }
 
       // ── ÉTAPE 2 : Marquer le progress d'onboarding AVANT completeOnboarding ──
