@@ -232,6 +232,7 @@ class ChurchRole with _$ChurchRole {
           Permission.messagingView,
           Permission.messagingSend,
           Permission.dashboardView,
+          Permission.financeView,
         },
         initialRoute: _calculateGroupRoute(routeKey),
         isSystemRole: true,
