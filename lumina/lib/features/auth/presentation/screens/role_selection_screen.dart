@@ -128,7 +128,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
 
       // ÉTAPE 3 : compléter l'onboardins le provider d'auth
       await ref.read(authProvider.notifier).completeOnboarding()
-          .timeout(const Duration(seconds: 4));
+          .timeout(const Duration(seconds: 10));
 
       // ÉTAPE 4 : naviguer
       if (mounted) {

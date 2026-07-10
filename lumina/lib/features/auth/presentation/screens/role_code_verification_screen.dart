@@ -100,7 +100,7 @@ class _RoleCodeVerificationScreenState
       // utilise le rôle du contexte fallback.
       try {
         await ref.read(authProvider.notifier).completeOnboarding()
-            .timeout(const Duration(seconds: 4));
+            .timeout(const Duration(seconds: 10));
         AppLogger.i('completeOnboarding réussi', 'ROLE_CODE_VERIFY');
       } catch (e) {
         AppLogger.w('completeOnboarding timeout/erreur (navigating anyway): $e', 'ROLE_CODE_VERIFY');

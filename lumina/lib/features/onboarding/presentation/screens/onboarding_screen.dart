@@ -117,7 +117,7 @@ class OnboardingScreen extends ConsumerWidget {
       // ── ÉTAPE 3 : Compléter l'onboarding dans le provider d'auth ──
       try {
         await ref.read(authProvider.notifier).completeOnboarding()
-            .timeout(const Duration(seconds: 4));
+            .timeout(const Duration(seconds: 10));
         AppLogger.i('completeOnboarding réussi (membre)', 'ONBOARDING');
       } catch (e) {
         AppLogger.w('completeOnboarding timeout (membre, navigating anyway): $e', 'ONBOARDING');
