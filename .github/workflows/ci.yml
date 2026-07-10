@@ -204,13 +204,31 @@ jobs:
 
       # --- Upload ---
 
+      - name: Create or update release
+        if: success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" == "push" ] && [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="v${VERSION:-1.0.5}"
+          fi
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Creating release $TAG"
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" \
+              --title "Release $TAG" \
+              --notes "Automated release from CI\n\nVersion: $TAG\nCommit: $GITHUB_SHA"
+          else
+            echo "Release $TAG already exists"
+          fi
+
       - name: Upload APK to release
         if: success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set +e
-          # On tag push, utiliser le tag directement. Sur main, fallback sur la version pubspec.
           if [ "${{ github.event_name }}" == "push" ] && [[ "$GITHUB_REF" == refs/tags/* ]]; then
             TAG="${GITHUB_REF#refs/tags/}"
           else
@@ -232,7 +250,7 @@ jobs:
           RESULT=$?
           set -e
           if [ $RESULT -ne 0 ]; then
-            echo "::error::gh release upload failed (exit $RESULT) — release may not exist or token lacks permissions"
+            echo "::error::gh release upload failed (exit $RESULT)"
             exit $RESULT
           fi
 
