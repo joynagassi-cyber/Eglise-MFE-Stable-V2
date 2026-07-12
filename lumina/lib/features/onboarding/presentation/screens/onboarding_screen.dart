@@ -35,7 +35,7 @@ class OnboardingScreen extends ConsumerWidget {
                 "Pour commencer, quel est votre rôle ?",
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
-              
+
               SizedBox(height: 48),
 
               // --- ROLE SELECTION ---
@@ -52,7 +52,7 @@ class OnboardingScreen extends ConsumerWidget {
                       title: "Responsable / Staff",
                       description: "Gérez vos groupes, vos membres et le suivi pastoral.",
                       icon: Icons.groups_outlined,
-                      onTap: () => context.push('/onboarding/admin-code'), // Vers la saisie de code
+                      onTap: () => context.push('/onboarding/admin-code'),
                     ),
                     _RoleCard(
                       title: "Administrateur",
@@ -81,69 +81,61 @@ class OnboardingScreen extends ConsumerWidget {
     );
   }
 
+  /// ═══════════════════════════════════════════════════════════════════
+  /// Membre : flux irréversible
+  ///
+  /// 1. assign_user_role('membre_simple') en DB — BLOCANT
+  /// 2. progress → completed
+  /// 3. completeOnboarding() → needs_onboarding = false en DB
+  /// 4. context.go('/dashboard') — remplace la pile, retour impossible
+  ///
+  /// Si l'assignation serveur échoue → reset progress + erreur.
+  /// ═══════════════════════════════════════════════════════════════════
   void _handleRoleSelection(BuildContext context, WidgetRef ref, String role) async {
-    // Pour un membre, l'onboarding peut être quasi-instantané
-    if (role == 'member') {
-      // ── ÉTAPE 1 : Assigner le rôle côté serveur ──
-      // Le rôle "membre" dans la base = consultation (pas de code secret requis)
-      // FIX #3a : l'assignation serveur est maintenant bloquante.
-      final userId = ref.read(currentUserIdProvider);
-      if (userId != null) {
-        final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
-        bool assigned = await roleCodeRepo.assignRoleToUser(
-          userId: userId,
-          roleCode: 'membre',
-        ).timeout(const Duration(seconds: 8));
+    if (role != 'member') return;
 
-        if (!assigned) {
-          assigned = await roleCodeRepo.assignRoleToUser(
-            userId: userId,
-            roleCode: 'consultation',
-          ).timeout(const Duration(seconds: 8));
-        }
+    final userId = ref.read(currentUserIdProvider);
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Utilisateur non connecté. Déconnectez-vous et réessayez.')),
+      );
+      return;
+    }
 
-        if (!assigned) {
-          throw Exception('Impossible d\'assigner le rôle membre côté serveur. Réessayez.');
-        }
-        AppLogger.i('Rôle membre assigné côté serveur: $assigned', 'ONBOARDING');
-      }
+    final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
+    final assigned = await roleCodeRepo.assignRoleToUser(
+      userId: userId,
+      roleCode: 'membre_simple',
+    ).timeout(const Duration(seconds: 10));
 
-      // ── ÉTAPE 2 : Marquer le progress d'onboarding AVANT completeOnboarding ──
-      // pour que le RouterPolicy ne bloque pas la navigation
-      ref.read(onboardingProgressNotifierProvider.notifier)
-        ..setRole('consultation', route: '/dashboard')
-        ..advance(OnboardingStep.completed);
-      
-      // ── ÉTAPE 3 : Compléter l'onboarding dans le provider d'auth ──
-      try {
-        await ref.read(authProvider.notifier).completeOnboarding()
-            .timeout(const Duration(seconds: 10));
-        AppLogger.i('completeOnboarding réussi (membre)', 'ONBOARDING');
-      } catch (e) {
-        AppLogger.w('completeOnboarding timeout (membre, navigating anyway): $e', 'ONBOARDING');
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  Icon(Icons.info_outline_rounded, color: Colors.white, size: 20),
-                  SizedBox(width: 12),
-                  Expanded(child: Text('Finalisation en cours, veuillez patienter…')),
-                ],
-              ),
-              backgroundColor: Colors.blue.shade700,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        }
-      }
-
+    if (!assigned) {
+      AppLogger.e('Échec assignation membre_simple', 'ONBOARDING');
+      ref.read(onboardingProgressNotifierProvider.notifier).reset();
       if (context.mounted) {
-        AppLogger.i('Navigation membre → /dashboard', 'ONBOARDING');
-        context.go(AppRoutes.dashboard);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Impossible d\'enregistrer votre profil. Réessayez.')),
+        );
       }
+      return;
+    }
+    AppLogger.i('Rôle membre_simple assigné (irréversible)', 'ONBOARDING');
+
+    // Marquer l'onboarding comme complété avant la navigation
+    ref.read(onboardingProgressNotifierProvider.notifier)
+      ..setRole('consultation', route: '/dashboard')
+      ..advance(OnboardingStep.completed);
+
+    // Compléter dans auth provider (needs_onboarding = false)
+    try {
+      await ref.read(authProvider.notifier).completeOnboarding()
+          .timeout(const Duration(seconds: 10));
+    } catch (e) {
+      AppLogger.w('completeOnboarding timeout, navigation quand même: $e', 'ONBOARDING');
+    }
+
+    // Navigation irréversible
+    if (context.mounted) {
+      context.go(AppRoutes.dashboard);
     }
   }
 }
@@ -155,10 +147,10 @@ class _RoleCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _RoleCard({
-    required this.title, 
-    required this.description, 
-    required this.icon, 
-    required this.onTap
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.onTap,
   });
 
   @override
@@ -184,9 +176,9 @@ class _RoleCard extends StatelessWidget {
                 Text(title, style: LuminaDesign.h2Of(context).copyWith(fontSize: 18)),
                 SizedBox(height: 4),
                 Text(
-                  description, 
+                  description,
                   style: LuminaDesign.bodyLargeOf(context).copyWith(
-                    fontSize: 14, 
+                    fontSize: 14,
                     color: context.colors.textSecondary
                   ),
                 ),

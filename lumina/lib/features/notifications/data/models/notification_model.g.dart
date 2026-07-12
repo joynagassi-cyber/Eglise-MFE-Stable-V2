@@ -22,70 +22,85 @@ const NotificationModelSchema = CollectionSchema(
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
-    r'isRead': PropertySchema(
+    r'deviceId': PropertySchema(
       id: 1,
+      name: r'deviceId',
+      type: IsarType.string,
+    ),
+    r'isDeleted': PropertySchema(
+      id: 2,
+      name: r'isDeleted',
+      type: IsarType.bool,
+    ),
+    r'isRead': PropertySchema(
+      id: 3,
       name: r'isRead',
       type: IsarType.bool,
     ),
     r'isSynced': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'isSynced',
       type: IsarType.bool,
     ),
     r'jsonData': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'jsonData',
       type: IsarType.string,
     ),
     r'lastSyncedAt': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'lastSyncedAt',
       type: IsarType.dateTime,
     ),
     r'linkUrl': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'linkUrl',
       type: IsarType.string,
     ),
     r'message': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'message',
       type: IsarType.string,
     ),
     r'payloadJson': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'payloadJson',
       type: IsarType.string,
     ),
     r'priority': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'priority',
       type: IsarType.string,
     ),
     r'readAt': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'readAt',
       type: IsarType.dateTime,
     ),
     r'remoteId': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'remoteId',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'title',
       type: IsarType.string,
     ),
     r'type': PropertySchema(
-      id: 12,
+      id: 14,
       name: r'type',
       type: IsarType.string,
     ),
     r'userId': PropertySchema(
-      id: 13,
+      id: 15,
       name: r'userId',
       type: IsarType.string,
+    ),
+    r'version': PropertySchema(
+      id: 16,
+      name: r'version',
+      type: IsarType.long,
     )
   },
   estimateSize: _notificationModelEstimateSize,
@@ -122,6 +137,7 @@ int _notificationModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.deviceId.length * 3;
   {
     final value = object.jsonData;
     if (value != null) {
@@ -156,19 +172,22 @@ void _notificationModelSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeBool(offsets[1], object.isRead);
-  writer.writeBool(offsets[2], object.isSynced);
-  writer.writeString(offsets[3], object.jsonData);
-  writer.writeDateTime(offsets[4], object.lastSyncedAt);
-  writer.writeString(offsets[5], object.linkUrl);
-  writer.writeString(offsets[6], object.message);
-  writer.writeString(offsets[7], object.payloadJson);
-  writer.writeString(offsets[8], object.priority);
-  writer.writeDateTime(offsets[9], object.readAt);
-  writer.writeString(offsets[10], object.remoteId);
-  writer.writeString(offsets[11], object.title);
-  writer.writeString(offsets[12], object.type);
-  writer.writeString(offsets[13], object.userId);
+  writer.writeString(offsets[1], object.deviceId);
+  writer.writeBool(offsets[2], object.isDeleted);
+  writer.writeBool(offsets[3], object.isRead);
+  writer.writeBool(offsets[4], object.isSynced);
+  writer.writeString(offsets[5], object.jsonData);
+  writer.writeDateTime(offsets[6], object.lastSyncedAt);
+  writer.writeString(offsets[7], object.linkUrl);
+  writer.writeString(offsets[8], object.message);
+  writer.writeString(offsets[9], object.payloadJson);
+  writer.writeString(offsets[10], object.priority);
+  writer.writeDateTime(offsets[11], object.readAt);
+  writer.writeString(offsets[12], object.remoteId);
+  writer.writeString(offsets[13], object.title);
+  writer.writeString(offsets[14], object.type);
+  writer.writeString(offsets[15], object.userId);
+  writer.writeLong(offsets[16], object.version);
 }
 
 NotificationModel _notificationModelDeserialize(
@@ -179,20 +198,23 @@ NotificationModel _notificationModelDeserialize(
 ) {
   final object = NotificationModel();
   object.createdAt = reader.readDateTimeOrNull(offsets[0]);
-  object.isRead = reader.readBool(offsets[1]);
-  object.isSynced = reader.readBool(offsets[2]);
+  object.deviceId = reader.readString(offsets[1]);
+  object.isDeleted = reader.readBool(offsets[2]);
+  object.isRead = reader.readBool(offsets[3]);
+  object.isSynced = reader.readBool(offsets[4]);
   object.isarId = id;
-  object.jsonData = reader.readStringOrNull(offsets[3]);
-  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[4]);
-  object.linkUrl = reader.readStringOrNull(offsets[5]);
-  object.message = reader.readString(offsets[6]);
-  object.payloadJson = reader.readStringOrNull(offsets[7]);
-  object.priority = reader.readString(offsets[8]);
-  object.readAt = reader.readDateTimeOrNull(offsets[9]);
-  object.remoteId = reader.readString(offsets[10]);
-  object.title = reader.readString(offsets[11]);
-  object.type = reader.readString(offsets[12]);
-  object.userId = reader.readString(offsets[13]);
+  object.jsonData = reader.readStringOrNull(offsets[5]);
+  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[6]);
+  object.linkUrl = reader.readStringOrNull(offsets[7]);
+  object.message = reader.readString(offsets[8]);
+  object.payloadJson = reader.readStringOrNull(offsets[9]);
+  object.priority = reader.readString(offsets[10]);
+  object.readAt = reader.readDateTimeOrNull(offsets[11]);
+  object.remoteId = reader.readString(offsets[12]);
+  object.title = reader.readString(offsets[13]);
+  object.type = reader.readString(offsets[14]);
+  object.userId = reader.readString(offsets[15]);
+  object.version = reader.readLong(offsets[16]);
   return object;
 }
 
@@ -206,31 +228,37 @@ P _notificationModelDeserializeProp<P>(
     case 0:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
       return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
       return (reader.readString(offset)) as P;
     case 9:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     case 11:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 12:
       return (reader.readString(offset)) as P;
     case 13:
       return (reader.readString(offset)) as P;
+    case 14:
+      return (reader.readString(offset)) as P;
+    case 15:
+      return (reader.readString(offset)) as P;
+    case 16:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -503,6 +531,152 @@ extension NotificationModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'deviceId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'deviceId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      deviceIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'deviceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      isDeletedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDeleted',
+        value: value,
       ));
     });
   }
@@ -2008,6 +2182,62 @@ extension NotificationModelQueryFilter
       ));
     });
   }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      versionEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      versionGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      versionLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterFilterCondition>
+      versionBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'version',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension NotificationModelQueryObject
@@ -2029,6 +2259,34 @@ extension NotificationModelQuerySortBy
       sortByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByDeviceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByDeviceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByIsDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.desc);
     });
   }
 
@@ -2213,6 +2471,20 @@ extension NotificationModelQuerySortBy
       return query.addSortBy(r'userId', Sort.desc);
     });
   }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      sortByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension NotificationModelQuerySortThenBy
@@ -2228,6 +2500,34 @@ extension NotificationModelQuerySortThenBy
       thenByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByDeviceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByDeviceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByIsDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.desc);
     });
   }
 
@@ -2426,6 +2726,20 @@ extension NotificationModelQuerySortThenBy
       return query.addSortBy(r'userId', Sort.desc);
     });
   }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QAfterSortBy>
+      thenByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension NotificationModelQueryWhereDistinct
@@ -2434,6 +2748,20 @@ extension NotificationModelQueryWhereDistinct
       distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QDistinct>
+      distinctByDeviceId({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deviceId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<NotificationModel, NotificationModel, QDistinct>
+      distinctByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDeleted');
     });
   }
 
@@ -2527,6 +2855,13 @@ extension NotificationModelQueryWhereDistinct
       return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
+
+  QueryBuilder<NotificationModel, NotificationModel, QDistinct>
+      distinctByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'version');
+    });
+  }
 }
 
 extension NotificationModelQueryProperty
@@ -2541,6 +2876,18 @@ extension NotificationModelQueryProperty
       createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
+    });
+  }
+
+  QueryBuilder<NotificationModel, String, QQueryOperations> deviceIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deviceId');
+    });
+  }
+
+  QueryBuilder<NotificationModel, bool, QQueryOperations> isDeletedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDeleted');
     });
   }
 
@@ -2623,6 +2970,12 @@ extension NotificationModelQueryProperty
   QueryBuilder<NotificationModel, String, QQueryOperations> userIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'userId');
+    });
+  }
+
+  QueryBuilder<NotificationModel, int, QQueryOperations> versionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'version');
     });
   }
 }

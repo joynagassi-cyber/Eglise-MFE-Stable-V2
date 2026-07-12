@@ -1,7 +1,6 @@
 // lib/features/auth/data/datasources/google_auth_service.dart
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../core/logging/app_logger.dart';
@@ -14,7 +13,8 @@ class GoogleAuthServiceImpl implements IGoogleAuthService {
     String? webClientId,
     bool enableLogging = kDebugMode,
   })  : _googleSignIn = GoogleSignIn.instance,
-        _webClientId = webClientId ?? dotenv.env['GOOGLE_WEB_CLIENT_ID'],
+        _webClientId = webClientId ??
+            const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID'),
         _enableLogging = enableLogging;
 
   final GoogleSignIn _googleSignIn;

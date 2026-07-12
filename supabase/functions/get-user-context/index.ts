@@ -5,6 +5,38 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Map un code de rôle DB vers un RoleLevel Dart valide (camelCase).
+// La table roles stocke des codes snake_case (super_admin, administrateur_systeme, etc.)
+// que le Dart ne peut pas matcher directement contre RoleLevel.name (camelCase).
+function mapRoleCodeToLevel(code: string, isSuper: boolean): string {
+  if (!code) return 'consultation'
+  const c = code.toLowerCase()
+  if (isSuper || c === 'super_admin' || c === 'superadmin') return 'superadmin'
+  if (c === 'administrateur_systeme' || c === 'administrateur_systeme_adjoint'
+      || c === 'admin_total' || c === 'webmaster'
+      || c === 'president' || c === 'vice_president'
+      || c === 'conseiller' || c === 'conseiller_adjoint'
+      || c === 'conseiller_principal') return 'adminTotal'
+  if (c === 'pasteur' || c === 'pasteur_principal' || c === 'pasteur_adjoint') return 'pastoral'
+  if (c === 'tresorier' || c === 'tresorier_adjoint'
+      || c === 'comptable' || c === 'comptable_adjoint'
+      || c === 'commissaire_aux_comptes' || c === 'commissaire_compte'
+      || c === 'validateur_transaction' || c === 'commissaire_aux_comptes_adjoint') return 'finance'
+  if (c === 'secretaire_general' || c === 'secretaire_general_adjoint'
+      || c === 'secretaire_adjoint' || c === 'gestionnaire_documents'
+      || c === 'responsable_archives') return 'staff'
+  if (c === 'responsable_groupe' || c === 'chef_chorale' || c === 'maitre_chorale'
+      || c === 'chef_intercession' || c === 'president_hommes'
+      || c === 'presidente_femmes' || c === 'president_jeunesse'
+      || c === 'president_hommes_adjoint' || c === 'presidente_femmes_adjointe'
+      || c === 'president_jeunesse_adjoint' || c === 'responsable_enfants'
+      || c === 'moniteur_enfants' || c === 'coordinateur_formation'
+      || c === 'organisateur_evenement' || c === 'gestionnaire_budget_event') return 'groupLeader'
+  if (c === 'donateur' || c === 'visiteur_temporaire'
+      || c === 'benevole' || c === 'membre_simple' || c === 'auditeur') return 'consultation'
+  return 'consultation'
+}
+
 // Logging helper
 function log(level: 'info' | 'warn' | 'error', message: string, data?: any) {
     const timestamp = new Date().toISOString()
@@ -217,7 +249,7 @@ Deno.serve(async (req) => {
                 code: roleData?.code,
                 label: roleData?.label,
                 is_super: roleData?.is_super ?? false,
-                level: roleData?.code ?? 'membre',   // champ toujours présent
+                level: mapRoleCodeToLevel(roleData?.code ?? 'membre', roleData?.is_super ?? false),
             },
             group: groupData ? {
                 code: groupData.code,

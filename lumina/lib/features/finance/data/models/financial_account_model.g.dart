@@ -43,55 +43,70 @@ const FinancialAccountModelSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'groupId': PropertySchema(
+    r'deviceId': PropertySchema(
       id: 5,
+      name: r'deviceId',
+      type: IsarType.string,
+    ),
+    r'groupId': PropertySchema(
+      id: 6,
       name: r'groupId',
       type: IsarType.string,
     ),
     r'id': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'id',
       type: IsarType.string,
     ),
     r'isActive': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'isActive',
       type: IsarType.bool,
     ),
+    r'isDeleted': PropertySchema(
+      id: 9,
+      name: r'isDeleted',
+      type: IsarType.bool,
+    ),
     r'isLocked': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'isLocked',
       type: IsarType.bool,
     ),
     r'isManual': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'isManual',
       type: IsarType.bool,
     ),
     r'isSynced': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'isSynced',
       type: IsarType.bool,
     ),
     r'lastSyncedAt': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'lastSyncedAt',
       type: IsarType.dateTime,
     ),
     r'name': PropertySchema(
-      id: 12,
+      id: 14,
       name: r'name',
       type: IsarType.string,
     ),
     r'type': PropertySchema(
-      id: 13,
+      id: 15,
       name: r'type',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'updatedAt',
       type: IsarType.dateTime,
+    ),
+    r'version': PropertySchema(
+      id: 17,
+      name: r'version',
+      type: IsarType.long,
     )
   },
   estimateSize: _financialAccountModelEstimateSize,
@@ -152,6 +167,7 @@ int _financialAccountModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.deviceId.length * 3;
   {
     final value = object.groupId;
     if (value != null) {
@@ -175,16 +191,19 @@ void _financialAccountModelSerialize(
   writer.writeString(offsets[2], object.bankName);
   writer.writeString(offsets[3], object.currency);
   writer.writeString(offsets[4], object.description);
-  writer.writeString(offsets[5], object.groupId);
-  writer.writeString(offsets[6], object.id);
-  writer.writeBool(offsets[7], object.isActive);
-  writer.writeBool(offsets[8], object.isLocked);
-  writer.writeBool(offsets[9], object.isManual);
-  writer.writeBool(offsets[10], object.isSynced);
-  writer.writeDateTime(offsets[11], object.lastSyncedAt);
-  writer.writeString(offsets[12], object.name);
-  writer.writeString(offsets[13], object.type);
-  writer.writeDateTime(offsets[14], object.updatedAt);
+  writer.writeString(offsets[5], object.deviceId);
+  writer.writeString(offsets[6], object.groupId);
+  writer.writeString(offsets[7], object.id);
+  writer.writeBool(offsets[8], object.isActive);
+  writer.writeBool(offsets[9], object.isDeleted);
+  writer.writeBool(offsets[10], object.isLocked);
+  writer.writeBool(offsets[11], object.isManual);
+  writer.writeBool(offsets[12], object.isSynced);
+  writer.writeDateTime(offsets[13], object.lastSyncedAt);
+  writer.writeString(offsets[14], object.name);
+  writer.writeString(offsets[15], object.type);
+  writer.writeDateTime(offsets[16], object.updatedAt);
+  writer.writeLong(offsets[17], object.version);
 }
 
 FinancialAccountModel _financialAccountModelDeserialize(
@@ -199,17 +218,20 @@ FinancialAccountModel _financialAccountModelDeserialize(
   object.bankName = reader.readStringOrNull(offsets[2]);
   object.currency = reader.readStringOrNull(offsets[3]);
   object.description = reader.readStringOrNull(offsets[4]);
-  object.groupId = reader.readStringOrNull(offsets[5]);
-  object.id = reader.readString(offsets[6]);
-  object.isActive = reader.readBool(offsets[7]);
-  object.isLocked = reader.readBool(offsets[8]);
-  object.isManual = reader.readBool(offsets[9]);
-  object.isSynced = reader.readBool(offsets[10]);
+  object.deviceId = reader.readString(offsets[5]);
+  object.groupId = reader.readStringOrNull(offsets[6]);
+  object.id = reader.readString(offsets[7]);
+  object.isActive = reader.readBool(offsets[8]);
+  object.isDeleted = reader.readBool(offsets[9]);
+  object.isLocked = reader.readBool(offsets[10]);
+  object.isManual = reader.readBool(offsets[11]);
+  object.isSynced = reader.readBool(offsets[12]);
   object.isarId = id;
-  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[11]);
-  object.name = reader.readString(offsets[12]);
-  object.type = reader.readString(offsets[13]);
-  object.updatedAt = reader.readDateTime(offsets[14]);
+  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[13]);
+  object.name = reader.readString(offsets[14]);
+  object.type = reader.readString(offsets[15]);
+  object.updatedAt = reader.readDateTime(offsets[16]);
+  object.version = reader.readLong(offsets[17]);
   return object;
 }
 
@@ -231,11 +253,11 @@ P _financialAccountModelDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
-    case 6:
       return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 8:
       return (reader.readBool(offset)) as P;
     case 9:
@@ -243,13 +265,19 @@ P _financialAccountModelDeserializeProp<P>(
     case 10:
       return (reader.readBool(offset)) as P;
     case 11:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 14:
+      return (reader.readString(offset)) as P;
+    case 15:
+      return (reader.readString(offset)) as P;
+    case 16:
       return (reader.readDateTime(offset)) as P;
+    case 17:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1144,6 +1172,144 @@ extension FinancialAccountModelQueryFilter on QueryBuilder<
   }
 
   QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'deviceId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+          QAfterFilterCondition>
+      deviceIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'deviceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+          QAfterFilterCondition>
+      deviceIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'deviceId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> deviceIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'deviceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
       QAfterFilterCondition> groupIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1442,6 +1608,16 @@ extension FinancialAccountModelQueryFilter on QueryBuilder<
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isActive',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> isDeletedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDeleted',
         value: value,
       ));
     });
@@ -1938,6 +2114,62 @@ extension FinancialAccountModelQueryFilter on QueryBuilder<
       ));
     });
   }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> versionEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> versionGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> versionLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel,
+      QAfterFilterCondition> versionBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'version',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension FinancialAccountModelQueryObject on QueryBuilder<
@@ -2019,6 +2251,20 @@ extension FinancialAccountModelQuerySortBy
   }
 
   QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByDeviceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByDeviceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
       sortByGroupId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'groupId', Sort.asc);
@@ -2057,6 +2303,20 @@ extension FinancialAccountModelQuerySortBy
       sortByIsActiveDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByIsDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.desc);
     });
   }
 
@@ -2157,6 +2417,20 @@ extension FinancialAccountModelQuerySortBy
       return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      sortByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension FinancialAccountModelQuerySortThenBy
@@ -2232,6 +2506,20 @@ extension FinancialAccountModelQuerySortThenBy
   }
 
   QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByDeviceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByDeviceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
       thenByGroupId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'groupId', Sort.asc);
@@ -2270,6 +2558,20 @@ extension FinancialAccountModelQuerySortThenBy
       thenByIsActiveDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByIsDeletedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeleted', Sort.desc);
     });
   }
 
@@ -2384,6 +2686,20 @@ extension FinancialAccountModelQuerySortThenBy
       return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QAfterSortBy>
+      thenByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension FinancialAccountModelQueryWhereDistinct
@@ -2425,6 +2741,13 @@ extension FinancialAccountModelQueryWhereDistinct
   }
 
   QueryBuilder<FinancialAccountModel, FinancialAccountModel, QDistinct>
+      distinctByDeviceId({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deviceId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QDistinct>
       distinctByGroupId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'groupId', caseSensitive: caseSensitive);
@@ -2442,6 +2765,13 @@ extension FinancialAccountModelQueryWhereDistinct
       distinctByIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isActive');
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QDistinct>
+      distinctByIsDeleted() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDeleted');
     });
   }
 
@@ -2493,6 +2823,13 @@ extension FinancialAccountModelQueryWhereDistinct
       return query.addDistinctBy(r'updatedAt');
     });
   }
+
+  QueryBuilder<FinancialAccountModel, FinancialAccountModel, QDistinct>
+      distinctByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'version');
+    });
+  }
 }
 
 extension FinancialAccountModelQueryProperty on QueryBuilder<
@@ -2538,6 +2875,13 @@ extension FinancialAccountModelQueryProperty on QueryBuilder<
     });
   }
 
+  QueryBuilder<FinancialAccountModel, String, QQueryOperations>
+      deviceIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deviceId');
+    });
+  }
+
   QueryBuilder<FinancialAccountModel, String?, QQueryOperations>
       groupIdProperty() {
     return QueryBuilder.apply(this, (query) {
@@ -2555,6 +2899,13 @@ extension FinancialAccountModelQueryProperty on QueryBuilder<
       isActiveProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isActive');
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, bool, QQueryOperations>
+      isDeletedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDeleted');
     });
   }
 
@@ -2602,6 +2953,12 @@ extension FinancialAccountModelQueryProperty on QueryBuilder<
       updatedAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'updatedAt');
+    });
+  }
+
+  QueryBuilder<FinancialAccountModel, int, QQueryOperations> versionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'version');
     });
   }
 }

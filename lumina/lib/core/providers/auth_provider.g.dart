@@ -135,7 +135,7 @@ final isFullAdminProvider = Provider<bool>.internal(
 );
 
 typedef IsFullAdminRef = ProviderRef<bool>;
-String _$isStaffHash() => r'4dcb27f400008294039a66620e807fc44a87f60f';
+String _$isStaffHash() => r'02fa73c6bf83ecbc9eb2a2c4f534b0e68e7e06c9';
 
 /// Vérifie si l'utilisateur fait partie du Staff (Accès opérationnel complet).
 /// Note: Tout le staff (Pasteurs, Secrétaires, Trésoriers) peut s'entraider.
@@ -251,7 +251,7 @@ final isMemberProvider = Provider<bool>.internal(
 );
 
 typedef IsMemberRef = ProviderRef<bool>;
-String _$authHash() => r'7eaff740c88f2e0cdafe74ffed85ab46a7ba344c';
+String _$authHash() => r'b53f3ffe243964dd36f7e6bc02dcf940456944ab';
 
 /// See also [Auth].
 @ProviderFor(Auth)

@@ -14,9 +14,12 @@ enum RoleLevel {
   /// Trésorier, Comptable, Commissaire aux comptes, Validateur.
   finance,
 
-  ///  CATÉGORIE 3 : ACCÈS STAFF (ADMINISTRATIF)
+  ///  CATÉGORIE 3 : ACCÈS STAFF (PASTEUR + ADMINISTRATIF)
   /// Pasteur, Secrétaire Général, Archive, Documents.
   staff,
+
+  ///  CATÉGORIE 3B : Pasteur (même accès opérationnel que staff)
+  pastoral,
 
   /// 👥 CATÉGORIE 4 : ACCÈS GROUPE (LEADER)
   /// Responsable de groupe, Chorale, Enfants, Jeunesse, Hommes, Femmes.
@@ -44,6 +47,7 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.finance:
         return 'Finance & Trésorerie';
       case RoleLevel.staff:
+      case RoleLevel.pastoral:
         return 'Staff & Administratif';
       case RoleLevel.groupLeader:
         return 'Leader de Groupe';
@@ -66,6 +70,7 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.finance:
         return 'Gestion financière, trésorerie et comptabilité';
       case RoleLevel.staff:
+      case RoleLevel.pastoral:
         return 'Gestion des membres et données administratives';
       case RoleLevel.groupLeader:
         return 'Gestion d\'équipe et suivi de groupe spécifique';
@@ -94,6 +99,7 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.consultation:
       case RoleLevel.membre:
         return 'person';
+      case RoleLevel.pastoral:
       case RoleLevel.superadmin:
         return 'vpn_key';
       case RoleLevel.custom:
@@ -116,6 +122,8 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.consultation:
       case RoleLevel.membre:
         return '#9E9E9E'; // Gris Consultation
+      case RoleLevel.pastoral:
+        return '#2196F3'; // Bleu Pasteur (même famille staff)
       case RoleLevel.superadmin:
         return '#673AB7'; // Deep Purple
       case RoleLevel.custom:
@@ -134,6 +142,7 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.finance:
         return 60;
       case RoleLevel.staff:
+      case RoleLevel.pastoral:
         return 60;
       case RoleLevel.groupLeader:
         return 40;
@@ -156,6 +165,7 @@ extension RoleLevelExtension on RoleLevel {
       case RoleLevel.finance:
         return 2;
       case RoleLevel.staff:
+      case RoleLevel.pastoral:
         return 1;
       case RoleLevel.groupLeader:
         return 3;

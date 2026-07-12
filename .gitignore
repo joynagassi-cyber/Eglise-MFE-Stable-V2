@@ -107,6 +107,12 @@ RECOVERY_GUIDE.md
 # Supabase test scripts (contain credentials, not for git)
 supabase/test_*.py
 supabase/test_*.sql
+supabase/.temp/
+supabase/__pycache__/
 
 # ZCode context
 .zcode/
+
+# CI artifacts / stack dumps (not for git)
+ci_jobs.json
+*.stackdump

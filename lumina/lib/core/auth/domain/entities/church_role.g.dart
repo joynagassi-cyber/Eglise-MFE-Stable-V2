@@ -46,6 +46,7 @@ const _$RoleLevelEnumMap = {
   RoleLevel.admin: 'admin',
   RoleLevel.finance: 'finance',
   RoleLevel.staff: 'staff',
+  RoleLevel.pastoral: 'pastoral',
   RoleLevel.groupLeader: 'groupLeader',
   RoleLevel.superadmin: 'superadmin',
   RoleLevel.consultation: 'consultation',

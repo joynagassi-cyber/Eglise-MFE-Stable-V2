@@ -336,7 +336,7 @@ class Auth extends _$Auth with AuditableMixin {
         name: session.name,
       ),
       role: const app_auth.RoleInfo(
-        code: 'membre',
+        code: 'membre_simple',
         label: 'Membre',
         isSuper: false,
         level: app_auth.RoleLevel.consultation,
@@ -662,7 +662,10 @@ bool _checkAdminAccess(app_auth.RoleInfo role) {
 @Riverpod(keepAlive: true)
 bool isStaff(IsStaffRef ref) {
   final level = ref.watch(currentRoleLevelProvider);
-  return level == RoleLevel.staff || ref.watch(isFullAdminProvider);
+  return level == RoleLevel.staff ||
+      level == RoleLevel.pastoral ||
+      level == RoleLevel.finance ||
+      ref.watch(isFullAdminProvider);
 }
 
 /// Vérifie si l'utilisateur a accès aux finances.

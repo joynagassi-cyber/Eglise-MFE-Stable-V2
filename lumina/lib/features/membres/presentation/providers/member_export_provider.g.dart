@@ -24,7 +24,7 @@ final activeChurchNameProvider = AutoDisposeFutureProvider<String?>.internal(
 
 typedef ActiveChurchNameRef = AutoDisposeFutureProviderRef<String?>;
 String _$memberExportActionsHash() =>
-    r'ea670b0fe03eb7437d9228a7786e4d19f4ea6cc7';
+    r'12e944c59e8427dd60f04f88e92995cb60868a09';
 
 /// Provider pour les actions d'export/import
 ///

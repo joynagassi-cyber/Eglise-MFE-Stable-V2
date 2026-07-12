@@ -33,48 +33,53 @@ const SocialCommentModelSchema = CollectionSchema(
       name: r'authorName',
       type: IsarType.string,
     ),
-    r'content': PropertySchema(
+    r'churchId': PropertySchema(
       id: 3,
+      name: r'churchId',
+      type: IsarType.string,
+    ),
+    r'content': PropertySchema(
+      id: 4,
       name: r'content',
       type: IsarType.string,
     ),
     r'createdAt': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'isDeleted': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'isDeleted',
       type: IsarType.bool,
     ),
     r'isSynced': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isSynced',
       type: IsarType.bool,
     ),
     r'jsonData': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'jsonData',
       type: IsarType.string,
     ),
     r'lastSyncedAt': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'lastSyncedAt',
       type: IsarType.dateTime,
     ),
     r'postId': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'postId',
       type: IsarType.string,
     ),
     r'remoteId': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'remoteId',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -110,6 +115,19 @@ const SocialCommentModelSchema = CollectionSchema(
           caseSensitive: true,
         )
       ],
+    ),
+    r'churchId': IndexSchema(
+      id: 8423068024602774628,
+      name: r'churchId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'churchId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
     )
   },
   links: {},
@@ -139,6 +157,12 @@ int _socialCommentModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.churchId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.content.length * 3;
   {
     final value = object.jsonData;
@@ -160,15 +184,16 @@ void _socialCommentModelSerialize(
   writer.writeString(offsets[0], object.authorAvatarUrl);
   writer.writeString(offsets[1], object.authorId);
   writer.writeString(offsets[2], object.authorName);
-  writer.writeString(offsets[3], object.content);
-  writer.writeDateTime(offsets[4], object.createdAt);
-  writer.writeBool(offsets[5], object.isDeleted);
-  writer.writeBool(offsets[6], object.isSynced);
-  writer.writeString(offsets[7], object.jsonData);
-  writer.writeDateTime(offsets[8], object.lastSyncedAt);
-  writer.writeString(offsets[9], object.postId);
-  writer.writeString(offsets[10], object.remoteId);
-  writer.writeDateTime(offsets[11], object.updatedAt);
+  writer.writeString(offsets[3], object.churchId);
+  writer.writeString(offsets[4], object.content);
+  writer.writeDateTime(offsets[5], object.createdAt);
+  writer.writeBool(offsets[6], object.isDeleted);
+  writer.writeBool(offsets[7], object.isSynced);
+  writer.writeString(offsets[8], object.jsonData);
+  writer.writeDateTime(offsets[9], object.lastSyncedAt);
+  writer.writeString(offsets[10], object.postId);
+  writer.writeString(offsets[11], object.remoteId);
+  writer.writeDateTime(offsets[12], object.updatedAt);
 }
 
 SocialCommentModel _socialCommentModelDeserialize(
@@ -181,16 +206,17 @@ SocialCommentModel _socialCommentModelDeserialize(
   object.authorAvatarUrl = reader.readStringOrNull(offsets[0]);
   object.authorId = reader.readString(offsets[1]);
   object.authorName = reader.readStringOrNull(offsets[2]);
-  object.content = reader.readString(offsets[3]);
-  object.createdAt = reader.readDateTimeOrNull(offsets[4]);
-  object.isDeleted = reader.readBool(offsets[5]);
-  object.isSynced = reader.readBool(offsets[6]);
+  object.churchId = reader.readStringOrNull(offsets[3]);
+  object.content = reader.readString(offsets[4]);
+  object.createdAt = reader.readDateTimeOrNull(offsets[5]);
+  object.isDeleted = reader.readBool(offsets[6]);
+  object.isSynced = reader.readBool(offsets[7]);
   object.isarId = id;
-  object.jsonData = reader.readStringOrNull(offsets[7]);
-  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[8]);
-  object.postId = reader.readString(offsets[9]);
-  object.remoteId = reader.readString(offsets[10]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[11]);
+  object.jsonData = reader.readStringOrNull(offsets[8]);
+  object.lastSyncedAt = reader.readDateTimeOrNull(offsets[9]);
+  object.postId = reader.readString(offsets[10]);
+  object.remoteId = reader.readString(offsets[11]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[12]);
   return object;
 }
 
@@ -208,22 +234,24 @@ P _socialCommentModelDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
       return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -464,6 +492,73 @@ extension SocialCommentModelQueryWhere
               indexName: r'postId',
               lower: [],
               upper: [postId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterWhereClause>
+      churchIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'churchId',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterWhereClause>
+      churchIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'churchId',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterWhereClause>
+      churchIdEqualTo(String? churchId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'churchId',
+        value: [churchId],
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterWhereClause>
+      churchIdNotEqualTo(String? churchId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [],
+              upper: [churchId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [churchId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [churchId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'churchId',
+              lower: [],
+              upper: [churchId],
               includeUpper: false,
             ));
       }
@@ -912,6 +1007,160 @@ extension SocialCommentModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'authorName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'churchId',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'churchId',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'churchId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'churchId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'churchId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'churchId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterFilterCondition>
+      churchIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'churchId',
         value: '',
       ));
     });
@@ -1829,6 +2078,20 @@ extension SocialCommentModelQuerySortBy
   }
 
   QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
+      sortByChurchId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
+      sortByChurchIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
       sortByContent() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'content', Sort.asc);
@@ -2000,6 +2263,20 @@ extension SocialCommentModelQuerySortThenBy
   }
 
   QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
+      thenByChurchId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
+      thenByChurchIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'churchId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QAfterSortBy>
       thenByContent() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'content', Sort.asc);
@@ -2165,6 +2442,13 @@ extension SocialCommentModelQueryWhereDistinct
   }
 
   QueryBuilder<SocialCommentModel, SocialCommentModel, QDistinct>
+      distinctByChurchId({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'churchId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, SocialCommentModel, QDistinct>
       distinctByContent({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'content', caseSensitive: caseSensitive);
@@ -2254,6 +2538,13 @@ extension SocialCommentModelQueryProperty
       authorNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'authorName');
+    });
+  }
+
+  QueryBuilder<SocialCommentModel, String?, QQueryOperations>
+      churchIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'churchId');
     });
   }
 
