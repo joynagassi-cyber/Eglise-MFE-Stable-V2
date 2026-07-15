@@ -4,7 +4,6 @@ import 'package:lumina/core/theme/lumina_design_system.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/providers/auth_provider.dart';
 import 'package:lumina/core/providers/repository_providers_auth.dart';
-import '../../../../core/router/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/onboarding_progress_provider.dart';
 import '../../domain/entities/onboarding_step.dart';
@@ -87,7 +86,7 @@ class OnboardingScreen extends ConsumerWidget {
   /// 1. assign_user_role('membre_simple') en DB — BLOCANT
   /// 2. progress → completed
   /// 3. completeOnboarding() → needs_onboarding = false en DB
-  /// 4. context.go('/dashboard') — remplace la pile, retour impossible
+  /// 4. Router redirige automatiquement vers initialRoute
   ///
   /// Si l'assignation serveur échoue → reset progress + erreur.
   /// ═══════════════════════════════════════════════════════════════════
@@ -130,13 +129,13 @@ class OnboardingScreen extends ConsumerWidget {
       await ref.read(authProvider.notifier).completeOnboarding()
           .timeout(const Duration(seconds: 10));
     } catch (e) {
-      AppLogger.w('completeOnboarding timeout, navigation quand même: $e', 'ONBOARDING');
+      AppLogger.w('completeOnboarding timeout: $e', 'ONBOARDING');
     }
 
-    // Navigation irréversible
-    if (context.mounted) {
-      context.go(AppRoutes.dashboard);
-    }
+    // Navigation déléguée au router :
+    // routeStatusProvider passe à authenticated → RouterRefreshListenable
+    // notifie GoRouter → AuthenticatedRedirectPolicy redirige vers initialRoute.
+    // Pas de context.go() direct ici pour éviter la course avec le router.
   }
 }
 

@@ -134,7 +134,7 @@ class Auth extends _$Auth with AuditableMixin {
 
     app_auth.UserContext context;
     if (skipContextFetch) {
-      context = _buildFallbackContext(session);
+      context = _buildFallbackContext(session, needsOnboarding: session.needsOnboarding);
       AppLogger.d(
         'Utilisation du contexte fallback (onboarding requis ou session légère)',
         'AUTH_PROVIDER',
@@ -153,7 +153,7 @@ class Auth extends _$Auth with AuditableMixin {
           'getUserContext() échoué dans _sub listener. Fallback. Erreur: $e',
           'AUTH_PROVIDER',
         );
-        context = _buildFallbackContext(session);
+        context = _buildFallbackContext(session, needsOnboarding: session.needsOnboarding);
       }
     }
 
@@ -228,7 +228,7 @@ class Auth extends _$Auth with AuditableMixin {
         _lastSession = session;
         return app_auth.AuthOnboardingRequired(
           session: session,
-          context: _buildFallbackContext(session),
+          context: _buildFallbackContext(session, needsOnboarding: session.needsOnboarding),
         );
       }
 
@@ -257,7 +257,7 @@ class Auth extends _$Auth with AuditableMixin {
         );
         return app_auth.AuthOnboardingRequired(
           session: session,
-          context: _buildFallbackContext(session),
+          context: _buildFallbackContext(session, needsOnboarding: session.needsOnboarding),
         );
       }
     } catch (e) {
@@ -312,7 +312,7 @@ class Auth extends _$Auth with AuditableMixin {
           // Fallback déterministe en cas de problème de contexte après login réussi
           state = AsyncData(app_auth.AuthOnboardingRequired(
             session: session,
-            context: _buildFallbackContext(session),
+            context: _buildFallbackContext(session, needsOnboarding: session.needsOnboarding),
           ));
           _lastSession = session;
           _lastManualAuthAt = DateTime.now();
@@ -328,22 +328,30 @@ class Auth extends _$Auth with AuditableMixin {
     }
   }
 
-  app_auth.UserContext _buildFallbackContext(UserSession session) {
+  app_auth.UserContext _buildFallbackContext(
+    UserSession session, {
+    bool? needsOnboarding,
+  }) {
+    // Convert ChurchRole -> RoleInfo pour le fallback.
+    // ChurchRole.name est utilisé comme code et label (comportement历史).
+    final isSuper = session.role.level == app_auth.RoleLevel.superadmin ||
+        session.role.level == app_auth.RoleLevel.adminTotal;
     return app_auth.UserContext(
       user: app_auth.UserInfo(
         id: session.userId,
         email: session.email,
         name: session.name,
       ),
-      role: const app_auth.RoleInfo(
-        code: 'membre_simple',
-        label: 'Membre',
-        isSuper: false,
-        level: app_auth.RoleLevel.consultation,
+      role: app_auth.RoleInfo(
+        code: session.role.name,
+        label: session.role.name,
+        isSuper: isSuper,
+        level: session.role.level,
+        initialRoute: session.role.initialRoute,
       ),
       permissions: const {},
       generatedAt: DateTime.now().toUtc(),
-      needsOnboarding: true,
+      needsOnboarding: needsOnboarding ?? session.needsOnboarding,
     );
   }
 
@@ -374,7 +382,7 @@ class Auth extends _$Auth with AuditableMixin {
         // On va directement au fallback → AuthOnboardingRequired → /onboarding.
         state = AsyncData(app_auth.AuthOnboardingRequired(
           session: session,
-          context: _buildFallbackContext(session),
+          context: _buildFallbackContext(session, needsOnboarding: true),
         ));
         _lastSession = session;
         _lastManualAuthAt = DateTime.now();

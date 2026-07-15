@@ -103,15 +103,13 @@ class _RoleCodeVerificationScreenState
             .timeout(const Duration(seconds: 10));
         AppLogger.i('completeOnboarding réussi', 'ROLE_CODE_VERIFY');
       } catch (e) {
-        AppLogger.w('completeOnboarding timeout/erreur (navigating anyway): $e', 'ROLE_CODE_VERIFY');
-        // Forcer quand même la transition — le provider a déjà le fallback
+        AppLogger.w('completeOnboarding timeout/erreur: $e', 'ROLE_CODE_VERIFY');
+        // Le provider a déjà le fallback ; le router gère la navigation.
       }
 
-      // ── ÉTAPE 5 : Naviguer vers le dashboard ──
-      if (mounted) {
-        AppLogger.i('Navigation → /dashboard', 'ROLE_CODE_VERIFY');
-        context.go('/dashboard');
-      }
+      // Navigation déléguée au router :
+      // completeOnboarding() → AuthAuthenticated → routeStatusProvider = authenticated
+      // → RouterRefreshListenable notifie GoRouter → redirect vers initialRoute.
     } catch (e, st) {
       AppLogger.e('Erreur vérification code', 'ROLE_CODE_VERIFY', e, st);
       if (mounted) {

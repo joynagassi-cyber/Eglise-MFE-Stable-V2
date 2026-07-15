@@ -5,7 +5,6 @@ import 'package:lumina/core/theme/lumina_design_system.dart';
 
 import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/providers/repository_providers_auth.dart';
-import '../../../../core/router/app_routes.dart';
 import '../../../onboarding/presentation/providers/onboarding_progress_provider.dart';
 import '../../../onboarding/domain/entities/onboarding_step.dart';
 import '../../../../core/extensions/context_extension.dart';
@@ -149,10 +148,9 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
       await ref.read(authProvider.notifier).completeOnboarding()
           .timeout(const Duration(seconds: 10));
 
-      if (mounted) {
-        // context.go remplace la pile de navigation — retour impossible
-        context.go(AppRoutes.dashboard);
-      }
+      // Navigation déléguée au router :
+      // completeOnboarding() → AuthAuthenticated → routeStatusProvider = authenticated
+      // → RouterRefreshListenable notifie GoRouter → redirect vers initialRoute.
     } catch (e) {
       AppLogger.e('Erreur onboarding membre', 'ROLE_SELECTION', e);
       if (mounted) {
