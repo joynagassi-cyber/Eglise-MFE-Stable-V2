@@ -181,8 +181,8 @@ class AppBootstrap {
       throw Exception('Initialization failed');
     }
 
-    final String? ciGoogleWebClientIdFromDefine =
-        const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
+    final String ciGoogleWebClientIdFromDefine =
+        const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID', '');
 
     final container = ProviderContainer(
       overrides: [
