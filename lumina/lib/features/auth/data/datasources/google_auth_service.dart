@@ -17,6 +17,13 @@ class GoogleAuthServiceImpl implements IGoogleAuthService {
             const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID'),
         _enableLogging = enableLogging;
 
+  GoogleAuthServiceImpl.direct({
+    required String webClientId,
+    bool enableLogging = kDebugMode,
+  })  : _googleSignIn = GoogleSignIn.instance,
+        _webClientId = webClientId,
+        _enableLogging = enableLogging;
+
   final GoogleSignIn _googleSignIn;
   final String? _webClientId;
   final bool _enableLogging;

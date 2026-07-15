@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:lumina/core/data/local/isar_service.dart';
+import 'package:lumina/core/providers/app_env_provider.dart';
 import 'package:lumina/core/providers/supabase_provider.dart';
 import 'package:lumina/features/auth/data/datasources/google_auth_service.dart';
 import 'package:lumina/features/auth/data/datasources/user_context_remote_datasource.dart';
@@ -50,7 +51,8 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 
 @Riverpod(keepAlive: true)
 IGoogleAuthService googleAuthService(GoogleAuthServiceRef ref) {
-  return GoogleAuthServiceImpl();
+  final webClientId = ref.watch(googleWebClientIdProvider);
+  return GoogleAuthServiceImpl(webClientId: webClientId);
 }
 
 @Riverpod(keepAlive: true)

@@ -4,6 +4,7 @@ import 'dart:io' show File;
 import 'package:lumina/core/api/supabase_service.dart';
 import 'package:lumina/core/config/image_cache_config.dart';
 import 'package:lumina/core/data/local/isar_service.dart';
+import 'package:lumina/core/providers/app_env_provider.dart';
 import 'package:lumina/core/logging/app_logger.dart';
 import 'package:lumina/core/logging/error_reporter.dart';
 import 'package:lumina/core/services/offline_sync_manager.dart';
@@ -50,6 +51,7 @@ class AppBootstrap {
     // En local elles sont lues depuis le fichier .env.
     String? ciSupabaseUrl,
     String? ciSupabaseAnonKey,
+    String? ciGoogleWebClientId,
     void Function()? setupGlobalErrorHandlers,
     Future<void> Function()? initLogger,
     void Function()? configureImageCache,
@@ -179,10 +181,29 @@ class AppBootstrap {
       throw Exception('Initialization failed');
     }
 
+    final String? ciGoogleWebClientIdFromDefine =
+        const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
+
     final container = ProviderContainer(
       overrides: [
         isarServiceProvider.overrideWithValue(isarService),
         sharedPreferencesProvider.overrideWithValue(prefs),
+        appEnvProvider.overrideWith((_) {
+          String? readEnv(String key) {
+            final bootstrapValue = switch (key) {
+              'GOOGLE_WEB_CLIENT_ID' when ciGoogleWebClientIdFromDefine.isNotEmpty =>
+                ciGoogleWebClientIdFromDefine,
+              'SUPABASE_URL' when ciSupabaseUrl != null && ciSupabaseUrl.isNotEmpty =>
+                ciSupabaseUrl,
+              'SUPABASE_ANON_KEY' when ciSupabaseAnonKey != null && ciSupabaseAnonKey.isNotEmpty =>
+                ciSupabaseAnonKey,
+              _ => null,
+            };
+            return bootstrapValue ?? getEnv(key);
+          }
+
+          return AppEnv(readEnv);
+        }),
       ],
     );
 

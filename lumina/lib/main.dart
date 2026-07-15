@@ -57,6 +57,8 @@ void main() async {
     // Ils prennent priorité sur le fichier .env local.
     const ciSupabaseUrl = String.fromEnvironment('SUPABASE_URL');
     const ciSupabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+    const ciGoogleWebClientId =
+        String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
 
     // 2. Firebase Init
     await Firebase.initializeApp();
@@ -68,6 +70,8 @@ void main() async {
       dotenvTimeout: const Duration(seconds: 5),
       ciSupabaseUrl: ciSupabaseUrl.isNotEmpty ? ciSupabaseUrl : null,
       ciSupabaseAnonKey: ciSupabaseAnonKey.isNotEmpty ? ciSupabaseAnonKey : null,
+      ciGoogleWebClientId:
+          ciGoogleWebClientId.isNotEmpty ? ciGoogleWebClientId : null,
     );
 
     // 3. Secondary Services (Non-blocking)
