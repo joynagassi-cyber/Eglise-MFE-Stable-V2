@@ -182,7 +182,7 @@ class AppBootstrap {
     }
 
     final String ciGoogleWebClientIdFromDefine =
-        const String.fromEnvironment('GOOGLE_WEB_CLIENT_ID', '');
+        String.fromEnvironment('GOOGLE_WEB_CLIENT_ID', defaultValue: '');
 
     final container = ProviderContainer(
       overrides: [

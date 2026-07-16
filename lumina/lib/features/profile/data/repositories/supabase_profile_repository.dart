@@ -126,8 +126,7 @@ class SupabaseProfileRepository implements ProfileRepository {
     // if the profiles row does not yet exist (post-role-code onboarding).
     // By emitting null upfront, the UI shows the dashboard immediately
     // and updates the firstName when the profile arrives.
-    return Stream.concat([
-      Stream.value(null),
+    return Stream.value(null).followedBy(
       _client
           .from('profiles')
           .stream(primaryKey: ['id'])
@@ -155,7 +154,7 @@ class SupabaseProfileRepository implements ProfileRepository {
               sink.add(null);
             },
           ),
-    ]).takeWhile((_) => true); // keep stream open after first null
+    ).takeWhile((_) => true); // keep stream open after first null
   }
 
   // ─── _syncToLegacyMember (privé) ─────────────────────────────────────────
