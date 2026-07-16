@@ -30,139 +30,49 @@ class HomeSwitcher extends ConsumerWidget {
     final userContextAsync = ref.watch(userContextNotifierProvider);
     final currentIndex = ref.watch(dashboardNavIndexProvider);
 
-    return profileAsync.when(
-      data: (profile) {
-        // Profile null (nouvel utilisateur, pas encore de row dans profiles)
-        // → On continue quand même avec un profil par défaut plutôt que
-        //   de bloquer l'utilisateur sur un message d'erreur.
-        if (profile == null) {
-          final roleLevel = userContextAsync.valueOrNull?.role.level ??
-              RoleLevel.membre;
-          final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
-          final isMemberViewMode = ref.watch(memberViewModeProvider);
-          final isProfessionalArea = hasLeaderAccess && !isMemberViewMode;
-          final navItems = _getNavItems(isProfessionalArea, roleLevel);
+    // Le profil est un enrichissement : on affiche le dashboard immÃ©diatement
+    // et on met Ã  jour le header quand le profil arrive.
+    final profile = profileAsync.valueOrNull;
+    final userContext = userContextAsync.valueOrNull;
+    final roleLevel = userContext?.role.level ?? RoleLevel.membre;
+    final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
+    final isMemberViewMode = ref.watch(memberViewModeProvider);
+    final isProfessionalArea = hasLeaderAccess && !isMemberViewMode;
+    final navItems = _getNavItems(isProfessionalArea, roleLevel);
 
-          return Scaffold(
-            drawer: const MainDrawer(),
-            body: Column(
-              children: [
-                _buildHomeHeader(context, ref, firstName: null),
-                Expanded(
-                  child: IndexedStack(
-                    index: currentIndex,
-                    children: navItems.map((item) => item.view).toList(),
-                  ),
-                ),
-              ],
+    return Scaffold(
+      drawer: const MainDrawer(),
+      body: Column(
+        children: [
+          _buildHomeHeader(context, ref, firstName: profile?.firstName),
+          Expanded(
+            child: IndexedStack(
+              index: currentIndex,
+              children: navItems.map((item) => item.view).toList(),
             ),
-            bottomNavigationBar: PremiumBottomBar(
-              currentIndex: currentIndex,
-              onTap: (index) =>
-                  ref.read(dashboardNavIndexProvider.notifier).state = index,
-              middleAction: RadialFireMenu(
-                items: _getRadialItems(context, hasLeaderAccess),
-              ),
-              items: navItems.asMap().entries.map((entry) {
-                final index = entry.key;
-                final item = entry.value;
-                return BottomNavigationBarItem(
-                  icon: DuoToneIcon(
-                    icon: item.icon,
-                    size: 24,
-                    backgroundOpacity: currentIndex == index ? 0.3 : 0.1,
-                    isFlamboyant: currentIndex == index,
-                  ),
-                  label: item.label,
-                );
-              }).toList(),
-            ),
-          );
-        }
-
-        // FIX: Utiliser la hiérarchie RoleLevel (RBAC source de vérité complète)
-        final userContext = userContextAsync.valueOrNull;
-        final roleLevel = userContext?.role.level ?? RoleLevel.membre;
-
-        // Accès leader pour tous ceux ayant un niveau hiérarchique >= 40
-        final hasLeaderAccess = roleLevel.hierarchyLevel >= 40;
-
-        // Mode Vue Membre forcé ?
-        final isMemberViewMode = ref.watch(memberViewModeProvider);
-
-        // Dashboard pro seulement si on a l'accès ET qu'on n'est pas en mode membre
-        final isProfessionalArea = hasLeaderAccess && !isMemberViewMode;
-
-        // 1. Définition des modules selon le niveau de rôle
-        final List<_NavigationItem> navItems =
-            _getNavItems(isProfessionalArea, roleLevel);
-
-        return Scaffold(
-          drawer: const MainDrawer(),
-          body: Column(
-            children: [
-              _buildHomeHeader(
-                context,
-                ref,
-                firstName: profile.firstName,
-                roleLabel: userContext?.role.label,
-              ),
-              Expanded(
-                child: IndexedStack(
-                  index: currentIndex,
-                  children: navItems.map((item) => item.view).toList(),
-                ),
-              ),
-            ],
           ),
-          bottomNavigationBar: PremiumBottomBar(
-            currentIndex: currentIndex,
-            onTap: (index) =>
-                ref.read(dashboardNavIndexProvider.notifier).state = index,
-            middleAction: RadialFireMenu(
-              items: _getRadialItems(context, hasLeaderAccess),
-            ),
-            items: navItems.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              return BottomNavigationBarItem(
-                icon: DuoToneIcon(
-                  icon: item.icon,
-                  size: 24,
-                  backgroundOpacity: currentIndex == index ? 0.3 : 0.1,
-                  isFlamboyant: currentIndex == index,
-                ),
-                label: item.label,
-              );
-            }).toList(),
-          ),
-        );
-      },
-      loading: () => Scaffold(
-        body: _buildLoadingScaffold(context),
+        ],
       ),
-      error: (e, st) => Scaffold(
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48),
-                SizedBox(height: 16),
-                Text(
-                  'Erreur d\'aiguillage : $e',
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => ref.invalidate(profileStateProvider),
-                  child: Text('Réessayer'),
-                ),
-              ],
-            ),
-          ),
+      bottomNavigationBar: PremiumBottomBar(
+        currentIndex: currentIndex,
+        onTap: (index) =>
+            ref.read(dashboardNavIndexProvider.notifier).state = index,
+        middleAction: RadialFireMenu(
+          items: _getRadialItems(context, hasLeaderAccess),
         ),
+        items: navItems.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          return BottomNavigationBarItem(
+            icon: DuoToneIcon(
+              icon: item.icon,
+              size: 24,
+              backgroundOpacity: currentIndex == index ? 0.3 : 0.1,
+              isFlamboyant: currentIndex == index,
+            ),
+            label: item.label,
+          );
+        }).toList(),
       ),
     );
   }
@@ -299,7 +209,8 @@ class HomeSwitcher extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFFD4AF37).withValues(alpha: 0.9),
+                            color:
+                                const Color(0xFFD4AF37).withValues(alpha: 0.9),
                             letterSpacing: 0.4,
                           ),
                         ),
@@ -342,27 +253,6 @@ class HomeSwitcher extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Scaffold de chargement : montre la structure du dashboard pendant
-  /// que le profil se charge.
-  Widget _buildLoadingScaffold(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.home_rounded, size: 48, color: context.colors.textTertiary),
-          const SizedBox(height: 16),
-          Text(
-            'Chargement de votre espace...',
-            style: TextStyle(
-              color: context.colors.textSecondary,
-              fontSize: 14,
             ),
           ),
         ],

@@ -28,16 +28,19 @@ class SupabaseProfileRepository implements ProfileRepository {
       // FIX #11 — Différenciation des erreurs Postgrest
       if (e.code == 'PGRST116') {
         AppLogger.w('Profile not found: $id', _tag);
-        return const Left(ServerFailure('Profil introuvable', code: 'NOT_FOUND'));
+        return const Left(
+            ServerFailure('Profil introuvable', code: 'NOT_FOUND'));
       } else if (e.code == '42501') {
         AppLogger.w('RLS denied access to profile: $id', _tag);
-        return const Left(PermissionFailure('Accès refusé au profil', code: 'FORBIDDEN'));
+        return const Left(
+            PermissionFailure('Accès refusé au profil', code: 'FORBIDDEN'));
       }
       AppLogger.e('Erreur Postgrest récupération profil: $id', _tag, e);
       return Left(ServerFailure(e.message, code: e.code));
     } on FormatException catch (e) {
       AppLogger.e('Erreur parsing profil: $id', _tag, e);
-      return const Left(ServerFailure('Données profil invalides', code: 'PARSE_ERROR'));
+      return const Left(
+          ServerFailure('Données profil invalides', code: 'PARSE_ERROR'));
     } on SocketException catch (e) {
       AppLogger.e('Erreur réseau récupération profil: $id', _tag, e);
       return const Left(NetworkFailure('Pas de connexion réseau'));
@@ -88,7 +91,8 @@ class SupabaseProfileRepository implements ProfileRepository {
 
       return Right(updatedProfile);
     } on PostgrestException catch (e) {
-      AppLogger.e('Erreur Postgrest mise à jour profil: ${profile.id}', _tag, e);
+      AppLogger.e(
+          'Erreur Postgrest mise à jour profil: ${profile.id}', _tag, e);
       return Left(ServerFailure(e.message, code: e.code));
     } catch (e) {
       AppLogger.e('Erreur mise à jour profil: ${profile.id}', _tag, e);
@@ -117,40 +121,41 @@ class SupabaseProfileRepository implements ProfileRepository {
 
   @override
   Stream<Profile?> watchProfile(String id) {
-    // FIX #5 — Ne pas fermer le sink sur timeout.
-    // FIX #11 — Propager les erreurs de parsing au lieu de les masquer.
-    return _client
-        .from('profiles')
-        .stream(primaryKey: ['id'])
-        .eq('id', id)
-        .map((data) {
-          if (data.isEmpty) return null;
-          try {
-            return Profile.fromJson(data.first);
-          } catch (e) {
-            AppLogger.e('Erreur parsing profil stream: $id', _tag, e);
-            // Relancer pour que handleError puisse le capturer
-            throw const ServerFailure('Données profil invalides', code: 'PARSE_ERROR');
-          }
-        })
-        .handleError((e, stack) {
-          // Émettre null et continuer à écouter — NE PAS fermer le stream
-          AppLogger.e('Erreur stream profil: $id', _tag, e);
-        })
-        .timeout(
-          const Duration(seconds: 8),
-          onTimeout: (sink) {
-            // FIX #5 : émettre null mais NE PAS fermer le sink.
-            // Le stream reste actif pour capter les mises à jour futures
-            // (ex : profil créé après le timeout pendant l'onboarding).
-            AppLogger.w(
-              'Profile stream timeout (stream maintenu actif): $id',
-              _tag,
-            );
-            sink.add(null);
-            // sink.close() ← SUPPRIMÉ intentionnellement
-          },
-        );
+    // Emit null IMMEDIATELY (profile is enrichment, not a prerequisite).
+    // Supabase realtime stream can take up to 8s (timeout) or block indefinitely
+    // if the profiles row does not yet exist (post-role-code onboarding).
+    // By emitting null upfront, the UI shows the dashboard immediately
+    // and updates the firstName when the profile arrives.
+    return Stream.concat([
+      Stream.value(null),
+      _client
+          .from('profiles')
+          .stream(primaryKey: ['id'])
+          .eq('id', id)
+          .map((data) {
+            if (data.isEmpty) return null;
+            try {
+              return Profile.fromJson(data.first);
+            } catch (e) {
+              AppLogger.e('Erreur parsing profil stream: $id', _tag, e);
+              throw const ServerFailure('Données profil invalides',
+                  code: 'PARSE_ERROR');
+            }
+          })
+          .handleError((e, stack) {
+            AppLogger.e('Erreur stream profil: $id', _tag, e);
+          })
+          .timeout(
+            const Duration(seconds: 8),
+            onTimeout: (sink) {
+              AppLogger.w(
+                'Profile stream timeout (stream maintenu actif): $id',
+                _tag,
+              );
+              sink.add(null);
+            },
+          ),
+    ]).takeWhile((_) => true); // keep stream open after first null
   }
 
   // ─── _syncToLegacyMember (privé) ─────────────────────────────────────────
