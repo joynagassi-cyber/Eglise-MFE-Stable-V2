@@ -126,35 +126,46 @@ class SupabaseProfileRepository implements ProfileRepository {
     // if the profiles row does not yet exist (post-role-code onboarding).
     // By emitting null upfront, the UI shows the dashboard immediately
     // and updates the firstName when the profile arrives.
-    return Stream.value(null).followedBy(
-      _client
-          .from('profiles')
-          .stream(primaryKey: ['id'])
-          .eq('id', id)
-          .map((data) {
-            if (data.isEmpty) return null;
-            try {
-              return Profile.fromJson(data.first);
-            } catch (e) {
-              AppLogger.e('Erreur parsing profil stream: $id', _tag, e);
-              throw const ServerFailure('Données profil invalides',
-                  code: 'PARSE_ERROR');
-            }
-          })
-          .handleError((e, stack) {
-            AppLogger.e('Erreur stream profil: $id', _tag, e);
-          })
-          .timeout(
-            const Duration(seconds: 8),
-            onTimeout: (sink) {
-              AppLogger.w(
-                'Profile stream timeout (stream maintenu actif): $id',
-                _tag,
-              );
-              sink.add(null);
-            },
-          ),
-    ).takeWhile((_) => true); // keep stream open after first null
+    final controller = StreamController<Profile?>.broadcast();
+    // Émettre null immédiatement, puis relayer le flux Supabase.
+    controller.add(null);
+    final realtime = _client
+        .from('profiles')
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((data) {
+          if (data.isEmpty) return null;
+          try {
+            return Profile.fromJson(data.first);
+          } catch (e) {
+            AppLogger.e('Erreur parsing profil stream: $id', _tag, e);
+            throw const ServerFailure('Données profil invalides',
+                code: 'PARSE_ERROR');
+          }
+        })
+        .handleError((e, stack) {
+          AppLogger.e('Erreur stream profil: $id', _tag, e);
+        })
+        .timeout(
+          const Duration(seconds: 8),
+          onTimeout: (sink) {
+            AppLogger.w(
+              'Profile stream timeout (stream maintenu actif): $id',
+              _tag,
+            );
+            sink.add(null);
+          },
+        );
+    realtime.listen(
+      controller.add,
+      onError: (e, st) {
+        if (!controller.isClosed) controller.addError(e, st);
+      },
+      onDone: () {
+        if (!controller.isClosed) controller.close();
+      },
+    );
+    return controller.stream;
   }
 
   // ─── _syncToLegacyMember (privé) ─────────────────────────────────────────
