@@ -11,6 +11,8 @@ import '../../../onboarding/presentation/providers/onboarding_progress_provider.
 import '../../../onboarding/domain/entities/onboarding_step.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/extensions/context_extension.dart';
+import '../../../../core/providers/local_persistence_provider.dart';
+import '../../../../core/data/models/local_user_context_model.dart';
 
 class RoleCodeVerificationScreen extends ConsumerStatefulWidget {
   const RoleCodeVerificationScreen({super.key});
@@ -32,17 +34,14 @@ class _RoleCodeVerificationScreenState
     super.dispose();
   }
 
-  /// ══════════════════════════════════════════════════════════════════════════
-  /// FLUX DÉTERMINISTE DE VÉRIFICATION
+  /// Flux de verification de code role - Offline-first
+  /// 1. RedeemSecretCode -> obtient role_code
+  /// 2. AssignRoleToUser -> cree user_roles + user_sessions + profiles
+  /// 3. CompleteOnboarding -> met l'etat auth a AuthAuthenticated
+  /// 4. Navigation -> deleguee au router
   ///
-  /// 1. RedeemSecretCode → obtient role_code
-  /// 2. AssignRoleToUser → crée user_roles + user_sessions + profiles
-  /// 3. CompleteOnboarding → met l'état auth à AuthAuthenticated
-  /// 4. Navigate → context.go('/dashboard')
-  ///
-  /// Si étape 2 échoue (RLS ou table inexistante), on continue quand même
-  /// car ChurchRole.fromLabel résout le rôle côté client.
-  /// ══════════════════════════════════════════════════════════════════════════
+  /// OFFLINE-FIRST: Si l'etape 2 echoue (timeout/reseau), on sauvegarde
+  /// le contexte localement et on continue. L'utilisateur n'est pas bloque.
   Future<void> _verifyCode() async {
     final code = _codeController.text.trim().toUpperCase();
     if (code.isEmpty) return;
@@ -56,14 +55,15 @@ class _RoleCodeVerificationScreenState
       final roleCodeRepo = ref.read(roleCodeRepositoryProvider);
       final userId = ref.read(currentUserIdProvider);
 
-      // ── ÉTAPE 1 : Vérifier le code ──
-      AppLogger.i('Vérification code: "$code"', 'ROLE_CODE_VERIFY');
-      final redemptionResult = await roleCodeRepo.redeemSecretCode(code);
+      // -- ETAPE 1 : Verifier le code --
+      AppLogger.i('Verification code: "$code"', 'ROLE_CODE_VERIFY');
+      final redemptionResult = await roleCodeRepo.redeemSecretCode(code)
+          .timeout(const Duration(seconds: 10));
 
       if (redemptionResult == null) {
         AppLogger.w('Code "$code" invalide', 'ROLE_CODE_VERIFY');
         if (mounted) {
-          setState(() => _errorMessage = 'Code invalide. Vérifiez le format (ex: PASTEUR-0081-2026) et réessayez.');
+          setState(() => _errorMessage = 'Code invalide. Verifiez le format (ex: PASTEUR-0081-2026) et reessayez.');
         }
         return;
       }
@@ -71,52 +71,79 @@ class _RoleCodeVerificationScreenState
       final roleCode = redemptionResult['role_code'] as String;
       AppLogger.i('Code valide ! role_code = "$roleCode"', 'ROLE_CODE_VERIFY');
 
-      // ── ÉTAPE 2 : Assigner le rôle côté serveur (user_roles + user_sessions + profiles) ──
-      // FIX #3a : l'assignation serveur est maintenant bloquante. Sans ligne dans
-      // user_roles, getUserContext() après completeOnboarding retournera
-      // needs_onboarding=true → l'utilisateur reste bloqué sur le splash.
+      // -- ETAPE 2 : Assigner le role cote serveur --
+      // OFFLINE-FIRST: Si l'assignation echoue (timeout/reseau), on ne bloque pas.
+      // On sauvegarde le contexte localement et on continue.
+      bool serverAssigned = false;
       if (userId != null) {
-        final bool assigned = await roleCodeRepo.assignRoleToUser(
-          userId: userId,
-          roleCode: roleCode,
-        ).timeout(const Duration(seconds: 8));
-
-        if (!assigned) {
-          throw Exception('Impossible d\'assigner le rôle "$roleCode" côté serveur. Réessayez.');
+        try {
+          serverAssigned = await roleCodeRepo.assignRoleToUser(
+            userId: userId,
+            roleCode: roleCode,
+          ).timeout(const Duration(seconds: 8));
+        } catch (e) {
+          AppLogger.w('assignRoleToUser echec (offline?): $e', 'ROLE_CODE_VERIFY');
         }
-        AppLogger.i('Rôle assigné côté serveur pour userId=$userId', 'ROLE_CODE_VERIFY');
+
+        if (serverAssigned) {
+          AppLogger.i('Role assigne cote serveur pour userId=$userId', 'ROLE_CODE_VERIFY');
+        } else {
+          AppLogger.w('Assignation serveur echouee - mode offline, sauvegarde locale', 'ROLE_CODE_VERIFY');
+        }
+        // Always save locally for offline-first resilience
+        unawaited(_saveContextLocally(userId, roleCode));
       }
 
-      // ── ÉTAPE 3 : Marquer l'onboarding comme complété AVANT completeOnboarding ──
-      // Ceci empêche le RouterPolicy de rediriger vers /onboarding
+      // -- ETAPE 3 : Marquer l'onboarding comme complete --
       ref.read(onboardingProgressNotifierProvider.notifier)
         ..setRole(roleCode)
         ..advance(OnboardingStep.completed);
 
-      // ── ÉTAPE 4 : Compléter l'onboarding dans le provider d'auth ──
-      // completeOnboarding() va appeler getUserContext() qui, grâce à l'étape 2,
-      // trouvera désormais un rôle valide dans user_roles et retournera
-      // needs_onboarding=false. Si getUserContext() échoue, le fallback optimiste
-      // utilise le rôle du contexte fallback.
+      // -- ETAPE 4 : Completer l'onboarding dans le provider d'auth --
       try {
         await ref.read(authProvider.notifier).completeOnboarding()
             .timeout(const Duration(seconds: 10));
-        AppLogger.i('completeOnboarding réussi', 'ROLE_CODE_VERIFY');
+        AppLogger.i('completeOnboarding reussi', 'ROLE_CODE_VERIFY');
       } catch (e) {
         AppLogger.w('completeOnboarding timeout/erreur: $e', 'ROLE_CODE_VERIFY');
-        // Le provider a déjà le fallback ; le router gère la navigation.
+        // OFFLINE-FIRST: Le provider a deja le fallback ; le router gere la navigation.
       }
 
-      // Navigation déléguée au router :
-      // completeOnboarding() → AuthAuthenticated → routeStatusProvider = authenticated
-      // → RouterRefreshListenable notifie GoRouter → redirect vers initialRoute.
+      // Navigation deleguee au router via l'etat auth.
     } catch (e, st) {
-      AppLogger.e('Erreur vérification code', 'ROLE_CODE_VERIFY', e, st);
+      AppLogger.e('Erreur verification code', 'ROLE_CODE_VERIFY', e, st);
       if (mounted) {
-        setState(() => _errorMessage = 'Oups ! Une erreur est survenue. Réessayez.');
+        final errorMsg = e.toString();
+        if (errorMsg.contains('Timeout') || errorMsg.contains('Socket') || errorMsg.contains('Network')) {
+          setState(() => _errorMessage = 'Connexion impossible. Verifiez votre reseau et reessayez.');
+        } else {
+          setState(() => _errorMessage = 'Oups ! Une erreur est survenue. Reessayez.');
+        }
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  /// Sauvegarde le contexte utilisateur localement (mode offline).
+  Future<void> _saveContextLocally(String userId, String roleCode) async {
+    try {
+      final localSvc = ref.read(localPersistenceServiceProvider);
+      final localCtx = LocalUserContextModel.fromMap({
+        'userId': userId,
+        'roleCode': roleCode,
+        'roleLabel': roleCode,
+        'roleHierarchyLevel': 0,
+        'isSuper': false,
+        'needsOnboarding': false,
+        'churchId': null,
+        'groupId': null,
+        'initialRoute': '/dashboard',
+      });
+      await localSvc.saveLocalUserContext(localCtx);
+      AppLogger.i('Contexte sauvegarde localement (offline)', 'ROLE_CODE_VERIFY');
+    } catch (e) {
+      AppLogger.w('Erreur sauvegarde contexte local: $e', 'ROLE_CODE_VERIFY');
     }
   }
 
@@ -153,10 +180,10 @@ class _RoleCodeVerificationScreenState
               const SizedBox(height: 32),
 
               // --- TITLES ---
-              Text("Vérification d'accès", style: LuminaDesign.h2Of(context)).animate().fadeIn(delay: 200.ms),
+              Text("Verification d'acces", style: LuminaDesign.h2Of(context)).animate().fadeIn(delay: 200.ms),
               const SizedBox(height: 12),
               Text(
-                "Saisissez le code secret fourni par votre église pour activer vos privilèges.",
+                "Saisissez le code secret fourni par votre eglise pour activer vos privileges.",
                 textAlign: TextAlign.center,
                 style: LuminaDesign.bodyLargeOf(context).copyWith(color: context.colors.textSecondary),
               ).animate().fadeIn(delay: 400.ms),
@@ -191,7 +218,7 @@ class _RoleCodeVerificationScreenState
 
               // --- BUTTON ---
               LuminaButton(
-                label: "Valider mon rôle",
+                label: "Valider mon role",
                 isLoading: _isLoading,
                 onPressed: _verifyCode,
               ).animate().fadeIn(delay: 600.ms),

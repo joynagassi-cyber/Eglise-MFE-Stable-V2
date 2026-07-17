@@ -21,7 +21,7 @@ final authStateProvider = AutoDisposeStreamProvider<AuthState>.internal(
 
 typedef AuthStateRef = AutoDisposeStreamProviderRef<AuthState>;
 String _$userContextNotifierHash() =>
-    r'023187303d8fa3159c52f70d374de28166f30fff';
+    r'684bb9e33e64b39792d40a8dd04971cd88be70fd';
 
 /// See also [UserContextNotifier].
 @ProviderFor(UserContextNotifier)

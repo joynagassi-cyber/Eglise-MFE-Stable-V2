@@ -102,7 +102,7 @@ String _$currentInitialRouteHash() =>
     r'd577cfe33876b6467408bef4919f177b64a885d1';
 
 /// Retourne la route initiale de l'utilisateur courant.
-/// Priorité au UserContext.role.initialRoute (rafraîchi après onboarding)
+/// PrioritÃ© au UserContext.role.initialRoute (rafraÃ®chi aprÃ¨s onboarding)
 /// puis fallback sur UserSession.role.initialRoute (construit au login).
 ///
 /// Copied from [currentInitialRoute].
@@ -120,8 +120,8 @@ final currentInitialRouteProvider = Provider<String>.internal(
 typedef CurrentInitialRouteRef = ProviderRef<String>;
 String _$isFullAdminHash() => r'674f1e506ef8791a9e47a75e465a8dec654fd211';
 
-/// Vérifie si l'utilisateur a un accès administratif complet.
-/// (Soit SuperAdmin, soit son rôle contient "administrateur").
+/// VÃ©rifie si l'utilisateur a un accÃ¨s administratif complet.
+/// (Soit SuperAdmin, soit son rÃ´le contient "administrateur").
 ///
 /// Copied from [isFullAdmin].
 @ProviderFor(isFullAdmin)
@@ -137,8 +137,8 @@ final isFullAdminProvider = Provider<bool>.internal(
 typedef IsFullAdminRef = ProviderRef<bool>;
 String _$isStaffHash() => r'02fa73c6bf83ecbc9eb2a2c4f534b0e68e7e06c9';
 
-/// Vérifie si l'utilisateur fait partie du Staff (Accès opérationnel complet).
-/// Note: Tout le staff (Pasteurs, Secrétaires, Trésoriers) peut s'entraider.
+/// VÃ©rifie si l'utilisateur fait partie du Staff (AccÃ¨s opÃ©rationnel complet).
+/// Note: Tout le staff (Pasteurs, SecrÃ©taires, TrÃ©soriers) peut s'entraider.
 ///
 /// Copied from [isStaff].
 @ProviderFor(isStaff)
@@ -154,9 +154,9 @@ final isStaffProvider = Provider<bool>.internal(
 typedef IsStaffRef = ProviderRef<bool>;
 String _$isTreasurerHash() => r'21f77ebbb5540936bb64aa00906a778822c631f7';
 
-/// Vérifie si l'utilisateur a accès aux finances.
-/// Avec la polyvalence opérationnelle, isStaff et isTreasurer deviennent équivalents
-/// pour le staff administratif de l'église.
+/// VÃ©rifie si l'utilisateur a accÃ¨s aux finances.
+/// Avec la polyvalence opÃ©rationnelle, isStaff et isTreasurer deviennent Ã©quivalents
+/// pour le staff administratif de l'Ã©glise.
 ///
 /// Copied from [isTreasurer].
 @ProviderFor(isTreasurer)
@@ -172,7 +172,7 @@ final isTreasurerProvider = Provider<bool>.internal(
 typedef IsTreasurerRef = ProviderRef<bool>;
 String _$isAdminHash() => r'd0f0061f79a14aa01c7b671708685aa527f38b9f';
 
-/// Vérifie si l'utilisateur est admin ou superadmin (Maintenu pour compatibilité UI)
+/// VÃ©rifie si l'utilisateur est admin ou superadmin (Maintenu pour compatibilitÃ© UI)
 ///
 /// Copied from [isAdmin].
 @ProviderFor(isAdmin)
@@ -188,7 +188,7 @@ final isAdminProvider = Provider<bool>.internal(
 typedef IsAdminRef = ProviderRef<bool>;
 String _$isSuperAdminHash() => r'e552664cc8df551a8779ced5d7f1030a53949ec7';
 
-/// Vérifie si l'utilisateur est superadmin
+/// VÃ©rifie si l'utilisateur est superadmin
 ///
 /// Copied from [isSuperAdmin].
 @ProviderFor(isSuperAdmin)
@@ -204,7 +204,7 @@ final isSuperAdminProvider = Provider<bool>.internal(
 typedef IsSuperAdminRef = ProviderRef<bool>;
 String _$isGroupLeaderHash() => r'2e1635d53223e67e4ffde1a2efe3c1dcc6e34db8';
 
-/// Vérifie si l'utilisateur est un leader (responsable de groupe)
+/// VÃ©rifie si l'utilisateur est un leader (responsable de groupe)
 ///
 /// Copied from [isGroupLeader].
 @ProviderFor(isGroupLeader)
@@ -221,7 +221,7 @@ final isGroupLeaderProvider = Provider<bool>.internal(
 typedef IsGroupLeaderRef = ProviderRef<bool>;
 String _$isConsultantHash() => r'7da341e91e4d0feb0aaee1cdeee463e7cfe49c4f';
 
-/// Vérifie si l'utilisateur est en mode consultation uniquement
+/// VÃ©rifie si l'utilisateur est en mode consultation uniquement
 ///
 /// Copied from [isConsultant].
 @ProviderFor(isConsultant)
@@ -237,7 +237,7 @@ final isConsultantProvider = Provider<bool>.internal(
 typedef IsConsultantRef = ProviderRef<bool>;
 String _$isMemberHash() => r'329abde1eba18a402015390d06aa70f932f97178';
 
-/// Vérifie si l'utilisateur est un membre standard
+/// VÃ©rifie si l'utilisateur est un membre standard
 ///
 /// Copied from [isMember].
 @ProviderFor(isMember)
@@ -251,7 +251,7 @@ final isMemberProvider = Provider<bool>.internal(
 );
 
 typedef IsMemberRef = ProviderRef<bool>;
-String _$authHash() => r'8be47bd46d66a4ac6ac4898f3fdb0b5a17c037ae';
+String _$authHash() => r'a9a79b52bfc1e2303b8cbc55a628601db0297071';
 
 /// See also [Auth].
 @ProviderFor(Auth)

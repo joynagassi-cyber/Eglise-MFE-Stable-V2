@@ -1,5 +1,5 @@
-// lib/core/data/local/isar_service.dart
-// Service centralisé pour la base de données locale Isar
+﻿// lib/core/data/local/isar_service.dart
+// Service centralisÃ© pour la base de donnÃ©es locale Isar
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
@@ -60,6 +60,9 @@ import 'package:lumina/features/groups/intercession/data/models/permanent_prayer
 import 'package:lumina/features/audit/data/models/audit_log_model.dart';
 import 'package:lumina/features/vie-spirituelle/data/models/jalon_spirituel_model.dart';
 import 'package:lumina/core/data/models/sync_lock_model.dart';
+import 'package:lumina/core/data/models/local_session_model.dart';
+import 'package:lumina/core/data/models/local_profile_model.dart';
+import 'package:lumina/core/data/models/local_user_context_model.dart';
 
 part 'isar_service.g.dart';
 
@@ -76,7 +79,7 @@ class IsarService {
   Isar get db => _isar!;
   bool get isReady => _isar != null;
 
-  // Getters de collections explicites pour éviter les erreurs de type et les getters manquants
+  // Getters de collections explicites pour Ã©viter les erreurs de type et les getters manquants
   IsarCollection<MemberModel> get memberModels =>
       _isar!.collection<MemberModel>();
   IsarCollection<FinanceTransactionModel> get financeTransactionModels =>
@@ -182,6 +185,13 @@ class IsarService {
       _isar!.collection<MembreJalonModel>();
   IsarCollection<AuditLogModel> get auditLogModels =>
       _isar!.collection<AuditLogModel>();
+  IsarCollection<LocalSessionModel> get localSessionModels =>
+      _isar!.collection<LocalSessionModel>();
+  IsarCollection<LocalProfileModel> get localProfileModels =>
+      _isar!.collection<LocalProfileModel>();
+  IsarCollection<LocalUserContextModel> get localUserContextModels =>
+      _isar!.collection<LocalUserContextModel>();
+
 
   static Future<IsarService> init() async {
     try {
@@ -252,6 +262,9 @@ class IsarService {
           JalonSpirituelModelSchema,
           MembreJalonModelSchema,
           AuditLogModelSchema,
+          LocalSessionModelSchema,
+          LocalProfileModelSchema,
+          LocalUserContextModelSchema,
         ],
         directory: path ?? '',
       );
@@ -316,7 +329,7 @@ class IsarService {
   // BASE OPERATIONS (ATOMIC & RAW)
   // ===========================================================================
 
-  /// Sauvegarde générique atomique
+  /// Sauvegarde gÃ©nÃ©rique atomique
   Future<void> save<T>(T item) async {
     if (_isar == null) return;
     await db.writeTxn(() async {
@@ -324,8 +337,8 @@ class IsarService {
     });
   }
 
-  /// Sauvegarde brute (à utiliser UNIQUEMENT à l'intérieur d'une transaction existante)
-  /// pour éviter les Deadlocks.
+  /// Sauvegarde brute (Ã  utiliser UNIQUEMENT Ã  l'intÃ©rieur d'une transaction existante)
+  /// pour Ã©viter les Deadlocks.
   Future<void> putRaw<T>(T item) async {
     if (_isar == null) return;
     await db.collection<T>().put(item);
@@ -833,12 +846,12 @@ class IsarService {
   }
 
   // ===========================================================================
-  // UPSERT FROM REMOTE — Méthodes de Pull différentiel (SyncService)
+  // UPSERT FROM REMOTE â€” MÃ©thodes de Pull diffÃ©rentiel (SyncService)
   //
-  // Chaque méthode applique une ligne JSON brute venue de Supabase
+  // Chaque mÃ©thode applique une ligne JSON brute venue de Supabase
   // dans la collection Isar correspondante.
   // Pattern : on garde le jsonData complet pour les round-trips fiables.
-  // Les champs indexés sont extraits pour les requêtes rapides.
+  // Les champs indexÃ©s sont extraits pour les requÃªtes rapides.
   // ===========================================================================
 
   Future<void> upsertMemberFromRemote(Map<String, dynamic> row) async {
@@ -1068,7 +1081,7 @@ class IsarService {
   }
 
   // ===========================================================================
-  // Helpers privés
+  // Helpers privÃ©s
   // ===========================================================================
 
   DateTime? _parseDateTime(dynamic raw) {
@@ -1076,7 +1089,7 @@ class IsarService {
     return DateTime.tryParse(raw.toString())?.toUtc();
   }
 
-  /// Parse un enum depuis sa représentation string.
+  /// Parse un enum depuis sa reprÃ©sentation string.
   /// Retourne [defaultValue] si la valeur n'est pas reconnue.
   T _parseEnum<T extends Enum>(dynamic raw, List<T> values, T defaultValue) {
     if (raw == null) return defaultValue;

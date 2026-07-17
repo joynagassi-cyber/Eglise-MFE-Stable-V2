@@ -1,18 +1,18 @@
-// lib/core/providers/auth_provider.dart
+﻿// lib/core/providers/auth_provider.dart
 //
-// Notifier d'authentification — RBAC v3
-// Responsabilité unique : mapper l'état Supabase en AuthState.
-// Aucune logique onboarding, aucun side-effect métier, aucun bypass.
+// Notifier d'authentification â€” RBAC v3
+// ResponsabilitÃ© unique : mapper l'Ã©tat Supabase en AuthState.
+// Aucune logique onboarding, aucun side-effect mÃ©tier, aucun bypass.
 //
 // CHANGELOG :
-//   - FIX : _sub listener + register() — getUserContext() est maintenant
-//     ignoré quand session.needsOnboarding=true ou light_session=true.
+//   - FIX : _sub listener + register() â€” getUserContext() est maintenant
+//     ignorÃ© quand session.needsOnboarding=true ou light_session=true.
 //     Avant ce fix, le listener appelait getUserContext() pour tout nouvel
-//     utilisateur (Google OAuth ou email), attendait 3 retries × 1.5s = ~4.5s,
-//     puis utilisait quand même le fallback. Résultat : l'utilisateur restait
-//     bloqué sur le splash ~5s avant d'arriver sur /onboarding.
-//     Désormais on va directement au fallback si la session indique déjà
-//     que l'onboarding est requis — getUserContext() n'apporterait rien.
+//     utilisateur (Google OAuth ou email), attendait 3 retries Ã— 1.5s = ~4.5s,
+//     puis utilisait quand mÃªme le fallback. RÃ©sultat : l'utilisateur restait
+//     bloquÃ© sur le splash ~5s avant d'arriver sur /onboarding.
+//     DÃ©sormais on va directement au fallback si la session indique dÃ©jÃ 
+//     que l'onboarding est requis â€” getUserContext() n'apporterait rien.
 
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,6 +23,9 @@ import 'package:lumina/core/auth/domain/entities/auth_state.dart'
 import 'package:lumina/core/auth/domain/entities/user_session.dart';
 import 'package:lumina/core/auth/domain/entities/enums/role_level.dart';
 import 'package:lumina/core/logging/app_logger.dart';
+import 'package:lumina/core/data/models/local_session_model.dart';
+import 'package:lumina/core/data/models/local_user_context_model.dart';
+import 'package:lumina/core/providers/local_persistence_provider.dart';
 import 'repository_providers.dart';
 
 part 'auth_provider.g.dart';
@@ -35,8 +38,8 @@ class Auth extends _$Auth with AuditableMixin {
   bool _manualAuthInProgress = false;
   DateTime? _lastManualAuthAt;
 
-  /// Durée de cooldown après une action manuelle (login/register/Google)
-  /// pendant laquelle les événements du stream sont ignorés pour éviter
+  /// DurÃ©e de cooldown aprÃ¨s une action manuelle (login/register/Google)
+  /// pendant laquelle les Ã©vÃ©nements du stream sont ignorÃ©s pour Ã©viter
   /// les overrides intempestifs (race condition avec getUserContext()).
   static const Duration _manualAuthCooldown = Duration(seconds: 3);
 
@@ -49,41 +52,41 @@ class Auth extends _$Auth with AuditableMixin {
       _manualAuthInProgress = false;
     });
 
-    // 1. Lecture initiale avant d'abonner le stream pour éviter les doubles
+    // 1. Lecture initiale avant d'abonner le stream pour Ã©viter les doubles
     //    transitions pendant le bootstrap du provider.
     final initialState = await _loadInitialSession();
 
-    // 2. Abonnement réactif à l'état d'authentification.
+    // 2. Abonnement rÃ©actif Ã  l'Ã©tat d'authentification.
     _sub = ref
         .read(authRepositoryProvider)
         .watchAuthState()
         .listen((session) async {
       if (_manualAuthInProgress) {
         AppLogger.d(
-          'Event auth ignoré pendant un flux manuel',
+          'Event auth ignorÃ© pendant un flux manuel',
           'AUTH_PROVIDER',
         );
         return;
       }
 
-      // Éviter le double déclenchement en gardant trace de la dernière session
+      // Ã‰viter le double dÃ©clenchement en gardant trace de la derniÃ¨re session
       if (_lastSession?.userId == session?.userId &&
           _lastSession?.accessToken == session?.accessToken) {
         AppLogger.d(
-          'Session identique à la précédente, pas de mise à jour',
+          'Session identique Ã  la prÃ©cÃ©dente, pas de mise Ã  jour',
           'AUTH_PROVIDER',
         );
         return;
       }
 
-      // Cooldown post-auth manuelle : ignorer les événements stream
-      // qui arrivent juste après une action manuelle, pour éviter que
-      // getUserContext() (appelé par loadSavedSession()) ne retourne
-      // null ou une session différente et override l'état correct.
+      // Cooldown post-auth manuelle : ignorer les Ã©vÃ©nements stream
+      // qui arrivent juste aprÃ¨s une action manuelle, pour Ã©viter que
+      // getUserContext() (appelÃ© par loadSavedSession()) ne retourne
+      // null ou une session diffÃ©rente et override l'Ã©tat correct.
       if (_lastManualAuthAt != null &&
           DateTime.now().difference(_lastManualAuthAt!) < _manualAuthCooldown) {
         AppLogger.d(
-          'Event auth ignoré (cooldown ${_manualAuthCooldown.inSeconds}s après action manuelle)',
+          'Event auth ignorÃ© (cooldown ${_manualAuthCooldown.inSeconds}s aprÃ¨s action manuelle)',
           'AUTH_PROVIDER',
         );
         return;
@@ -96,24 +99,135 @@ class Auth extends _$Auth with AuditableMixin {
     return initialState;
   }
 
-  /// Gère les changements de session de manière centralisée
+  // --- Local Persistence Helpers (Offline-First) ---
+
+  /// Sauvegarde la session et le contexte dans Isar pour le mode offline.
+  Future<void> _saveSessionLocally(
+    UserSession session,
+    app_auth.UserContext context,
+  ) async {
+    try {
+      final localSvc = ref.read(localPersistenceServiceProvider);
+      if (!localSvc.isReady) return;
+
+      final localSession = LocalSessionModel.fromMap({
+        'userId': session.userId,
+        'email': session.email,
+        'name': session.name,
+        'accessToken': session.accessToken,
+        'refreshToken': session.refreshToken,
+        'activeChurchId': session.activeChurchId,
+        'roleCode': context.role.code,
+        'roleLabel': context.role.label,
+        'roleHierarchyLevel': session.role.level.index,
+        'needsOnboarding': session.needsOnboarding,
+        'lastLoginAt': DateTime.now().toIso8601String(),
+      });
+      await localSvc.saveLocalSession(localSession);
+
+      final localCtx = LocalUserContextModel.fromMap({
+        'userId': session.userId,
+        'roleCode': context.role.code,
+        'roleLabel': context.role.label,
+        'roleHierarchyLevel': session.role.level.index,
+        'isSuper': context.role.isSuper,
+        'needsOnboarding': context.needsOnboarding,
+        'churchId': context.churchId ?? session.activeChurchId,
+        'groupId': context.group?.id,
+        'initialRoute': context.role.initialRoute,
+      });
+      await localSvc.saveLocalUserContext(localCtx);
+
+      AppLogger.d('Session + contexte sauvegardes localement', 'AUTH_PROVIDER');
+    } catch (e) {
+      AppLogger.w('Erreur sauvegarde locale session: $e', 'AUTH_PROVIDER');
+    }
+  }
+
+  /// Tente de charger une session depuis Isar (fallback offline).
+  Future<app_auth.AuthState?> _loadSessionFromLocal() async {
+    try {
+      final localSvc = ref.read(localPersistenceServiceProvider);
+      if (!localSvc.isReady) return null;
+
+      final localSession = await localSvc.getLocalSession();
+      if (localSession == null) return null;
+
+      AppLogger.i(
+        'Session locale: ${localSession.email} - mode offline',
+        'AUTH_PROVIDER',
+      );
+
+      final localCtx = await localSvc.getLocalUserContext(localSession.userId);
+
+      final churchId = localSession.activeChurchId ?? 'global';
+      final role = app_auth.ChurchRole.fromLabel(
+        churchId: churchId,
+        label: localCtx?.roleCode ?? localSession.roleCode ?? 'membre',
+      );
+
+      final session = UserSession(
+        userId: localSession.userId,
+        email: localSession.email,
+        name: localSession.name ?? '',
+        accessToken: localSession.accessToken ?? '',
+        refreshToken: localSession.refreshToken ?? '',
+        activeChurchId: churchId,
+        accessibleChurchIds: [churchId],
+        role: role,
+        tokenExpiresAt: DateTime.now().add(const Duration(days: 1)),
+        lastLoginAt: DateTime.now(),
+        needsOnboarding: localSession.needsOnboarding,
+      );
+
+      final context = app_auth.UserContext(
+        user: app_auth.UserInfo(
+          id: localSession.userId,
+          email: localSession.email,
+          name: localSession.name ?? '',
+        ),
+        role: app_auth.RoleInfo(
+          code: localCtx?.roleCode ?? localSession.roleCode ?? 'membre',
+          label: localCtx?.roleLabel ?? localSession.roleLabel ?? 'Membre',
+          isSuper: localCtx?.isSuper ?? false,
+          level: role.level,
+          initialRoute: localCtx?.initialRoute ?? role.initialRoute,
+        ),
+        permissions: const {},
+        generatedAt: DateTime.now().toUtc(),
+        needsOnboarding: localSession.needsOnboarding,
+        churchId: localCtx?.churchId ?? churchId,
+      );
+
+      _isInitialized = true;
+      _lastSession = session;
+
+      return localSession.needsOnboarding
+          ? app_auth.AuthOnboardingRequired(session: session, context: context)
+          : app_auth.AuthAuthenticated(session: session, context: context);
+    } catch (e) {
+      AppLogger.w('Erreur chargement session locale: $e', 'AUTH_PROVIDER');
+      return null;
+    }
+  }
+  /// GÃ¨re les changements de session de maniÃ¨re centralisÃ©e
   Future<void> _handleSessionChange(UserSession? session) async {
     if (session == null) {
-      // ⚠️ FIX: Ne pas override un état AuthAuthenticated valide avec
-      // AuthUnauthenticated à cause d'une erreur transitoire de
+      // âš ï¸ FIX: Ne pas override un Ã©tat AuthAuthenticated valide avec
+      // AuthUnauthenticated Ã  cause d'une erreur transitoire de
       // loadSavedSession() / getUserContext() dans le stream listener.
-      // L'utilisateur reste connecté jusqu'à la prochaine mise à jour valide.
+      // L'utilisateur reste connectÃ© jusqu'Ã  la prochaine mise Ã  jour valide.
       final currentState = state.valueOrNull;
       if (currentState is app_auth.AuthAuthenticated &&
           _lastSession != null) {
         AppLogger.d(
-          'Session null ignorée — état AuthAuthenticated préservé '
+          'Session null ignorÃ©e â€” Ã©tat AuthAuthenticated prÃ©servÃ© '
           '(erreur transitoire loadSavedSession)',
           'AUTH_PROVIDER',
         );
         return;
       }
-      AppLogger.d('Session null - utilisateur déconnecté', 'AUTH_PROVIDER');
+      AppLogger.d('Session null - utilisateur dÃ©connectÃ©', 'AUTH_PROVIDER');
       _lastSession = null;
       state = const AsyncData(app_auth.AuthUnauthenticated());
       return;
@@ -121,14 +235,14 @@ class Auth extends _$Auth with AuditableMixin {
 
     final currentState = state.valueOrNull;
     AppLogger.d(
-      'Changement de session détecté pour: ${session.userId}',
+      'Changement de session dÃ©tectÃ© pour: ${session.userId}',
       'AUTH_PROVIDER',
     );
 
-    // FIX : si la session indique déjà que l'onboarding est requis
+    // FIX : si la session indique dÃ©jÃ  que l'onboarding est requis
     // (light_session = nouvel utilisateur sans profil RBAC, ou needsOnboarding=true),
-    // on n'appelle PAS getUserContext() — ça échouerait après 3 retries × 1.5s
-    // pour rien, et on utiliserait de toute façon le fallback.
+    // on n'appelle PAS getUserContext() â€” Ã§a Ã©chouerait aprÃ¨s 3 retries Ã— 1.5s
+    // pour rien, et on utiliserait de toute faÃ§on le fallback.
     final bool skipContextFetch = session.needsOnboarding ||
         (session.metadata ?? {})['light_session'] == true;
 
@@ -136,7 +250,7 @@ class Auth extends _$Auth with AuditableMixin {
     if (skipContextFetch) {
       context = _buildFallbackContext(session, needsOnboarding: session.needsOnboarding);
       AppLogger.d(
-        'Utilisation du contexte fallback (onboarding requis ou session légère)',
+        'Utilisation du contexte fallback (onboarding requis ou session lÃ©gÃ¨re)',
         'AUTH_PROVIDER',
       );
     } else {
@@ -145,12 +259,12 @@ class Auth extends _$Auth with AuditableMixin {
             await ref.read(userContextRepositoryProvider).getUserContext()
               .timeout(const Duration(seconds: 4));
         AppLogger.d(
-          'Contexte utilisateur chargé avec succès',
+          'Contexte utilisateur chargÃ© avec succÃ¨s',
           'AUTH_PROVIDER',
         );
       } catch (e) {
         AppLogger.d(
-          'getUserContext() échoué dans _sub listener. Fallback. Erreur: $e',
+          'getUserContext() Ã©chouÃ© dans _sub listener. Fallback. Erreur: $e',
           'AUTH_PROVIDER',
         );
         context = _buildFallbackContext(session, needsOnboarding: session.needsOnboarding);
@@ -164,7 +278,7 @@ class Auth extends _$Auth with AuditableMixin {
           : app_auth.AuthAuthenticated(session: session, context: context),
     );
 
-    // Audit Log: Login (seulement si authentifié et l'état change vers connecté)
+    // Audit Log: Login (seulement si authentifiÃ© et l'Ã©tat change vers connectÃ©)
     if (newState.valueOrNull is app_auth.AuthAuthenticated &&
         currentState is! app_auth.AuthAuthenticated) {
       unawaited(logAuditAction(
@@ -180,13 +294,19 @@ class Auth extends _$Auth with AuditableMixin {
     }
 
     state = newState;
+
+    // OFFLINE-FIRST: Persist when authenticated
+    if (newState.valueOrNull is app_auth.AuthAuthenticated) {
+      final a = newState.valueOrNull as app_auth.AuthAuthenticated;
+      unawaited(_saveSessionLocally(a.session, a.context));
+    }
   }
 
-  /// Charge la session initiale de manière synchrone
+  /// Charge la session initiale de maniÃ¨re synchrone
   Future<app_auth.AuthState> _loadInitialSession() async {
     if (_isInitialized) {
       AppLogger.d(
-        'Session déjà initialisée, retour de l\'état actuel',
+        'Session dÃ©jÃ  initialisÃ©e, retour de l\'Ã©tat actuel',
         'AUTH_PROVIDER',
       );
       return state.value ?? const app_auth.AuthUnauthenticated();
@@ -197,9 +317,12 @@ class Auth extends _$Auth with AuditableMixin {
 
       if (user == null) {
         AppLogger.d(
-          'Aucun utilisateur trouvé, état non-authentifié',
+          'Aucun utilisateur trouvÃ©, Ã©tat non-authentifiÃ©',
           'AUTH_PROVIDER',
         );
+        // OFFLINE FALLBACK
+        final localState = await _loadSessionFromLocal();
+        if (localState != null) return localState;
         return const app_auth.AuthUnauthenticated();
       }
 
@@ -209,19 +332,20 @@ class Auth extends _$Auth with AuditableMixin {
 
       if (session == null) {
         AppLogger.d(
-          'Aucune session trouvée, état non-authentifié',
+          'Aucune session trouvÃ©e, Ã©tat non-authentifiÃ©',
           'AUTH_PROVIDER',
         );
+        // OFFLINE FALLBACK
+        final localState = await _loadSessionFromLocal();
+        if (localState != null) return localState;
         return const app_auth.AuthUnauthenticated();
       }
-
-      // Même logique de skip pour la lecture initiale
       final bool skipContextFetch = session.needsOnboarding ||
           (session.metadata ?? {})['light_session'] == true;
 
       if (skipContextFetch) {
         AppLogger.d(
-          'Session avec onboarding requis ou légère, utilisation du contexte fallback',
+          'Session avec onboarding requis ou lÃ©gÃ¨re, utilisation du contexte fallback',
           'AUTH_PROVIDER',
         );
         _isInitialized = true;
@@ -239,7 +363,7 @@ class Auth extends _$Auth with AuditableMixin {
 
         _isInitialized = true;
         _lastSession = session;
-        AppLogger.d('Session initiale chargée avec succès', 'AUTH_PROVIDER');
+        AppLogger.d('Session initiale chargÃ©e avec succÃ¨s', 'AUTH_PROVIDER');
         final shouldOnboard =
             session.needsOnboarding || context.needsOnboarding;
         return shouldOnboard
@@ -247,12 +371,12 @@ class Auth extends _$Auth with AuditableMixin {
                 session: session, context: context)
             : app_auth.AuthAuthenticated(session: session, context: context);
       } catch (e) {
-        // Guard : si le contexte échoue (nouveau compte sans RBAC encore prêt),
+        // Guard : si le contexte Ã©choue (nouveau compte sans RBAC encore prÃªt),
         // fallback safe vers AuthOnboardingRequired.
         _isInitialized = true;
         _lastSession = session;
         AppLogger.d(
-          'Contexte utilisateur échoué, fallback vers onboarding',
+          'Contexte utilisateur Ã©chouÃ©, fallback vers onboarding',
           'AUTH_PROVIDER',
         );
         return app_auth.AuthOnboardingRequired(
@@ -261,14 +385,14 @@ class Auth extends _$Auth with AuditableMixin {
         );
       }
     } catch (e) {
-      AppLogger.e('Erreur lors du chargement de la session initiale',
-          'AUTH_PROVIDER', e);
+      AppLogger.w('Erreur chargement session Supabase: `$e. Tentative locale...',
+          'AUTH_PROVIDER');
+      // OFFLINE FALLBACK: Try loading from Isar
+      final localState = await _loadSessionFromLocal();
+      if (localState != null) return localState;
       return const app_auth.AuthUnauthenticated();
     }
   }
-
-  // ─── Login / Register / Logout ───────────────────────────────────────────
-
   Future<void> login({
     required String email,
     required String password,
@@ -297,6 +421,9 @@ class Auth extends _$Auth with AuditableMixin {
           _lastSession = session;
           _lastManualAuthAt = DateTime.now();
 
+          // OFFLINE-FIRST: Save session locally
+          unawaited(_saveSessionLocally(session, context));
+
           // Audit Log: Login
           unawaited(logAuditAction(
             ref,
@@ -309,7 +436,7 @@ class Auth extends _$Auth with AuditableMixin {
             },
           ));
         } catch (e) {
-          // Fallback déterministe en cas de problème de contexte après login réussi
+          // Fallback dÃ©terministe en cas de problÃ¨me de contexte aprÃ¨s login rÃ©ussi
           state = AsyncData(app_auth.AuthOnboardingRequired(
             session: session,
             context: _buildFallbackContext(session, needsOnboarding: session.needsOnboarding),
@@ -333,7 +460,7 @@ class Auth extends _$Auth with AuditableMixin {
     bool? needsOnboarding,
   }) {
     // Convert ChurchRole -> RoleInfo pour le fallback.
-    // ChurchRole.name est utilisé comme code et label (comportement历史).
+    // ChurchRole.name est utilisÃ© comme code et label (comportementåŽ†å²).
     final isSuper = session.role.level == app_auth.RoleLevel.superadmin ||
         session.role.level == app_auth.RoleLevel.adminTotal;
     return app_auth.UserContext(
@@ -371,15 +498,15 @@ class Auth extends _$Auth with AuditableMixin {
         final session = result.getOrElse(() => null);
         if (session == null) {
           // session=null : confirmation email requise (ne devrait pas arriver
-          // avec confirm email désactivé, mais on gère quand même).
+          // avec confirm email dÃ©sactivÃ©, mais on gÃ¨re quand mÃªme).
           state = const AsyncData(app_auth.AuthUnauthenticated());
           _lastSession = null;
           return;
         }
 
-        // FIX : même logique que le _sub listener — un nouvel utilisateur
+        // FIX : mÃªme logique que le _sub listener â€” un nouvel utilisateur
         // n'a pas encore de profil RBAC, inutile d'appeler getUserContext().
-        // On va directement au fallback → AuthOnboardingRequired → /onboarding.
+        // On va directement au fallback â†’ AuthOnboardingRequired â†’ /onboarding.
         state = AsyncData(app_auth.AuthOnboardingRequired(
           session: session,
           context: _buildFallbackContext(session, needsOnboarding: true),
@@ -429,7 +556,7 @@ class Auth extends _$Auth with AuditableMixin {
       final session = result.getOrElse(() => null);
       if (session == null) {
         AppLogger.d(
-          'Connexion Google annulée par l\'utilisateur',
+          'Connexion Google annulÃ©e par l\'utilisateur',
           'AUTH_PROVIDER',
         );
         final restoredState = switch (previousState) {
@@ -445,7 +572,7 @@ class Auth extends _$Auth with AuditableMixin {
       await _handleSessionChange(session);
       _lastManualAuthAt = DateTime.now();
       AppLogger.d(
-        'Google OAuth natif synchronisé immédiatement',
+        'Google OAuth natif synchronisÃ© immÃ©diatement',
         'AUTH_PROVIDER',
       );
     } finally {
@@ -464,12 +591,18 @@ class Auth extends _$Auth with AuditableMixin {
       ));
     }
 
+    // OFFLINE-FIRST: Clear local persistence
+    try {
+      await ref.read(localPersistenceServiceProvider).clearAll();
+    } catch (e) {
+      AppLogger.w('Erreur nettoyage session locale: $e', 'AUTH_PROVIDER');
+    }
     await ref.read(authRepositoryProvider).logout();
     _lastSession = null;
     state = const AsyncData(app_auth.AuthUnauthenticated());
   }
 
-  // ─── Password ────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Password â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   Future<void> requestPasswordReset({required String email}) async {
     await ref.read(authRepositoryProvider).requestPasswordReset(email: email);
@@ -487,15 +620,15 @@ class Auth extends _$Auth with AuditableMixin {
         );
   }
 
-  // ─── Onboarding ──────────────────────────────────────────────────────────
+  // â”€â”€â”€ Onboarding â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   Future<void> completeOnboarding() async {
     final current = state.valueOrNull;
     if (current is! app_auth.AuthOnboardingRequired) return;
 
-    // 1. Tenter de récupérer le contexte backend AVANT de transitionner.
-    //    Si getUserContext() réussit, on a la source de vérité (rôle, groupe...).
-    //    Si l'Edge Function retourne needs_onboarding=true, c'est que le rôle
+    // 1. Tenter de rÃ©cupÃ©rer le contexte backend AVANT de transitionner.
+    //    Si getUserContext() rÃ©ussit, on a la source de vÃ©ritÃ© (rÃ´le, groupe...).
+    //    Si l'Edge Function retourne needs_onboarding=true, c'est que le rÃ´le
     //    n'est pas encore visible en DB : on retente 2 fois avant de basculer.
     app_auth.UserContext? backendContext;
     int tries = 0;
@@ -506,12 +639,12 @@ class Auth extends _$Auth with AuditableMixin {
               .timeout(const Duration(seconds: 3));
         if (!backendContext.needsOnboarding) break;
         AppLogger.w(
-          'getUserContext() après onboarding: needs_onboarding=true (tentative ${tries + 1}/2)',
+          'getUserContext() aprÃ¨s onboarding: needs_onboarding=true (tentative ${tries + 1}/2)',
           'AUTH_PROVIDER',
         );
       } catch (e) {
         AppLogger.w(
-          'getUserContext() échec tentative ${tries + 1}/2: $e',
+          'getUserContext() Ã©chec tentative ${tries + 1}/2: $e',
           'AUTH_PROVIDER',
         );
       }
@@ -549,10 +682,10 @@ class Auth extends _$Auth with AuditableMixin {
     state = AsyncData(
         app_auth.AuthAuthenticated(session: session, context: updatedContext));
     _lastSession = session;
+
+    // OFFLINE-FIRST: Save the authenticated session locally
+    unawaited(_saveSessionLocally(session, updatedContext));
   }
-
-  // ─── Church switching ─────────────────────────────────────────────────────
-
   Future<void> switchChurch(String churchId) async {
     final current = state.valueOrNull;
     if (current is! app_auth.AuthAuthenticated) return;
@@ -579,7 +712,7 @@ class Auth extends _$Auth with AuditableMixin {
   }
 }
 
-// ─── Providers dérivés ────────────────────────────────────────────────────
+// â”€â”€â”€ Providers dÃ©rivÃ©s â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @Riverpod(keepAlive: true)
 UserSession? currentSession(CurrentSessionRef ref) {
@@ -611,7 +744,7 @@ String activeChurchId(ActiveChurchIdRef ref) {
   return ref.watch(currentSessionProvider)?.activeChurchId ?? 'global';
 }
 
-// ─── Providers dérivés additionnels (Architecture V2) ─────────────────
+// â”€â”€â”€ Providers dÃ©rivÃ©s additionnels (Architecture V2) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /// Retourne le RoleLevel de l'utilisateur courant
 @Riverpod(keepAlive: true)
@@ -621,12 +754,12 @@ RoleLevel currentRoleLevel(CurrentRoleLevelRef ref) {
 }
 
 /// Retourne la route initiale de l'utilisateur courant.
-/// Priorité au UserContext.role.initialRoute (rafraîchi après onboarding)
+/// PrioritÃ© au UserContext.role.initialRoute (rafraÃ®chi aprÃ¨s onboarding)
 /// puis fallback sur UserSession.role.initialRoute (construit au login).
 @Riverpod(keepAlive: true)
 String currentInitialRoute(CurrentInitialRouteRef ref) {
   final authState = ref.watch(authProvider).valueOrNull;
-  // 1. Priorité au contexte (rafraîchi post-onboarding via getUserContext)
+  // 1. PrioritÃ© au contexte (rafraÃ®chi post-onboarding via getUserContext)
   final contextRoute = switch (authState) {
     app_auth.AuthAuthenticated(context: final c) => c.role.initialRoute,
     app_auth.AuthOnboardingRequired(context: final c) => c.role.initialRoute,
@@ -637,8 +770,8 @@ String currentInitialRoute(CurrentInitialRouteRef ref) {
   return ref.watch(currentSessionProvider)?.role.initialRoute ?? '/dashboard';
 }
 
-/// Vérifie si l'utilisateur a un accès administratif complet.
-/// (Soit SuperAdmin, soit son rôle contient "administrateur").
+/// VÃ©rifie si l'utilisateur a un accÃ¨s administratif complet.
+/// (Soit SuperAdmin, soit son rÃ´le contient "administrateur").
 @Riverpod(keepAlive: true)
 bool isFullAdmin(IsFullAdminRef ref) {
   final authState = ref.watch(authProvider).valueOrNull;
@@ -650,7 +783,7 @@ bool isFullAdmin(IsFullAdminRef ref) {
   };
 }
 
-/// Helper pour vérifier les accès administratifs par nom ou catégorie.
+/// Helper pour vÃ©rifier les accÃ¨s administratifs par nom ou catÃ©gorie.
 bool _checkAdminAccess(app_auth.RoleInfo role) {
   if (role.isSuper ||
       role.level == RoleLevel.adminTotal ||
@@ -660,13 +793,13 @@ bool _checkAdminAccess(app_auth.RoleInfo role) {
 
   final label = role.label.toLowerCase();
   return label.contains('administrateur') ||
-      label.contains('président') ||
+      label.contains('prÃ©sident') ||
       label.contains('superadmin') ||
       label.contains('webmaster');
 }
 
-/// Vérifie si l'utilisateur fait partie du Staff (Accès opérationnel complet).
-/// Note: Tout le staff (Pasteurs, Secrétaires, Trésoriers) peut s'entraider.
+/// VÃ©rifie si l'utilisateur fait partie du Staff (AccÃ¨s opÃ©rationnel complet).
+/// Note: Tout le staff (Pasteurs, SecrÃ©taires, TrÃ©soriers) peut s'entraider.
 @Riverpod(keepAlive: true)
 bool isStaff(IsStaffRef ref) {
   final level = ref.watch(currentRoleLevelProvider);
@@ -676,40 +809,40 @@ bool isStaff(IsStaffRef ref) {
       ref.watch(isFullAdminProvider);
 }
 
-/// Vérifie si l'utilisateur a accès aux finances.
-/// Avec la polyvalence opérationnelle, isStaff et isTreasurer deviennent équivalents
-/// pour le staff administratif de l'église.
+/// VÃ©rifie si l'utilisateur a accÃ¨s aux finances.
+/// Avec la polyvalence opÃ©rationnelle, isStaff et isTreasurer deviennent Ã©quivalents
+/// pour le staff administratif de l'Ã©glise.
 @Riverpod(keepAlive: true)
 bool isTreasurer(IsTreasurerRef ref) {
   return ref.watch(isStaffProvider);
 }
 
-/// Vérifie si l'utilisateur est admin ou superadmin (Maintenu pour compatibilité UI)
+/// VÃ©rifie si l'utilisateur est admin ou superadmin (Maintenu pour compatibilitÃ© UI)
 @Riverpod(keepAlive: true)
 bool isAdmin(IsAdminRef ref) {
   return ref.watch(isFullAdminProvider);
 }
 
-/// Vérifie si l'utilisateur est superadmin
+/// VÃ©rifie si l'utilisateur est superadmin
 @Riverpod(keepAlive: true)
 bool isSuperAdmin(IsSuperAdminRef ref) {
   return ref.watch(currentRoleLevelProvider) == RoleLevel.superadmin;
 }
 
-/// Vérifie si l'utilisateur est un leader (responsable de groupe)
+/// VÃ©rifie si l'utilisateur est un leader (responsable de groupe)
 @Riverpod(keepAlive: true)
 bool isGroupLeader(IsGroupLeaderRef ref) {
   return ref.watch(currentRoleLevelProvider) == RoleLevel.groupLeader ||
       ref.watch(isStaffProvider);
 }
 
-/// Vérifie si l'utilisateur est en mode consultation uniquement
+/// VÃ©rifie si l'utilisateur est en mode consultation uniquement
 @Riverpod(keepAlive: true)
 bool isConsultant(IsConsultantRef ref) {
   return ref.watch(currentRoleLevelProvider) == RoleLevel.consultation;
 }
 
-/// Vérifie si l'utilisateur est un membre standard
+/// VÃ©rifie si l'utilisateur est un membre standard
 @Riverpod(keepAlive: true)
 bool isMember(IsMemberRef ref) {
   return ref.watch(currentRoleLevelProvider) == RoleLevel.consultation;
